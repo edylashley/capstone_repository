@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Project extends Model
+{
+
+
+    protected $casts = [
+        'keywords' => 'array',
+        'is_published' => 'boolean',
+        'published_at' => 'datetime',
+        'manuscript_validated' => 'boolean',
+    ];
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'abstract',
+        'year',
+        'adviser_id',
+        'status',
+        'program',
+        'specialization',
+        'keywords',
+        'is_published',
+        'published_at',
+        'manuscript_validated',
+        'manuscript_validation_notes',
+        'rejection_reason',
+        'authors_list',
+        'adviser_name',
+    ];
+
+    public function adviser()
+    {
+        return $this->belongsTo(User::class, 'adviser_id');
+    }
+
+    public function authors()
+    {
+        return $this->belongsToMany(User::class, 'project_authors', 'project_id', 'user_id')
+            ->withPivot('author_order')
+            ->orderBy('project_authors.author_order');
+    }
+
+    public function files()
+    {
+        return $this->hasMany(ProjectFile::class);
+    }
+
+    public function verification()
+    {
+        return $this->hasOne(AdviserVerification::class);
+    }
+}
