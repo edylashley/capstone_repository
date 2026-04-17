@@ -58,7 +58,8 @@ class StoreProjectRequest extends FormRequest
         $allowedTypes = str_replace(' ', '', \App\Models\Setting::get('allowed_file_types', 'pdf,zip,doc,docx,ppt,pptx,xls,xlsx,mp4,avi,mov,sql,txt,csv,json,xml,jpg,jpeg,png,gif,md,rar,7z'));
 
         // Use the configured academic year or fallback to current year
-        $academicYearEnd = (int) \App\Models\Setting::get('academic_year', date('Y'));
+        $yearSetting = \App\Models\Setting::get('academic_year');
+        $academicYearEnd = $yearSetting ? (int)$yearSetting : (int)date('Y');
 
         return [
             'title' => [
