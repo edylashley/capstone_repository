@@ -89,8 +89,8 @@ class StoreProjectRequest extends FormRequest
             'program' => ['required', 'string', Rule::in(['BSInT', 'Com-Sci'])],
             'specialization' => ['required', 'string', Rule::in(\App\Models\Category::pluck('name')->toArray())],
 
-            // Main manuscript: Allowing all types temporarily to debug detection
-            'manuscript' => ['nullable','file','max:'.$maxManuscriptKb], 
+            // Main manuscript: PDF only
+            'manuscript' => ['required','file','mimes:pdf','max:'.$maxManuscriptKb], 
 
             // Optional attachments — broad types for capstone research submissions
             'attachments' => ['nullable','array'],
