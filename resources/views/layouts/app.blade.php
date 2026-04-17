@@ -12,6 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
+        <link rel="icon" type="image/jpg" href="{{ asset('images/system-logo.jpg') }}">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Sidebar offset styles -->
         <style>
