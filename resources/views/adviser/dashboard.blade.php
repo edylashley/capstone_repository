@@ -82,7 +82,7 @@
                     
                     @if($recentProjects->isEmpty())
                         <div class="text-center py-10 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                            <span class="text-4xl block mb-2 opacity-30 italic">📂</span>
+                            <span class="text-4xl block mb-2 opacity-50 italic">📂</span>
                             <p class="text-gray-400 font-medium">No projects have been assigned to you yet.</p>
                         </div>
                     @else
