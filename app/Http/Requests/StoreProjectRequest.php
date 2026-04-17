@@ -90,7 +90,7 @@ class StoreProjectRequest extends FormRequest
             'specialization' => ['required', 'string', Rule::in(\App\Models\Category::pluck('name')->toArray())],
 
             // Main manuscript: PDF only
-            'manuscript' => ['required','file','mimes:pdf','max:'.$maxManuscriptKb], 
+            'manuscript' => ['nullable','file','mimes:pdf','max:'.$maxManuscriptKb], 
 
             // Optional attachments — broad types for capstone research submissions
             'attachments' => ['nullable','array'],
