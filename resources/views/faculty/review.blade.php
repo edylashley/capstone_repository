@@ -102,6 +102,13 @@
                                                             class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 hover:text-amber-800 hover:underline transition">
                                                         Return
                                                     </button>
+                                                    
+                                                    <form method="POST" action="{{ route('faculty.projects.reject-advisory', $project) }}" class="inline" onsubmit="return confirm('Confirm that you are NOT the adviser for this project? This will notify the student and allow them to pick the correct adviser.');">
+                                                        @csrf
+                                                        <button type="submit" class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-red-500 hover:text-red-700 hover:underline transition">
+                                                            Not My Project
+                                                        </button>
+                                                    </form>
                                                 @elseif($project->status === 'approved')
                                                     <form method="POST" action="{{ route('faculty.projects.cancel', $project) }}" class="inline" onsubmit="return confirm('Please confirm: You want to REVOKE the approval for this project? It will return to Pending status.');">
                                                         @csrf

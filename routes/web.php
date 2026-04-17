@@ -38,6 +38,7 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::post('/faculty/projects/{project}/approve', [\App\Http\Controllers\Faculty\ReviewController::class, 'approve'])->name('faculty.projects.approve');
     Route::post('/faculty/projects/{project}/cancel', [\App\Http\Controllers\Faculty\ReviewController::class, 'cancel'])->name('faculty.projects.cancel');
     Route::post('/faculty/projects/{project}/reject', [\App\Http\Controllers\Faculty\ReviewController::class, 'reject'])->name('faculty.projects.reject');
+    Route::post('/faculty/projects/{project}/reject-advisory', [\App\Http\Controllers\Faculty\ReviewController::class, 'rejectAdvisory'])->name('faculty.projects.reject-advisory');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

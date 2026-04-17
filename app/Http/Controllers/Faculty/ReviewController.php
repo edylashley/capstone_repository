@@ -155,4 +155,50 @@ class ReviewController extends Controller
         return redirect()->route('faculty.review')
             ->with('success', 'Project returned to student for corrections.');
     }
+
+    /**
+     * Handle the scenario where an adviser rejects the advisory (wrong adviser selected).
+     */
+    public function rejectAdvisory(Request $request, Project $project): RedirectResponse
+    {
+        $user = $request->user();
+
+        // Verify the user is the currently assigned adviser
+        if ($project->adviser_id !== $user->id) {
+            abort(403, 'Unauthorized.');
+        }
+
+        $reason = "The selected Adviser (" . $user->name . ") indicated that they are not the assigned adviser for this project. Please edit your submission and select the correct adviser.";
+
+        $project->update([
+            'status' => 'rejected',
+            'rejection_reason' => $reason,
+            'adviser_id' => null, // Remove the wrong association
+        ]);
+
+        // Log the action
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'action' => 'advisory_rejected',
+            'target_type' => Project::class,
+            'target_id' => $project->id,
+            'ip' => $request->ip(),
+            'meta' => [
+                'project_title' => $project->title,
+                'reason' => 'not_my_project',
+            ],
+        ]);
+
+        // Notify students
+        try {
+            foreach ($project->authors as $author) {
+                \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectReturned($project));
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to send advisory rejection email: ' . $e->getMessage());
+        }
+
+        return redirect()->route('faculty.review')
+            ->with('success', 'Project rejected from your advisory. The student has been notified to fix it.');
+    }
 }

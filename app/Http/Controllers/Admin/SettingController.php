@@ -48,7 +48,7 @@ class SettingController extends Controller
             'max_upload_size' => 'required|numeric|min:1',
             'max_attachment_size' => 'required|numeric|min:1',
             'allowed_file_types' => 'required|string',
-            'academic_year' => 'required|integer|min:2000',
+            'academic_year' => 'nullable|integer|min:2000',
             'repository_name' => 'required|string|max:255',
             'maintenance_mode' => 'nullable|boolean',
             'submissions_open' => 'nullable|boolean',

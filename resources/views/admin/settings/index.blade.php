@@ -61,7 +61,7 @@
 
                             <div>
                                 <label for="academic_year" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
-                                    Current Academic Year <span class="text-red-500">*</span>
+                                    Current Academic Year <span class="text-xs font-normal text-gray-500 ml-1">(Optional)</span>
                                 </label>
                                 <p class="text-xs text-gray-500 mb-2">The latest valid year for new submissions.</p>
                                 <input type="number" id="academic_year" name="academic_year" 
