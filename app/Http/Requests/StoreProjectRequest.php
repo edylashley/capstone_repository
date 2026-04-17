@@ -57,10 +57,18 @@ class StoreProjectRequest extends FormRequest
         
         $allowedTypes = str_replace(' ', '', \App\Models\Setting::get('allowed_file_types', 'pdf,zip,doc,docx,ppt,pptx,xls,xlsx,mp4,avi,mov,sql,txt,csv,json,xml,jpg,jpeg,png,gif,md,rar,7z'));
 
-        // Use the configured academic year or fallback to current year
+        // Smart Year Validation: If setting is blank, allow any year. If set, force that year.
         $yearSetting = \App\Models\Setting::get('academic_year');
-        $academicYearEnd = $yearSetting ? (int)$yearSetting : (int)date('Y');
-
+        $yearRules = ['required', 'integer'];
+        
+        if ($yearSetting) {
+            $yearRules[] = 'min:' . $yearSetting;
+            $yearRules[] = 'max:' . $yearSetting;
+        } else {
+            $yearRules[] = 'min:2000';
+            $yearRules[] = 'max:' . (date('Y') + 1);
+        }
+        
         return [
             'title' => [
                 'required',
@@ -72,7 +80,7 @@ class StoreProjectRequest extends FormRequest
             ],
             'slug' => ['nullable','string','max:255','unique:projects,slug'],
             'abstract' => ['required','string'],
-            'year' => ['required','integer','min:'.$academicYearEnd,'max:'.$academicYearEnd],
+            'year' => $yearRules,
             'adviser_id' => ['required','exists:users,id'],
             'authors' => ['required','array','min:1'],
             'authors.*' => ['required','string','max:255'],
@@ -104,10 +112,15 @@ class StoreProjectRequest extends FormRequest
      */
     public function messages(): array
     {
+        $yearSetting = \App\Models\Setting::get('academic_year');
+        $message = $yearSetting 
+            ? "Submissions are currently restricted to the {$yearSetting} academic year."
+            : "Please enter a valid academic year (e.g., 2020 - " . (date('Y')) . ").";
+
         return [
             'title.unique' => 'A project with this exact title already exists in the system. Please revise your title.',
-            'year.min' => 'Error, this is not the current year.',
-            'year.max' => 'Error, this is not the current year.',
+            'year.min' => $message,
+            'year.max' => $message,
         ];
     }
 }
