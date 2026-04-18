@@ -14,14 +14,16 @@ class RegistrationVerificationCode extends Mailable
 
     public string $code;
     public string $userName;
+    public string $email;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $code, string $userName)
+    public function __construct(string $code, string $userName, string $email)
     {
         $this->code = $code;
         $this->userName = $userName;
+        $this->email = $email;
     }
 
     /**

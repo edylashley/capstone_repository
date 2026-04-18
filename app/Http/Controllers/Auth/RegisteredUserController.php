@@ -54,11 +54,11 @@ class RegisteredUserController extends Controller
             'password' => $request->password,
         ]);
         $request->session()->put('registration_code', $verificationCode);
-        $request->session()->put('registration_code_expires_at', now()->addMinutes(2));
+        $request->session()->put('registration_code_expires_at', now()->addMinutes(10));
 
         // Send the verification email
         Mail::to($request->email)->queue(
-            new RegistrationVerificationCode($verificationCode, $request->name)
+            new RegistrationVerificationCode($verificationCode, $request->name, $request->email)
         );
 
         return view('auth.verify-registration-code', [
@@ -161,7 +161,7 @@ class RegisteredUserController extends Controller
 
         // Send the new verification email
         Mail::to($registrationData['email'])->queue(
-            new RegistrationVerificationCode($verificationCode, $registrationData['name'])
+            new RegistrationVerificationCode($verificationCode, $registrationData['name'], $registrationData['email'])
         );
 
         return view('auth.verify-registration-code', [
