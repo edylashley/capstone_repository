@@ -85,9 +85,11 @@ class ProjectController extends Controller
             }
         }
 
-        // Search by category/specialization
+        // Search by category
         if ($request->filled('specialization')) {
-            $query->where('specialization', $request->query('specialization'));
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('name', $request->query('specialization'));
+            });
         }
 
         // Intelligent Multi-Term Search
@@ -192,9 +194,14 @@ class ProjectController extends Controller
             'adviser_id' => $data['adviser_id'],
             'status' => 'pending',
             'program' => $data['program'] ?? 'CSIT',
-            'specialization' => $data['specialization'] ?? null,
+            'specialization' => null, // Deprecated in favor of many-to-many
             'authors_list' => implode(', ', array_map('trim', $data['authors'])),
         ]);
+
+        // Sync multiple categories
+        if ($request->has('categories')) {
+            $project->categories()->sync($request->categories);
+        }
 
         // Attach ONLY the submitting author so they retain ownership to view/edit their submission
         $project->authors()->attach($request->user()->id, ['author_order' => 0]);
@@ -563,7 +570,8 @@ class ProjectController extends Controller
             ],
             'abstract' => 'required|string',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'specialization' => 'required|string',
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'exists:categories,id',
             'program' => ['required', 'string', Rule::in(['BSInT', 'Com-Sci'])],
             'adviser_id' => 'required|exists:users,id',
             'keywords' => 'nullable|string',
@@ -587,7 +595,7 @@ class ProjectController extends Controller
             'title' => $validated['title'],
             'abstract' => $validated['abstract'],
             'year' => $validated['year'],
-            'specialization' => $validated['specialization'],
+            'specialization' => null, // Deprecated
             'program' => $validated['program'],
             'adviser_id' => $validated['adviser_id'],
             'keywords' => $keywords,
@@ -595,6 +603,9 @@ class ProjectController extends Controller
             'status' => 'pending', // Reset to pending for re-review
             'rejection_reason' => null, // Clear previous feedback
         ]);
+
+        // Sync categories
+        $project->categories()->sync($validated['categories']);
 
         // Log the edit
         ActivityLog::create([

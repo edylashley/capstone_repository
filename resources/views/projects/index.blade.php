@@ -118,9 +118,16 @@
                                     <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                                         <div class="flex-1 min-w-0">
                                             <div class="flex flex-wrap items-center gap-2 mb-3">
-                                                <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-indigo-100 dark:border-indigo-800">
-                                                    {{ $project->specialization ?? 'General' }}
-                                                </span>
+                                                @foreach($project->categories as $category)
+                                                    <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-indigo-100 dark:border-indigo-800">
+                                                        {{ $category->name }}
+                                                    </span>
+                                                @endforeach
+                                                @if($project->categories->isEmpty())
+                                                    <span class="bg-gray-50 dark:bg-gray-700 text-gray-400 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-gray-100 dark:border-gray-600">
+                                                        General
+                                                    </span>
+                                                @endif
                                                 <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $project->year }}</span>
                                                 <span class="text-[10px] text-indigo-400/80 font-black uppercase tracking-widest border-l border-gray-200 dark:border-gray-700 pl-2">{{ $project->program }}</span>
                                                 

@@ -146,7 +146,8 @@ class ProjectController extends Controller
             'year' => 'required|integer|min:1900',
             'adviser_id' => 'nullable|exists:users,id',
             'adviser_name' => 'nullable|string|max:255',
-            'specialization' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Category::pluck('name')->toArray())],
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'exists:categories,id',
             'abstract' => 'nullable|string',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(['BSInT', 'Com-Sci'])],
             'manuscript' => [
@@ -189,10 +190,9 @@ class ProjectController extends Controller
             'slug' => $slug,
             'abstract' => $validated['abstract'] ?? null,
             'year' => $validated['year'],
-            'adviser_id' => $validated['adviser_id'] ?? null,
             'adviser_name' => $validated['adviser_name'] ?? null,
             'program' => $program,
-            'specialization' => $validated['specialization'],
+            'specialization' => null, // Deprecated
             'authors_list' => $validated['authors_list'],
             'status' => 'published', // INSTANT PUBLISH
             'is_published' => true,
@@ -201,6 +201,9 @@ class ProjectController extends Controller
             'manuscript_validated' => true,
             'manuscript_validation_notes' => 'Archived by Administrator. Manuscript assumed valid.',
         ]);
+
+        // Sync categories
+        $project->categories()->sync($validated['categories']);
 
         // Upload manuscript
         $file = $request->file('manuscript');
@@ -311,13 +314,26 @@ class ProjectController extends Controller
             'adviser_id' => 'required|exists:users,id',
             'abstract' => 'nullable|string',
             'status' => 'required|in:pending,verified,approved,published,archived',
-            'specialization' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Category::pluck('name')->toArray())],
+            'categories' => 'required|array|min:1',
+            'categories.*' => 'exists:categories,id',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(['BSInT', 'Com-Sci'])],
         ]);
 
         $validated['adviser_name'] = \App\Models\User::find($request->adviser_id)->name;
 
-        $project->update($validated);
+        $project->update([
+            'title' => $validated['title'],
+            'year' => $validated['year'],
+            'authors_list' => $validated['authors_list'],
+            'adviser_id' => $validated['adviser_id'],
+            'adviser_name' => $validated['adviser_name'],
+            'abstract' => $validated['abstract'],
+            'status' => $validated['status'],
+            'specialization' => null, // Deprecated
+            'program' => $validated['program'],
+        ]);
+
+        $project->categories()->sync($validated['categories']);
 
         return redirect()->route('admin.projects.index')->with('success', 'Project metadata updated successfully');
     }
@@ -460,7 +476,8 @@ class ProjectController extends Controller
             'projects.*.year' => 'required|integer|min:1900',
             'projects.*.adviser_id' => 'nullable|exists:users,id',
             'projects.*.adviser_name' => 'nullable|string|max:255',
-            'projects.*.specialization' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Category::pluck('name')->toArray())],
+            'projects.*.categories' => 'required|array|min:1',
+            'projects.*.categories.*' => 'exists:categories,id',
             'projects.*.program' => ['required', 'string', \Illuminate\Validation\Rule::in(['BSInT', 'Com-Sci'])],
             'projects.*.abstract' => 'nullable|string',
             'projects.*.manuscript' => [
@@ -517,7 +534,7 @@ class ProjectController extends Controller
                 'adviser_id' => $data['adviser_id'] ?? null,
                 'adviser_name' => $data['adviser_name'] ?? null,
                 'program' => $data['program'],
-                'specialization' => $data['specialization'],
+                'specialization' => null, // Deprecated
                 'authors_list' => $data['authors_list'],
                 'status' => 'published',
                 'is_published' => true,
@@ -525,6 +542,9 @@ class ProjectController extends Controller
                 'manuscript_validated' => true,
                 'manuscript_validation_notes' => 'Bulk archived by Administrator. Manuscript assumed valid.',
             ]);
+
+            // Sync categories
+            $project->categories()->sync($data['categories']);
 
             // Upload manuscript
             $manuscriptFile = $request->file("projects.{$idx}.manuscript");

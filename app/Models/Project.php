@@ -51,6 +51,11 @@ class Project extends Model
         return $this->hasMany(ProjectFile::class);
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_project');
+    }
+
     public function verification()
     {
         return $this->hasOne(AdviserVerification::class);

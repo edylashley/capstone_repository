@@ -75,16 +75,20 @@
                                 <x-input-error :messages="$errors->get('abstract')" class="mt-2" />
                             </div>
 
-                            <!-- Specialization/Category -->
-                            <div>
-                                <x-input-label for="specialization" :value="__('Project Category')" class="text-white"/>
-                                <select id="specialization" name="specialization" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                                    <option value="">Select Category</option>
+                            <!-- Project Categories -->
+                            <div class="col-span-2">
+                                <x-input-label :value="__('Project Categories')" class="text-white mb-2"/>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 bg-gray-900/50 p-4 rounded-lg border border-gray-700">
                                     @foreach($categories as $cat)
-                                        <option value="{{ $cat->name }}" {{ $project->specialization === $cat->name ? 'selected' : '' }}>{{ $cat->name }}</option>
+                                        <label class="flex items-center gap-3 cursor-pointer group">
+                                            <input type="checkbox" name="categories[]" value="{{ $cat->id }}" 
+                                                {{ (is_array(old('categories')) && in_array($cat->id, old('categories'))) || (!old('categories') && $project->categories->contains($cat->id)) ? 'checked' : '' }}
+                                                class="rounded border-gray-700 bg-gray-900 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                                            <span class="text-sm text-gray-300 group-hover:text-white transition-colors">{{ $cat->name }}</span>
+                                        </label>
                                     @endforeach
-                                </select>
-                                <x-input-error :messages="$errors->get('specialization')" class="mt-2" />
+                                </div>
+                                <x-input-error :messages="$errors->get('categories')" class="mt-2" />
                             </div>
 
                             <!-- Program -->

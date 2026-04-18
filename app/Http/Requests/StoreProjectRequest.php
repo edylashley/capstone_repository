@@ -87,7 +87,8 @@ class StoreProjectRequest extends FormRequest
 
             // Metadata
             'program' => ['required', 'string', Rule::in(['BSInT', 'Com-Sci'])],
-            'specialization' => ['required', 'string', Rule::in(\App\Models\Category::pluck('name')->toArray())],
+            'categories' => ['required', 'array', 'min:1'],
+            'categories.*' => ['exists:categories,id'],
 
             // Main manuscript: PDF only
             'manuscript' => ['required','file','mimes:pdf','max:'.$maxManuscriptKb], 

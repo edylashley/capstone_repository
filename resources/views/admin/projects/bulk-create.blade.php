@@ -80,13 +80,18 @@
     <script>
         // ── Template data ──────────────────────────────────────────────────────
         const advisers = @json($advisers->map(fn($a) => ['id' => $a->id, 'name' => $a->name]));
-        const categories = @json($categories->map(fn($c) => ['name' => $c->name]));
+        const categories = @json($categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]));
         let projectIndex = 0;
 
         // ── Build project card HTML ────────────────────────────────────────────
         function createProjectCard(idx) {
             const adviserOptions = advisers.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
-            const categoryOptions = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+            const categoryCheckboxes = categories.map(c => `
+                <label class="flex items-center gap-2 p-2 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors group">
+                    <input type="checkbox" name="projects[${idx}][categories][]" value="${c.id}" class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                    <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">${c.name}</span>
+                </label>
+            `).join('');
 
             const card = document.createElement('div');
             card.className = 'bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-2xl border border-gray-100 dark:border-gray-700 project-card';
@@ -141,11 +146,10 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Category <span class="text-red-500">*</span></label>
-                            <select name="projects[${idx}][specialization]" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
-                                <option value="" disabled selected>Select Category</option>
-                                ${categoryOptions}
-                            </select>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-2">Categories <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-32 overflow-y-auto pr-2 border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-gray-50 dark:bg-gray-900/50">
+                                ${categoryCheckboxes}
+                            </div>
                         </div>
                         <div>
                             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Abstract <span class="text-gray-400 text-[10px] uppercase">(Optional)</span></label>

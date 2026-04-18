@@ -51,7 +51,7 @@
                         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             @foreach($categories as $category)
                                 @php
-                                    $usageCount = \App\Models\Project::where('specialization', $category->name)->count();
+                                    $usageCount = $category->projects()->count();
                                 @endphp
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">

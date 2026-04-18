@@ -175,7 +175,13 @@
                                                     </div>
                                                     <div>
                                                         <span class="text-[9px] uppercase font-black text-gray-500 tracking-widest block mb-1">Category</span>
-                                                        <span class="text-xs text-gray-300 font-bold tracking-tight">{{ $project->specialization ?? 'Uncategorized' }}</span>
+                                                        <span class="text-xs text-gray-300 font-bold tracking-tight">
+                                                            @if($project->categories->isNotEmpty())
+                                                                {{ $project->categories->pluck('name')->join(', ') }}
+                                                            @else
+                                                                Uncategorized
+                                                            @endif
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

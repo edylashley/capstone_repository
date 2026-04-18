@@ -8,7 +8,7 @@ use App\Http\Controllers\SupportTicketController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::get('/', function () {
+Route::any('/', function () {
     return view('home');
 })->name('home');
 

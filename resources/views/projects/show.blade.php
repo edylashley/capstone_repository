@@ -39,11 +39,11 @@
                         <div class="pt-4 border-t border-gray-100 dark:border-gray-700 mt-4">
                             <strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-2">Categories</strong>
                             <div class="text-sm mt-1 flex flex-wrap gap-2">
-                                @if($project->specialization)
+                                @foreach($project->categories as $category)
                                     <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black px-2 py-1 rounded-lg border border-indigo-100 dark:border-indigo-800 uppercase tracking-tighter">
-                                        {{ $project->specialization }}
+                                        {{ $category->name }}
                                     </span>
-                                @endif
+                                @endforeach
                                 @if(is_array($project->keywords))
                                     @foreach($project->keywords as $kw)
                                         <span class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[10px] px-2 py-1 rounded-lg border border-gray-100 dark:border-gray-600 font-bold">#{{ $kw }}</span>

@@ -124,16 +124,20 @@
                     </div>
 
                     <div class="mb-6">
-                        <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 mb-2">Project Category</label>
-                        <select name="specialization" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                            <option value="">Select Category</option>
+                        <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 mb-3 text-center sm:text-left">Project Categories <span class="text-indigo-400 normal-case font-medium">(Select all that apply)</span></label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach($categories as $category)
-                                <option value="{{ $category->name }}" {{ old('specialization') == $category->name ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
+                                <label class="relative flex items-center p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 cursor-pointer transition-all group bg-gray-50/30">
+                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
+                                        {{ is_array(old('categories')) && in_array($category->id, old('categories')) ? 'checked' : '' }}
+                                        class="w-5 h-5 rounded-lg border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
+                                    <span class="ml-3 text-sm font-bold text-gray-700 group-hover:text-indigo-700 transition-colors">
+                                        {{ $category->name }}
+                                    </span>
+                                </label>
                             @endforeach
-                        </select>
-                        @error('specialization') <p class="text-red-600 text-sm mt-1 font-semibold">{{ $message }}</p> @enderror
+                        </div>
+                        @error('categories') <p class="text-red-600 text-sm mt-3 font-semibold">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

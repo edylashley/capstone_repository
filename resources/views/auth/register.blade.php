@@ -15,7 +15,8 @@
                     </svg>
                 </div>
                 <input id="name"
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    style="padding-left: 2.75rem !important;"
                     type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
                     placeholder="Enter your full name" />
             </div>
@@ -35,7 +36,8 @@
                     </svg>
                 </div>
                 <input id="student_id"
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    style="padding-left: 2.75rem !important;"
                     type="text" name="student_id" value="{{ old('student_id') }}" required
                     placeholder="Enter your 9-digit ID (e.g., 202312345)" />
             </div>
@@ -58,7 +60,8 @@
                     </svg>
                 </div>
                 <select id="program" name="program"
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all appearance-none"
+                    class="block w-full py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    style="text-indent: 2.25rem !important;"
                     required>
                     <option value="" disabled {{ old('program') ? '' : 'selected' }}>Choose Program</option>
                     <option value="BSInT" {{ old('program') == 'BSInT' ? 'selected' : '' }}>Bachelor of Science in
@@ -89,7 +92,8 @@
                     </svg>
                 </div>
                 <input id="email"
-                    class="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    style="padding-left: 2.75rem !important;"
                     type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
                     placeholder="Enter your email" />
             </div>
@@ -110,7 +114,8 @@
                     </svg>
                 </div>
                 <input id="password"
-                    class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-12 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    style="padding-left: 2.75rem !important;"
                     type="password" name="password" required autocomplete="new-password"
                     placeholder="Create a password" />
                 <button type="button" onclick="togglePasswordVisibility('password')"
@@ -140,7 +145,8 @@
                     </svg>
                 </div>
                 <input id="password_confirmation"
-                    class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-12 py-3 border border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    style="padding-left: 2.75rem !important;"
                     type="password" name="password_confirmation" required autocomplete="new-password"
                     placeholder="Confirm your password" />
                 <button type="button" onclick="togglePasswordVisibility('password_confirmation')"
@@ -159,6 +165,7 @@
 
         <!-- Submit Button -->
         <button type="submit"
+            style="margin-top: 1rem !important;"
             class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
             Create Account
         </button>
