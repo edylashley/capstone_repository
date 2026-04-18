@@ -31,20 +31,30 @@
                             <!-- Marquee CSS -->
                             <style>
                                 @keyframes sidebar-marquee {
-                                    0% { transform: translateX(0%); }
+                                    0% { transform: translateX(0); }
                                     100% { transform: translateX(-50%); }
                                 }
                                 .animate-sidebar-marquee {
-                                    display: inline-block;
-                                    animation: sidebar-marquee 12s linear infinite;
+                                    display: flex;
+                                    width: max-content;
+                                    animation: sidebar-marquee 30s linear infinite;
                                 }
                             </style>
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-300">Search Records</label>
+                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Search Records</label>
                                 <div class="relative w-full bg-white rounded-lg overflow-hidden flex items-center border border-gray-300 focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500">
-                                    <div id="sidebar-marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 0.50rem; right: 0.50rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
-                                        <div class="whitespace-nowrap animate-sidebar-marquee text-sm text-gray-400">
-                                            Title, abstract, author, adviser, keywords... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Title, abstract, author, adviser, keywords...
+                                    <div id="sidebar-marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 0.50rem; right: 0.50rem; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+                                        <div class="animate-sidebar-marquee text-sm text-gray-400">
+                                            <div class="flex shrink-0">
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                            </div>
+                                            <div class="flex shrink-0">
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 px-3 text-sm text-gray-900 bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="">
@@ -52,7 +62,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-300">Year</label>
+                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Year</label>
                                 <select name="year" class="w-full rounded-lg border-gray-300 text-sm">
                                     <option value="">All Years</option>
                                     @foreach($years as $y)
@@ -62,16 +72,16 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-300">Program</label>
+                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Program</label>
                                 <select name="program" class="w-full rounded-lg border-gray-300 text-sm">
                                     <option value="">All Programs</option>
-                                    <option value="BSIT" {{ request('program') == 'BSIT' || request('program') == 'BSInT' ? 'selected' : '' }}>BSIT</option>
+                                    <option value="BSInT" {{ request('program') == 'BSInT' ? 'selected' : '' }}>BSInT</option>
                                     <option value="BSCS" {{ request('program') == 'BSCS' || request('program') == 'Com-Sci' ? 'selected' : '' }}>BSCS</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-300">Category</label>
+                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Category</label>
                                 <select name="specialization" class="w-full rounded-lg border-gray-300 text-sm" onchange="this.form.submit()">
                                     <option value="">Select Category</option>
                                     @foreach(\App\Models\Category::pluck('name') as $spec)

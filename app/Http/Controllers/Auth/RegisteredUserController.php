@@ -36,8 +36,8 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'student_id' => ['required', 'string', 'regex:/^[0-9]{9}$/', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'student_id' => ['required', 'string', 'regex:/^[0-9]{9}$/', 'unique:' . User::class],
             'program' => ['required', 'string', 'in:BSInT,Com-Sci'],
             'password' => ['required', 'confirmed', Rules\Password::min(8)],
         ]);
@@ -136,7 +136,7 @@ class RegisteredUserController extends Controller
         $request->session()->forget(['registration_data', 'registration_code', 'registration_code_expires_at']);
 
         // Note: We DO NOT log in the user here because they are not active yet.
-        
+
         return redirect()->route('login')->with('success', 'Registration successful! Your email has been verified and your account is now pending administrative review. You will be able to log in once your CSIT student status is verified.');
     }
 

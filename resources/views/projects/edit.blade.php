@@ -60,7 +60,7 @@
                                 <option value="">Select adviser</option>
                                 @foreach($advisers as $adv)
                                     <option value="{{ $adv->id }}" {{ old('adviser_id', $project->adviser_id) == $adv->id ? 'selected' : '' }}>
-                                        {{ $adv->name }} ({{ $adv->email }})
+                                        {{ $adv->name }}
                                     </option>
                                 @endforeach
                             </select>

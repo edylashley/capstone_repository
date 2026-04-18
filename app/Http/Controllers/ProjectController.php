@@ -73,7 +73,7 @@ class ProjectController extends Controller
             $query->where('year', $request->query('year'));
         }
 
-        // Filter by Program (Mapping BSIT to BSInT, and BSCS to Com-Sci based on DB schema)
+        // Filter by Program (Mapping BSInT and Com-Sci based on DB schema)
         if ($request->filled('program')) {
             $program = $request->query('program');
             if ($program === 'BSIT') {

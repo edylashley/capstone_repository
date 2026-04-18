@@ -1,14 +1,14 @@
 <x-mail::message>
-# Project Published!
+    # Project Published!
 
-Great News! The project **"{{ $project->title }}"** has been officially published to the Repository.
+    Great News! The project **"{{ $project->title }}"** has been officially published to the Repository.
 
-It is now publicly accessible and indexed in the institutional archives.
+    It is now publicly accessible and indexed in the institutional archives.
 
-<x-mail::button :url="route('projects.show', $project->id)">
-View Published Record
-</x-mail::button>
+    <x-mail::button :url="route('projects.show', $project->id)">
+        View Published Record
+    </x-mail::button>
 
-Thanks,<br>
-{{ config('app.name') }}
+    Thanks,<br>
+    {{ config('app.name') }}
 </x-mail::message>

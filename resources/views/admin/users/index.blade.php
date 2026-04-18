@@ -115,7 +115,7 @@
                                                 Active
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 uppercase tracking-wider transition-all duration-300 group-hover:bg-amber-500/20 group-hover:text-amber-300" title="Requires BSIT Verification">
+                                            <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 uppercase tracking-wider transition-all duration-300 group-hover:bg-amber-500/20 group-hover:text-amber-300" title="Requires BSInT Verification">
                                                 <span class="w-1.5 h-1.5 rounded-full bg-amber-600 dark:bg-amber-400 animate-pulse group-hover:bg-amber-300"></span>
                                                 Pending Review
                                             </span>

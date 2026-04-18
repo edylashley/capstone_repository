@@ -33,7 +33,7 @@
                             <label class="text-xs font-white uppercase text-gray-400">Program:</label>
                             <select name="program" onchange="this.form.submit()" class="text-sm rounded-lg border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 py-1.5 pl-3 pr-10 border-0 shadow-sm">
                                 <option value="">All Programs</option>
-                                <option value="BSInT" {{ request('program')=='BSInT'?'selected':'' }}>BSIT</option>
+                                <option value="BSInT" {{ request('program')=='BSInT'?'selected':'' }}>BSInT</option>
                                 <option value="Com-Sci" {{ request('program')=='Com-Sci'?'selected':'' }}>BSCS</option>
                             </select>
                         </div>

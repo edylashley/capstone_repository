@@ -38,7 +38,7 @@
                             <select name="adviser_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 <option value="">Select adviser</option>
                                 @foreach($advisers as $adv)
-                                    <option value="{{ $adv->id }}" {{ old('adviser_id') == $adv->id ? 'selected' : '' }}>{{ $adv->name }} ({{ $adv->email }})</option>
+                                    <option value="{{ $adv->id }}" {{ old('adviser_id') == $adv->id ? 'selected' : '' }}>{{ $adv->name }}</option>
                                 @endforeach
                             </select>
                             @error('adviser_id') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
