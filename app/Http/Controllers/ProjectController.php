@@ -174,7 +174,11 @@ class ProjectController extends Controller
             return redirect()->route('student.home')->withErrors(['submissions' => 'You have already submitted a project. Students are limited to one project submission.']);
         }
 
-        \Log::debug('ProjectController@store called', ['user' => $request->user() ? $request->user()->toArray() : null, 'input_keys' => array_keys($request->all())]);
+        \Log::info('ProjectController@store initiated', [
+            'user' => $request->user()->id,
+            'title' => $request->title,
+            'has_manuscript' => $request->hasFile('manuscript')
+        ]);
 
         $data = $request->validated();
 

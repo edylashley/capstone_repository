@@ -30,6 +30,13 @@ class StoreProjectRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
+        \Log::info('StoreProjectRequest incoming data', [
+            'has_manuscript' => $this->hasFile('manuscript'),
+            'manuscript_valid' => $this->hasFile('manuscript') ? $this->file('manuscript')->isValid() : false,
+            'manuscript_error' => $this->hasFile('manuscript') ? $this->file('manuscript')->getError() : 'no file',
+            'authors' => $this->authors
+        ]);
+
         if ($this->has('authors') && is_array($this->authors)) {
             // Remove empty string inputs so they don't fail the 'required' check
             $filteredAuthors = array_filter($this->authors, function ($value) {
@@ -122,5 +129,19 @@ class StoreProjectRequest extends FormRequest
             'year.min' => $message,
             'year.max' => $message,
         ];
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     */
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        \Log::warning('Project Submission Validation Failed', [
+            'user_id' => $this->user() ? $this->user()->id : null,
+            'errors' => $validator->errors()->toArray(),
+            'input_keys' => array_keys($this->all())
+        ]);
+
+        parent::failedValidation($validator);
     }
 }
