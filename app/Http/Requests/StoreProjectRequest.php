@@ -30,13 +30,6 @@ class StoreProjectRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        \Log::info('StoreProjectRequest incoming data', [
-            'has_manuscript' => $this->hasFile('manuscript'),
-            'manuscript_valid' => $this->hasFile('manuscript') ? $this->file('manuscript')->isValid() : false,
-            'manuscript_error' => $this->hasFile('manuscript') ? $this->file('manuscript')->getError() : 'no file',
-            'authors' => $this->authors
-        ]);
-
         if ($this->has('authors') && is_array($this->authors)) {
             // Remove empty string inputs so they don't fail the 'required' check
             $filteredAuthors = array_filter($this->authors, function ($value) {
@@ -136,10 +129,22 @@ class StoreProjectRequest extends FormRequest
      */
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        \Log::warning('Project Submission Validation Failed', [
+        // Log the failure to the database for the Admin
+        \App\Models\ActivityLog::create([
             'user_id' => $this->user() ? $this->user()->id : null,
-            'errors' => $validator->errors()->toArray(),
-            'input_keys' => array_keys($this->all())
+            'action' => 'submission_validation_failed',
+            'ip' => $this->ip(),
+            'meta' => [
+                'errors' => $validator->errors()->toArray(),
+                'title' => $this->title ?? 'Untitled',
+                'files' => [
+                    'manuscript' => $this->hasFile('manuscript') ? [
+                        'name' => $this->file('manuscript')->getClientOriginalName(),
+                        'size' => round($this->file('manuscript')->getSize() / 1024 / 1024, 2) . ' MB',
+                        'mime' => $this->file('manuscript')->getMimeType(),
+                    ] : 'missing'
+                ]
+            ]
         ]);
 
         parent::failedValidation($validator);
