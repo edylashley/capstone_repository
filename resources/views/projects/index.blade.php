@@ -22,8 +22,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row gap-8 items-start">
                 <!-- Sidebar: Refinement Tools -->
-                <aside class="w-full lg:w-1/4 shrink-0 space-y-6" style="position: -webkit-sticky; position: sticky; top: 2rem; align-self: flex-start; z-index: 10;">
-                    <div class="dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
+                <aside class="w-full lg:w-1/4 shrink-0 space-y-6 lg:sticky lg:top-8 lg:self-start lg:z-10">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
                         <h3 class="font-black text-xs uppercase tracking-widest text-gray-400 mb-4 italic">Library Catalog</h3>
                         
                         <!-- Search Form -->
@@ -70,21 +70,38 @@
                                 </select>
                             </div>
 
-                            <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-300">Category</label>
-                                <div class="space-y-1 text-gray-400">
-                                @php
-                                    $specializations = \App\Models\Category::pluck('name');
-                                @endphp
+                            <div x-data="{ open: {{ request('specialization') ? 'true' : 'false' }} }" class="space-y-3 pt-2">
+                                <div @click="open = !open" class="flex items-center justify-between cursor-pointer group border-b border-gray-700/50 pb-2">
+                                    <label class="block text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-indigo-400 transition-colors cursor-pointer italic">
+                                        Filter by Category
+                                    </label>
+                                    <svg class="w-3.5 h-3.5 text-gray-500 group-hover:text-indigo-400 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
                                 </div>
-                                <div class="space-y-1 text-gray-400">
+                                
+                                <div x-show="open" 
+                                     x-transition:enter="transition ease-out duration-200"
+                                     x-transition:enter-start="opacity-0 -translate-y-2"
+                                     x-transition:enter-end="opacity-100 translate-y-0"
+                                     class="space-y-1 text-gray-400 pl-3 border-l-2 border-indigo-500/30 ml-1 py-1"
+                                     x-cloak>
+                                    @php
+                                        $specializations = \App\Models\Category::pluck('name');
+                                    @endphp
                                     @foreach($specializations as $spec)
-                                        <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-indigo-600">
-                                            <input type="radio" name="specialization" value="{{ $spec }}" {{ request('specialization') == $spec ? 'checked' : '' }} onchange="this.form.submit()" class="text-indigo-600 focus:ring-indigo-500">
-                                            {{ $spec }}
+                                        <label class="flex items-center gap-2 text-sm cursor-pointer hover:text-indigo-400 transition-colors py-0.5">
+                                            <input type="radio" name="specialization" value="{{ $spec }}" {{ request('specialization') == $spec ? 'checked' : '' }} onchange="this.form.submit()" class="w-3 h-3 text-indigo-600 focus:ring-indigo-500 bg-gray-700 border-gray-600">
+                                            <span class="{{ request('specialization') == $spec ? 'text-indigo-400 font-bold' : '' }}">{{ $spec }}</span>
                                         </label>
                                     @endforeach
-                                    <a href="{{ route('projects.index') }}" class="block text-[10px] text-gray-400 mt-2 uppercase font-bold hover:text-red-500">Clear Filters</a>
+                                    
+                                    @if(request('specialization'))
+                                        <a href="{{ route('projects.index') }}" class="inline-flex items-center gap-1 text-[9px] text-red-400 mt-2 uppercase font-black hover:text-red-500 transition-colors">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            Clear Category
+                                        </a>
+                                    @endif
                                 </div>
                             </div>
 
