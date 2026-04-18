@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-white leading-tight">{{ $project->title }}</h2>
-            <a href="{{ url()->previous() }}" class="px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 transition ease-in-out duration-150">
+        <div class="flex justify-between items-start sm:items-center gap-4">
+            <h2 class="font-semibold text-xl text-white leading-tight flex-1 break-words opacity-90">{{ $project->title }}</h2>
+            <a href="{{ url()->previous() }}" class="shrink-0 whitespace-nowrap px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 transition ease-in-out duration-150 mt-1 sm:mt-0">
                 Back
             </a>
         </div>

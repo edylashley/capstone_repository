@@ -57,7 +57,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 px-3 text-sm text-gray-900 bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="">
+                                    <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 pl-3 pr-8 text-sm text-gray-900 bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="">
+                                    <button type="button" id="sidebar-clear-btn" class="absolute text-gray-400 hover:text-gray-600 hidden z-30 focus:outline-none" style="right: 10px; top: 50%; transform: translateY(-50%);" title="Clear search">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    </button>
                                 </div>
                             </div>
 
@@ -182,6 +185,7 @@
             // Smooth CSS Marquee Placeholder behavior for Sidebar Config
             const sidebarSearchInput = document.getElementById('sidebar-search');
             const sidebarMarqueePlaceholder = document.getElementById('sidebar-marquee-placeholder');
+            const sidebarClearBtn = document.getElementById('sidebar-clear-btn');
             
             if (sidebarSearchInput && sidebarMarqueePlaceholder) {
                 const toggleSidebarMarquee = () => {
@@ -190,11 +194,27 @@
                     } else {
                         sidebarMarqueePlaceholder.style.opacity = '1';
                     }
+                    if (sidebarClearBtn) {
+                        if (sidebarSearchInput.value.length > 0) {
+                            sidebarClearBtn.classList.remove('hidden');
+                        } else {
+                            sidebarClearBtn.classList.add('hidden');
+                        }
+                    }
                 };
 
                 sidebarSearchInput.addEventListener('focus', toggleSidebarMarquee);
                 sidebarSearchInput.addEventListener('blur', toggleSidebarMarquee);
                 sidebarSearchInput.addEventListener('input', toggleSidebarMarquee);
+                
+                if (sidebarClearBtn) {
+                    sidebarClearBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        sidebarSearchInput.value = '';
+                        toggleSidebarMarquee();
+                        sidebarSearchInput.focus();
+                    });
+                }
                 
                 // Set initial state
                 toggleSidebarMarquee();

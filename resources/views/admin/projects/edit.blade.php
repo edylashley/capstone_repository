@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-white leading-tight">
-                {{ __('Edit Project Metadata') }}: {{ $project->title }}
+        <div class="flex justify-between items-start sm:items-center gap-4">
+            <h2 class="font-semibold text-xl text-white leading-tight flex-1 break-words">
+                {{ __('Edit Project Metadata') }}: <span class="opacity-90">{{ $project->title }}</span>
             </h2>
-            <a href="{{ route('admin.projects.index') }}" class="px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 transition ease-in-out duration-150">
+            <a href="{{ route('admin.projects.index') }}" class="shrink-0 whitespace-nowrap px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 transition ease-in-out duration-150 mt-1 sm:mt-0">
                 Back to List
             </a>
         </div>

@@ -382,7 +382,7 @@ class ProjectController extends Controller
     public function bulkAction(Request $request)
     {
         $validated = $request->validate([
-            'action' => 'required|in:publish,delete,reassign',
+            'action' => 'required|in:publish,delete,reassign,archive',
             'project_ids' => 'required|array',
             'project_ids.*' => 'exists:projects,id',
             'adviser_id' => 'required_if:action,reassign|exists:users,id'
@@ -425,6 +425,25 @@ class ProjectController extends Controller
                 $publishedCount++;
             }
             return redirect()->back()->with('success', "{$publishedCount} selected projects published successfully.");
+        } elseif ($action === 'archive') {
+            $projects = \App\Models\Project::whereIn('id', $projectIds)->get();
+            $archivedCount = 0;
+            foreach ($projects as $project) {
+                $project->status = 'archived';
+                $project->is_published = false;
+                $project->save();
+                
+                \App\Models\ActivityLog::create([
+                    'user_id' => $request->user()->id,
+                    'action' => 'archive_project',
+                    'target_type' => 'project',
+                    'target_id' => $project->id,
+                    'ip' => $request->ip(),
+                    'meta' => ['bulk' => true],
+                ]);
+                $archivedCount++;
+            }
+            return redirect()->back()->with('success', "{$archivedCount} selected projects archived successfully.");
         } elseif ($action === 'delete') {
             $projects = \App\Models\Project::whereIn('id', $projectIds)->get();
             foreach ($projects as $project) {

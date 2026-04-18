@@ -57,10 +57,12 @@ class ProjectController extends Controller
     {
         $query = Project::with('adviser');
 
-        // Administrators see the full lifecycle (pending, approved, published)
+        // Administrators see the full lifecycle (pending, approved, published) EXCEPT archived
         // Students and Guests only see 'published' records
         if (!auth()->check() || !auth()->user()->isAdmin()) {
             $query->where('status', 'published');
+        } else {
+            $query->where('status', '!=', 'archived');
         }
 
         // Search by title

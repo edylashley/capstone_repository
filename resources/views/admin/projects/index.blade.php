@@ -27,6 +27,7 @@
                                 <option value="pending" {{ request('status')=='pending'?'selected':'' }}>Pending Adviser</option>
                                 <option value="approved" {{ request('status')=='approved'?'selected':'' }}>Awaiting Publication</option>
                                 <option value="published" {{ request('status')=='published'?'selected':'' }}>Published Records</option>
+                                <option value="archived" {{ request('status')=='archived'?'selected':'' }}>Archived</option>
                             </select>
                         </div>
                         <div class="flex items-center gap-2 border-l-0 sm:border-l border-gray-200 pl-0 sm:pl-4">
@@ -47,6 +48,7 @@
                         <select name="action" id="bulkActionSelect" required class="text-sm rounded-lg border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 py-1.5 pl-3 pr-8" onchange="document.getElementById('bulkAdviserSelect').classList.toggle('hidden', this.value !== 'reassign'); document.getElementById('bulkAdviserSelect').disabled = this.value !== 'reassign';">
                             <option value="">Select Action...</option>
                             <option value="publish">Publish Selected</option>
+                            <option value="archive">Archive Selected</option>
                             <option value="reassign">Reassign Adviser</option>
                             <option value="delete">Delete Selected</option>
                         </select>
@@ -133,6 +135,8 @@
                                         <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 ring-green-200">Published</span>
                                     @elseif($project->status === 'approved' || $project->status === 'verified')
                                         <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 ring-amber-200">Awaiting Admin</span>
+                                    @elseif($project->status === 'archived')
+                                        <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 ring-red-200">Archived</span>
                                     @else
                                         <span class="px-3 py-1 bg-gray-100 text-gray-500 rounded-full text-[10px] font-black uppercase tracking-widest ring-1 ring-gray-200">Awaiting Faculty</span>
                                     @endif
