@@ -93,11 +93,36 @@
                         <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-700 pb-2">Recent Activity Log</h4>
                         <div class="space-y-4">
                             @forelse($activities as $log)
+                                @php
+                                    $colorClass = match(true) {
+                                        str_contains($log->action, 'login') || str_contains($log->action, 'validated') || str_contains($log->action, 'approved') => 'emerald',
+                                        str_contains($log->action, 'logout') || str_contains($log->action, 'delete') => 'red',
+                                        str_contains($log->action, 'failed') || str_contains($log->action, 'rejected') || str_contains($log->action, 'blocked') => 'amber',
+                                        str_contains($log->action, 'upload') || str_contains($log->action, 'edit') || str_contains($log->action, 'create') => 'indigo',
+                                        default => 'gray'
+                                    };
+
+                                    $dotColors = match($colorClass) {
+                                        'emerald' => 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]',
+                                        'red' => 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]',
+                                        'amber' => 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)]',
+                                        'indigo' => 'bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]',
+                                        default => 'bg-gray-500 shadow-[0_0_8px_rgba(107,114,128,0.5)]'
+                                    };
+
+                                    $textColors = match($colorClass) {
+                                        'emerald' => 'text-emerald-400',
+                                        'red' => 'text-red-400',
+                                        'amber' => 'text-amber-400',
+                                        'indigo' => 'text-indigo-400',
+                                        default => 'text-gray-400'
+                                    };
+                                @endphp
                                 <div class="flex gap-3 items-start">
-                                    <div class="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]"></div>
+                                    <div class="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 {{ $dotColors }}"></div>
                                     <div>
                                         <p class="text-xs text-gray-300 leading-snug">
-                                            <span class="text-indigo-400 font-bold uppercase tracking-tighter">{{ str_replace('_', ' ', $log->action) }}</span>
+                                            <span class="{{ $textColors }} font-bold uppercase tracking-tighter">{{ str_replace('_', ' ', $log->action) }}</span>
                                         </p>
                                         <span class="text-[9px] text-gray-500 uppercase font-black tracking-widest">{{ $log->created_at->diffForHumans() }}</span>
                                     </div>

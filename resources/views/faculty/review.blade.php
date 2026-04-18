@@ -84,42 +84,49 @@
                                                 </span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 text-center text-sm font-medium">
-                                            <div class="flex flex-wrap items-center justify-center gap-4">
-                                                <a href="{{ route('projects.show', $project) }}" class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-blue-600 hover:text-blue-800 hover:underline transition">
+                                        <td class="px-6 py-4 text-center">
+                                            <div class="inline-flex flex-col items-start gap-2 text-left">
+                                                <a href="{{ route('projects.show', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-400 transition-all">
+                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                                     View Details
                                                 </a>
 
                                                 @if($project->status === 'pending')
-                                                    <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" class="inline" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
+                                                    <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
                                                         @csrf
-                                                        <button type="submit" class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-200 hover:text-indigo-800 hover:underline transition">
+                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-emerald-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
+                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                                             Confirm
                                                         </button>
                                                     </form>
+                                                    
                                                     <button type="button"
                                                             onclick="openReturnModal({{ $project->id }}, '{{ addslashes($project->title) }}')"
-                                                            class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-600 hover:text-amber-800 hover:underline transition">
+                                                            class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-amber-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
+                                                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
                                                         Return
                                                     </button>
                                                     
-                                                    <form method="POST" action="{{ route('faculty.projects.reject-advisory', $project) }}" class="inline" onsubmit="return confirm('Confirm that you are NOT the adviser for this project? This will notify the student and allow them to pick the correct adviser.');">
+                                                    <form method="POST" action="{{ route('faculty.projects.reject-advisory', $project) }}" onsubmit="return confirm('Confirm that you are NOT the adviser for this project? This will notify the student and allow them to pick the correct adviser.');">
                                                         @csrf
-                                                        <button type="submit" class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-red-500 hover:text-red-700 hover:underline transition">
+                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
+                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
                                                             Not My Project
                                                         </button>
                                                     </form>
                                                 @elseif($project->status === 'approved')
-                                                    <form method="POST" action="{{ route('faculty.projects.cancel', $project) }}" class="inline" onsubmit="return confirm('Please confirm: You want to REVOKE the approval for this project? It will return to Pending status.');">
+                                                    <form method="POST" action="{{ route('faculty.projects.cancel', $project) }}" onsubmit="return confirm('Please confirm: You want to REVOKE the approval for this project? It will return to Pending status.');">
                                                         @csrf
-                                                        <button type="submit" class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-red-600 hover:text-red-800 hover:underline transition">
+                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
+                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                                             Revoke
                                                         </button>
                                                     </form>
                                                 @elseif($project->status === 'rejected' && $project->rejection_reason)
                                                     <button type="button"
                                                             onclick="openViewFeedbackModal('{{ addslashes($project->title) }}', `{{ addslashes($project->rejection_reason) }}`)"
-                                                            class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-gray-700 hover:underline transition">
+                                                            class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-white transition-all bg-transparent border-0 p-0 cursor-pointer">
+                                                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                                                         Feedback
                                                     </button>
                                                 @endif
