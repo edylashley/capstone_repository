@@ -33,10 +33,13 @@
             </div>
 
             <!-- My Pending/Active Projects -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-                        <h3 class="text-lg font-bold">My Submissions</h3>
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl border border-gray-100 dark:border-gray-700">
+                <div class="p-4 md:p-8">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                        <div>
+                            <h3 class="text-xl font-black text-gray-800 dark:text-white">My Submissions</h3>
+                            <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-1">Track the status of your research manuscript</p>
+                        </div>
                         @php
                             $deadlineStr = \App\Models\Setting::get('submission_deadline');
                             $isPastDeadline = $deadlineStr && \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($deadlineStr));
@@ -44,131 +47,120 @@
                             $hasSubmitted = auth()->user()->authoredProjects()->exists();
                         @endphp
 
-                        @if($submissionsOpen && !$isPastDeadline && !$hasSubmitted)
-                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                            @if($submissionsOpen && !$isPastDeadline && !$hasSubmitted)
                                 @if($deadlineStr)
-                                    <span class="text-sm font-black text-red-600 uppercase tracking-widest bg-red-50 dark:bg-red-900/40 px-4 py-2 rounded-lg border-2 border-red-200 dark:border-red-800 animate-pulse">
+                                    <span class="text-[10px] font-black text-red-600 uppercase tracking-widest bg-red-50 dark:bg-red-900/40 px-3 py-2 rounded-lg border border-red-200 dark:border-red-800 animate-pulse text-center">
                                         Deadline: {{ \Carbon\Carbon::parse($deadlineStr)->format('M d, Y h:i A') }}
                                     </span>
                                 @endif
-                                <a href="{{ route('projects.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded shadow-sm hover:shadow-indigo-500/30 transition-all text-center">
+                                <a href="{{ route('projects.create') }}" class="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
                                     Submit New Project
                                 </a>
-                            </div>
-                        @elseif($hasSubmitted)
-                            <div class="bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 rounded-lg px-6 py-3">
-                                <span class="text-sm font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">
-                                    ✓ You have submitted your required project.
-                                </span>
-                            </div>
-                        @else
-                            <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-lg px-6 py-3">
-                                <span class="text-xs sm:text-sm font-black text-red-600 dark:text-red-400 uppercase tracking-wide">
-                                    @if(!$submissionsOpen)
-                                        ⚠️ Submissions are currently closed.
-                                    @else
-                                        ⚠️ The submission deadline has passed ({{ \Carbon\Carbon::parse($deadlineStr)->format('M d, Y h:i A') }}).
-                                    @endif
-                                </span>
-                            </div>
-                        @endif
+                            @elseif($hasSubmitted)
+                                <div class="bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 rounded-xl px-4 py-2 flex items-center justify-center">
+                                    <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+                                        ✓ Submitted
+                                    </span>
+                                </div>
+                            @else
+                                <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-xl px-4 py-2 flex items-center justify-center">
+                                    <span class="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-widest">
+                                        @if(!$submissionsOpen)
+                                            ⚠️ Closed
+                                        @else
+                                            ⚠️ Expired
+                                        @endif
+                                    </span>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     
                     @if($myProjects->isEmpty())
-                        <p class="text-gray-500 italic">You have no pending submissions.</p>
+                        <div class="text-center py-12">
+                            <div class="w-16 h-16 bg-gray-50 dark:bg-gray-700/30 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">📭</div>
+                            <p class="text-gray-500 italic text-sm">You have no pending submissions.</p>
+                        </div>
                     @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Project Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Adviser</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Submitted</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Record Status</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($myProjects as $project)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            <div class="whitespace-normal break-words max-w-xs md:max-w-md">
-                                                <a href="{{ route('projects.show', $project) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-white font-bold leading-tight">
-                                                    {{ $project->title }}
-                                                </a>
-                                                <div class="text-[10px] text-gray-500 font-bold mt-1 uppercase tracking-widest flex items-center gap-2">
-                                                    <span>{{ $project->year }}</span>
-                                                    <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                                    <span>{{ $project->program }}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 italic whitespace-nowrap">{{ $project->adviser->name ?? 'N/A' }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $project->created_at->format('M d, Y') }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($project->status === 'published')
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-green-500 text-gray-200 border border-emerald-200 shadow-sm">
-                                                    Official Record
-                                                </span>
-                                            @elseif($project->status === 'approved')
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-indigo-700 text-gray-200 border border-indigo-200 shadow-sm">
-                                                    Confirmed Final
-                                                </span>
-                                            @elseif($project->status === 'rejected')
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-red-100 text-red-800 border border-red-200 shadow-sm">
-                                                    Returned
-                                                </span>
-                                            @else
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-emerald-100 text-gray-700 border border-green-200 shadow-sm">
-                                                    Pending
-                                                </span>
+                        <div class="overflow-x-auto -mx-4 sm:mx-0">
+                            <div class="inline-block min-w-full align-middle">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead>
+                                        <tr class="text-left text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                            <th class="px-6 py-4">Project Title</th>
+                                            <th class="px-6 py-4">Adviser</th>
+                                            <th class="px-6 py-4 text-center">Status</th>
+                                            <th class="px-6 py-4 text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                        @foreach($myProjects as $project)
+                                            <tr class="group hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                                                <td class="px-6 py-4">
+                                                    <div class="max-w-xs md:max-w-md">
+                                                        <div class="text-sm font-bold text-gray-800 dark:text-white mb-1 leading-snug truncate md:whitespace-normal">{{ $project->title }}</div>
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="text-[9px] font-black uppercase tracking-tighter text-indigo-400 px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 rounded border border-indigo-100 dark:border-indigo-800">{{ $project->program }}</span>
+                                                            <span class="text-[9px] font-bold text-gray-400 uppercase italic">{{ $project->year }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 italic whitespace-nowrap">{{ $project->adviser->name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 text-center">
+                                                    @php
+                                                        $statusClasses = match($project->status) {
+                                                            'published' => 'bg-emerald-500 text-white border-emerald-600',
+                                                            'approved' => 'bg-indigo-600 text-white border-indigo-700',
+                                                            'rejected' => 'bg-red-100 text-red-600 border-red-200',
+                                                            default => 'bg-amber-100 text-amber-600 border-amber-200',
+                                                        };
+                                                    @endphp
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border {{ $statusClasses }} shadow-sm">
+                                                        {{ $project->status }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-center">
+                                                    <div class="inline-flex flex-col items-start gap-2 text-left">
+                                                        <a href="{{ route('projects.show', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-400 transition-all">
+                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                            View Details
+                                                        </a>
+                                                        @if($project->status === 'pending' || $project->status === 'rejected')
+                                                            <a href="{{ route('projects.edit', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-emerald-400 transition-all">
+                                                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                                {{ $project->status === 'rejected' ? 'Resubmit' : 'Edit' }}
+                                                            </a>
+                                                            <form action="{{ route('projects.cancel', $project) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this submission? This will delete the project and all uploaded files.');" class="inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                                                    {{ $project->status === 'rejected' ? 'Delete' : 'Cancel' }}
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @if($project->status === 'rejected' && $project->rejection_reason)
+                                            <tr class="bg-red-50/30 dark:bg-red-900/10">
+                                                <td colspan="4" class="px-6 py-4">
+                                                    <div class="flex items-start gap-3">
+                                                        <div class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5"></div>
+                                                        <div>
+                                                            <p class="text-[9px] font-black uppercase tracking-widest text-red-500 mb-1">Feedback</p>
+                                                            <p class="text-xs text-gray-600 dark:text-red-200/80 leading-relaxed">{{ $project->rejection_reason }}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                             @endif
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            <div class="inline-flex flex-col items-start gap-2 text-left">
-                                                <a href="{{ route('projects.show', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-400 transition-all">
-                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                                    View Details
-                                                </a>
-                                                @if($project->status === 'pending' || $project->status === 'rejected')
-                                                    <a href="{{ route('projects.edit', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-emerald-400 transition-all">
-                                                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                                                        {{ $project->status === 'rejected' ? 'Resubmit' : 'Edit' }}
-                                                    </a>
-                                                    
-                                                    <form action="{{ route('projects.cancel', $project) }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel this submission? This will delete the project and all uploaded files.');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
-                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                                            {{ $project->status === 'rejected' ? 'Delete' : 'Cancel' }}
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    {{-- Inline feedback row for returned projects --}}
-                                    @if($project->status === 'rejected' && $project->rejection_reason)
-                                    <tr class="bg-red-50/50">
-                                        <td colspan="5" class="px-6 py-3">
-                                            <div class="flex items-start gap-3">
-                                                <svg class="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                                                </svg>
-                                                <div>
-                                                    <p class="text-[10px] text-red-500 uppercase font-bold tracking-wider mb-1">Adviser's Feedback</p>
-                                                    <p class="text-sm text-red-700 leading-relaxed">{{ $project->rejection_reason }}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     @endif
                 </div>

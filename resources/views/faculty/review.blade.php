@@ -5,137 +5,132 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-6 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             
             <!-- Faculty Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-indigo-500">
-                    <div class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Pending Confirmation</div>
-                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $projects->where('status', 'pending')->count() }}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-l-4 border-indigo-500 transition-transform hover:scale-[1.02]">
+                    <div class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-1">Pending Confirmation</div>
+                    <div class="text-3xl font-black text-gray-900 dark:text-white">{{ $projects->where('status', 'pending')->count() }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-green-500">
-                    <div class="text-xs font-bold text-green-600 uppercase tracking-wider">My Historical Archives</div>
-                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $projects->whereIn('status', ['approved', 'published'])->count() }}</div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-l-4 border-emerald-500 transition-transform hover:scale-[1.02]">
+                    <div class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-1">Historical Archives</div>
+                    <div class="text-3xl font-black text-gray-900 dark:text-white">{{ $projects->whereIn('status', ['approved', 'published'])->count() }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border-l-4 border-blue-500">
-                    <div class="text-xs font-bold text-blue-600 uppercase tracking-wider">Assigned Advisees</div>
-                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $projects->count() }}</div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border-l-4 border-blue-500 transition-transform hover:scale-[1.02] sm:col-span-2 lg:col-span-1">
+                    <div class="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1">Assigned Advisees</div>
+                    <div class="text-3xl font-black text-gray-900 dark:text-white">{{ $projects->count() }}</div>
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h3 class="text-lg font-bold mb-4">Final Record Confirmation Queue</h3>
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl border border-gray-100 dark:border-gray-700">
+                <div class="p-4 md:p-8">
+                    <div class="mb-8">
+                        <h3 class="text-xl font-black text-gray-800 dark:text-white leading-tight">Final Record Confirmation Queue</h3>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-1">Review and verify the final defended versions of research projects</p>
+                    </div>
 
                     @if($projects->isEmpty())
-                        <p class="text-gray-500 italic">No pending final records waiting for confirmation.</p>
+                        <div class="text-center py-12">
+                            <div class="w-16 h-16 bg-gray-50 dark:bg-gray-700/30 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">⏳</div>
+                            <p class="text-gray-500 italic">No pending final records waiting for confirmation.</p>
+                        </div>
                     @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Project Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Authors</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Submitted</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Record Status</th>
-                                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($projects as $project)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            <div class="whitespace-normal break-words max-w-xs md:max-w-md">
-                                                <a href="{{ route('projects.show', $project) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-white font-bold leading-tight">
-                                                    {{ $project->title }}
-                                                </a>
-                                                <div class="text-[10px] text-gray-500 font-bold mt-1 uppercase tracking-widest flex items-center gap-2">
-                                                    <span>{{ $project->year }}</span>
-                                                    <span class="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                                    <span>{{ $project->program }}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 italic">
-                                            <div class="whitespace-normal break-words max-w-xs">
-                                                {{ $project->authors->pluck('name')->join(', ') }}
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                            {{ $project->created_at->format('M d, Y') }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($project->status === 'published')
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-green-500 text-gray-200 border border-emerald-200 shadow-sm">
-                                                    Official Record
-                                                </span>
-                                            @elseif($project->status === 'approved')
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-indigo-700 text-gray-200 border border-indigo-200 shadow-sm">
-                                                    Confirmed Final
-                                                </span>
-                                            @elseif($project->status === 'rejected')
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-red-100 text-red-800 border border-red-200 shadow-sm">
-                                                    Returned
-                                                </span>
-                                            @else
-                                                <span class="px-3 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-full bg-emerald-100 text-gray-700 border border-green-200 shadow-sm">
-                                                    Pending
-                                                </span>
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4 text-center">
-                                            <div class="inline-flex flex-col items-start gap-2 text-left">
-                                                <a href="{{ route('projects.show', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-400 transition-all">
-                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                                                    View Details
-                                                </a>
+                        <div class="overflow-x-auto -mx-4 sm:mx-0">
+                            <div class="inline-block min-w-full align-middle">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead>
+                                        <tr class="text-left text-[10px] font-black uppercase tracking-widest text-gray-400">
+                                            <th class="px-6 py-4">Project Title</th>
+                                            <th class="px-6 py-4">Authors</th>
+                                            <th class="px-6 py-4 text-center">Status</th>
+                                            <th class="px-6 py-4 text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                        @foreach($projects as $project)
+                                            <tr class="group hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                                                <td class="px-6 py-4">
+                                                    <div class="max-w-xs md:max-w-md">
+                                                        <div class="text-sm font-bold text-gray-800 dark:text-white mb-1 leading-snug truncate md:whitespace-normal">{{ $project->title }}</div>
+                                                        <div class="flex items-center gap-2">
+                                                            <span class="text-[9px] font-black uppercase tracking-tighter text-indigo-400 px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 rounded border border-indigo-100 dark:border-indigo-800">{{ $project->program }}</span>
+                                                            <span class="text-[9px] font-bold text-gray-400 uppercase italic">{{ $project->year }}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 text-xs text-gray-500 dark:text-gray-400 italic">
+                                                    <div class="max-w-[150px] truncate md:whitespace-normal md:max-w-xs">
+                                                        {{ $project->authors->pluck('name')->join(', ') }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4 text-center">
+                                                    @php
+                                                        $statusClasses = match($project->status) {
+                                                            'published' => 'bg-emerald-500 text-white border-emerald-600',
+                                                            'approved' => 'bg-indigo-600 text-white border-indigo-700',
+                                                            'rejected' => 'bg-red-100 text-red-600 border-red-200',
+                                                            default => 'bg-amber-100 text-amber-600 border-amber-200',
+                                                        };
+                                                    @endphp
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border {{ $statusClasses }} shadow-sm">
+                                                        {{ $project->status }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 text-center">
+                                                    <div class="inline-flex flex-col items-start gap-2 text-left">
+                                                        <a href="{{ route('projects.show', $project) }}" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-400 transition-all">
+                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                            View Details
+                                                        </a>
 
-                                                @if($project->status === 'pending')
-                                                    <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
-                                                        @csrf
-                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-emerald-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
-                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                            Confirm
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <button type="button"
-                                                            onclick="openReturnModal({{ $project->id }}, '{{ addslashes($project->title) }}')"
-                                                            class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-amber-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
-                                                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
-                                                        Return
-                                                    </button>
-                                                    
-                                                    <form method="POST" action="{{ route('faculty.projects.reject-advisory', $project) }}" onsubmit="return confirm('Confirm that you are NOT the adviser for this project? This will notify the student and allow them to pick the correct adviser.');">
-                                                        @csrf
-                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
-                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
-                                                            Not My Project
-                                                        </button>
-                                                    </form>
-                                                @elseif($project->status === 'approved')
-                                                    <form method="POST" action="{{ route('faculty.projects.cancel', $project) }}" onsubmit="return confirm('Please confirm: You want to REVOKE the approval for this project? It will return to Pending status.');">
-                                                        @csrf
-                                                        <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer">
-                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                                            Revoke
-                                                        </button>
-                                                    </form>
-                                                @elseif($project->status === 'rejected' && $project->rejection_reason)
-                                                    <button type="button"
-                                                            onclick="openViewFeedbackModal('{{ addslashes($project->title) }}', `{{ addslashes($project->rejection_reason) }}`)"
-                                                            class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-white transition-all bg-transparent border-0 p-0 cursor-pointer">
-                                                        <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                                                        Feedback
-                                                    </button>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                        @if($project->status === 'pending')
+                                                            <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-emerald-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                                    Confirm
+                                                                </button>
+                                                            </form>
+                                                            
+                                                            <button type="button"
+                                                                    onclick="openReturnModal({{ $project->id }}, '{{ addslashes($project->title) }}')"
+                                                                    class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-amber-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+                                                                Return
+                                                            </button>
+                                                            
+                                                            <form method="POST" action="{{ route('faculty.projects.reject-advisory', $project) }}" onsubmit="return confirm('Confirm that you are NOT the adviser for this project? This will notify the student and allow them to pick the correct adviser.');" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+                                                                    Not My Project
+                                                                </button>
+                                                            </form>
+                                                        @elseif($project->status === 'approved')
+                                                            <form method="POST" action="{{ route('faculty.projects.cancel', $project) }}" onsubmit="return confirm('Please confirm: You want to REVOKE the approval for this project? It will return to Pending status.');" class="inline">
+                                                                @csrf
+                                                                <button type="submit" class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                                    Revoke
+                                                                </button>
+                                                            </form>
+                                                        @elseif($project->status === 'rejected' && $project->rejection_reason)
+                                                            <button type="button"
+                                                                    onclick="openViewFeedbackModal('{{ addslashes($project->title) }}', `{{ addslashes($project->rejection_reason) }}`)"
+                                                                    class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-white transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                                                                Feedback
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     @endif
                 </div>

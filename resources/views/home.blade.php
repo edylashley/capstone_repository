@@ -62,20 +62,22 @@
                                 }
                             </style>
                             <form action="{{ route('projects.index') ?? '#' }}" method="GET">
-                                <div class="relative w-full bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden flex items-center">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none z-10">
-                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <div class="relative w-full bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden flex items-center ring-1 ring-gray-100 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:shadow-indigo-500/10 transition-all duration-300">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none z-10">
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                                     </div>
                                     
                                     <!-- Smooth Visual Marquee -->
-                                    <div id="marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 1.5rem; right: 6rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
-                                        <div class="whitespace-nowrap animate-smooth-marquee text-sm text-gray-400">
+                                    <div id="marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-300" style="left: 3.5rem; right: 7rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
+                                        <div class="whitespace-nowrap animate-smooth-marquee text-sm text-gray-400 font-medium">
                                             Find past projects: Search by capstone titles, authors, faculty advisers, or keywords... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Find projects: Search by capstone titles, authors, faculty advisers, or keywords...
                                         </div>
                                     </div>
 
-                                    <input type="search" id="dynamic-search" name="keyword" class="block w-full p-4 pl-12 pr-28 text-sm text-gray-900 bg-transparent outline-none focus:ring-0 border-0 relative z-20" placeholder="" required>
-                                    <button type="submit" class="text-white absolute right-2.5 bottom-2 bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-semibold rounded-lg text-sm px-5 py-2 transition-colors duration-200 z-30">Search</button>
+                                    <input type="search" id="dynamic-search" name="keyword" class="block w-full py-5 pl-14 pr-28 text-sm text-gray-900 bg-transparent outline-none focus:ring-0 border-0 relative z-20" placeholder="" required>
+                                    <button type="submit" class="text-white absolute right-2.5 bg-indigo-600 hover:bg-indigo-700 hover:scale-105 active:scale-95 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-black rounded-xl text-[10px] md:text-xs px-6 py-2.5 transition-all duration-200 z-30 uppercase tracking-widest shadow-lg shadow-indigo-600/20">
+                                        Search
+                                    </button>
                                 </div>
                             </form>
                             

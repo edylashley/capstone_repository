@@ -31,8 +31,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">Abstract (Optional)</label>
-                        <textarea name="abstract" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3">{{ old('abstract') }}</textarea>
+                        <label class="block font-medium text-sm text-gray-700">Abstract</label>
+                        <textarea name="abstract" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" required>{{ old('abstract') }}</textarea>
                         @error('abstract') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                     </div>
 

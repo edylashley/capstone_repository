@@ -8,50 +8,48 @@
         </div>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="py-6 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col gap-6 @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id()) lg:flex-row @endif">
                 
                 <!-- Metadata Side -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id()) lg:w-1/3 @else w-full @endif">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id()) lg:w-1/3 @else w-full @endif border border-gray-100 dark:border-gray-700">
                     <div class="mb-4 space-y-2">
                         <div class="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
                             <div>
-                                <h3 class="text-xl font-bold uppercase tracking-tight text-gray-900 dark:text-gray-300 leading-none mb-1">Project Details</h3>
-                                <p class="text-xs text-gray-500">ID: #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900 dark:text-white leading-none mb-1">Project Details</h3>
+                                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">ID: #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>
                             @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id())
-                                <span class="bg-indigo-600 text-white text-[10px] font-black uppercase px-2 py-1 rounded">Review Mode</span>
+                                <span class="bg-indigo-600 text-white text-[9px] font-black uppercase px-2 py-1 rounded shadow-sm">Review Mode</span>
                             @endif
                         </div>
 
-                        <p class="text-gray-700 dark:text-gray-300"><strong class="text-white">Year:</strong> {{ $project->year }}</p>
-                        <p class="text-gray-700 dark:text-gray-300"><strong class="text-white">Adviser:</strong> {{ $project->adviser->name ?? $project->adviser_name ?? '-' }}</p>
-                        <p class="text-gray-700 dark:text-gray-300"><strong class="text-white">Program:</strong> {{ $project->program ?? '-' }}</p>
-                        <p class="text-gray-700 dark:text-gray-300"><strong class="text-white">Authors:</strong> {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
-                        <p class="pt-2 border-t border-gray-100 dark:border-gray-700 mt-2 text-gray-700 dark:text-gray-300"><strong class="text-white">Abstract:</strong></p>
-                        <p class="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed">{{ $project->abstract }}</p>
-                        <p class="pt-2 border-t mt-2 text-gray-300"><strong class="text-gray-500">Categories:</strong></p>
-                        <div class="text-sm mt-1 flex flex-wrap gap-2">
-                            <!-- Show Specialization as Plain Text -->
-                            @if($project->specialization)
-                                <span class="text-gray-300 font-medium">
-                                    {{ $project->specialization }}
-                                </span>
-                            @endif
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Year Defended</strong> {{ $project->year }}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong> {{ $project->adviser->name ?? $project->adviser_name ?? '-' }}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong> {{ $project->program ?? '-' }}</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong> {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
+                        </div>
+                        <div class="pt-4 border-t border-gray-100 dark:border-gray-700 mt-4">
+                            <strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-2 text-indigo-500">Abstract</strong>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed">{{ $project->abstract }}</p>
+                        </div>
 
-                            <!-- Show Keywords as Hash Tags -->
-                            @if(is_array($project->keywords))
-                                @foreach($project->keywords as $kw)
-                                    <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full border border-gray-200">#{{ $kw }}</span>
-                                @endforeach
-                            @elseif(!empty($project->keywords))
-                                <span class="text-gray-400">{{ $project->keywords }}</span>
-                            @endif
-
-                            @if(empty($project->specialization) && empty($project->keywords))
-                                <span class="text-gray-500 italic text-xs">Uncategorized</span>
-                            @endif
+                        <div class="pt-4 border-t border-gray-100 dark:border-gray-700 mt-4">
+                            <strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-2">Categories</strong>
+                            <div class="text-sm mt-1 flex flex-wrap gap-2">
+                                @if($project->specialization)
+                                    <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black px-2 py-1 rounded-lg border border-indigo-100 dark:border-indigo-800 uppercase tracking-tighter">
+                                        {{ $project->specialization }}
+                                    </span>
+                                @endif
+                                @if(is_array($project->keywords))
+                                    @foreach($project->keywords as $kw)
+                                        <span class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[10px] px-2 py-1 rounded-lg border border-gray-100 dark:border-gray-600 font-bold">#{{ $kw }}</span>
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
 
                         @if($project->status === 'published' || (auth()->check() && (auth()->user()->isAdviser() || auth()->user()->isAdmin() || $project->authors->contains(auth()->user()))))
@@ -185,9 +183,20 @@
                 </div>
 
                 <!-- PDF Layout (Side or Bottom) -->
-                <div class="flex-1 space-y-6 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 sm:rounded-lg ">
-                    <div class="overflow-hidden shadow-sm sm:rounded-lg p-6">
-                        <h3 class="font-bold text-lg mb-4 border-b pb-2">Manuscript Viewer</h3>
+                <div class="flex-1 space-y-6">
+                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-gray-100 dark:border-gray-700">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
+                            <h3 class="font-black text-lg text-gray-800 dark:text-white uppercase tracking-tight italic">Manuscript Viewer</h3>
+                            @auth
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('files.view', $project->files->firstWhere('type', 'manuscript')) }}" target="_blank" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                        Open Full View
+                                    </a>
+                                </div>
+                            @endauth
+                        </div>
+                        
                         @php
                             $manuscript = $project->files->firstWhere('type', 'manuscript');
                             $attachments = $project->files->where('type', 'attachment');
@@ -195,24 +204,25 @@
 
                         @if($manuscript)
                             @auth
-                                <div class="mt-4 border-4 border-gray-100 rounded-xl overflow-hidden shadow-inner transition-all duration-300" id="pdf-container">
-                                    <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%" height="800px" style="min-height: 800px;" class="w-full h-[800px] bg-gray-500"></iframe>
+                                <div class="relative border-4 border-gray-50 dark:border-gray-700 rounded-2xl overflow-hidden shadow-inner bg-gray-100 dark:bg-gray-900" id="pdf-container">
+                                    <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%" height="800px" style="min-height: 800px;" class="w-full h-[600px] md:h-[800px] bg-gray-500 border-0"></iframe>
                                 </div>
 
-                                <div class="mt-4 flex justify-between items-center bg-gray-50 p-4 rounded-lg">
-                                    <span class="text-xs text-gray-500 italic">Verify all signatures on the manuscript before confirmation.</span>
-                                    
-                                    <div class="flex items-center gap-4">
-                                        @if(auth()->user()->isAdmin() || auth()->user()->isAdviser() || $project->authors->contains(auth()->user()))
-                                            <span class="text-xs font-bold text-gray-500 uppercase tracking-widest bg-gray-200 px-2 py-1 rounded">
-                                                {{ number_format($manuscript->size / 1048576, 2) }} MB
-                                            </span>
-                                        @endif
-
-                                        <a href="{{ route('files.download', $manuscript->id) }}" class="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-bold shadow hover:bg-gray-900 transition flex items-center gap-2">
-                                            Download PDF
-                                        </a>
+                                <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-sm">
+                                            <span class="text-xl">📄</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-black text-gray-800 dark:text-white uppercase tracking-widest">{{ $manuscript->filename }}</p>
+                                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{{ number_format($manuscript->size / 1048576, 2) }} MB</p>
+                                        </div>
                                     </div>
+                                    
+                                    <a href="{{ route('files.download', $manuscript->id) }}" class="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                        Download PDF
+                                    </a>
                                 </div>
                             @else
                                 <div class="mt-4 p-12 border-4 border-dashed border-gray-200 bg-gray-50 rounded-xl flex flex-col items-center justify-center text-center">

@@ -117,54 +117,57 @@
                 </aside>
 
                 <!-- Main Content: Project Gallery -->
-                <div class="flex-1">
+                <div class="flex-1 w-full">
                     @if($projects->isEmpty())
-                        <div class="bg-white dark:bg-gray-800 p-12 text-center rounded-xl shadow-sm border border-gray-100">
+                        <div class="bg-white dark:bg-gray-800 p-8 md:p-12 text-center rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <div class="text-4xl mb-4">📭</div>
                             <h3 class="text-lg font-bold text-gray-400">No records found</h3>
-                            <p class="text-gray-400">Try adjusting your search filters or browse by category.</p>
+                            <p class="text-sm text-gray-400">Try adjusting your search filters or browse by category.</p>
                         </div>
                     @else
-                        <div class="space-y-4">
+                        <div class="space-y-4 md:space-y-6">
                             @foreach($projects as $project)
-                                <article class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition group">
-                                    <div class="flex flex-col md:flex-row justify-between gap-4">
-                                        <div class="flex-1">
-                                            <div class="flex items-center gap-2 mb-2">
-                                                <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase">
+                                <article class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all group overflow-hidden">
+                                    <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex flex-wrap items-center gap-2 mb-3">
+                                                <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-indigo-100 dark:border-indigo-800">
                                                     {{ $project->specialization ?? 'General' }}
                                                 </span>
-                                                <span class="text-[10px] text-gray-400 font-bold uppercase">{{ $project->year }}</span>
-                                                <span class="text-[10px] text-indigo-400/80 font-black uppercase tracking-widest border-l border-gray-700 pl-2 ml-1">{{ $project->program }}</span>
+                                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $project->year }}</span>
+                                                <span class="text-[10px] text-indigo-400/80 font-black uppercase tracking-widest border-l border-gray-200 dark:border-gray-700 pl-2">{{ $project->program }}</span>
+                                                
                                                 @if(auth()->check() && auth()->user()->isAdmin())
-                                                    @if($project->status === 'published')
-                                                        <span class="bg-emerald-500/10 text-emerald-600 text-[9px] font-black px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-tighter">Published Record</span>
-                                                    @elseif($project->status === 'approved')
-                                                        <span class="bg-indigo-500/10 text-indigo-500 text-[9px] font-black px-2 py-0.5 rounded-full border border-indigo-500/20 uppercase tracking-tighter">Approved Final</span>
-                                                    @else
-                                                        <span class="bg-green-500/10 text-green-500 text-[9px] font-black px-2 py-0.5 rounded-full border border-green-500/20 uppercase tracking-tighter">Pending Review</span>
-                                                    @endif
+                                                    <span class="bg-emerald-500/10 text-emerald-600 text-[9px] font-black px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-tighter ml-auto sm:ml-0">
+                                                        {{ ucfirst($project->status) }}
+                                                    </span>
                                                 @endif
                                             </div>
-                                            <h4 class="text-xl font-bold text-gray-800 dark:text-white group-hover:text-indigo-600 transition mb-2">
-                                                <a href="{{ route('projects.show', $project) }}">{{ $project->title }}</a>
+
+                                            <h4 class="text-lg md:text-xl font-black text-gray-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-2 leading-tight">
+                                                <a href="{{ route('projects.show', $project) }}" class="block">{{ $project->title }}</a>
                                             </h4>
-                                            <p class="text-sm text-gray-500 line-clamp-2 leading-relaxed mb-4">
+
+                                            <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 md:line-clamp-3 leading-relaxed mb-4">
                                                 {{ $project->abstract }}
                                             </p>
-                                            <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-[10px] uppercase font-black tracking-widest leading-none">
-                                                <div class="flex items-center gap-1.5 overflow-hidden">
-                                                    <span class="text-indigo-400/80 flex-shrink-0">Authors:</span>
-                                                    <span class="text-gray-300 truncate">{{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</span>
+
+                                            <div class="flex flex-col sm:flex-row sm:items-center gap-y-2 gap-x-6 text-[10px] uppercase font-black tracking-widest leading-none">
+                                                <div class="flex items-center gap-2 overflow-hidden">
+                                                    <span class="text-indigo-400/80 shrink-0">Authors:</span>
+                                                    <span class="text-gray-400 truncate">{{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</span>
                                                 </div>
-                                                <div class="flex items-center gap-1.5 overflow-hidden">
-                                                    <span class="text-indigo-400/80 flex-shrink-0">Adviser:</span>
-                                                    <span class="text-gray-300 truncate">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
+                                                <div class="flex items-center gap-2 overflow-hidden">
+                                                    <span class="text-indigo-400/80 shrink-0">Adviser:</span>
+                                                    <span class="text-gray-400 truncate">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="md:w-32 flex md:flex-col justify-center items-center gap-2 border-l md:pl-4 border-gray-100 font-black">
-                                            <a href="{{ route('projects.show', $project) }}" class="text-indigo-600 hover:underline text-xs">View Full Details</a>
+
+                                        <div class="shrink-0 flex md:flex-col justify-center items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-700 md:pl-6">
+                                            <a href="{{ route('projects.show', $project) }}" class="w-full md:w-auto text-center px-4 py-2 md:py-1.5 bg-gray-50 dark:bg-gray-700/50 hover:bg-indigo-600 hover:text-white dark:text-gray-300 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                                                View Details
+                                            </a>
                                         </div>
                                     </div>
                                 </article>
