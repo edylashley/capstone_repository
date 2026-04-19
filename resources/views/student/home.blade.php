@@ -10,23 +10,36 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
 
-            <!-- Getting Started Guide -->
-            <div class="bg-indigo-600 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-5">
-                    <h3 class="text-2xl font-bold mb-2 text-white">Welcome to your Capstone Repository!</h3>
-                    <p class="text-indigo-100 mb-4">You are part of the institutional memory. Whether you're here to research or to archive your legacy, follow these steps:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white/10 p-3 rounded-lg flex items-start gap-3">
-                            <span class="bg-white text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center font-bold flex-shrink-0">1</span>
-                            <p class="text-white text-sm"><strong>Search</strong> for inspiration in the Library below using keywords or years.</p>
+            <!-- System Guide -->
+            <div class="bg-indigo-600 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-2xl border border-indigo-500/30">
+                <div class="p-6 md:p-10">
+                    <div class="mb-10">
+                        <h3 class="text-3xl font-black text-white leading-tight mb-4">Welcome to your Capstone Repository! 👋</h3>
+                        <p class="text-indigo-100 text-lg leading-relaxed max-w-3xl">
+                            You are part of the institutional memory. Whether you're here to research or to archive your <strong>legacy</strong>, use this guide to navigate the system effectively.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                <span class="text-sm font-black text-white uppercase tracking-wider">Discovery</span>
+                            </div>
+                            <p class="text-indigo-100 text-xs leading-relaxed">Explore the institutional library to research previous works and manuscripts for your own inspiration.</p>
                         </div>
-                        <div class="bg-white/10 p-3 rounded-lg flex items-start gap-3">
-                            <span class="bg-white text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center font-bold flex-shrink-0">2</span>
-                            <p class="text-white text-sm"><strong>Upload</strong> your final defended manuscript in PDF format via the Submit button.</p>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                <span class="text-sm font-black text-white uppercase tracking-wider">Submission</span>
+                            </div>
+                            <p class="text-indigo-100 text-xs leading-relaxed">Upload your final defended manuscript in PDF format and all required **attachment files** via the secure submission portal.</p>
                         </div>
-                        <div class="bg-white/10 p-3 rounded-lg flex items-start gap-3">
-                            <span class="bg-white text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center font-bold flex-shrink-0">3</span>
-                            <p class="text-white text-sm"><strong>Wait</strong> for your Faculty Adviser to confirm the digital record for the archive.</p>
+                        <div class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                            <div class="flex items-center gap-3 mb-2">
+                                <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span class="text-sm font-black text-white uppercase tracking-wider">Verification</span>
+                            </div>
+                            <p class="text-indigo-100 text-xs leading-relaxed">Track your progress as your Faculty Adviser reviews and confirms your digital record for permanent institutional archiving.</p>
                         </div>
                     </div>
                 </div>

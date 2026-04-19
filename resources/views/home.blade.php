@@ -156,8 +156,7 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">1. Check Your Idea</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Anyone can use the search bar to check if their capstone idea has already been done by a
-                            previous group.
+                            Use the search bar to explore existing capstone projects and verify if your idea has already been completed by a previous group.
                         </p>
                     </div>
                 </div>
@@ -176,8 +175,7 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">2. Upload Your Work</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Graduating students log in to upload their final capstone project and fill out the details about
-                            their system.
+                            Authorized students can log in to submit their final capstone work and provide comprehensive details about their systems.
                         </p>
                     </div>
                 </div>
@@ -195,10 +193,9 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">3. Teacher Approval</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">3. Adviser Review</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Advisers look over the submitted projects to make sure everything is correct before they approve
-                            them for the library.
+                            Faculty advisers review submitted projects for accuracy and compliance before they are officially published in the library.
                         </p>
                     </div>
                 </div>
@@ -218,8 +215,7 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">4. Explore Projects</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Once approved, anyone can read the summary of the project. But you must be logged in to download
-                            the full files.
+                            Access project abstracts publicly, or log in to securely download full manuscripts and verified source code files.
                         </p>
                     </div>
                 </div>

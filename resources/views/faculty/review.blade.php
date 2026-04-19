@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-6 md:py-12">
+    <div class="py-4 md:py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             
             <!-- Faculty Stats -->
@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-2xl border border-gray-100 dark:border-gray-700">
                 <div class="p-4 md:p-8">
                     <div class="mb-8">
                         <h3 class="text-xl font-black text-gray-800 dark:text-white leading-tight">Final Record Confirmation Queue</h3>
@@ -62,7 +62,7 @@
                                                 </td>
                                                 <td class="px-6 py-4 text-xs text-gray-500 dark:text-gray-400 italic">
                                                     <div class="max-w-[150px] truncate md:whitespace-normal md:max-w-xs">
-                                                        {{ $project->authors->pluck('name')->join(', ') }}
+                                                        {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 text-center">

@@ -40,56 +40,60 @@
             @endif
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-0 sm:p-6 text-gray-900 dark:text-gray-100">
                     
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead class="bg-gray-50 dark:bg-gray-700">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Description</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Usage Count</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                            @foreach($categories as $category)
-                                @php
-                                    $usageCount = $category->projects()->count();
-                                @endphp
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
-                                        {{ $category->name }}
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                                        {{ $category->description ?? 'No description' }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $usageCount > 0 ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
-                                            {{ $usageCount }} projects
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-3">
-                                        <button onclick="editCategory({{ $category->id }}, '{{ addslashes($category->name) }}', '{{ addslashes($category->description) }}')" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</button>
-                                        
-                                        @if($usageCount == 0)
-                                            <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Delete</button>
-                                            </form>
-                                        @else
-                                            <span class="text-gray-400 cursor-not-allowed" title="Cannot delete category while in use">Delete</span>
-                                        @endif
-                                    </td>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Name</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Description</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Usage Count</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Actions</th>
                                 </tr>
-                            @endforeach
-                            @if($categories->isEmpty())
-                                <tr>
-                                    <td colspan="4" class="px-6 py-4 text-center text-gray-500 italic">No categories found. Start by adding one.</td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                @foreach($categories as $category)
+                                    @php
+                                        $usageCount = $category->projects()->count();
+                                    @endphp
+                                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
+                                            {{ $category->name }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-gray-500 min-w-[200px] max-w-xs truncate">
+                                            {{ $category->description ?? 'No description' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span class="px-2.5 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-lg {{ $usageCount > 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-800' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 border border-gray-200 dark:border-gray-600' }}">
+                                                {{ $usageCount }} projects
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex items-center gap-4">
+                                                <button onclick="editCategory({{ $category->id }}, '{{ addslashes($category->name) }}', '{{ addslashes($category->description) }}')" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 font-bold uppercase text-[10px] tracking-widest">Edit</button>
+                                                
+                                                @if($usageCount == 0)
+                                                    <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?');" class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 font-bold uppercase text-[10px] tracking-widest">Delete</button>
+                                                    </form>
+                                                @else
+                                                    <span class="text-gray-400 cursor-not-allowed font-bold uppercase text-[10px] tracking-widest" title="Cannot delete category while in use">Delete</span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @if($categories->isEmpty())
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-4 text-center text-gray-500 italic">No categories found. Start by adding one.</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
             </div>

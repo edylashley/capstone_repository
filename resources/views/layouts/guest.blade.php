@@ -14,7 +14,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen flex flex-col items-center justify-center py-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50">
+        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50">
             <!-- Decorative background elements -->
             <div class="fixed inset-0 overflow-hidden pointer-events-none">
                 <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full opacity-20 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
@@ -30,7 +30,11 @@
                         </div>
                         <h3 class="text-2xl font-bold text-white uppercase tracking-tight">
                             @if(request()->routeIs('login'))
-                                Welcome Back
+                                @if(request()->cookie('returning_user'))
+                                    Welcome Back
+                                @else
+                                    Welcome to the Portal
+                                @endif
                             @elseif(request()->routeIs('register'))
                                 Create Account
                             @elseif(request()->is('register/verify-code') || request()->is('register/resend-code'))
@@ -41,7 +45,11 @@
                         </h3>
                         <p class="text-blue-100 text-sm mt-2">
                             @if(request()->routeIs('login'))
-                                Sign in to your account
+                                @if(request()->cookie('returning_user'))
+                                    Sign in to your account
+                                @else
+                                    Access your institutional repository
+                                @endif
                             @elseif(request()->routeIs('register'))
                                 Join the NORSU CSIT community
                             @elseif(request()->is('register/verify-code') || request()->is('register/resend-code'))
@@ -125,5 +133,12 @@
 
         {{-- Global loading spinner for submit buttons --}}
         @include('components.loading-spinner')
+
+        {{-- Set returning user cookie --}}
+        <script>
+            if (!document.cookie.split(';').some((item) => item.trim().startsWith('returning_user='))) {
+                document.cookie = "returning_user=true; max-age=31536000; path=/";
+            }
+        </script>
     </body>
 </html>

@@ -31,7 +31,7 @@
                             <!-- Authors -->
                             <div class="col-span-2">
                                 <x-input-label for="authors_list" :value="__('Authors')" class="text-white"/>
-                                <x-text-input id="authors_list" class="block mt-1 w-full dark:bg-gray-900 text-sm" type="text" name="authors_list" :value="old('authors_list', $project->authors_list)" placeholder="Comma-separated e.g. John Doe, Jane Doe" />
+                                <x-text-input id="authors_list" class="block mt-1 w-full dark:bg-gray-900 text-sm" type="text" name="authors_list" :value="old('authors_list', $project->authors_list ?: $project->authors->pluck('name')->join(', '))" placeholder="Comma-separated e.g. John Doe, Jane Doe" />
                                 <x-input-error :messages="$errors->get('authors_list')" class="mt-2" />
                                 <p class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Only for projects stored without active student accounts. Leave blank if submitted directly by students.</p>
                             </div>

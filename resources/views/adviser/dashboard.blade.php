@@ -7,32 +7,25 @@
                 </h2>
                 <p class="text-sm text-gray-500 mt-1 uppercase tracking-widest font-semibold">Institutional Mentorship Overview</p>
             </div>
-            <div class="flex items-center gap-3">
-                <span class="text-xs font-bold text-gray-400 uppercase">System Status:</span>
-                <span class="flex items-center gap-1.5 py-1 px-3 rounded-full text-[10px] font-black bg-green-100 text-green-700 uppercase tracking-tighter">
-                    <span class="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse"></span>
-                    Operational
-                </span>
-            </div>
         </div>
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 space-y-8">
             
             <!-- Welcome Hero -->
             <div class="dark:bg-gray-800 rounded-3xl p-8 text-white shadow-2xl shadow-indigo-200 relative overflow-hidden">
-                <div class="relative z-10 max-w-2xl">
+                <div class="relative z-10">
                     <h1 class="text-4xl font-black mb-4 leading-tight">Good day, Adviser {{ auth()->user()->name }}! 👋</h1>
                     <p class="text-indigo-100 text-lg mb-8 leading-relaxed">
                         Welcome back to the {{ \App\Models\Setting::get('repository_name', 'CSIT Capstone Repository') }}. You are currently mentoring <span class="font-bold text-white border-b-2 border-white/30">{{ $stats['total_advising'] }}</span> student groups. There are <span class="font-bold text-white border-b-2 border-white/30">{{ $stats['pending_confirmation'] }}</span> projects awaiting your expertise in the verification queue.
                     </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('faculty.review') }}" class="inline-flex items-center px-6 py-3 bg-white text-indigo-700 font-black rounded-xl shadow-xl hover:bg-indigo-50 transition transform hover:-translate-y-1 group">
-                            Open Confirmation Queue
-                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    <div class="flex flex-col sm:flex-row gap-4 mt-8">
+                        <a href="{{ route('faculty.review') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-white text-indigo-700 font-black rounded-2xl shadow-xl hover:shadow-indigo-500/20 transition-all transform hover:-translate-y-1 active:scale-95 group">
+                            <span class="text-sm md:text-base">Open Confirmation Queue</span>
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                         </a>
-                        <a href="{{ route('projects.index') }}" class="inline-flex items-center px-6 py-3 bg-indigo-500/30 text-white font-bold rounded-xl border border-white/20 hover:bg-indigo-500/50 transition">
+                        <a href="{{ route('projects.index') }}" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 transition-all active:scale-95 text-sm md:text-base">
                             Browse All Records
                         </a>
                     </div>
@@ -43,32 +36,44 @@
             </div>
 
             <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
                 <!-- Stat Card 1 -->
-                <div class="dark:bg-gray-800 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 group hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
-                    <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <div class="dark:bg-gray-800 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-gray-300 leading-none">{{ $stats['total_advising'] }}</div>
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Supervised Groups</div>
+                        </div>
                     </div>
-                    <div class="text-3xl font-black text-gray-300">{{ $stats['total_advising'] }}</div>
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Total Supervised Groups</div>
                 </div>
 
                 <!-- Stat Card 2 -->
-                <div class="dark:bg-gray-800 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 group hover:shadow-xl hover:shadow-amber-50 transition-all duration-300">
-                    <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-600 mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="dark:bg-gray-800 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-gray-300 leading-none">{{ $stats['pending_confirmation'] }}</div>
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Pending Confirmation</div>
+                        </div>
                     </div>
-                    <div class="text-3xl font-black text-gray-300">{{ $stats['pending_confirmation'] }}</div>
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Pending Confirmation</div>
                 </div>
 
                 <!-- Stat Card 3 -->
-                <div class="dark:bg-gray-800 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 group hover:shadow-xl hover:shadow-green-50 transition-all duration-300">
-                    <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 mb-4 group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="dark:bg-gray-800 bg-white p-5 rounded-2xl shadow-sm border border-gray-100 group hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center text-green-600 group-hover:scale-105 transition-transform shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-gray-300 leading-none">{{ $stats['confirmed_projects'] }}</div>
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Finalized Archives</div>
+                        </div>
                     </div>
-                    <div class="text-3xl font-black text-gray-300">{{ $stats['confirmed_projects'] }}</div>
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Finalized Archives</div>
                 </div>
             </div>
 
@@ -88,12 +93,12 @@
                     @else
                         <div class="space-y-4">
                             @foreach($recentProjects as $project)
-                                <div class="p-4 bg-gray-200 rounded-2xl border border-gray-100 flex items-center justify-between hover:bg-gray-700 hover:shadow-md transition cursor-pointer" onclick="window.location='{{ route('projects.show', $project) }}'">
+                                <div class="p-4 bg-gray-200 rounded-2xl border border-gray-100 flex items-center justify-between hover:bg-gray-600 hover:shadow-md transition cursor-pointer" onclick="window.location='{{ route('projects.show', $project) }}'">
                                     <div class="flex-1 min-w-0 pr-4">
                                         <h4 class="font-bold text-gray-900 truncate mb-1">{{ $project->title }}</h4>
                                         <div class="flex items-center gap-2">
                                             <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-black uppercase tracking-tighter">{{ $project->year }}</span>
-                                            <span class="text-xs text-gray-500 font-medium truncate italic text-clamp-1">By: {{ $project->authors->pluck('name')->join(', ') }}</span>
+                                            <span class="text-xs text-gray-500 font-medium truncate italic text-clamp-1">By: {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</span>
                                         </div>
                                     </div>
                                     <div>
