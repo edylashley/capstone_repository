@@ -6,10 +6,10 @@
     </x-slot>
 
     <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-b-4 border-blue-500">
                     <div class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold mb-1">Total Projects</div>
                     <div class="text-2xl font-black text-gray-900 dark:text-gray-100">{{ $stats['total_projects'] }}</div>
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Refined 4-Pillar Quick Actions Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Pillar 1: User Management -->
                 <a href="{{ route('admin.users.index') }}" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group border-b-4 border-b-blue-500">
                     <div class="flex items-center gap-4">
@@ -99,19 +99,19 @@
                         <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                             <thead class="bg-gray-50 dark:bg-gray-700">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Adviser</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider min-w-[500px]">Title</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Adviser</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($projects as $project)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $project->id }}</td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $project->title }}</div>
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $project->id }}</td>
+                                    <td class="px-4 py-4">
+                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100 whitespace-nowrap">{{ $project->title }}</div>
                                         <div class="flex items-center gap-2 mt-1">
                                             <span class="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded font-bold uppercase tracking-tighter">{{ $project->year }}</span>
                                             <span class="text-[10px] text-gray-500 font-medium">
@@ -120,8 +120,8 @@
                                             </span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $project->adviser->name ?? 'None' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{{ $project->adviser->name ?? 'None' }}</td>
+                                    <td class="px-4 py-4 whitespace-nowrap">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                             {{ $project->status === 'approved' || $project->status === 'published' ? 'bg-green-100 text-green-800' : 
                                               ($project->status === 'archived' ? 'bg-gray-100 text-gray-800' : 
@@ -129,7 +129,7 @@
                                             {{ ucfirst($project->status) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('projects.show', $project) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">View</a>
                                         <!-- Edit button would go here -->
                                     </td>

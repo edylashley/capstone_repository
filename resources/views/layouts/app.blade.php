@@ -180,8 +180,8 @@
                     class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden pointer-events-auto flex flex-col max-h-full">
                     {{-- Header --}}
                     <div
-                        class="bg-gradient-to-r from-indigo-600 to-indigo-800 p-6 text-white flex justify-between items-center shrink-0">
-                        <div class="flex items-center gap-3">
+                        class="bg-gradient-to-r from-indigo-600 to-indigo-800 p-6 text-white flex justify-between items-center gap-4 shrink-0">
+                        <div class="flex items-center gap-3 pr-2">
                             <div
                                 class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
