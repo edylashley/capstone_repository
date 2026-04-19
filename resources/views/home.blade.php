@@ -18,13 +18,13 @@
                 </div>
 
                 <div class="relative grid lg:grid-cols-2 gap-8 lg:gap-20 p-8 md:p-16 items-center">
-                    <div class="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-3 lg:gap-4">
+                    <div class="flex flex-col md:flex-row items-center justify-center lg:justify-start lg:items-start gap-4">
                         <div
                             class="flex-shrink-0 w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 flex items-center justify-center overflow-hidden rounded-full shadow-2xl bg-white animate-float border-4 border-white/20">
                             <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Logo"
                                 class="w-full h-full object-cover transform scale-150 hover:scale-110 transition-transform duration-500 ease-in-out animate-pop-in" />
                         </div>
-                        <div class="text-center md:text-left flex-shrink-0">
+                        <div class="text-center lg:text-left flex-shrink-0">
                             <h1
                                 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-2 whitespace-nowrap md:whitespace-normal animate-fade-in-up">
                                 <span class="text-teal-300 drop-shadow-lg">CSIT</span><br>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <div class="space-y-6 text-white animate-fade-in-up delay-200">
+                    <div class="space-y-6 text-white text-center lg:text-left animate-fade-in-up delay-200">
                         <div>
                             <p class="text-blue-200 font-bold text-xs uppercase tracking-widest mb-3">Institutional Platform
                             </p>
@@ -109,7 +109,7 @@
                             </form>
 
                             <div
-                                class="flex flex-wrap items-center justify-between gap-4 pt-6 mt-6 border-t border-white/20">
+                                class="flex flex-wrap items-center justify-center lg:justify-between gap-4 pt-6 mt-6 border-t border-white/20">
                                 <!-- Browse Button on Left -->
                                 <a href="{{ route('projects.index') }}"
                                     class="inline-flex items-center px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg backdrop-blur-sm border border-white/20 transition-colors duration-200 shadow-sm hover:shadow-lg">
