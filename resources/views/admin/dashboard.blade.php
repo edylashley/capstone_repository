@@ -19,9 +19,20 @@
         }
     </style>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-white leading-tight">
-            {{ __('Admin Dashboard & Master Directory') }}
-        </h2>
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 items-start md:items-center">
+            <div>
+                <h2 class="font-bold text-2xl text-white leading-tight">Admin Dashboard & Master Directory</h2>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-black mt-1">Real-time system oversight and statistics</p>
+            </div>
+            @php $sysStatus = \App\Models\Setting::getSystemStatus(); @endphp
+            <div class="flex items-center gap-2">
+                <span class="text-[10px] font-black uppercase text-gray-500">System Status:</span>
+                <div class="flex items-center gap-1.5 px-2.5 py-1 {{ $sysStatus['bg'] }} {{ $sysStatus['text'] }} rounded-full border border-{{ $sysStatus['color'] }}-200 shadow-sm transition-all duration-300">
+                    <span class="w-1.5 h-1.5 rounded-full {{ $sysStatus['color'] == 'green' ? 'bg-green-500 animate-pulse' : ($sysStatus['color'] == 'yellow' ? 'bg-yellow-500' : 'bg-red-500 animate-bounce') }}"></span>
+                    <span class="text-[10px] font-black uppercase tracking-tighter">{{ $sysStatus['label'] }}</span>
+                </div>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-4">

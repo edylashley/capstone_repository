@@ -1,16 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 items-start md:items-center">
             <div>
                 <h2 class="font-bold text-2xl text-white leading-tight">Admin: Project Oversight</h2>
                 <p class="text-xs text-gray-500 uppercase tracking-widest font-black mt-1">Manage project submissions and approvals</p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-[10px] font-black uppercase text-gray-400">Database Status:</span>
-                    <span class="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-full uppercase tracking-tighter">Sync Active</span>
-                </div>
-                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600">
+            <div class="flex flex-wrap items-center gap-4">
+                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600 w-fit whitespace-nowrap">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Dashboard
                 </a>

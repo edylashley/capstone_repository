@@ -45,10 +45,10 @@
             @auth
                 @if(!request()->is('/'))
                     <div class="lg:hidden bg-indigo-700 text-white p-4 flex items-center justify-between shadow-md">
-                        <div class="flex items-center gap-2">
-                            <img src="{{ asset('images/system-logo.jpg') }}" class="w-8 h-8 object-contain rounded-full"
+                        <div class="flex items-center gap-3">
+                            <img src="{{ asset('images/system-logo.jpg') }}" class="w-12 h-12 object-contain rounded-full shadow-lg border-2 border-white/20"
                                 alt="NORSU Capstone Repository">
-                            <span class="text-xs font-black uppercase tracking-wider">Capstone Repository</span>
+                            <span class="text-sm font-black uppercase tracking-wider">Capstone Repository</span>
                         </div>
                         <button @click="sidebarOpen = true" class="p-2 rounded-lg hover:bg-indigo-800 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
