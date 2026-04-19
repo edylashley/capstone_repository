@@ -1,4 +1,23 @@
 <x-app-layout>
+    <style>
+        @media (min-width: 850px) {
+            .stats-grid { 
+                display: grid !important;
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important; 
+            }
+            .storage-card { 
+                grid-column: span 1 / span 1 !important; 
+                text-align: left !important;
+                align-items: flex-start !important;
+            }
+        }
+        @media (min-width: 1100px) {
+            .actions-grid { 
+                display: grid !important;
+                grid-template-columns: repeat(4, minmax(0, 1fr)) !important; 
+            }
+        }
+    </style>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
             {{ __('Admin Dashboard & Master Directory') }}
@@ -9,31 +28,31 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-b-4 border-blue-500">
+            <div class="grid grid-cols-2 stats-grid gap-4">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-2xl p-4 sm:p-6 border-b-4 border-blue-500">
                     <div class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold mb-1">Total Projects</div>
                     <div class="text-2xl font-black text-gray-900 dark:text-gray-100">{{ $stats['total_projects'] }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-b-4 border-yellow-500">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-2xl p-4 sm:p-6 border-b-4 border-yellow-500">
                     <div class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold mb-1">Processing</div>
                     <div class="text-2xl font-black text-yellow-600">{{ $stats['pending_projects'] }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-b-4 border-green-500">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-2xl p-4 sm:p-6 border-b-4 border-green-500">
                     <div class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold mb-1">Confirmed</div>
                     <div class="text-2xl font-black text-green-600">{{ $stats['approved_projects'] }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-b-4 border-indigo-500">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-2xl p-4 sm:p-6 border-b-4 border-indigo-500">
                     <div class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold mb-1">Users</div>
                     <div class="text-2xl font-black text-indigo-600">{{ $stats['total_users'] }}</div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6 border-b-4 border-red-500">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-2xl p-4 sm:p-6 border-b-4 border-red-500 col-span-2 storage-card flex flex-col items-center text-center">
                     <div class="text-gray-500 dark:text-gray-400 text-xs uppercase font-bold mb-1">Repository Storage</div>
                     <div class="text-2xl font-black text-red-600">{{ $stats['total_storage'] }}</div>
                 </div>
             </div>
 
             <!-- Refined 4-Pillar Quick Actions Grid -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 actions-grid gap-4">
                 <!-- Pillar 1: User Management -->
                 <a href="{{ route('admin.users.index') }}" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group border-b-4 border-b-blue-500">
                     <div class="flex items-center gap-4">
@@ -73,7 +92,7 @@
                     </div>
                 </a>
 
-                <!-- Pillar 4: Consolidated System Settings -->
+                <!-- Pillar 4: Settings -->
                 <a href="{{ route('admin.settings.index') }}" class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group border-b-4 border-b-orange-500">
                     <div class="flex items-center gap-4">
                         @php $isMaintenance = \App\Models\Setting::get('maintenance_mode', '0') == '1'; @endphp
