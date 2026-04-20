@@ -18,14 +18,14 @@ class FileScanner
         // ═══════════════════════════════════════════════════════════════
         // LAYER 1: Dangerous File Types
         // ═══════════════════════════════════════════════════════════════
-        $dangerousExtensions = ['exe', 'bat', 'cmd', 'ps1', 'vbs', 'js', 'scr', 'com', 'pif', 'msi', 'hta', 'cpl', 'inf', 'reg', 'ws', 'wsf', 'wsc', 'wsh'];
-        $dangerousMimes = ['application/x-msdownload', 'application/x-executable', 'application/x-dosexec', 'application/x-msdos-program'];
+        $dangerousExtensions = ['exe', 'bat', 'cmd', 'ps1', 'vbs', 'js', 'scr', 'com', 'pif', 'msi', 'hta', 'cpl', 'inf', 'reg', 'ws', 'wsf', 'wsc', 'wsh', 'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phar'];
+        $dangerousMimes = ['application/x-msdownload', 'application/x-executable', 'application/x-dosexec', 'application/x-msdos-program', 'application/x-php', 'text/x-php'];
 
         if ($extension && in_array($extension, $dangerousExtensions)) {
-            return ['ok' => false, 'notes' => "Blocked: Extension '.{$extension}' is a dangerous executable type"];
+            return ['ok' => false, 'notes' => "Blocked: Extension '.{$extension}' is a dangerous executable or script type."];
         }
         if (in_array($mimeType, $dangerousMimes)) {
-            return ['ok' => false, 'notes' => "Blocked: MIME type indicates an executable binary"];
+            return ['ok' => false, 'notes' => "Blocked: MIME type indicates an executable binary or server-side script."];
         }
 
         // ═══════════════════════════════════════════════════════════════
@@ -35,7 +35,7 @@ class FileScanner
         $signature = $this->detectFileType($header);
 
         if ($signature === 'PE Executable (EXE/DLL)' && !in_array($extension, ['exe', 'dll', 'sys', 'drv'])) {
-            return ['ok' => false, 'notes' => "Blocked: Disguised File - PE Executable disguised as .{$extension}"];
+            return ['ok' => false, 'notes' => "Blocked: Disguised File - PE Executable disguised as .{$extension}."];
         }
 
         // ═══════════════════════════════════════════════════════════════
@@ -45,22 +45,22 @@ class FileScanner
 
         $signatures = [
             //'EICAR Test Virus' => ['exact' => 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'],
-            'PHP Web Shell (eval)' => ['contains' => 'eval(base64_decode('],
-            'PHP Web Shell (system)' => ['contains' => '<?php system('],
-            'PHP Web Shell (exec)' => ['contains' => '<?php exec('],
-            'JavaScript eval injection' => ['contains' => '<script>eval('],
+            'PHP Web Shell (eval)' => ['contains' => 'eval('],
+            'PHP Web Shell (system)' => ['contains' => 'system('],
+            'PHP Web Shell (exec)' => ['contains' => 'exec('],
+            'JavaScript eval injection' => ['contains' => 'eval('],
             'PowerShell Download Cradle' => ['regex' => '/powershell[^;]*\-[eE].*downloadstring/i'],
         ];
 
         foreach ($signatures as $name => $sig) {
             if (isset($sig['exact']) && strpos($contents, $sig['exact']) !== false) {
-                return ['ok' => false, 'notes' => "Threat detected: {$name}"];
+                return ['ok' => false, 'notes' => "Threat detected: {$name}."];
             }
             if (isset($sig['contains']) && stripos($contents, $sig['contains']) !== false) {
-                return ['ok' => false, 'notes' => "Threat detected: {$name}"];
+                return ['ok' => false, 'notes' => "Threat detected: {$name}."];
             }
             if (isset($sig['regex']) && preg_match($sig['regex'], $contents)) {
-                return ['ok' => false, 'notes' => "Threat detected: {$name}"];
+                return ['ok' => false, 'notes' => "Threat detected: {$name}."];
             }
         }
 

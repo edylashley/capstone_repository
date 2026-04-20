@@ -30,16 +30,16 @@
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased bg-slate-100 text-slate-900"
+<body class="font-sans antialiased bg-slate-100 text-slate-900 overflow-x-hidden"
     x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
-    <div class="min-h-screen flex flex-col lg:flex-row">
+    <div class="min-h-screen flex flex-col lg:flex-row overflow-x-hidden">
         @auth
             @if(!request()->is('/'))
                 @include('layouts.sidebar')
             @endif
         @endauth
 
-        <div class="flex-1 flex flex-col min-h-screen min-w-0 transition-all duration-300 ease-in-out {{ auth()->check() && !request()->is('/') ? 'sidebar-offset' : '' }}"
+        <div class="flex-1 flex flex-col min-h-screen min-w-0 overflow-x-hidden transition-all duration-300 ease-in-out {{ auth()->check() && !request()->is('/') ? 'sidebar-offset' : '' }}"
             :class="{ 'sidebar-collapsed-offset': sidebarCollapsed }">
             <!-- Mobile Header (Visible only on small screens) -->
             @auth
