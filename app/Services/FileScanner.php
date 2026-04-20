@@ -83,7 +83,10 @@ class FileScanner
             set_time_limit($originalLimit);
 
             if ($exit !== 0) {
-                return ['ok' => false, 'notes' => implode('\n', $output)];
+                $rawNotes = implode('\n', $output);
+                // Sanitize: Replace the full path with just the filename for better UX and security
+                $sanitizedNotes = str_replace($path, basename($path), $rawNotes);
+                return ['ok' => false, 'notes' => $sanitizedNotes];
             }
         }
 

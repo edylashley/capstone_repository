@@ -15,8 +15,13 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('submit', function (e) {
-            const form = e.target;
-            if (!(form instanceof HTMLFormElement)) return;
+            // Use a micro-task to allow other 'submit' listeners (like confirm() in onsubmit) to run first
+            setTimeout(() => {
+                // If the submission was canceled by a confirmation box or validation, STOP.
+                if (e.defaultPrevented) return;
+
+                const form = e.target;
+                if (!(form instanceof HTMLFormElement)) return;
 
             // Skip forms that have their own custom loading (e.g. project submission)
             if (form.id === 'project-form') return;
@@ -68,6 +73,7 @@
                     btn.classList.remove('opacity-75', 'cursor-not-allowed');
                 }
             }, 15000);
+            }, 0);
         });
     });
 </script>

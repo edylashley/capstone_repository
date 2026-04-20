@@ -11,10 +11,10 @@
 
     <div class="py-6 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col gap-6 @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id()) lg:flex-row @endif">
+            <div class="flex flex-col gap-6 @if((optional(auth()->user())->isAdviser() || optional(auth()->user())->isAdmin())) lg:flex-row @endif">
                 
                 <!-- Metadata Side -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id()) lg:w-1/3 @else w-full @endif border border-gray-100 dark:border-gray-700">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if((optional(auth()->user())->isAdviser() || optional(auth()->user())->isAdmin())) lg:w-1/3 lg:min-w-[350px] @else w-full @endif border border-gray-100 dark:border-gray-700 h-fit">
                     <div class="mb-4 space-y-2">
                         <div class="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
                             <div>
@@ -95,11 +95,21 @@
                                         <span class="text-yellow-300 font-black text-sm uppercase tracking-tight italic">Archive Processing</span>
                                     </div>
                                 </div>
-                            @endif
+                                                    @endif
 
-
+                        <style>
+                            @media (max-width: 767px) {
+                                .desktop-only { display: none !important; }
+                                .mobile-only { display: block !important; }
+                            }
+                            @media (min-width: 768px) {
+                                .desktop-only { display: block !important; }
+                                .mobile-only { display: none !important; }
+                            }
+                        </style>
                             <!-- ADVISER DECISION HUB ACTION -->
-                            @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id())
+                            <!-- SYSTEM VERIFICATION REPORT (Visible to Faculty/Admin always if notes exist) -->
+                            @if((optional(auth()->user())->isAdviser() || optional(auth()->user())->isAdmin()) && $project->manuscript_validation_notes)
                                 <div class="mt-8 pt-6 border-t border-gray-700/50">
                                     <!-- Assistant's Report Card -->
                                     <div class="mb-6 p-4 rounded-xl {{ $project->manuscript_validated ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-yellow-500/10 border border-yellow-500/20' }}">
@@ -160,23 +170,27 @@
                                             </div>
                                         @endif
                                         
-                                        <form method="POST" action="{{ route('projects.reverify-pdf', $project->id) }}" class="mt-4 border-t border-dashed border-gray-600/50 pt-2">
-                                            @csrf
-                                            <button type="submit" class="flex items-center gap-2 text-[10px] text-gray-400 hover:text-indigo-400 transition-colors">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                                Run System Scan Again
-                                            </button>
-                                        </form>
+                                        @if($project->status === 'pending')
+                                            <form method="POST" action="{{ route('projects.reverify-pdf', $project->id) }}" class="mt-4 border-t border-dashed border-gray-600/50 pt-2">
+                                                @csrf
+                                                <button type="submit" class="flex items-center gap-2 text-[10px] text-gray-400 hover:text-indigo-400 transition-colors">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                                    Run System Scan Again
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
 
-                                    <h4 class="font-black text-gray-400 uppercase text-xs mb-4">Verification Actions</h4>
-                                    <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
-                                        @csrf
-                                        <button type="submit" class="w-full bg-indigo-600 text-white font-black py-4 rounded-lg shadow-lg hover:shadow-xl hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 active:translate-y-1 active:border-b-0 uppercase tracking-widest text-sm text-nowrap">
-                                            Confirm Final Record
-                                        </button>
-                                    </form>
-                                    <p class="text-[10px] text-gray-500 mt-2 text-center italic">Digital signature will be recorded upon confirmation.</p>
+                                    @if($project->status === 'pending' && $project->adviser_id === auth()->id())
+                                        <h4 class="font-black text-gray-400 uppercase text-xs mb-4">Verification Actions</h4>
+                                        <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
+                                            @csrf
+                                            <button type="submit" class="w-full bg-indigo-600 text-white font-black py-4 rounded-lg shadow-lg hover:shadow-xl hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 active:translate-y-1 active:border-b-0 uppercase tracking-widest text-sm text-nowrap">
+                                                Confirm Final Record
+                                            </button>
+                                        </form>
+                                        <p class="text-[10px] text-gray-500 mt-2 text-center italic">Digital signature will be recorded upon confirmation.</p>
+                                    @endif
                                 </div>
                             @endif
                         @endif
@@ -184,17 +198,17 @@
                 </div>
 
                 <!-- PDF Layout (Side or Bottom) -->
-                <div class="flex-1 space-y-6">
+                <div class="flex-1 min-w-0 space-y-6">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-gray-100 dark:border-gray-700">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
                             <h3 class="font-black text-lg text-gray-800 dark:text-white uppercase tracking-tight italic">Manuscript Viewer</h3>
                             @auth
-                                <div class="flex items-center gap-2">
-                                    <a href="{{ route('files.view', $project->files->firstWhere('type', 'manuscript')) }}" target="_blank" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                        Open Full View
-                                    </a>
-                                </div>
+                                    <div class="flex items-center gap-2 desktop-only">
+                                        <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                            Open Full View
+                                        </button>
+                                    </div>
                             @endauth
                         </div>
                         
@@ -205,9 +219,110 @@
 
                         @if($manuscript)
                             @auth
-                                <div class="relative border-4 border-gray-50 dark:border-gray-700 rounded-2xl overflow-hidden shadow-inner bg-gray-100 dark:bg-gray-900" id="pdf-container">
-                                    <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%" height="800px" style="min-height: 800px;" class="w-full h-[600px] md:h-[800px] bg-gray-500 border-0"></iframe>
+                                <!-- Universal Viewer Wrapper -->
+                                <div id="pdf-viewer-wrapper">
+                                    <!-- Desktop Viewer -->
+                                    <div class="desktop-only relative border-4 border-gray-50 dark:border-gray-700 rounded-2xl overflow-hidden shadow-inner bg-gray-100 dark:bg-gray-900" id="pdf-container">
+                                        <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%" height="800px" style="min-height: 800px;" class="w-full h-[600px] md:h-[800px] bg-gray-500 border-0"></iframe>
+                                    </div>
+
+                                    <!-- Mobile Viewer Fallback (Renders PDF to Canvas) -->
+                                    <div class="mobile-only">
+                                        <div class="bg-gray-900 border-2 border-indigo-500/30 rounded-2xl overflow-hidden shadow-2xl relative" id="mobile-pdf-wrapper" style="min-height: 400px;">
+                                            <!-- Canvas for PDF Rendering -->
+                                            <div id="mobile-canvas-container" class="flex justify-center bg-gray-800 p-2 overflow-hidden">
+                                                <canvas id="mobile-pdf-canvas" class="shadow-xl max-w-full h-auto"></canvas>
+                                            </div>
+
+                                            <!-- Mobile Controls -->
+                                            <div class="bg-gray-900/90 backdrop-blur-md p-4 border-t border-white/10 flex items-center justify-between">
+                                                <div class="flex items-center gap-2">
+                                                    <button onclick="mobilePrevPage()" class="p-2 bg-gray-800 text-white rounded-lg active:scale-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                                                    <span class="text-[10px] font-black text-white uppercase tracking-widest px-2"><span id="mobile-page-num">1</span> / <span id="mobile-page-count">-</span></span>
+                                                    <button onclick="mobileNextPage()" class="p-2 bg-gray-800 text-white rounded-lg active:scale-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
+                                                </div>
+                                                    <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                                        <span>Full View</span>
+                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                                    </button>
+                                            </div>
+
+                                            <!-- Loading Overlay -->
+                                            <div id="mobile-pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 z-10 transition-opacity duration-500">
+                                                <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                                                <p class="text-[9px] font-black text-white uppercase tracking-widest animate-pulse">Loading Preview...</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+                                <script>
+                                    // Mobile PDF Engine
+                                    const m_pdfjsLib = window['pdfjs-dist/build/pdf'];
+                                    m_pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+                                    let m_pdfDoc = null, m_pageNum = 1, m_pageRendering = false;
+                                    const m_canvas = document.getElementById('mobile-pdf-canvas');
+                                    const m_ctx = m_canvas.getContext('2d');
+
+                                    function renderMobilePage(num) {
+                                        if (!m_pdfDoc) return;
+                                        m_pageRendering = true;
+                                        m_pdfDoc.getPage(num).then(function(page) {
+                                            // HD Rendering for Mobile (Retina/DPR Support)
+                                            const dpr = window.devicePixelRatio || 1;
+                                            const containerWidth = document.getElementById('mobile-canvas-container').clientWidth - 20;
+                                            
+                                            const unscaledViewport = page.getViewport({scale: 1.0});
+                                            const scale = containerWidth / unscaledViewport.width;
+                                            const viewport = page.getViewport({scale: scale});
+
+                                            m_canvas.height = viewport.height * dpr;
+                                            m_canvas.width = viewport.width * dpr;
+                                            m_canvas.style.width = viewport.width + 'px';
+                                            m_canvas.style.height = viewport.height + 'px';
+                                            
+                                            m_ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                                            const renderContext = { canvasContext: m_ctx, viewport: viewport };
+                                            page.render(renderContext).promise.then(function() {
+                                                m_pageRendering = false;
+                                                document.getElementById('mobile-page-num').textContent = num;
+                                                const loading = document.getElementById('mobile-pdf-loading');
+                                                if(loading) {
+                                                    loading.style.opacity = '0';
+                                                    setTimeout(() => loading.classList.add('hidden'), 500);
+                                                }
+                                            });
+                                        });
+                                    }
+
+                                    function mobilePrevPage() { if (m_pageNum <= 1 || m_pageRendering) return; m_pageNum--; renderMobilePage(m_pageNum); }
+                                    function mobileNextPage() { if (m_pageNum >= m_pdfDoc.numPages || m_pageRendering) return; m_pageNum++; renderMobilePage(m_pageNum); }
+
+                                    // Start Mobile Engine if on mobile
+                                    if (window.innerWidth < 768) {
+                                        m_pdfjsLib.getDocument({
+                                            url: "{{ route('files.view', $manuscript) }}",
+                                            withCredentials: true
+                                        }).promise.then(function(pdfDoc_) {
+                                            m_pdfDoc = pdfDoc_;
+                                            document.getElementById('mobile-page-count').textContent = m_pdfDoc.numPages;
+                                            renderMobilePage(m_pageNum);
+                                        }).catch(err => {
+                                            console.error("Mobile PDF Error:", err);
+                                            document.getElementById('mobile-pdf-loading').innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Failed. Use Full View.</p>';
+                                        });
+                                    }
+                                </script>
+
+                                <style>
+                                    @media (min-width: 768px) { .mobile-only { display: none !important; } .desktop-only { display: block !important; } }
+                                    @media (max-width: 767px) { .desktop-only { display: none !important; } .mobile-only { display: block !important; } }
+                                    .animate-bounce-short { animation: bounce-short 1s ease-in-out infinite; }
+                                    @keyframes bounce-short { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+                                </style>
 
                                 <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
                                     <div class="flex items-center gap-3">
@@ -259,8 +374,7 @@
                                 <h3 class="font-bold text-lg">Project Attachments</h3>
                                 <span class="px-2 py-0.5 bg-gray-100 text-[10px] font-black text-gray-800 uppercase rounded">{{ $attachments->count() }} Technical Files</span>
                             </div>
-                            
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach($attachments as $file)
                                     @php
                                         $ext = strtolower(pathinfo($file->filename, PATHINFO_EXTENSION));
@@ -308,48 +422,18 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <a href="{{ route('files.download', $file->id) }}"
-                                               class="p-2 hover:bg-indigo-50 text-indigo-600 rounded-lg transition-colors flex-shrink-0" title="Download File">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                            </a>
+                                            <div class="flex items-center gap-2 pr-2">
+                                                @if($isPreviewable)
+                                                    <button onclick="openLightbox('{{ $fileUrl }}', '{{ $isImage ? 'image' : 'video' }}')" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="Preview File">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                    </button>
+                                                @endif
+                                                <a href="{{ route('files.download', $file) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="Download File">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                                </a>
+                                            </div>
                                         </div>
-
-                                        {{-- Inline image preview --}}
-                                        @if($isImage)
-                                            <div class="px-4 pb-4">
-                                                <div class="rounded-lg overflow-hidden border border-gray-200 bg-gray-100 shadow-inner flex items-center justify-center relative group cursor-zoom-in"
-                                                     onclick="openLightbox('{{ $fileUrl }}', '{{ addslashes($file->filename) }}')">
-                                                    <img src="{{ $fileUrl }}"
-                                                         alt="{{ $file->filename }}"
-                                                         class="max-h-[300px] w-full object-contain transition-transform duration-200 group-hover:scale-[1.02]"
-                                                         loading="lazy">
-                                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-200 flex items-center justify-center">
-                                                        <span class="opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-                                                            🔍 Click to enlarge
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        {{-- Inline video preview --}}
-                                        @elseif($isVideo)
-                                            <div class="px-4 pb-4">
-                                                <div class="rounded-lg overflow-hidden border border-gray-200 bg-black shadow-inner relative group cursor-pointer"
-                                                     onclick="openVideoLightbox('{{ $fileUrl }}', '{{ addslashes($file->filename) }}', '{{ $ext === 'mov' ? 'quicktime' : $ext }}')">
-                                                    <video class="w-full max-h-[300px] pointer-events-none">
-                                                        <source src="{{ $fileUrl }}" type="video/{{ $ext === 'mov' ? 'quicktime' : $ext }}">
-                                                    </video>
-                                                    <div class="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center">
-                                                        <span class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs font-bold px-4 py-2 rounded-full backdrop-blur-sm">
-                                                            ⛶ Click to expand
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <p class="text-[9px] text-gray-400 mt-2 text-center italic">Video Demo — click to open full player.</p>
-                                            </div>
-                                        @endif
                                     </div>
-
                                 @endforeach
                             </div>
                         </div>
@@ -459,25 +543,78 @@
 
         // ── PDF Navigation ────────────────────────────────────────────────────────
         function jumpToPage(pageNumber, keyword) {
-            const iframe = document.getElementById('manuscript-viewer');
-            const container = document.getElementById('pdf-container');
-            
-            if (iframe) {
-                let currentSrc = iframe.src.split('#')[0];
-                let newSrc = currentSrc + '#page=' + pageNumber + '&zoom=100';
-                if (keyword) {
-                    newSrc += '&search="' + encodeURIComponent(keyword) + '"';
+            // Check if we are in Mobile View (Canvas) or Desktop View (Iframe)
+            if (window.innerWidth < 768) {
+                // MOBILE NAVIGATION (Talks to the Canvas Engine)
+                if (typeof m_pdfDoc !== 'undefined' && m_pdfDoc) {
+                    m_pageNum = pageNumber;
+                    renderMobilePage(pageNumber);
+                    
+                    // Center viewer on screen for better focus
+                    const wrapper = document.getElementById('mobile-pdf-wrapper');
+                    if(wrapper) wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    if (keyword) {
+                        const cleanKeyword = keyword.replace(/['"]+/g, '');
+                        navigator.clipboard.writeText(cleanKeyword).catch(() => {});
+                        showToast(`Mobile: Page ${pageNumber}. Keyword copied!`, 'info');
+                    }
                 }
-                iframe.src = 'about:blank';
-                setTimeout(() => { iframe.src = newSrc; }, 50);
+            } else {
+                // DESKTOP NAVIGATION
+                const iframe = document.getElementById('manuscript-viewer');
+                const container = document.getElementById('pdf-container');
+                
+                if (iframe) {
+                    if (keyword) {
+                        const cleanKeyword = keyword.replace(/['"]+/g, '');
+                        navigator.clipboard.writeText(cleanKeyword).catch(() => {});
+                        showToast(`Navigated to Page ${pageNumber}. Press Ctrl+F and Paste to highlight.`, 'info');
+                    }
 
-                if(container) {
-                    container.classList.add('ring-4', 'ring-indigo-500', 'scale-[1.01]', 'shadow-2xl');
-                    setTimeout(() => {
-                        container.classList.remove('ring-4', 'ring-indigo-500', 'scale-[1.01]', 'shadow-2xl');
-                    }, 800);
+                    let currentSrc = iframe.src.split('#')[0];
+                    let fragment = '';
+                    
+                    if (keyword) {
+                        let cleanKeyword = keyword.replace(/['"]+/g, '');
+                        fragment = 'search=' + encodeURIComponent(cleanKeyword) + '&page=' + pageNumber + '&view=FitH&pagemode=none&navpanes=0';
+                    } else {
+                        fragment = 'page=' + pageNumber + '&view=FitH&pagemode=none&navpanes=0';
+                    }
+
+                    const newSrc = currentSrc + '#' + fragment;
+                    iframe.src = 'about:blank';
+                    setTimeout(() => { 
+                        iframe.src = newSrc; 
+                        if(container) {
+                            container.classList.add('ring-4', 'ring-indigo-500/50', 'scale-[1.005]');
+                            setTimeout(() => container.classList.remove('ring-4', 'ring-indigo-500/50', 'scale-[1.005]'), 800);
+                        }
+                    }, 50);
                 }
             }
+        }
+
+        function showToast(message, type = 'success') {
+            const existing = document.getElementById('smart-toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'smart-toast';
+            toast.className = `fixed bottom-8 left-1/2 -translate-x-1/2 z-[200] px-6 py-3 rounded-2xl shadow-2xl border flex items-center gap-3 transition-all duration-500 bg-gray-900 border-indigo-500/50 text-white`;
+            
+            toast.innerHTML = `
+                <span class="text-lg">🔍</span>
+                <p class="text-xs font-black uppercase tracking-widest leading-tight">${message}</p>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, 20px)';
+                setTimeout(() => toast.remove(), 500);
+            }, 8000);
         }
     </script>
 </x-app-layout>

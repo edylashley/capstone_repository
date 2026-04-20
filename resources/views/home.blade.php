@@ -18,7 +18,8 @@
                 </div>
 
                 <div class="relative grid lg:grid-cols-2 gap-8 lg:gap-20 p-8 md:p-16 items-center">
-                    <div class="flex flex-col md:flex-row items-center justify-center lg:justify-start lg:items-start gap-4">
+                    <div
+                        class="flex flex-col md:flex-row items-center justify-center lg:justify-start lg:items-start gap-4">
                         <div
                             class="flex-shrink-0 w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 flex items-center justify-center overflow-hidden rounded-full shadow-2xl bg-white animate-float border-4 border-white/20">
                             <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Logo"
@@ -81,7 +82,7 @@
                                     <!-- Smooth Visual Marquee -->
                                     <div id="marquee-placeholder"
                                         class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-300"
-                                        style="left: 3.5rem; right: 7rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
+                                        style="left: 2rem; right: 7rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
                                         <div
                                             class="whitespace-nowrap animate-smooth-marquee text-sm text-gray-400 font-medium">
                                             Find past projects: Search by capstone titles, authors, faculty advisers, or
@@ -156,7 +157,8 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">1. Check Your Idea</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Use the search bar to explore existing capstone projects and verify if your idea has already been completed by a previous group.
+                            Use the search bar to explore existing capstone projects and verify if your idea has already
+                            been completed by a previous group.
                         </p>
                     </div>
                 </div>
@@ -175,7 +177,8 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">2. Upload Your Work</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Authorized students can log in to submit their final capstone work and provide comprehensive details about their systems.
+                            Authorized students can log in to submit their final capstone work and provide comprehensive
+                            details about their systems.
                         </p>
                     </div>
                 </div>
@@ -195,7 +198,8 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">3. Adviser Review</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Faculty advisers review submitted projects for accuracy and compliance before they are officially published in the library.
+                            Faculty advisers review submitted projects for accuracy and compliance before they are
+                            officially published in the library.
                         </p>
                     </div>
                 </div>
@@ -215,7 +219,8 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-900 mb-2">4. Explore Projects</h3>
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Access project abstracts publicly, or log in to securely download full manuscripts and verified source code files.
+                            Access project abstracts publicly, or log in to securely download full manuscripts and verified
+                            source code files.
                         </p>
                     </div>
                 </div>

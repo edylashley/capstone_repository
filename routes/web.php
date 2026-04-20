@@ -106,12 +106,30 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->gro
             abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
         }
 
+        // Force PDF to be inline for better browser/mobile support (Streaming Option)
+        if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) === 'pdf') {
+            return response()->stream(function () use ($fullPath) {
+                readfile($fullPath);
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline',
+                'Content-Length' => filesize($fullPath),
+                'X-Content-Type-Options' => 'nosniff',
+                'Cache-Control' => 'private, max-age=0, must-revalidate',
+            ]);
+        }
+
         return response()->file($fullPath);
     })->name('files.view');
 });
 
 // Single project view (placed after /projects/create to avoid shadowing)
 Route::get('/projects/{project}', [\App\Http\Controllers\ProjectController::class, 'show'])->name('projects.show');
+
+// Dedicated Full-Screen Viewer (Bypasses mobile download issues)
+Route::get('/projects/{project}/viewer', function (\App\Models\Project $project) {
+    return view('projects.viewer', compact('project'));
+})->middleware(['auth'])->name('projects.viewer');
 
 // Adviser verification
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:adviser'])->group(function () {
