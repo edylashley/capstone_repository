@@ -19,11 +19,11 @@
     <style>
         @media (min-width: 1024px) {
             .sidebar-offset {
-                margin-left: 280px;
+                padding-left: 280px;
             }
 
             .sidebar-collapsed-offset {
-                margin-left: 0 !important;
+                padding-left: 0 !important;
             }
         }
     </style>
@@ -39,7 +39,7 @@
             @endif
         @endauth
 
-        <div class="flex-1 flex flex-col min-h-screen min-w-0 overflow-x-hidden transition-all duration-300 ease-in-out {{ auth()->check() && !request()->is('/') ? 'sidebar-offset' : '' }}"
+        <div class="w-full flex flex-col min-h-screen min-w-0 transition-all duration-300 ease-in-out {{ auth()->check() && !request()->is('/') ? 'sidebar-offset' : '' }}"
             :class="{ 'sidebar-collapsed-offset': sidebarCollapsed }">
             <!-- Mobile Header (Visible only on small screens) -->
             @auth
