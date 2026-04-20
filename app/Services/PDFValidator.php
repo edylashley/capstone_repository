@@ -117,15 +117,18 @@ class PDFValidator
             }
         } else {
             // Split by form feed char \f (ASCII 12) to identify pages
-            // If \f is missing (single page or layout mode weirdness), array will have 1 element
-            $pagesContent = explode("\f", $text);
+            // Filter out empty trailing pages caused by trailing \f
+            $pagesContent = array_filter(explode("\f", trim($text)), function($val) {
+                return $val !== ""; // Keep only pages that have something in them
+            });
+            
             $hasImageOnlyPage = false;
 
             foreach ($pagesContent as $index => $pageText) {
                 // If a page has almost no text (less than 20 chars), it's likely a scan or image-only
                 if (strlen(trim($pageText)) < 20) {
                     $hasImageOnlyPage = true;
-                    $notes[] = "ℹ️ Page " . ($index + 1) . " detected as image-only/scanned. (Likely the Signed Approval Sheet)";
+                    $notes[] = "(i) Page " . ($index + 1) . " detected as image-only/scanned. (Likely the Signed Approval Sheet)";
                 }
             }
 
@@ -140,23 +143,23 @@ class PDFValidator
                 
                 if (!empty($kwLocations)) {
                     $pageList = implode(', ', $kwLocations);
-                    $notes[] = "✅ Detected: $kw (Pages $pageList)";
+                    $notes[] = "[OK] Detected: $kw (Pages $pageList)";
                 }
             }
 
             if ($hasImageOnlyPage && count($found) === 0) {
-                $notes[] = "💡 Manual Audit Advised: Keywords not found in text, but an image-only page was detected. Please verify signatures in the HD Viewer.";
+                $notes[] = "(!) Manual Audit Advised: Keywords not found in text, but an image-only page was detected. Please verify signatures in the HD Viewer.";
             }
         }
 
         if (count($found) === 0 && !$hasImageOnlyPage) {
             $valid = false;
             $keywordsMissing = true;
-            $notes[] = '❌ Approval page or signatures not detected (no required keywords found).';
+            $notes[] = "[ERROR] Approval page or signatures not detected (no required keywords found).";
         } elseif (count($found) === 0 && $hasImageOnlyPage) {
             // If we have an image page, we mark it as "Valid but needs eyes"
             $valid = true; 
-            $notes[] = '⚠️ Automated scan inconclusive due to scanned page. Human verification required.';
+            $notes[] = "[!] Automated scan inconclusive due to scanned page. Human verification required.";
         }
 
         return [
