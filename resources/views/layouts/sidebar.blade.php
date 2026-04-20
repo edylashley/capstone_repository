@@ -1,13 +1,7 @@
 @auth
 <!-- Desktop Sidebar (hidden on mobile) -->
-<aside class="hidden lg:flex flex-col text-white shadow-lg bg-indigo-600 sticky top-0 left-0 z-40 transition-transform duration-300 ease-in-out shrink-0"
-       x-show="!sidebarCollapsed"
-       x-transition:enter="transition ease-in-out duration-300"
-       x-transition:enter-start="-translate-x-full"
-       x-transition:enter-end="translate-x-0"
-       x-transition:leave="transition ease-in-out duration-300"
-       x-transition:leave-start="translate-x-0"
-       x-transition:leave-end="-translate-x-full"
+<aside class="hidden lg:flex flex-col text-white shadow-lg bg-indigo-600 fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out"
+       :class="{ '-translate-x-full': sidebarCollapsed, 'translate-x-0': !sidebarCollapsed }"
        style="width: 280px; height: 100vh; min-height: 100vh;">
     @include('layouts.sidebar-content')
 </aside>
