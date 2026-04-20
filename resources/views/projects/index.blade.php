@@ -20,9 +20,9 @@
 
     <div class="py-4">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+            <div class="flex flex-col lg:flex-row gap-8 items-start">
                 <!-- Sidebar: Refinement Tools -->
-                <aside class="w-full lg:col-span-1 space-y-6 lg:sticky lg:top-8 lg:self-start lg:z-10">
+                <aside class="w-full lg:w-1/4 shrink-0 space-y-6 lg:sticky lg:top-8 lg:self-start lg:z-10">
                     <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
                         <h3 class="font-black text-xs uppercase tracking-widest text-gray-400 mb-4 italic">Library Catalog</h3>
                         
@@ -107,7 +107,7 @@
                 </aside>
 
                 <!-- Main Content: Project Gallery -->
-                <div class="lg:col-span-3 w-full">
+                <div class="flex-1 w-full min-w-0">
                     @if($projects->isEmpty())
                         <div class="bg-white dark:bg-gray-800 p-8 md:p-12 text-center rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                             <div class="text-4xl mb-4">📭</div>
