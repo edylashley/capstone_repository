@@ -19,11 +19,13 @@
     <style>
         @media (min-width: 1024px) {
             .sidebar-offset {
-                padding-left: 280px;
+                margin-left: 280px;
+                width: calc(100% - 280px) !important;
             }
 
             .sidebar-collapsed-offset {
-                padding-left: 0 !important;
+                margin-left: 0 !important;
+                width: 100% !important;
             }
         }
     </style>
