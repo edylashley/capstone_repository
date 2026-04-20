@@ -16,7 +16,7 @@
     <link rel="icon" type="image/jpg" href="{{ asset('images/system-logo.jpg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Sidebar offset styles -->
-        /* Sidebar offsets no longer needed with flex-flow */
+
     @stack('styles')
 </head>
 
@@ -35,7 +35,8 @@
                 @if(!request()->is('/'))
                     <div class="lg:hidden bg-indigo-700 text-white p-4 flex items-center justify-between shadow-md">
                         <div class="flex items-center gap-3">
-                            <img src="{{ asset('images/system-logo.jpg') }}" class="w-12 h-12 object-contain rounded-full shadow-lg border-2 border-white/20"
+                            <img src="{{ asset('images/system-logo.jpg') }}"
+                                class="w-12 h-12 object-contain rounded-full shadow-lg border-2 border-white/20"
                                 alt="NORSU Capstone Repository">
                             <span class="text-sm font-black uppercase tracking-wider">Capstone Repository</span>
                         </div>
@@ -226,7 +227,8 @@
                                         </p>
                                         <div class="bg-white/60 p-3 rounded-lg">
                                             <p class="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
-                                                {{ $latestReply->admin_reply }}</p>
+                                                {{ $latestReply->admin_reply }}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
