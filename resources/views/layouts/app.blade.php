@@ -16,19 +16,7 @@
     <link rel="icon" type="image/jpg" href="{{ asset('images/system-logo.jpg') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Sidebar offset styles -->
-    <style>
-        @media (min-width: 1024px) {
-            .sidebar-offset {
-                margin-left: 280px;
-                width: calc(100% - 280px) !important;
-            }
-
-            .sidebar-collapsed-offset {
-                margin-left: 0 !important;
-                width: 100% !important;
-            }
-        }
-    </style>
+        /* Sidebar offsets no longer needed with flex-flow */
     @stack('styles')
 </head>
 
@@ -41,8 +29,7 @@
             @endif
         @endauth
 
-        <div class="w-full flex flex-col min-h-screen min-w-0 transition-all duration-300 ease-in-out {{ auth()->check() && !request()->is('/') ? 'sidebar-offset' : '' }}"
-            :class="{ 'sidebar-collapsed-offset': sidebarCollapsed }">
+        <div class="flex-1 flex flex-col min-h-screen min-w-0 transition-all duration-300 ease-in-out">
             <!-- Mobile Header (Visible only on small screens) -->
             @auth
                 @if(!request()->is('/'))
