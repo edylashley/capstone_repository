@@ -1,10 +1,10 @@
 <section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
+    <header class="hidden">
+        <h2 class="text-lg font-medium text-slate-900">
             {{ __('Profile Information') }}
         </h2>
 
-        <p class="mt-1 text-sm text-gray-600">
+        <p class="mt-1 text-sm text-slate-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
@@ -27,14 +27,14 @@
             <x-input-label for="student_id" :value="__('Student ID')" />
             <x-text-input id="student_id" name="student_id" type="text" class="mt-1 block w-full {{ $user->isStudent() ? 'bg-gray-100' : '' }}" :value="old('student_id', $user->student_id)" {{ $user->isStudent() ? 'readonly' : '' }} placeholder="9-digit ID (e.g. 202312345)" />
             @if($user->isStudent())
-                <p class="text-[10px] text-gray-500 mt-1 italic">Student ID is managed by the administrator.</p>
+                <p class="text-[10px] text-slate-500 mt-1 italic">Student ID is managed by the administrator.</p>
             @endif
             <x-input-error class="mt-2" :messages="$errors->get('student_id')" />
         </div>
 
         <div>
             <x-input-label for="program" :value="__('Degree Program')" />
-            <select id="program" name="program" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+            <select id="program" name="program" class="mt-1 block w-full border-slate-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm text-sm">
                 <option value="" disabled {{ $user->program ? '' : 'selected' }}>Choose Program</option>
                 <option value="BSInT" {{ old('program', $user->program) == 'BSInT' ? 'selected' : '' }}>Bachelor of Science in Information Technology (BSInT)</option>
                 <option value="Com-Sci" {{ old('program', $user->program) == 'Com-Sci' ? 'selected' : '' }}>Bachelor of Science in Computer Science (Com-Sci)</option>
@@ -49,10 +49,10 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-gray-800">
+                    <p class="text-sm mt-2 text-slate-800">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <button form="send-verification" class="underline text-sm text-slate-600 hover:text-slate-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
@@ -75,7 +75,7 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
+                    class="text-sm text-slate-600"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>

@@ -10,7 +10,7 @@
     </x-slot>
 
     <style>
-        @keyframes scan-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(99,102,241,0.2); } 50% { box-shadow:0 0 20px 8px rgba(99,102,241,0.3); } }
+        @keyframes scan-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(15,23,42,0.2); } 50% { box-shadow:0 0 20px 8px rgba(15,23,42,0.3); } }
         @keyframes scan-line { 0% { top:0; } 100% { top:100%; } }
         @keyframes fade-in-up { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
         @keyframes progress-fill { from { width:0; } }
@@ -31,13 +31,13 @@
         <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
             {{-- ═══ SECTION 1: Algorithm Overview ═══ --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 px-8 py-6">
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-slate-800 via-slate-900 to-slate-950 px-8 py-6">
                     <h3 class="text-xl font-black text-white tracking-tight flex items-center gap-3">
-                        <svg class="w-7 h-7 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                        <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                         How the Security Scan Algorithm Works
                     </h3>
-                    <p class="text-indigo-200 text-sm mt-1">Every file uploaded to this system passes through a multi-layered security pipeline before it is accepted.</p>
+                    <p class="text-slate-400 text-sm mt-1">Every file uploaded to this system passes through a multi-layered security pipeline before it is accepted.</p>
                 </div>
                 <div class="p-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -112,12 +112,12 @@
                         </div>
 
                         {{-- Layer 6 --}}
-                        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-2xl p-5 border border-indigo-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-5 border border-slate-200 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
-                                <div class="w-10 h-10 bg-indigo-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <svg class="w-5 h-5 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                                <div class="w-10 h-10 bg-slate-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                                 </div>
-                                <span class="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 6</span>
+                                <span class="bg-slate-800 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 6</span>
                             </div>
                             <div>
                                 <h4 class="font-bold text-gray-800 text-sm">PDF Structure Validation</h4>
@@ -126,9 +126,9 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-start gap-3 p-4 bg-indigo-50 rounded-xl border border-indigo-100">
-                        <svg class="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <div class="text-xs text-indigo-700">
+                    <div class="mt-6 flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <svg class="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <div class="text-xs text-slate-700">
                             <strong>How it works in practice:</strong> When a student submits a project, every uploaded file (manuscript + attachments) goes through this entire pipeline. If <em>any</em> layer detects a threat, the entire submission is <strong>blocked</strong>, the uploaded files are <strong>deleted</strong>, and the incident is <strong>logged</strong> to the activity log with full details.
                         </div>
                     </div>
@@ -244,27 +244,27 @@
             </div>
 
             {{-- ═══ SECTION 3: Live Scanner ═══ --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <div class="px-8 py-5 border-b border-gray-100">
-                    <h3 class="font-black text-gray-800 text-lg flex items-center gap-2">
-                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+                <div class="px-8 py-5 border-b border-slate-100">
+                    <h3 class="font-black text-slate-800 text-lg flex items-center gap-2">
+                        <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         Live Security Scanner
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1">Upload any file below to run it through the full security pipeline in real-time.</p>
+                    <p class="text-xs text-slate-500 mt-1">Upload any file below to run it through the full security pipeline in real-time.</p>
                 </div>
                 <div class="p-8">
                     {{-- Upload Area --}}
                     <input type="file" id="scan-file-input" class="hidden" accept="*/*">
                     <div id="drop-zone"
-                         class="relative border-2 border-dashed border-gray-300 hover:border-indigo-400 rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group"
+                         class="relative border-2 border-dashed border-slate-300 hover:border-slate-900 rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group"
                          onclick="document.getElementById('scan-file-input').click()">
                         <div class="flex flex-col items-center gap-3">
-                            <div class="w-16 h-16 bg-indigo-100 group-hover:bg-indigo-200 rounded-2xl flex items-center justify-center transition-colors">
-                                <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            <div class="w-16 h-16 bg-slate-100 group-hover:bg-slate-200 rounded-2xl flex items-center justify-center transition-colors">
+                                <svg class="w-8 h-8 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-gray-700">Drop a file here or click to browse</p>
-                                <p class="text-xs text-gray-400 mt-1">Any file type up to 50MB — it will be scanned and immediately deleted</p>
+                                <p class="text-sm font-bold text-slate-700">Drop a file here or click to browse</p>
+                                <p class="text-xs text-slate-400 mt-1">Any file type up to 50MB — it will be scanned and immediately deleted</p>
                             </div>
                         </div>
                         {{-- Scanning overlay --}}
@@ -305,7 +305,7 @@
 
                         {{-- Scan Again --}}
                         <div class="text-center pt-4">
-                            <button onclick="resetScanner()" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-100 hover:shadow-indigo-200 transition-all text-sm uppercase tracking-wider">
+                            <button onclick="resetScanner()" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-black text-white font-bold rounded-xl shadow-lg shadow-slate-100 hover:shadow-slate-200 transition-all text-sm uppercase tracking-wider">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                 Scan Another File
                             </button>

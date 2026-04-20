@@ -14,16 +14,16 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50">
+        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-6 bg-slate-950">
             <!-- Decorative background elements -->
             <div class="fixed inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full opacity-20 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 rounded-full opacity-20 blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full opacity-5 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-600 rounded-full opacity-5 blur-3xl translate-y-1/2 -translate-x-1/2"></div>
             </div>
         
-            <div class="relative w-full sm:max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+            <div class="relative w-full sm:max-w-md bg-slate-900 shadow-2xl rounded-2xl overflow-hidden border border-slate-800 shadow-indigo-500/10 backdrop-blur-xl">
                 <!-- Header with gradient -->
-                <div class="bg-gradient-to-br from-indigo-600 via-blue-600 to-purple-700 p-4 text-center">
+                <div class="bg-gradient-to-br from-indigo-600 via-slate-800 to-slate-900 p-4 text-center">
                     <div class="flex flex-col items-center">
                         <div class="w-32 h-32 flex items-center justify-center overflow-hidden mb-4 rounded-full shadow-lg bg-white border-4 border-white/20">
                             <img src="{{ asset('images/system-logo.jpg') }}" alt="Portal Logo" class="w-full h-full object-cover transform scale-100 hover:scale-125 transition-transform duration-500" />
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="mt-6 text-gray-600 text-sm">
+            <div class="mt-6 text-slate-500 text-sm">
                 &copy; {{ date('Y') }} NORSU {{ \App\Models\Setting::get('repository_name', 'CSIT Capstone Repository') }}
             </div>
         </div>

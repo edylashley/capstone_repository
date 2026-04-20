@@ -12,56 +12,56 @@
         </div>
     </x-slot>
 
-    <div class="py-8">
+    <div class="py-8 bg-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Stats Cards --}}
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 p-5 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-indigo-100 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+                        <div class="w-11 h-11 rounded-xl bg-slate-200 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
                         </div>
                         <div>
-                            <p class="text-2xl font-black text-gray-800">{{ $stats['total'] }}</p>
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Total</p>
+                            <p class="text-2xl font-black text-slate-800">{{ $stats['total'] }}</p>
+                            <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Total Inquiry</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-2xl shadow-sm border border-amber-100 p-5 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 rounded-2xl shadow-sm border border-amber-200/50 p-5 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center">
+                        <div class="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center">
                             <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <div>
                             <p class="text-2xl font-black text-amber-600">{{ $stats['pending'] }}</p>
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Pending</p>
+                            <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Waitlisted</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-sm border border-green-100 p-5 hover:shadow-md transition-shadow">
+                <div class="bg-slate-50 rounded-2xl shadow-sm border border-emerald-200/50 p-5 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <div>
-                            <p class="text-2xl font-black text-green-600">{{ $stats['resolved'] }}</p>
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-gray-400">Resolved</p>
+                            <p class="text-2xl font-black text-emerald-600">{{ $stats['resolved'] }}</p>
+                            <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Completed</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- Filters --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6">
+            <div class="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 p-5 mb-6">
                 <form method="GET" action="{{ route('admin.support.index') }}" class="flex flex-wrap gap-3 items-end">
                     <div class="flex-1 min-w-[200px]">
                         <label class="block text-[10px] uppercase font-black tracking-wider text-gray-400 mb-1">Search</label>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Subject, message, or user..." class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Subject, message, or user..." class="w-full rounded-xl border-slate-300 bg-slate-50/50 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-black tracking-wider text-gray-400 mb-1">Status</label>
-                        <select name="status" class="rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm">
+                        <label class="block text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1">Status</label>
+                        <select name="status" class="rounded-xl border-slate-300 bg-slate-50/50 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
                             <option value="">All</option>
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pending</option>
 
@@ -69,8 +69,8 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] uppercase font-black tracking-wider text-gray-400 mb-1">Category</label>
-                        <select name="category" class="rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm">
+                        <label class="block text-[10px] uppercase font-black tracking-wider text-slate-400 mb-1">Category</label>
+                        <select name="category" class="rounded-xl border-slate-300 bg-slate-50/50 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
                             <option value="">All</option>
                             <option value="bug" {{ request('category') === 'bug' ? 'selected' : '' }}>System Bug</option>
                             <option value="correction" {{ request('category') === 'correction' ? 'selected' : '' }}>Record Correction</option>
@@ -78,7 +78,7 @@
                             <option value="general" {{ request('category') === 'general' ? 'selected' : '' }}>General</option>
                         </select>
                     </div>
-                    <button type="submit" class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm">
+                    <button type="submit" class="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-black transition-colors shadow-sm">
                         Filter
                     </button>
                     @if(request()->hasAny(['search', 'status', 'category']))
@@ -90,7 +90,7 @@
             </div>
 
             {{-- Tickets List --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 @if($tickets->isEmpty())
                     <div class="p-12 text-center">
                         <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -139,7 +139,7 @@
                                 </div>
 
                                 {{-- Arrow --}}
-                                <svg class="w-5 h-5 text-gray-300 group-hover:text-indigo-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                <svg class="w-5 h-5 text-slate-300 group-hover:text-slate-900 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                             </a>
                         @endforeach
                     </div>

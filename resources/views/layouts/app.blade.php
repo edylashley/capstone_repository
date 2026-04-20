@@ -33,7 +33,7 @@
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased bg-slate-100 text-slate-900"
+<body class="font-sans antialiased bg-slate-50 text-slate-900"
     x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
     <div class="min-h-screen flex flex-col lg:flex-row">
         @auth
@@ -42,7 +42,7 @@
             @endif
         @endauth
 
-        <div class="main-content flex-1 flex flex-col min-h-screen min-w-0 transition-all duration-300 ease-in-out"
+        <div class="flex-1 flex flex-col min-h-screen min-w-0 transition-all duration-300 ease-in-out {{ auth()->check() && !request()->is('/') ? 'main-content' : '' }}"
             :class="{ 'sidebar-collapsed-offset': sidebarCollapsed }">
             <!-- Mobile Header (Visible only on small screens) -->
             @auth

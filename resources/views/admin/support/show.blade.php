@@ -11,14 +11,14 @@
         </div>
     </x-slot>
 
-    <div class="py-8">
+    <div class="py-8 bg-slate-100">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             {{-- Ticket Header Card --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-6">
                     <div class="flex items-start justify-between gap-4 mb-4">
                         <div>
-                            <h3 class="text-lg font-black text-gray-800">{{ $ticket->subject }}</h3>
+                            <h3 class="text-lg font-black text-slate-800">{{ $ticket->subject }}</h3>
                             <div class="flex items-center gap-2 mt-1.5">
                                 <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border {{ $ticket->status_badge }}">
                                     {{ str_replace('_', ' ', $ticket->status) }}
@@ -76,7 +76,7 @@
                     </div>
 
                     {{-- Submitter Info --}}
-                    <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                    <div class="flex items-center gap-3 p-4 bg-slate-200/50 rounded-xl border border-slate-200">
                         <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">
                             {{ substr($ticket->user?->name ?? $ticket->email ?? '?', 0, 1) }}
                         </div>
@@ -98,9 +98,9 @@
             </div>
 
             {{-- Ticket Message --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-5 border-b border-gray-100 bg-gray-50">
-                    <h4 class="font-black text-sm text-gray-800 flex items-center gap-2">
+            <div class="bg-slate-50 rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="p-5 border-b border-slate-200 bg-slate-800">
+                    <h4 class="font-black text-sm text-white flex items-center gap-2">
                         <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
                         Issue Details
                     </h4>
@@ -112,8 +112,8 @@
 
             {{-- Admin Reply / Resolve Panel --}}
             @if($ticket->status !== 'resolved')
-            <div class="bg-white rounded-2xl shadow-sm border border-indigo-100 overflow-hidden">
-                <div class="p-5 border-b border-indigo-50 bg-indigo-50">
+            <div class="bg-slate-50 rounded-2xl shadow-sm border border-indigo-200 overflow-hidden">
+                <div class="p-5 border-b border-indigo-200 bg-indigo-50">
                     <h4 class="font-black text-sm text-indigo-800 flex items-center gap-2">
                         <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
                         Send Reply & Resolve Ticket
@@ -143,8 +143,8 @@
                 </div>
             </div>
             @else
-            <div class="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden">
-                <div class="p-5 border-b border-green-50 bg-green-50">
+            <div class="bg-slate-50 rounded-2xl shadow-sm border border-emerald-200 overflow-hidden">
+                <div class="p-5 border-b border-emerald-200 bg-emerald-50">
                     <h4 class="font-black text-sm text-green-800 flex items-center gap-2">
                         <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Admin Reply Sent

@@ -1,6 +1,6 @@
 @auth
 <!-- Desktop Sidebar (hidden on mobile) -->
-<aside class="hidden lg:flex flex-col text-white shadow-lg bg-indigo-600 fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out"
+<aside class="hidden lg:flex flex-col text-white shadow-lg bg-slate-900 fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out"
        :class="{ '-translate-x-full': sidebarCollapsed, 'translate-x-0': !sidebarCollapsed }"
        style="width: 280px; height: 100vh; min-height: 100vh;">
     @include('layouts.sidebar-content')
@@ -30,7 +30,7 @@
          x-transition:leave="transition ease-in-out duration-300 transform"
          x-transition:leave-start="translate-x-0"
          x-transition:leave-end="-translate-x-full"
-         class="relative flex flex-col max-w-[280px] w-full h-full bg-indigo-700 text-white overflow-hidden">
+         class="relative flex flex-col max-w-[280px] w-full h-full bg-slate-950 text-white overflow-hidden">
 
         <div class="absolute top-4 right-4 z-10">
             <button @click="sidebarOpen = false" class="p-2 text-white hover:bg-white/10 rounded-lg">
