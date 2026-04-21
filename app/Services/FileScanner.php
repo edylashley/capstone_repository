@@ -71,22 +71,34 @@ class FileScanner
             $clamscan = config('repository.clamscan_path', 'clamscan');
             $which = $this->which($clamscan);
             if (!$which) {
-                return ['ok' => false, 'notes' => "ClamAV not found at path: {$clamscan}"];
+                return [
+                    'ok' => false, 
+                    'notes' => "ClamAV not found at path: {$clamscan}",
+                    'error_type' => 'system'
+                ];
             }
 
             $cmd = escapeshellarg($which) . ' --no-summary ' . escapeshellarg($path);
             $output = [];
 
             $originalLimit = (int) ini_get('max_execution_time');
-            set_time_limit(300);
+            set_time_limit(300); // 5 minutes for slow servers
             @exec($cmd . ' 2>&1', $output, $exit);
             set_time_limit($originalLimit);
 
             if ($exit !== 0) {
                 $rawNotes = implode('\n', $output);
-                // Sanitize: Replace the full path with just the filename for better UX and security
+                // Sanitize: Replace the full path with just the filename
                 $sanitizedNotes = str_replace($path, basename($path), $rawNotes);
-                return ['ok' => false, 'notes' => $sanitizedNotes];
+                
+                // ClamAV Exit Codes: 0 = Clean, 1 = Virus Found, 2 = Error occurred
+                $errorType = ($exit === 1) ? 'threat' : 'system';
+
+                return [
+                    'ok' => false, 
+                    'notes' => $sanitizedNotes,
+                    'error_type' => $errorType
+                ];
             }
         }
 

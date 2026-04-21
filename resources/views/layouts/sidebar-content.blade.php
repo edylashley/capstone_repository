@@ -106,7 +106,7 @@
                     d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9l-2-2H5a2 2 0 01-2 2v8a2 2 0 012 2z">
                 </path>
             </svg>
-            <span class="font-bold tracking-tight">Project Flow</span>
+            <span class="font-bold tracking-tight">Projects</span>
         </a>
         <a href="{{ route('admin.logs') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.logs') ? 'bg-slate-800 shadow-md text-white' : 'text-slate-400' }}">

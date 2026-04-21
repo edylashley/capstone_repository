@@ -299,14 +299,19 @@ class ProjectController extends Controller
                 $project->authors()->detach();
                 $project->delete();
 
-                $payload = ['message' => 'File scan failed: upload blocked', 'notes' => $scanResult['notes']];
+                $errorMsg = 'File scan failed: upload blocked. Please contact support or try again later.';
+                if (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system') {
+                    $errorMsg = 'Security scanner service error: ' . $scanResult['notes'] . '. Please contact support.';
+                }
+
+                $payload = ['message' => 'File scan failed', 'notes' => $scanResult['notes'], 'error' => $errorMsg];
 
                 if ($request->expectsJson() || $request->wantsJson()) {
                     return response()->json($payload, 422);
                 }
 
                 return redirect()->back()->withInput()
-                    ->withErrors(['manuscript' => 'File scan failed: upload blocked. Please contact support or try again later.']);
+                    ->withErrors(['manuscript' => $errorMsg]);
             }
 
             // Run PDF validation heuristics (page count, keywords)
@@ -439,9 +444,15 @@ class ProjectController extends Controller
                     $project->delete();
 
                     $errorMsg = "⚠️ Security Threat Detected in Attachment!\n\n";
-                    $errorMsg .= "File: \"{$attach->getClientOriginalName()}\"\n";
-                    $errorMsg .= "Reason: {$attachScanResult['notes']}\n\n";
-                    $errorMsg .= "The entire submission has been blocked for your safety. Please remove the flagged file and try again.";
+                    if (isset($attachScanResult['error_type']) && $attachScanResult['error_type'] === 'system') {
+                        $errorMsg = "⚠️ Scanner Service Error!\n\n";
+                        $errorMsg .= "The security scanner encountered a system error: {$attachScanResult['notes']}\n\n";
+                        $errorMsg .= "Please contact the administrator.";
+                    } else {
+                        $errorMsg .= "File: \"{$attach->getClientOriginalName()}\"\n";
+                        $errorMsg .= "Reason: {$attachScanResult['notes']}\n\n";
+                        $errorMsg .= "The entire submission has been blocked for your safety. Please remove the flagged file and try again.";
+                    }
 
                     if ($request->expectsJson() || $request->wantsJson()) {
                         return response()->json(['message' => 'Attachment scan failed', 'error' => $errorMsg], 422);
