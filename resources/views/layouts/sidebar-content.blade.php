@@ -1,9 +1,9 @@
 <!-- Logo -->
 <div class="flex flex-col items-center py-4 px-2 border-b border-slate-700/50">
     <button @click="sidebarCollapsed = true"
-        class="relative w-32 h-32 flex items-center justify-center overflow-hidden rounded-full shadow-2xl bg-slate-800 transition duration-300 border-4 border-slate-700 hover:scale-105 hover:shadow-slate-500/20 focus:outline-none group">
+        class="relative w-32 h-32 flex items-center justify-center overflow-hidden rounded-full shadow-[0_0_50px_-10px_rgba(99,102,241,0.6)] bg-slate-950/80 backdrop-blur-md transition duration-300 border-4 border-indigo-500/30 hover:scale-105 hover:shadow-indigo-500/80 focus:outline-none group">
         <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Capstone Repository"
-            class="w-full h-full object-cover transform scale-125 transition-transform duration-300 group-hover:scale-110" />
+            class="w-full h-full object-cover transform scale-120 transition-transform duration-300 group-hover:scale-135" />
     </button>
     <span class="text-sm font-black text-center leading-tight mt-4 uppercase tracking-wider text-white">
         {{ \App\Models\Setting::get('repository_name', 'CSIT Capstone Repository') }}

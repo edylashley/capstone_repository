@@ -47,14 +47,14 @@
             <!-- Mobile Header (Visible only on small screens) -->
             @auth
                 @if(!request()->is('/'))
-                    <div class="lg:hidden bg-indigo-700 text-white p-4 flex items-center justify-between shadow-md">
+                    <div class="lg:hidden bg-slate-950 text-white p-4 flex items-center justify-between shadow-md border-b border-white/5">
                         <div class="flex items-center gap-3">
                             <img src="{{ asset('images/system-logo.jpg') }}"
                                 class="w-12 h-12 object-contain rounded-full shadow-lg border-2 border-white/20"
                                 alt="NORSU Capstone Repository">
                             <span class="text-sm font-black uppercase tracking-wider">Capstone Repository</span>
                         </div>
-                        <button @click="sidebarOpen = true" class="p-2 rounded-lg hover:bg-indigo-800 transition">
+                        <button @click="sidebarOpen = true" class="p-2 rounded-lg hover:bg-white/10 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 12h16M4 18h16"></path>
@@ -156,7 +156,7 @@
         <div x-data="{ supportOpen: false }" class="relative z-[9990]">
             {{-- Floating Action Button --}}
             <button @click="supportOpen = true"
-                class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-300 group"
+                class="fixed bottom-6 right-6 w-14 h-14 bg-slate-900 hover:bg-black text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-slate-500 group"
                 title="Help & Support">
                 <svg class="w-6 h-6 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -184,7 +184,7 @@
                     class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden pointer-events-auto flex flex-col max-h-full">
                     {{-- Header --}}
                     <div
-                        class="bg-gradient-to-r from-indigo-600 to-indigo-800 p-6 text-white flex justify-between items-center gap-4 shrink-0">
+                        class="bg-gradient-to-r from-slate-900 to-slate-950 p-6 text-white flex justify-between items-center gap-4 shrink-0">
                         <div class="flex items-center gap-3 pr-2">
                             <div
                                 class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
@@ -196,7 +196,7 @@
                             </div>
                             <div>
                                 <h3 class="font-black text-lg tracking-tight">System Support</h3>
-                                <p class="text-indigo-200 text-xs font-semibold uppercase tracking-wider">Report an Issue or
+                                <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Report an Issue or
                                     Contact Admin</p>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                                 <label class="block text-sm font-bold text-gray-700 mb-1">Issue Category <span
                                         class="text-red-500">*</span></label>
                                 <select name="category" required
-                                    class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm">
+                                    class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
                                     <option value="" disabled selected>Select the type of issue...</option>
                                     <option value="bug">System Bug / Error</option>
                                     <option value="correction">Request Record Correction</option>
@@ -268,7 +268,7 @@
                                 <label class="block text-sm font-bold text-gray-700 mb-1">Subject <span
                                         class="text-red-500">*</span></label>
                                 <input type="text" name="subject" required placeholder="Brief title of your issue"
-                                    class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm">
+                                    class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
                             </div>
 
                             <div>
@@ -276,7 +276,7 @@
                                         class="text-red-500">*</span></label>
                                 <textarea name="message" rows="4" required
                                     placeholder="Please provide specific details so the admin can assist you efficiently..."
-                                    class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm resize-none"></textarea>
+                                    class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm resize-none"></textarea>
                             </div>
 
                             @if(!auth()->check())
@@ -284,13 +284,13 @@
                                     <label class="block text-sm font-bold text-gray-700 mb-1">Your Email <span
                                             class="text-red-500">*</span></label>
                                     <input type="email" name="email" required placeholder="We need this to reply to you"
-                                        class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm">
+                                        class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
                                 </div>
                             @endif
 
                             <div class="pt-2">
                                 <button type="submit"
-                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-slate-900 hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors">
                                     Submit Ticket
                                 </button>
                                 <p
@@ -311,7 +311,7 @@
             $adminOpenTickets = \App\Models\SupportTicket::where('status', 'pending')->count();
         @endphp
         <a href="{{ route('admin.support.index') }}"
-            class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-300 group z-[9990]"
+            class="fixed bottom-6 right-6 w-14 h-14 bg-slate-900 hover:bg-black text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-slate-500 group z-[9990]"
             title="Support Tickets{{ $adminOpenTickets > 0 ? ' — ' . $adminOpenTickets . ' pending' : '' }}">
             <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">

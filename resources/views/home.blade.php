@@ -99,7 +99,7 @@
                         <div
                             class="flex-shrink-0 w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 flex items-center justify-center overflow-hidden rounded-full shadow-[0_0_80px_-10px_rgba(99,102,241,0.8)] bg-slate-950/80 backdrop-blur-md animate-float border-4 border-indigo-400/50 group">
                             <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Logo"
-                                class="w-full h-full object-cover transform scale-150 saturate-[1.4] group-hover:scale-110 transition-transform duration-500 ease-in-out animate-pop-in" />
+                                class="w-full h-full object-cover transform scale-120 group-hover:scale-135 transition-transform duration-500 ease-in-out animate-pop-in" />
                         </div>
                         <div class="text-center lg:text-left flex-shrink-0">
                             <h1
@@ -147,7 +147,7 @@
                             <form action="{{ route('projects.index') ?? '#' }}" method="GET">
                                 <div
                                     class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex items-center ring-1 ring-white/20 focus-within:ring-2 focus-within:ring-teal-500/50 focus-within:shadow-teal-500/20 transition-all duration-300 group/search">
-                                    <div class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none z-10">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
                                         <svg class="w-5 h-5 text-teal-400 group-focus-within/search:scale-110 transition-transform"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
