@@ -49,8 +49,11 @@
                             <label class="block font-medium text-sm text-gray-700">Program</label>
                             <select name="program" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                 <option value="" disabled {{ (old('program') ?? auth()->user()->program) ? '' : 'selected' }}>Choose Program</option>
-                                <option value="BSInT" {{ (old('program') ?? auth()->user()->program) == 'BSInT' ? 'selected' : '' }}>BSInT</option>
-                                <option value="Com-Sci" {{ (old('program') ?? auth()->user()->program) == 'Com-Sci' ? 'selected' : '' }}>Com-Sci</option>
+                                @foreach($programs as $prog)
+                                    <option value="{{ $prog->abbreviation }}" {{ (old('program') ?? auth()->user()->program) == $prog->abbreviation ? 'selected' : '' }}>
+                                        {{ $prog->abbreviation }}
+                                    </option>
+                                @endforeach
                             </select>
                             @error('program') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                         </div>
@@ -137,7 +140,39 @@
                                     </span>
                                 </label>
                             @endforeach
+
+                            {{-- "Others" Option --}}
+                            <label class="relative flex items-center p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 cursor-pointer transition-all group bg-gray-50/30">
+                                <input type="checkbox" id="other_category_trigger" name="other_category_trigger" 
+                                    {{ old('other_category') ? 'checked' : '' }}
+                                    class="w-5 h-5 rounded-lg border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
+                                <span class="ml-3 text-sm font-bold text-gray-700 group-hover:text-indigo-700 transition-colors">
+                                    Others
+                                </span>
+                            </label>
                         </div>
+
+                        <div id="other_category_container" class="{{ old('other_category') ? '' : 'hidden' }} mt-3">
+                            <input type="text" name="other_category" value="{{ old('other_category') }}" 
+                                placeholder="Specify other category name"
+                                class="w-full sm:w-1/2 rounded-xl border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm bg-indigo-50/30 px-4 py-3 font-bold placeholder:font-normal">
+                            <p class="text-[10px] text-indigo-400 mt-1 italic ml-1">This will be added as a new specialization for your project.</p>
+                        </div>
+                        
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const trigger = document.getElementById('other_category_trigger');
+                                const container = document.getElementById('other_category_container');
+                                
+                                trigger.addEventListener('change', function() {
+                                    if (this.checked) {
+                                        container.classList.remove('hidden');
+                                    } else {
+                                        container.classList.add('hidden');
+                                    }
+                                });
+                            });
+                        </script>
                         @error('categories') <p class="text-red-600 text-sm mt-3 font-semibold">{{ $message }}</p> @enderror
                     </div>
 

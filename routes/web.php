@@ -54,6 +54,9 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     // Manage Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['create', 'show', 'edit']);
 
+    // Manage Programs
+    Route::resource('programs', \App\Http\Controllers\Admin\ProgramController::class)->except(['create', 'show', 'edit']);
+
     // Security Scan Demo
     Route::get('/security-scan-demo', [\App\Http\Controllers\Admin\SecurityScanDemoController::class, 'index'])->name('security-demo.index');
     Route::post('/security-scan-demo/scan', [\App\Http\Controllers\Admin\SecurityScanDemoController::class, 'scan'])->name('security-demo.scan');

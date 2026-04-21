@@ -86,9 +86,16 @@ class StoreProjectRequest extends FormRequest
             'authors.*' => ['required','string','max:255'],
 
             // Metadata
-            'program' => ['required', 'string', Rule::in(['BSInT', 'Com-Sci'])],
-            'categories' => ['required', 'array', 'min:1'],
+            'program' => [
+                'required', 
+                'string', 
+                auth()->user()->isAdmin() 
+                    ? Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())
+                    : Rule::in([auth()->user()->program])
+            ],
+            'categories' => ['required_without:other_category', 'array'],
             'categories.*' => ['exists:categories,id'],
+            'other_category' => ['nullable', 'string', 'max:50', 'required_if:other_category_trigger,on'],
 
             // Main manuscript: PDF only
             'manuscript' => ['required','file','mimes:pdf','max:'.$maxManuscriptKb], 

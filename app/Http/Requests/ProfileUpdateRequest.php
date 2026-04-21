@@ -34,7 +34,7 @@ class ProfileUpdateRequest extends FormRequest
             'program' => [
                 'nullable',
                 'string',
-                Rule::in(['BSInT', 'Com-Sci']),
+                Rule::in(\App\Models\Program::pluck('abbreviation')->toArray()),
             ],
         ];
     }

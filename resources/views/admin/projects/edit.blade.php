@@ -97,8 +97,11 @@
                                 <x-input-label for="program" :value="__('Program')" class="text-white"/>
                                 <select id="program" name="program" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                     <option value="" disabled {{ (old('program', $project->program)) ? '' : 'selected' }}>Choose Program</option>
-                                    <option value="BSInT" {{ old('program', $project->program) == 'BSInT' ? 'selected' : '' }}>BSInT</option>
-                                    <option value="Com-Sci" {{ old('program', $project->program) == 'Com-Sci' ? 'selected' : '' }}>Com-Sci</option>
+                                    @foreach($programs as $prog)
+                                        <option value="{{ $prog->abbreviation }}" {{ old('program', $project->program) == $prog->abbreviation ? 'selected' : '' }}>
+                                            {{ $prog->abbreviation }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 <x-input-error :messages="$errors->get('program')" class="mt-2" />
                             </div>

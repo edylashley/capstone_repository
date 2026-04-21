@@ -160,10 +160,11 @@ class ProjectController extends Controller
             $students->push(auth()->user());
         }
 
-        // Fetch dynamic categories
+        // Fetch dynamic categories and programs
         $categories = \App\Models\Category::all();
+        $programs = \App\Models\Program::all();
 
-        return view('projects.create', compact('advisers', 'students', 'categories'));
+        return view('projects.create', compact('advisers', 'students', 'categories', 'programs'));
     }
 
     /**
@@ -201,9 +202,16 @@ class ProjectController extends Controller
         ]);
 
         // Sync multiple categories
-        if ($request->has('categories')) {
-            $project->categories()->sync($request->categories);
+        $categoryIds = $request->categories ?? [];
+        if ($request->filled('other_category')) {
+            $newCat = \App\Models\Category::firstOrCreate([
+                'name' => ucwords(strtolower(trim($request->other_category)))
+            ]);
+            if (!in_array($newCat->id, $categoryIds)) {
+                $categoryIds[] = $newCat->id;
+            }
         }
+        $project->categories()->sync($categoryIds);
 
         // Attach ONLY the submitting author so they retain ownership to view/edit their submission
         $project->authors()->attach($request->user()->id, ['author_order' => 0]);
@@ -299,9 +307,13 @@ class ProjectController extends Controller
                 $project->authors()->detach();
                 $project->delete();
 
-                $errorMsg = 'File scan failed: upload blocked. Please contact support or try again later.';
+                $errorMsg = "⚠️ Security Threat Detected in Manuscript!\n\n";
+                $errorMsg .= "The file \"{$file->getClientOriginalName()}\" contains a restricted signature: " . str_replace('FOUND', '', $scanResult['notes']) . "\n\n";
+                $errorMsg .= "Your submission has been blocked for security reasons. Please ensure your files are clean and try again.";
+
                 if (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system') {
-                    $errorMsg = 'Security scanner service error: ' . $scanResult['notes'] . '. Please contact support.';
+                    $errorMsg = "⚠️ Scanner Service Error!\n\n";
+                    $errorMsg .= "The system encountered an error while scanning the manuscript. Please contact the technical administrator.";
                 }
 
                 $payload = ['message' => 'File scan failed', 'notes' => $scanResult['notes'], 'error' => $errorMsg];
@@ -446,12 +458,12 @@ class ProjectController extends Controller
                     $errorMsg = "⚠️ Security Threat Detected in Attachment!\n\n";
                     if (isset($attachScanResult['error_type']) && $attachScanResult['error_type'] === 'system') {
                         $errorMsg = "⚠️ Scanner Service Error!\n\n";
-                        $errorMsg .= "The security scanner encountered a system error: {$attachScanResult['notes']}\n\n";
-                        $errorMsg .= "Please contact the administrator.";
+                        $errorMsg .= "The security scanner encountered a system error while processing: {$attach->getClientOriginalName()}\n\n";
+                        $errorMsg .= "Please contact the technical administrator for assistance.";
                     } else {
                         $errorMsg .= "File: \"{$attach->getClientOriginalName()}\"\n";
-                        $errorMsg .= "Reason: {$attachScanResult['notes']}\n\n";
-                        $errorMsg .= "The entire submission has been blocked for your safety. Please remove the flagged file and try again.";
+                        $errorMsg .= "Threat Signature: " . str_replace('FOUND', '', $attachScanResult['notes']) . "\n\n";
+                        $errorMsg .= "CRITICAL: The entire submission has been blocked for your safety. To proceed, please remove the flagged file and re-upload only clean files.";
                     }
 
                     if ($request->expectsJson() || $request->wantsJson()) {
@@ -549,8 +561,9 @@ class ProjectController extends Controller
 
         $advisers = \App\Models\User::where('role', \App\Models\User::ROLE_ADVISER)->active()->get();
         $categories = \App\Models\Category::all();
+        $programs = \App\Models\Program::all();
 
-        return view('projects.edit', compact('project', 'advisers', 'categories'));
+        return view('projects.edit', compact('project', 'advisers', 'categories', 'programs'));
     }
 
     /**
@@ -583,9 +596,16 @@ class ProjectController extends Controller
             ],
             'abstract' => 'required|string',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'categories' => 'required|array|min:1',
+            'categories' => 'required_without:other_category|array',
             'categories.*' => 'exists:categories,id',
-            'program' => ['required', 'string', Rule::in(['BSInT', 'Com-Sci'])],
+            'other_category' => ['nullable', 'string', 'max:50', 'required_if:other_category_trigger,on'],
+            'program' => [
+                'required', 
+                'string', 
+                auth()->user()->isAdmin() 
+                    ? Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())
+                    : Rule::in([auth()->user()->program])
+            ],
             'adviser_id' => 'required|exists:users,id',
             'keywords' => 'nullable|string',
             'authors' => 'required|array|min:1',
@@ -618,7 +638,16 @@ class ProjectController extends Controller
         ]);
 
         // Sync categories
-        $project->categories()->sync($validated['categories']);
+        $categoryIds = $validated['categories'] ?? [];
+        if ($request->filled('other_category')) {
+            $newCat = \App\Models\Category::firstOrCreate([
+                'name' => ucwords(strtolower(trim($request->other_category)))
+            ]);
+            if (!in_array($newCat->id, $categoryIds)) {
+                $categoryIds[] = $newCat->id;
+            }
+        }
+        $project->categories()->sync($categoryIds);
 
         // Log the edit
         ActivityLog::create([

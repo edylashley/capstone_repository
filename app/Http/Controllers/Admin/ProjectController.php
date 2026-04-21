@@ -114,8 +114,9 @@ class ProjectController extends Controller
 
         $projects = $query->with(['authors', 'adviser', 'files'])->paginate(20)->withQueryString();
         $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
+        $programs = \App\Models\Program::all();
 
-        return view('admin.projects.index', compact('projects', 'advisers'));
+        return view('admin.projects.index', compact('projects', 'advisers', 'programs'));
     }
 
     /**
@@ -125,7 +126,8 @@ class ProjectController extends Controller
     {
         $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
         $categories = \App\Models\Category::all();
-        return view('admin.projects.create', compact('advisers', 'categories'));
+        $programs = \App\Models\Program::all();
+        return view('admin.projects.create', compact('advisers', 'categories', 'programs'));
     }
 
     /**
@@ -149,7 +151,7 @@ class ProjectController extends Controller
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'abstract' => 'nullable|string',
-            'program' => ['required', 'string', \Illuminate\Validation\Rule::in(['BSInT', 'Com-Sci'])],
+            'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'manuscript' => [
                 'required', 'file', 'mimes:pdf', 'max:51200',
                 function ($attribute, $value, $fail) {
@@ -289,8 +291,9 @@ class ProjectController extends Controller
         $project = \App\Models\Project::findOrFail($id);
         $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
         $categories = \App\Models\Category::all();
+        $programs = \App\Models\Program::all();
         
-        return view('admin.projects.edit', compact('project', 'advisers', 'categories'));
+        return view('admin.projects.edit', compact('project', 'advisers', 'categories', 'programs'));
     }
 
     /**
@@ -316,7 +319,7 @@ class ProjectController extends Controller
             'status' => 'required|in:pending,verified,approved,published,archived',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
-            'program' => ['required', 'string', \Illuminate\Validation\Rule::in(['BSInT', 'Com-Sci'])],
+            'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
         ]);
 
         $validated['adviser_name'] = \App\Models\User::find($request->adviser_id)->name;
@@ -472,7 +475,8 @@ class ProjectController extends Controller
     {
         $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
         $categories = \App\Models\Category::all();
-        return view('admin.projects.bulk-create', compact('advisers', 'categories'));
+        $programs = \App\Models\Program::all();
+        return view('admin.projects.bulk-create', compact('advisers', 'categories', 'programs'));
     }
 
     /**
@@ -497,7 +501,7 @@ class ProjectController extends Controller
             'projects.*.adviser_name' => 'nullable|string|max:255',
             'projects.*.categories' => 'required|array|min:1',
             'projects.*.categories.*' => 'exists:categories,id',
-            'projects.*.program' => ['required', 'string', \Illuminate\Validation\Rule::in(['BSInT', 'Com-Sci'])],
+            'projects.*.program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'projects.*.abstract' => 'nullable|string',
             'projects.*.manuscript' => [
                 'required', 'file', 'mimes:pdf', 'max:51200',

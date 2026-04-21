@@ -36,8 +36,11 @@
                             <label class="text-xs font-white uppercase text-gray-400">Program:</label>
                             <select name="program" onchange="this.form.submit()" class="text-sm rounded-lg border-gray-200 focus:ring-indigo-500 focus:border-indigo-500 py-1.5 pl-3 pr-10 border-0 shadow-sm w-full sm:w-auto text-center sm:text-left">
                                 <option value="">All Programs</option>
-                                <option value="BSInT" {{ request('program')=='BSInT'?'selected':'' }}>BSInT</option>
-                                <option value="Com-Sci" {{ request('program')=='Com-Sci'?'selected':'' }}>BSCS</option>
+                                @foreach($programs as $prog)
+                                    <option value="{{ $prog->abbreviation }}" {{ request('program') == $prog->abbreviation ? 'selected' : '' }}>
+                                        {{ $prog->abbreviation }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </form>

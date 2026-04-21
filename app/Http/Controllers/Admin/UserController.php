@@ -68,7 +68,7 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', Rule::in(['student', 'adviser', 'admin'])],
             'student_id' => ['nullable', 'string', 'regex:/^[0-9]{9}$/', 'unique:users'],
-            'program' => ['nullable', 'string', Rule::in(['BSInT', 'Com-Sci'])],
+            'program' => ['nullable', 'string', Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
         ]);
 
         $user = User::create([
@@ -114,7 +114,7 @@ class UserController extends Controller
             'student_id' => ['nullable', 'string', 'regex:/^[0-9]{9}$/', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', Rule::in(['student', 'adviser', 'admin'])],
-            'program' => ['nullable', 'string', Rule::in(['BSInT', 'Com-Sci'])],
+            'program' => ['nullable', 'string', Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'is_active' => ['boolean'],
         ]);
 

@@ -64,10 +64,11 @@
                     style="text-indent: 2.25rem !important;"
                     required>
                     <option value="" disabled {{ old('program') ? '' : 'selected' }}>Choose Program</option>
-                    <option value="BSInT" {{ old('program') == 'BSInT' ? 'selected' : '' }}>Bachelor of Science in
-                        Information Technology (BSInT)</option>
-                    <option value="Com-Sci" {{ old('program') == 'Com-Sci' ? 'selected' : '' }}>Bachelor of Science in
-                        Computer Science (Com-Sci)</option>
+                    @foreach($programs as $prog)
+                        <option value="{{ $prog->abbreviation }}" {{ old('program') == $prog->abbreviation ? 'selected' : '' }}>
+                            {{ $prog->name }} ({{ $prog->abbreviation }})
+                        </option>
+                    @endforeach
                 </select>
             </div>
             <x-input-error :messages="$errors->get('program')" class="mt-2" />

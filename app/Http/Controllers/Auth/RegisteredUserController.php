@@ -23,7 +23,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $programs = \App\Models\Program::all();
+        return view('auth.register', compact('programs'));
     }
 
     /**
@@ -38,7 +39,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'student_id' => ['required', 'string', 'regex:/^[0-9]{9}$/', 'unique:' . User::class],
-            'program' => ['required', 'string', 'in:BSInT,Com-Sci'],
+            'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'password' => ['required', 'confirmed', Rules\Password::min(8)],
         ]);
 

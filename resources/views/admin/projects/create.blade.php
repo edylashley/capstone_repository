@@ -83,8 +83,11 @@
                         <label class="block font-medium text-sm text-gray-700">Program</label>
                         <select name="program" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                             <option value="" disabled {{ old('program') ? '' : 'selected' }}>Choose Program</option>
-                            <option value="BSInT" {{ old('program') == 'BSInT' ? 'selected' : '' }}>BSInT</option>
-                            <option value="Com-Sci" {{ old('program') == 'Com-Sci' ? 'selected' : '' }}>Com-Sci</option>
+                            @foreach($programs as $prog)
+                                <option value="{{ $prog->abbreviation }}" {{ old('program') == $prog->abbreviation ? 'selected' : '' }}>
+                                    {{ $prog->abbreviation }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('program') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                     </div>

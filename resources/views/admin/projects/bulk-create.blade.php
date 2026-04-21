@@ -82,11 +82,13 @@
         // ── Template data ──────────────────────────────────────────────────────
         const advisers = @json($advisers->map(fn($a) => ['id' => $a->id, 'name' => $a->name]));
         const categories = @json($categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]));
+        const programs = @json($programs->map(fn($p) => ['abbreviation' => $p->abbreviation, 'name' => $p->name]));
         let projectIndex = 0;
 
         // ── Build project card HTML ────────────────────────────────────────────
         function createProjectCard(idx) {
             const adviserOptions = advisers.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+            const programOptions = programs.map(p => `<option value="${p.abbreviation}">${p.abbreviation}</option>`).join('');
             const categoryCheckboxes = categories.map(c => `
                 <label class="flex items-center gap-2 p-2 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors group">
                     <input type="checkbox" name="projects[${idx}][categories][]" value="${c.id}" class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-indigo-600 shadow-sm focus:ring-indigo-500">
@@ -139,8 +141,7 @@
                             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Program <span class="text-red-500">*</span></label>
                             <select name="projects[${idx}][program]" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
                                 <option value="" disabled selected>Choose...</option>
-                                <option value="BSInT">BSInT</option>
-                                <option value="Com-Sci">Com-Sci</option>
+                                ${programOptions}
                             </select>
                         </div>
                     </div>

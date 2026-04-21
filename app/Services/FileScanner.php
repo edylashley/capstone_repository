@@ -88,15 +88,19 @@ class FileScanner
 
             if ($exit !== 0) {
                 $rawNotes = implode('\n', $output);
+                
                 // Sanitize: Replace the full path with just the filename
+                // Handle both forward and backward slashes for Windows/Linux consistency
                 $sanitizedNotes = str_replace($path, basename($path), $rawNotes);
+                $winPath = str_replace('/', '\\', $path);
+                $sanitizedNotes = str_replace($winPath, basename($winPath), $sanitizedNotes);
                 
                 // ClamAV Exit Codes: 0 = Clean, 1 = Virus Found, 2 = Error occurred
                 $errorType = ($exit === 1) ? 'threat' : 'system';
 
                 return [
                     'ok' => false, 
-                    'notes' => $sanitizedNotes,
+                    'notes' => trim($sanitizedNotes),
                     'error_type' => $errorType
                 ];
             }
