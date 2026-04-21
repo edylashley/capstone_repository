@@ -1,6 +1,6 @@
 @auth
 <!-- Desktop Sidebar (hidden on mobile) -->
-<aside class="hidden lg:flex flex-col text-white shadow-lg bg-slate-900 fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out"
+<aside class="hidden lg:flex flex-col text-white shadow-2xl bg-slate-950 fixed top-0 left-0 z-40 transition-transform duration-300 ease-in-out border-r border-white/5"
        :class="{ '-translate-x-full': sidebarCollapsed, 'translate-x-0': !sidebarCollapsed }"
        style="width: 280px; height: 100vh; min-height: 100vh;">
     @include('layouts.sidebar-content')

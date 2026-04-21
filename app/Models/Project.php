@@ -32,6 +32,7 @@ class Project extends Model
         'rejection_reason',
         'authors_list',
         'adviser_name',
+        'custom_category',
     ];
 
     public function adviser()

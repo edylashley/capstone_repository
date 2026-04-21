@@ -81,7 +81,7 @@ class StoreProjectRequest extends FormRequest
             'slug' => ['nullable','string','max:255','unique:projects,slug'],
             'abstract' => ['required','string'],
             'year' => $yearRules,
-            'adviser_id' => ['required','exists:users,id'],
+            'adviser_name' => ['required','string','max:255'],
             'authors' => ['required','array','min:1'],
             'authors.*' => ['required','string','max:255'],
 

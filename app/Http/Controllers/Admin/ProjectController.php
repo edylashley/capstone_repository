@@ -105,18 +105,22 @@ class ProjectController extends Controller
         $query = \App\Models\Project::query();
 
         if ($request->filled('status')) {
-            $query->where('status', $request->query('status'));
+            $status = $request->query('status');
+            if ($status === 'pending') {
+                $query->whereIn('status', ['pending', 'approved', 'verified']);
+            } else {
+                $query->where('status', $status);
+            }
         }
         
         if ($request->filled('program')) {
             $query->where('program', $request->query('program'));
         }
 
-        $projects = $query->with(['authors', 'adviser', 'files'])->paginate(20)->withQueryString();
-        $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
+        $projects = $query->with(['authors', 'files'])->paginate(20)->withQueryString();
         $programs = \App\Models\Program::all();
 
-        return view('admin.projects.index', compact('projects', 'advisers', 'programs'));
+        return view('admin.projects.index', compact('projects', 'programs'));
     }
 
     /**
@@ -124,10 +128,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
-        return view('admin.projects.create', compact('advisers', 'categories', 'programs'));
+        return view('admin.projects.create', compact('categories', 'programs'));
     }
 
     /**
@@ -289,11 +292,10 @@ class ProjectController extends Controller
     public function edit(string $id)
     {
         $project = \App\Models\Project::findOrFail($id);
-        $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
         
-        return view('admin.projects.edit', compact('project', 'advisers', 'categories', 'programs'));
+        return view('admin.projects.edit', compact('project', 'categories', 'programs'));
     }
 
     /**
@@ -314,7 +316,7 @@ class ProjectController extends Controller
             ],
             'year' => 'required|integer|min:2000',
             'authors_list' => 'nullable|string|max:1000',
-            'adviser_id' => 'required|exists:users,id',
+            'adviser_name' => 'required|string|max:255',
             'abstract' => 'nullable|string',
             'status' => 'required|in:pending,verified,approved,published,archived',
             'categories' => 'required|array|min:1',
@@ -322,13 +324,11 @@ class ProjectController extends Controller
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
         ]);
 
-        $validated['adviser_name'] = \App\Models\User::find($request->adviser_id)->name;
-
         $project->update([
             'title' => $validated['title'],
             'year' => $validated['year'],
             'authors_list' => $validated['authors_list'],
-            'adviser_id' => $validated['adviser_id'],
+            'adviser_id' => null, // Explicitly null as we are moving away from adviser roles
             'adviser_name' => $validated['adviser_name'],
             'abstract' => $validated['abstract'],
             'status' => $validated['status'],
@@ -385,10 +385,9 @@ class ProjectController extends Controller
     public function bulkAction(Request $request)
     {
         $validated = $request->validate([
-            'action' => 'required|in:publish,delete,reassign,archive',
+            'action' => 'required|in:publish,delete,archive,pending',
             'project_ids' => 'required|array',
             'project_ids.*' => 'exists:projects,id',
-            'adviser_id' => 'required_if:action,reassign|exists:users,id'
         ]);
 
         $action = $validated['action'];
@@ -413,13 +412,10 @@ class ProjectController extends Controller
                     'meta' => ['bulk' => true, 'published_at' => $project->published_at->toDateTimeString()],
                 ]);
 
-                // Send email notification to students and adviser
+                // Send email notification to students
                 try {
                     foreach ($project->authors as $author) {
                         \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectPublished($project));
-                    }
-                    if ($project->adviser) {
-                        \Illuminate\Support\Facades\Mail::to($project->adviser)->queue(new \App\Mail\ProjectPublished($project));
                     }
                 } catch (\Exception $e) {
                     \Log::error('Failed to send project publication email during bulk action: ' . $e->getMessage());
@@ -447,6 +443,25 @@ class ProjectController extends Controller
                 $archivedCount++;
             }
             return redirect()->back()->with('success', "{$archivedCount} selected projects archived successfully.");
+        } elseif ($action === 'pending') {
+            $projects = \App\Models\Project::whereIn('id', $projectIds)->get();
+            $pendingCount = 0;
+            foreach ($projects as $project) {
+                $project->status = 'pending';
+                $project->is_published = false;
+                $project->save();
+                
+                \App\Models\ActivityLog::create([
+                    'user_id' => $request->user()->id,
+                    'action' => 'project_set_to_pending_bulk',
+                    'target_type' => 'project',
+                    'target_id' => $project->id,
+                    'ip' => $request->ip(),
+                    'meta' => ['bulk' => true],
+                ]);
+                $pendingCount++;
+            }
+            return redirect()->back()->with('success', "{$pendingCount} selected projects moved back to pending review.");
         } elseif ($action === 'delete') {
             $projects = \App\Models\Project::whereIn('id', $projectIds)->get();
             foreach ($projects as $project) {
@@ -458,11 +473,6 @@ class ProjectController extends Controller
                 $project->delete();
             }
             return redirect()->back()->with('success', 'Selected projects deleted successfully.');
-        } elseif ($action === 'reassign') {
-            \App\Models\Project::whereIn('id', $projectIds)->update([
-                'adviser_id' => $validated['adviser_id']
-            ]);
-            return redirect()->back()->with('success', 'Selected projects reassigned successfully.');
         }
         
         return redirect()->back()->with('error', 'Invalid action');
@@ -473,10 +483,9 @@ class ProjectController extends Controller
      */
     public function bulkCreate()
     {
-        $advisers = \App\Models\User::where('role', 'adviser')->orderBy('name')->get();
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
-        return view('admin.projects.bulk-create', compact('advisers', 'categories', 'programs'));
+        return view('admin.projects.bulk-create', compact('categories', 'programs'));
     }
 
     /**
@@ -497,8 +506,7 @@ class ProjectController extends Controller
             ],
             'projects.*.authors_list' => 'required|string|max:1000',
             'projects.*.year' => 'required|integer|min:1900',
-            'projects.*.adviser_id' => 'nullable|exists:users,id',
-            'projects.*.adviser_name' => 'nullable|string|max:255',
+            'projects.*.adviser_name' => 'required|string|max:255',
             'projects.*.categories' => 'required|array|min:1',
             'projects.*.categories.*' => 'exists:categories,id',
             'projects.*.program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
@@ -554,8 +562,8 @@ class ProjectController extends Controller
                 'slug' => $slug,
                 'abstract' => $data['abstract'] ?? null,
                 'year' => $data['year'],
-                'adviser_id' => $data['adviser_id'] ?? null,
-                'adviser_name' => $data['adviser_name'] ?? null,
+                'adviser_id' => null,
+                'adviser_name' => $data['adviser_name'],
                 'program' => $data['program'],
                 'specialization' => null, // Deprecated
                 'authors_list' => $data['authors_list'],
@@ -643,5 +651,78 @@ class ProjectController extends Controller
         }
 
         return redirect()->route('admin.projects.index')->with('success', "{$createdCount} past project(s) successfully uploaded and published.");
+    }
+
+    /**
+     * Confirm and Publish a project (replaces adviser confirmation and intermediate approval step)
+     */
+    public function approve(Request $request, $id)
+    {
+        $project = \App\Models\Project::findOrFail($id);
+
+        if (!in_array($project->status, ['pending', 'approved', 'verified'])) {
+            return redirect()->back()->with('error', 'Project is not in a confirmable state');
+        }
+
+        $project->update([
+            'status' => 'published',
+            'is_published' => true,
+            'published_at' => now(),
+        ]);
+
+        \App\Models\ActivityLog::create([
+            'user_id' => $request->user()->id,
+            'action' => 'project_confirmed_published_admin',
+            'target_type' => 'project',
+            'target_id' => $project->id,
+            'ip' => $request->ip(),
+            'meta' => ['project_title' => $project->title, 'published_at' => $project->published_at->toDateTimeString()],
+        ]);
+
+        try {
+            foreach ($project->authors as $author) {
+                \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectPublished($project));
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to send admin approval/publication email: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Project confirmed and published successfully.');
+    }
+
+    /**
+     * Reject a project (replaces adviser return)
+     */
+    public function reject(Request $request, $id)
+    {
+        $project = \App\Models\Project::findOrFail($id);
+
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|max:2000',
+        ]);
+
+        $project->update([
+            'status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
+
+        \App\Models\ActivityLog::create([
+            'user_id' => $request->user()->id,
+            'action' => 'project_rejected_admin',
+            'target_type' => 'project',
+            'target_id' => $project->id,
+            'ip' => $request->ip(),
+            'meta' => ['reason' => $validated['rejection_reason']],
+        ]);
+
+        try {
+            foreach ($project->authors as $author) {
+                \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectReturned($project));
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to send admin rejection email: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('success', 'Project returned to student for revision.');
     }
 }

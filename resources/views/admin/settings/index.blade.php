@@ -9,21 +9,22 @@
 @endpush
 
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 items-start md:items-center">
-            <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">System Settings</h2>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black mt-1">Configure global application parameters</p>
+    <div class="py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Integrated Header --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+                <div>
+                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">System Settings</h2>
+                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">General Website Configuration</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-inner border border-white/5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Dashboard
+                    </a>
+                </div>
             </div>
-            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600 whitespace-nowrap w-fit">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Dashboard
-            </a>
-        </div>
-    </x-slot>
-
-    <div class="py-6">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-4">
             
             @if(session('success'))
                 <div class="bg-emerald-100 border-l-4 border-emerald-500 text-emerald-900 p-3 rounded shadow-sm flex items-center gap-4 py-4" role="alert">
@@ -41,7 +42,7 @@
 
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-8 text-gray-900 dark:text-gray-100 border-b-4 border-indigo-500">
-                    <h3 class="text-xl font-bold mb-6 text-indigo-600 dark:text-indigo-400">Global System Configurations</h3>
+                    <h3 class="text-xl font-bold mb-6 text-indigo-600 dark:text-indigo-400">Website Configuration</h3>
                     
                     <form action="{{ route('admin.settings.update') }}" method="POST" class="space-y-6">
                         @csrf
@@ -181,6 +182,31 @@
                             </div>
                         </div>
 
+                        <!-- Activity Log Settings -->
+                        <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+                            <h4 class="text-md font-bold text-gray-800 dark:text-gray-200 mb-4 border-l-4 border-amber-500 pl-3">Activity Log Settings</h4>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="log_retention_days" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">
+                                        Log Retention Period (Days) <span class="text-red-500">*</span>
+                                    </label>
+                                    <p class="text-xs text-gray-500 mb-2">Number of days to keep activity logs. Logs older than this will be auto-pruned to save space.</p>
+                                    <input type="number" id="log_retention_days" name="log_retention_days" 
+                                        value="{{ old('log_retention_days', $settings['log_retention_days'] ?? '90') }}" 
+                                        min="7" max="3650"
+                                        class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 shadow-sm focus:border-amber-500 focus:ring-amber-500">
+                                    @error('log_retention_days') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
+                                </div>
+                                <div class="flex items-end">
+                                    <div class="p-4 bg-amber-50 dark:bg-amber-900/10 rounded-lg border border-amber-100 dark:border-amber-800/50 w-full">
+                                        <p class="text-[10px] text-amber-600 dark:text-amber-400 font-bold uppercase tracking-widest mb-1">Cyber-Hardening Tip</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Higher retention (90+ days) is recommended for institutional audits, while lower retention (30 days) saves database storage.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Maintenance Settings -->
                          <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
                             <h4 class="text-md font-bold text-gray-800 dark:text-gray-200 mb-4 border-l-4 border-red-500 pl-3">Danger Zone</h4>
@@ -201,9 +227,9 @@
                         </div>
 
                         <div class="mt-8 flex justify-end">
-                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-colors flex items-center gap-2">
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition-all flex items-center gap-2 uppercase tracking-widest text-[10px]">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                Save All Settings
+                                Save Settings
                             </button>
                         </div>
                     </form>

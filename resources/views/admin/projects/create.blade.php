@@ -44,23 +44,10 @@
                             @error('year') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                         </div>
 
-                        <div class="col-span-1 md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block font-medium text-sm text-gray-700">Adviser</label>
-                                <select id="adviser_id_select" name="adviser_id" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                    <option value="">-- Not listed / Left university --</option>
-                                    @foreach($advisers as $adv)
-                                        <option value="{{ $adv->id }}" {{ old('adviser_id') == $adv->id ? 'selected' : '' }}>{{ $adv->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('adviser_id') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
-                            </div>
-                            <div id="other-adviser-container" class="{{ old('adviser_id') ? 'hidden' : '' }}">
-                                <label class="block font-medium text-sm text-gray-700">Other</label>
-                                <input type="text" name="adviser_name" value="{{ old('adviser_name') }}" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <p class="mt-1 text-[10px] text-gray-400 italic">Only fill this if they are not in the list.</p>
-                                @error('adviser_name') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
-                            </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block font-medium text-sm text-gray-700">Adviser Name</label>
+                            <input type="text" name="adviser_name" value="{{ old('adviser_name') }}" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                            @error('adviser_name') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -207,20 +194,6 @@
             btn.disabled = true;
             btn.classList.add('opacity-75', 'cursor-not-allowed');
             document.getElementById('btn-text').textContent = 'Uploading...';
-        });
-
-        // ── Adviser Toggle Logic ────────────────────────────────────────────────
-        const adviserSelect = document.getElementById('adviser_id_select');
-        const otherContainer = document.getElementById('other-adviser-container');
-        const otherInput = otherContainer.querySelector('input');
-
-        adviserSelect.addEventListener('change', function() {
-            if (this.value === '') {
-                otherContainer.classList.remove('hidden');
-            } else {
-                otherContainer.classList.add('hidden');
-                otherInput.value = ''; // Clear value so we don't accidentally submit it
-            }
         });
     </script>
 </x-app-layout>

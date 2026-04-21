@@ -1,25 +1,24 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 items-start md:items-center">
-            <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">Program Management</h2>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black mt-1">Manage academic programs and abbreviations</p>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Integrated Header --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+                <div>
+                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">Academic Programs</h2>
+                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Institutional Registry & Departmental Nodes</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-inner border border-white/5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Dashboard
+                    </a>
+                    <button onclick="document.getElementById('add-program-modal').classList.remove('hidden')" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-900/20 transform hover:-translate-y-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                        Add Program
+                    </button>
+                </div>
             </div>
-            <div class="flex flex-wrap items-center gap-2">
-                <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600 whitespace-nowrap">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Dashboard
-                </a>
-                <button onclick="document.getElementById('add-program-modal').classList.remove('hidden')" class="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-700 transition-all shadow-sm hover:shadow-md border border-indigo-500 whitespace-nowrap">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                    Add Program
-                </button>
-            </div>
-        </div>
-    </x-slot>
-
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             @if(session('success'))
                 <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded mb-6">
@@ -39,44 +38,44 @@
                 </div>
             @endif
 
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-0 sm:p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-white/5">
+                <div class="p-0 sm:p-6 text-white">
                     
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
+                        <table class="min-w-full divide-y divide-white/5">
+                            <thead class="bg-slate-800">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Name</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Abbr</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Description</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Usage Count</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-gray-300 uppercase tracking-widest">Actions</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Name</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Abbr</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Description</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Usage Count</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                            <tbody class="bg-slate-900 divide-y divide-white/5">
                                 @foreach($programs as $program)
                                     @php
                                         $projectCount = \App\Models\Project::where('program', $program->abbreviation)->count();
                                         $userCount = \App\Models\User::where('program', $program->abbreviation)->count();
                                     @endphp
-                                    <tr class="hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
+                                    <tr class="hover:bg-white/[0.02] transition-colors">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
                                             {{ $program->name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-indigo-600 dark:text-indigo-400 font-black">
                                             {{ $program->abbreviation }}
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-500 min-w-[200px] max-w-xs truncate">
+                                        <td class="px-6 py-4 text-sm text-slate-400 min-w-[200px] max-w-xs truncate">
                                             {{ $program->description ?? 'No description' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
                                             <div class="flex flex-col gap-1">
-                                                <span class="px-2.5 py-1 inline-flex text-[8px] leading-5 font-black uppercase tracking-widest rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                                                <a href="{{ route('admin.projects.index', ['program' => $program->abbreviation]) }}" class="px-2.5 py-1 inline-flex text-[8px] leading-5 font-black uppercase tracking-widest rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors">
                                                     {{ $projectCount }} projects
-                                                </span>
-                                                <span class="px-2.5 py-1 inline-flex text-[8px] leading-5 font-black uppercase tracking-widest rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                                                </a>
+                                                <a href="{{ route('admin.users.index', ['program' => $program->abbreviation]) }}" class="px-2.5 py-1 inline-flex text-[8px] leading-5 font-black uppercase tracking-widest rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-200 dark:hover:bg-emerald-800/50 transition-colors">
                                                     {{ $userCount }} users
-                                                </span>
+                                                </a>
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -182,7 +181,7 @@
             document.getElementById('edit-program-name').value = name;
             document.getElementById('edit-program-abbr').value = abbr;
             document.getElementById('edit-program-desc').value = desc === 'null' ? '' : desc;
-            document.getElementById('edit-program-form').action = '/admin/programs/' + id;
+            document.getElementById('edit-program-form').action = "{{ url('admin/programs') }}/" + id;
             document.getElementById('edit-program-modal').classList.remove('hidden');
         }
     </script>

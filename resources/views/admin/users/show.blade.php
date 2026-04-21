@@ -41,9 +41,7 @@
                             <div>
                                 <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Account Role</label>
                                 <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 
-                                      ($user->role === 'adviser' ? 'bg-purple-100 text-purple-800' : 
-                                      'bg-blue-100 text-blue-800') }}">
+                                    {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' }}">
                                     {{ ucfirst($user->role) }}
                                 </span>
                             </div>
@@ -139,13 +137,8 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
-                            @if($user->isAdviser())
-                                <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-700 pb-2">Advised Projects</h4>
-                                @php $projects = $user->advisedProjects; @endphp
-                            @else
                                 <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-700 pb-2">Project Submissions</h4>
                                 @php $projects = $user->authoredProjects; @endphp
-                            @endif
 
                             <div class="space-y-6">
                                 @forelse($projects as $project)

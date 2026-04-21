@@ -24,8 +24,7 @@ class UserController extends Controller
             $query->where('program', $request->program);
         }
 
-        $users = $query->withCount('advisedProjects')
-            ->orderBy('is_active', 'asc') // Show Inactive/Pending first
+        $users = $query->orderBy('is_active', 'asc') // Show Inactive/Pending first
             ->orderBy('name')
             ->paginate(20)
             ->withQueryString();
@@ -37,9 +36,7 @@ class UserController extends Controller
 
     public function show(User $user): View
     {
-        $user->load(['advisedProjects' => function($q) {
-            $q->orderBy('year', 'desc');
-        }, 'authoredProjects' => function($q) {
+        $user->load(['authoredProjects' => function($q) {
             $q->orderBy('year', 'desc');
         }]);
 
@@ -66,7 +63,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string', Rule::in(['student', 'adviser', 'admin'])],
+            'role' => ['required', 'string', Rule::in(['student', 'admin'])],
             'student_id' => ['nullable', 'string', 'regex:/^[0-9]{9}$/', 'unique:users'],
             'program' => ['nullable', 'string', Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
         ]);
@@ -113,7 +110,7 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'student_id' => ['nullable', 'string', 'regex:/^[0-9]{9}$/', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string', Rule::in(['student', 'adviser', 'admin'])],
+            'role' => ['required', 'string', Rule::in(['student', 'admin'])],
             'program' => ['nullable', 'string', Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'is_active' => ['boolean'],
         ]);

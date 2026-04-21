@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
-use App\Http\Controllers\Adviser\VerificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\SupportTicketController;
@@ -16,9 +15,6 @@ Route::any('/', function () {
 Route::get('/projects', [\App\Http\Controllers\ProjectController::class, 'indexPage'])->name('projects.index');
 
 Route::get('/dashboard', function (Request $request) {
-    if ($request->user()->isAdviser()) {
-        return (new \App\Http\Controllers\Adviser\DashboardController())->index($request);
-    }
     
     return match ($request->user()->role) {
         'admin' => redirect()->route('admin.dashboard'),
@@ -32,14 +28,6 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::get('/student/home', [\App\Http\Controllers\Student\HomeController::class, 'index'])->name('student.home');
 });
 
-Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:adviser'])->group(function () {
-    Route::get('/faculty/dashboard', [\App\Http\Controllers\Adviser\DashboardController::class, 'index'])->name('faculty.dashboard');
-    Route::get('/faculty/review', [\App\Http\Controllers\Faculty\ReviewController::class, 'index'])->name('faculty.review');
-    Route::post('/faculty/projects/{project}/approve', [\App\Http\Controllers\Faculty\ReviewController::class, 'approve'])->name('faculty.projects.approve');
-    Route::post('/faculty/projects/{project}/cancel', [\App\Http\Controllers\Faculty\ReviewController::class, 'cancel'])->name('faculty.projects.cancel');
-    Route::post('/faculty/projects/{project}/reject', [\App\Http\Controllers\Faculty\ReviewController::class, 'reject'])->name('faculty.projects.reject');
-    Route::post('/faculty/projects/{project}/reject-advisory', [\App\Http\Controllers\Faculty\ReviewController::class, 'rejectAdvisory'])->name('faculty.projects.reject-advisory');
-});
 
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
@@ -79,52 +67,11 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->gro
     Route::delete('/projects/{project}/cancel', [ProjectController::class, 'cancel'])->name('projects.cancel');
     Route::post('/projects/abort-submission', [ProjectController::class, 'abortSubmission'])->name('projects.abort-submission');
     // Forced-download for any project file (bypasses browser inline rendering)
-    Route::get('/files/{file}/download', function (\App\Models\ProjectFile $file) {
-        $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($file->path);
-        abort_unless(file_exists($fullPath), 404);
-
-        if ($file->type === 'attachment') {
-            $user = auth()->user();
-            $project = $file->project;
-            $isOwner   = $project && $project->authors->contains($user);
-            $isPrivileged = $user->isAdmin() || $user->isAdviser();
-
-            abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
-        }
-
-        return response()->download($fullPath, $file->filename);
-    })->name('files.download');
-
-    // Streaming view for project files (supports seeking/skipping in videos)
-    Route::get('/files/{file}/view', function (\App\Models\ProjectFile $file) {
-        $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($file->path);
-        abort_unless(file_exists($fullPath), 404);
-
-        if ($file->type === 'attachment') {
-            $user = auth()->user();
-            $project = $file->project;
-            $isOwner   = $project && ($project->authors->contains($user) || $project->adviser_id == $user->id);
-            $isPrivileged = $user->isAdmin();
-
-            abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
-        }
-
-        // Force PDF to be inline for better browser/mobile support (Streaming Option)
-        if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) === 'pdf') {
-            return response()->stream(function () use ($fullPath) {
-                readfile($fullPath);
-            }, 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline',
-                'Content-Length' => filesize($fullPath),
-                'X-Content-Type-Options' => 'nosniff',
-                'Cache-Control' => 'private, max-age=0, must-revalidate',
-            ]);
-        }
-
-        return response()->file($fullPath);
-    })->name('files.view');
+    Route::get('/files/{file}/download', [ProjectController::class, 'downloadFile'])->name('files.download');
 });
+
+// Streaming view for project files (supports seeking/skipping in videos)
+Route::get('/files/{file}/view', [ProjectController::class, 'viewFile'])->name('files.view');
 
 // Single project view (placed after /projects/create to avoid shadowing)
 Route::get('/projects/{project}', [\App\Http\Controllers\ProjectController::class, 'show'])->name('projects.show');
@@ -132,13 +79,8 @@ Route::get('/projects/{project}', [\App\Http\Controllers\ProjectController::clas
 // Dedicated Full-Screen Viewer (Bypasses mobile download issues)
 Route::get('/projects/{project}/viewer', function (\App\Models\Project $project) {
     return view('projects.viewer', compact('project'));
-})->middleware(['auth'])->name('projects.viewer');
+})->name('projects.viewer');
 
-// Adviser verification
-Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:adviser'])->group(function () {
-    Route::post('/projects/{project}/verify', [VerificationController::class, 'store'])->name('projects.verify');
-    Route::post('/projects/{project}/reverify-pdf', [VerificationController::class, 'revalidatePdf'])->name('projects.reverify-pdf');
-});
 
 // Admin project management
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:admin'])->group(function () {
@@ -152,6 +94,8 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::post('/admin/projects/bulk', [AdminProjectController::class, 'bulkAction'])->name('admin.projects.bulk');
     Route::post('/admin/projects/{project}/verify-pdf', [AdminProjectController::class, 'verifyPdf'])->name('admin.projects.verify-pdf');
     Route::post('/admin/projects/{project}/publish', [AdminProjectController::class, 'publish'])->name('admin.projects.publish');
+    Route::post('/admin/projects/{project}/approve', [AdminProjectController::class, 'approve'])->name('admin.projects.approve');
+    Route::post('/admin/projects/{project}/reject', [AdminProjectController::class, 'reject'])->name('admin.projects.reject');
     Route::delete('/admin/projects/{project}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
 });
 

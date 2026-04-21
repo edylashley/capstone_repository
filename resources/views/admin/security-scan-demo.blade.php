@@ -1,13 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-bold text-2xl text-white leading-tight">🛡️ Security Scan — Live Demo</h2>
-            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Dashboard
-            </a>
-        </div>
-    </x-slot>
+
 
     <style>
         @keyframes scan-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(15,23,42,0.2); } 50% { box-shadow:0 0 20px 8px rgba(15,23,42,0.3); } }
@@ -27,11 +19,27 @@
         .shield-bounce { animation: shield-bounce 1s ease-in-out infinite; }
     </style>
 
-    <div class="py-4">
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8 space-y-6">
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Integrated Header --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+                <div>
+                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">Security Protocols</h2>
+                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Heuristic Analysis & Integrity Shield</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-inner border border-white/5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
 
             {{-- ═══ SECTION 1: Algorithm Overview ═══ --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+            <div class="bg-slate-900 rounded-2xl shadow-lg border border-white/5 overflow-hidden">
                 <div class="bg-gradient-to-r from-slate-800 via-slate-900 to-slate-950 px-8 py-6">
                     <h3 class="text-xl font-black text-white tracking-tight flex items-center gap-3">
                         <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -42,7 +50,7 @@
                 <div class="p-8">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {{-- Layer 1 --}}
-                        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-2xl p-5 border border-yellow-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-yellow-950/20 to-yellow-900/10 rounded-2xl p-5 border border-yellow-500/20 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-yellow-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5 text-yellow-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -50,13 +58,13 @@
                                 <span class="bg-yellow-500 text-yellow-950 text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 1</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">Integrity Hash & Dup Check</h4>
-                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">SHA-256 hash of every file is stored. Detects re-submissions of identical files (plagiarism/duplicate protection).</p>
+                                <h4 class="font-bold text-white text-sm">Integrity Hash & Dup Check</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">SHA-256 hash of every file is stored. Detects re-submissions of identical files (plagiarism/duplicate protection).</p>
                             </div>
                         </div>
 
                         {{-- Layer 2 --}}
-                        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-5 border border-blue-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-blue-950/20 to-blue-900/10 rounded-2xl p-5 border border-blue-500/20 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-blue-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
@@ -64,13 +72,13 @@
                                 <span class="bg-blue-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 2</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">File Type & Extension Check</h4>
-                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">Validates MIME type + extension. Blocks dangerous types like <code class="bg-white text-red-600 px-1 py-0.5 rounded border border-gray-100 text-[10px] font-mono">.exe</code>, <code class="bg-white text-red-600 px-1 py-0.5 rounded border border-gray-100 text-[10px] font-mono">.bat</code>. Detects disguised binaries.</p>
+                                <h4 class="font-bold text-white text-sm">File Type & Extension Check</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Validates MIME type + extension. Blocks dangerous types like <code class="bg-slate-800 text-red-400 px-1 py-0.5 rounded border border-white/5 text-[10px] font-mono">.exe</code>, <code class="bg-slate-800 text-red-400 px-1 py-0.5 rounded border border-white/5 text-[10px] font-mono">.bat</code>. Detects disguised binaries.</p>
                             </div>
                         </div>
 
                         {{-- Layer 3 --}}
-                        <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-5 border border-purple-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-purple-950/20 to-purple-900/10 rounded-2xl p-5 border border-purple-500/20 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-purple-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
@@ -78,13 +86,13 @@
                                 <span class="bg-purple-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 3</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">Magic Bytes & Signature Analysis</h4>
-                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">Reads actual binary header (magic bytes) to verify true file type. Catches renamed executables disguised as PDFs or ZIP files.</p>
+                                <h4 class="font-bold text-white text-sm">Magic Bytes & Signature Analysis</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Reads actual binary header (magic bytes) to verify true file type. Catches renamed executables disguised as PDFs or ZIP files.</p>
                             </div>
                         </div>
 
                         {{-- Layer 4 --}}
-                        <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-5 border border-red-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-red-950/20 to-red-900/10 rounded-2xl p-5 border border-red-500/20 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
@@ -92,13 +100,13 @@
                                 <span class="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 4</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">Malicious Pattern Scanning</h4>
-                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">Scans content for known malware signatures: EICAR test, PHP webshells, JS injection, VBA macros, PowerShell cradles, and more.</p>
+                                <h4 class="font-bold text-white text-sm">Malicious Pattern Scanning</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Scans content for known malware signatures: EICAR test, PHP webshells, JS injection, VBA macros, PowerShell cradles, and more.</p>
                             </div>
                         </div>
 
                         {{-- Layer 5 --}}
-                        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-5 border border-green-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-green-950/20 to-green-900/10 rounded-2xl p-5 border border-green-500/20 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-green-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -106,13 +114,13 @@
                                 <span class="bg-green-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 5</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">ClamAV Antivirus Engine</h4>
-                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">Optional deep scan via ClamAV — 8M+ virus signatures, heuristic analysis. Status: <span class="font-bold {{ config('repository.filescan_enabled') ? 'text-green-700' : 'text-gray-500' }}">{{ config('repository.filescan_enabled') ? 'ENABLED' : 'AVAILABLE (disabled)' }}</span></p>
+                                <h4 class="font-bold text-white text-sm">ClamAV Antivirus Engine</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Optional deep scan via ClamAV — 8M+ virus signatures, heuristic analysis. Status: <span class="font-bold {{ config('repository.filescan_enabled') ? 'text-green-400' : 'text-slate-500' }}">{{ config('repository.filescan_enabled') ? 'ENABLED' : 'AVAILABLE (disabled)' }}</span></p>
                             </div>
                         </div>
 
                         {{-- Layer 6 --}}
-                        <div class="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-5 border border-slate-200 group hover:shadow-lg transition-all duration-300">
+                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 border border-white/5 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-slate-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
@@ -120,134 +128,134 @@
                                 <span class="bg-slate-800 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 6</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-gray-800 text-sm">PDF Structure Validation</h4>
-                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">PDF-specific: extracts text directly from bytes. Strictly scans payload for missing approval cover-sheet signatures via NLP validation.</p>
+                                <h4 class="font-bold text-white text-sm">PDF Structure Validation</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">PDF-specific: extracts text directly from bytes. Strictly scans payload for missing approval cover-sheet signatures via NLP validation.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-6 flex items-start gap-3 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="mt-6 flex items-start gap-3 p-4 bg-slate-950 rounded-xl border border-white/5">
                         <svg class="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        <div class="text-xs text-slate-700">
-                            <strong>How it works in practice:</strong> When a student submits a project, every uploaded file (manuscript + attachments) goes through this entire pipeline. If <em>any</em> layer detects a threat, the entire submission is <strong>blocked</strong>, the uploaded files are <strong>deleted</strong>, and the incident is <strong>logged</strong> to the activity log with full details.
+                        <div class="text-xs text-slate-400">
+                            <strong class="text-white">How it works in practice:</strong> When a student submits a project, every uploaded file (manuscript + attachments) goes through this entire pipeline. If <em>any</em> layer detects a threat, the entire submission is <strong>blocked</strong>, the uploaded files are <strong>deleted</strong>, and the incident is <strong>logged</strong> to the activity log with full details.
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- ═══ SECTION 2: Test Files ═══ --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <div class="px-8 py-5 border-b border-gray-100">
-                    <h3 class="font-black text-gray-800 text-lg flex items-center gap-2">
+            <div class="bg-slate-900 rounded-2xl shadow-lg border border-white/5 overflow-hidden">
+                <div class="px-8 py-5 border-b border-white/5">
+                    <h3 class="font-black text-white text-lg flex items-center gap-2">
                         <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                         Test Files — Download & Scan
                     </h3>
-                    <p class="text-xs text-gray-500 mt-1">Download these pre-made test files, then upload them below to see how the scanner detects each type.</p>
+                    <p class="text-xs text-slate-500 mt-1">Download these pre-made test files, then upload them below to see how the scanner detects each type.</p>
                 </div>
                 <div class="p-8">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {{-- EICAR --}}
-                        <div class="p-4 rounded-xl bg-red-50 border-2 border-red-200 hover:border-red-400 transition-all group">
+                        <div class="p-4 rounded-xl bg-red-950/20 border-2 border-red-500/20 hover:border-red-500/40 transition-all group">
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
                                 </div>
                                 <div>
-                                    <p class="font-bold text-red-700 text-sm">EICAR Test Virus</p>
-                                    <p class="text-[10px] text-red-400 font-semibold">SHOULD BE DETECTED</p>
+                                    <p class="font-bold text-red-400 text-sm">EICAR Test Virus</p>
+                                    <p class="text-[10px] text-red-500/80 font-semibold uppercase">Should be detected</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-red-600 mb-3">Industry-standard antivirus test file. Completely harmless but contains the EICAR detection signature.</p>
+                            <p class="text-xs text-slate-400 mb-3">Industry-standard antivirus test file. Completely harmless but contains the EICAR detection signature.</p>
                             <a href="{{ route('admin.security-demo.test-file', 'eicar') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Download
                             </a>
                         </div>
                         {{-- PHP Shell --}}
-                        <div class="p-4 rounded-xl bg-red-50 border-2 border-red-200 hover:border-red-400 transition-all group">
+                        <div class="p-4 rounded-xl bg-red-950/20 border-2 border-red-500/20 hover:border-red-500/40 transition-all group">
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                                 </div>
                                 <div>
-                                    <p class="font-bold text-red-700 text-sm">PHP Webshell</p>
-                                    <p class="text-[10px] text-red-400 font-semibold">SHOULD BE DETECTED</p>
+                                    <p class="font-bold text-red-400 text-sm">PHP Webshell</p>
+                                    <p class="text-[10px] text-red-500/80 font-semibold uppercase">Should be detected</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-red-600 mb-3">Simulated PHP webshell with eval(), system(), and passthru() patterns — common server-side attack.</p>
+                            <p class="text-xs text-slate-400 mb-3">Simulated PHP webshell with eval(), system(), and passthru() patterns — common server-side attack.</p>
                             <a href="{{ route('admin.security-demo.test-file', 'php-shell') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-colors">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Download
                             </a>
                         </div>
                         {{-- JS Injection --}}
-                        <div class="p-4 rounded-xl bg-amber-50 border-2 border-amber-200 hover:border-amber-400 transition-all group">
+                        <div class="p-4 rounded-xl bg-amber-950/20 border-2 border-amber-500/20 hover:border-amber-500/40 transition-all group">
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                                 </div>
                                 <div>
-                                    <p class="font-bold text-amber-700 text-sm">XSS / JS Injection</p>
-                                    <p class="text-[10px] text-amber-500 font-semibold">SHOULD BE DETECTED</p>
+                                    <p class="font-bold text-amber-400 text-sm">XSS / JS Injection</p>
+                                    <p class="text-[10px] text-amber-500/80 font-semibold uppercase">Should be detected</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-amber-600 mb-3">HTML file with JavaScript eval() and document.write() injection — cross-site scripting (XSS) attack.</p>
+                            <p class="text-xs text-slate-400 mb-3">HTML file with JavaScript eval() and document.write() injection — cross-site scripting (XSS) attack.</p>
                             <a href="{{ route('admin.security-demo.test-file', 'js-injection') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-lg transition-colors">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Download
                             </a>
                         </div>
                         {{-- Clean PDF --}}
-                        <div class="p-4 rounded-xl bg-green-50 border-2 border-green-200 hover:border-green-400 transition-all group">
+                        <div class="p-4 rounded-xl bg-green-950/20 border-2 border-green-500/20 hover:border-green-500/40 transition-all group">
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 </div>
                                 <div>
-                                    <p class="font-bold text-green-700 text-sm">Clean PDF</p>
-                                    <p class="text-[10px] text-green-500 font-semibold">SHOULD PASS</p>
+                                    <p class="font-bold text-green-400 text-sm">Clean PDF</p>
+                                    <p class="text-[10px] text-green-500/80 font-semibold uppercase">Should pass</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-green-600 mb-3">A minimal, clean PDF file with no malicious content — should pass all security checks successfully.</p>
+                            <p class="text-xs text-slate-400 mb-3">A minimal, clean PDF file with no malicious content — should pass all security checks successfully.</p>
                             <a href="{{ route('admin.security-demo.test-file', 'clean-pdf') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Download
                             </a>
                         </div>
                         {{-- Clean Text --}}
-                        <div class="p-4 rounded-xl bg-green-50 border-2 border-green-200 hover:border-green-400 transition-all group">
+                        <div class="p-4 rounded-xl bg-green-950/20 border-2 border-green-500/20 hover:border-green-500/40 transition-all group">
                             <div class="flex items-center gap-3 mb-2">
                                 <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                 </div>
                                 <div>
-                                    <p class="font-bold text-green-700 text-sm">Clean Text File</p>
-                                    <p class="text-[10px] text-green-500 font-semibold">SHOULD PASS</p>
+                                    <p class="font-bold text-green-400 text-sm">Clean Text File</p>
+                                    <p class="text-[10px] text-green-500/80 font-semibold uppercase">Should pass</p>
                                 </div>
                             </div>
-                            <p class="text-xs text-green-600 mb-3">A plain text file with harmless content — should pass all security checks without any alerts.</p>
+                            <p class="text-xs text-slate-400 mb-3">A plain text file with harmless content — should pass all security checks without any alerts.</p>
                             <a href="{{ route('admin.security-demo.test-file', 'clean-text') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-lg transition-colors">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                 Download
                             </a>
                         </div>
                         {{-- Upload Your Own --}}
-                        <div class="p-4 rounded-xl bg-gray-50 border-2 border-dashed border-gray-300 hover:border-indigo-400 transition-all flex flex-col items-center justify-center text-center group">
-                            <div class="w-8 h-8 bg-gray-200 group-hover:bg-indigo-100 rounded-lg flex items-center justify-center mb-2 transition-colors">
-                                <svg class="w-4 h-4 text-gray-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                        <div class="p-4 rounded-xl bg-slate-950/20 border-2 border-dashed border-white/10 hover:border-indigo-400 transition-all flex flex-col items-center justify-center text-center group">
+                            <div class="w-8 h-8 bg-slate-800 group-hover:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-2 transition-colors">
+                                <svg class="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                             </div>
-                            <p class="font-bold text-gray-500 text-sm">Or upload any file</p>
-                            <p class="text-[10px] text-gray-400 mt-1">Use the scanner below</p>
+                            <p class="font-bold text-slate-400 text-sm">Or upload any file</p>
+                            <p class="text-[10px] text-slate-500 mt-1 uppercase font-black tracking-widest">Use the scanner below</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- ═══ SECTION 3: Live Scanner ═══ --}}
-            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
-                <div class="px-8 py-5 border-b border-slate-100">
-                    <h3 class="font-black text-slate-800 text-lg flex items-center gap-2">
-                        <svg class="w-5 h-5 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <div class="bg-slate-900 rounded-2xl shadow-lg border border-white/5 overflow-hidden">
+                <div class="px-8 py-5 border-b border-white/5">
+                    <h3 class="font-black text-white text-lg flex items-center gap-2">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                         Live Security Scanner
                     </h3>
                     <p class="text-xs text-slate-500 mt-1">Upload any file below to run it through the full security pipeline in real-time.</p>
@@ -256,19 +264,19 @@
                     {{-- Upload Area --}}
                     <input type="file" id="scan-file-input" class="hidden" accept="*/*">
                     <div id="drop-zone"
-                         class="relative border-2 border-dashed border-slate-300 hover:border-slate-900 rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group"
+                         class="relative border-2 border-dashed border-slate-800 hover:border-slate-400 rounded-2xl p-12 text-center transition-all duration-300 cursor-pointer group"
                          onclick="document.getElementById('scan-file-input').click()">
                         <div class="flex flex-col items-center gap-3">
-                            <div class="w-16 h-16 bg-slate-100 group-hover:bg-slate-200 rounded-2xl flex items-center justify-center transition-colors">
-                                <svg class="w-8 h-8 text-slate-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                            <div class="w-16 h-16 bg-slate-800 group-hover:bg-slate-700 rounded-2xl flex items-center justify-center transition-colors">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
                             </div>
                             <div>
-                                <p class="text-sm font-bold text-slate-700">Drop a file here or click to browse</p>
-                                <p class="text-xs text-slate-400 mt-1">Any file type up to 50MB — it will be scanned and immediately deleted</p>
+                                <p class="text-sm font-bold text-slate-300">Drop a file here or click to browse</p>
+                                <p class="text-xs text-slate-500 mt-1">Any file type up to 50MB — it will be scanned and immediately deleted</p>
                             </div>
                         </div>
                         {{-- Scanning overlay --}}
-                        <div id="scan-overlay" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4">
+                        <div id="scan-overlay" class="hidden absolute inset-0 bg-slate-900/95 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center gap-4">
                             <div class="relative w-20 h-20">
                                 <svg class="spin-slow w-20 h-20 text-indigo-500" viewBox="0 0 50 50" fill="none">
                                     <circle cx="25" cy="25" r="21" stroke="#e0e7ff" stroke-width="3"></circle>
@@ -279,8 +287,8 @@
                                 </div>
                             </div>
                             <div class="text-center">
-                                <p class="font-black text-gray-800 text-sm">Scanning File...</p>
-                                <p id="scan-status-text" class="text-xs text-indigo-600 font-semibold mt-1">Analyzing file header</p>
+                                <p class="font-black text-white text-sm">Scanning File...</p>
+                                <p id="scan-status-text" class="text-xs text-indigo-400 font-semibold mt-1">Analyzing file header</p>
                             </div>
                         </div>
                     </div>
@@ -292,8 +300,8 @@
                         <div id="verdict-banner" class="rounded-2xl p-6 flex items-center gap-5 transition-all duration-500"></div>
 
                         {{-- File Info --}}
-                        <div id="file-info-card" class="bg-gray-50 rounded-xl p-5 border border-gray-100">
-                            <h4 class="text-xs font-black text-gray-500 uppercase tracking-wider mb-3">File Information</h4>
+                        <div id="file-info-card" class="bg-slate-950/50 rounded-xl p-5 border border-white/5">
+                            <h4 class="text-xs font-black text-slate-500 uppercase tracking-wider mb-3">File Information</h4>
                             <div id="file-info-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
                         </div>
 

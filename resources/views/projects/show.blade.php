@@ -11,40 +11,42 @@
 
     <div class="py-6 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col gap-6 @if((optional(auth()->user())->isAdviser() || optional(auth()->user())->isAdmin())) lg:flex-row @endif">
+            <div class="flex flex-col gap-6 @if(optional(auth()->user())->isAdmin()) lg:flex-row @endif">
                 
                 <!-- Metadata Side -->
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if((optional(auth()->user())->isAdviser() || optional(auth()->user())->isAdmin())) lg:w-1/3 lg:min-w-[350px] @else w-full @endif border border-gray-100 dark:border-gray-700 h-fit">
+                <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if(optional(auth()->user())->isAdmin()) lg:w-1/3 lg:min-w-[350px] @else w-full @endif border border-white/5 h-fit">
                     <div class="mb-4 space-y-2">
-                        <div class="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-4 mb-4">
+                        <div class="flex justify-between items-start border-b border-white/5 pb-4 mb-4">
                             <div>
-                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900 dark:text-white leading-none mb-1">Project Details</h3>
-                                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">ID: #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-white leading-none mb-1">Project Details</h3>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">ID: #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>
-                            @if(optional(auth()->user())->isAdviser() && $project->status === 'pending' && $project->adviser_id === auth()->id())
-                                <span class="bg-indigo-600 text-white text-[9px] font-black uppercase px-2 py-1 rounded shadow-sm">Review Mode</span>
-                            @endif
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Year Defended</strong> {{ $project->year }}</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong> {{ $project->adviser->name ?? $project->adviser_name ?? '-' }}</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong> {{ $project->program ?? '-' }}</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong> {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
+                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Year Defended</strong> {{ $project->year }}</p>
+                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong> {{ $project->adviser->name ?? $project->adviser_name ?? '-' }}</p>
+                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong> {{ $project->program ?? '-' }}</p>
+                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong> {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
                         </div>
-                        <div class="pt-4 border-t border-gray-100 dark:border-gray-700 mt-4">
-                            <strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-2 text-indigo-500">Abstract</strong>
-                            <p class="text-sm text-gray-600 dark:text-gray-300 italic leading-relaxed">{{ $project->abstract }}</p>
+                        <div class="pt-4 border-t border-white/5 mt-4">
+                            <strong class="text-white uppercase text-[10px] tracking-widest block mb-2 text-indigo-500">Abstract</strong>
+                            <p class="text-sm text-slate-300 italic leading-relaxed">{{ $project->abstract }}</p>
                         </div>
 
-                        <div class="pt-4 border-t border-gray-100 dark:border-gray-700 mt-4">
-                            <strong class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-2">Categories</strong>
+                        <div class="pt-4 border-t border-white/5 mt-4">
+                            <strong class="text-white uppercase text-[10px] tracking-widest block mb-2">Categories</strong>
                             <div class="text-sm mt-1 flex flex-wrap gap-2">
                                 @foreach($project->categories as $category)
                                     <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black px-2 py-1 rounded-lg border border-indigo-100 dark:border-indigo-800 uppercase tracking-tighter">
                                         {{ $category->name }}
                                     </span>
                                 @endforeach
+                                @if($project->custom_category)
+                                    <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black px-2 py-1 rounded-lg border border-indigo-100 dark:border-indigo-800 uppercase tracking-tighter">
+                                        {{ $project->custom_category }}
+                                    </span>
+                                @endif
                                 @if(is_array($project->keywords))
                                     @foreach($project->keywords as $kw)
                                         <span class="bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-[10px] px-2 py-1 rounded-lg border border-gray-100 dark:border-gray-600 font-bold">#{{ $kw }}</span>
@@ -53,7 +55,7 @@
                             </div>
                         </div>
 
-                        @if($project->status === 'published' || (auth()->check() && (auth()->user()->isAdviser() || auth()->user()->isAdmin() || $project->authors->contains(auth()->user()))))
+                        @if($project->status === 'published' || (auth()->check() && (auth()->user()->isAdmin() || $project->authors->contains(auth()->user()))))
                             @if($project->status === 'published')
                                 <div class="mt-4 p-5 border-2 border-emerald-500/30 bg-emerald-500/10 rounded-2xl shadow-sm">
                                     <span class="text-white/50 uppercase text-[10px] font-bold tracking-widest block mb-1">RECORD STATUS:</span> 
@@ -82,7 +84,7 @@
                                     </div>
                                     @if($project->rejection_reason)
                                         <div class="mt-4 pt-4 border-t border-red-500/20">
-                                            <p class="text-[10px] text-gray-300 uppercase font-bold tracking-widest mb-2">Adviser's Feedback:</p>
+                                            <p class="text-[10px] text-gray-300 uppercase font-bold tracking-widest mb-2">Administrator's Feedback:</p>
                                             <p class="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap bg-red-500/10 rounded-lg p-3 border border-red-500/20">{{ $project->rejection_reason }}</p>
                                         </div>
                                     @endif
@@ -109,7 +111,7 @@
                         </style>
                             <!-- ADVISER DECISION HUB ACTION -->
                             <!-- SYSTEM VERIFICATION REPORT (Visible to Faculty/Admin always if notes exist) -->
-                            @if((optional(auth()->user())->isAdviser() || optional(auth()->user())->isAdmin()) && $project->manuscript_validation_notes)
+                            @if(optional(auth()->user())->isAdmin() && $project->manuscript_validation_notes)
                                 <div class="mt-8 pt-6 border-t border-gray-700/50">
                                     <!-- Assistant's Report Card -->
                                     <div class="mb-6 p-4 rounded-xl {{ $project->manuscript_validated ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-yellow-500/10 border border-yellow-500/20' }}">
@@ -199,17 +201,15 @@
 
                 <!-- PDF Layout (Side or Bottom) -->
                 <div class="flex-1 min-w-0 space-y-6">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-gray-100 dark:border-gray-700">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4">
-                            <h3 class="font-black text-lg text-gray-800 dark:text-white uppercase tracking-tight italic">Manuscript Viewer</h3>
-                            @auth
-                                    <div class="flex items-center gap-2 desktop-only">
-                                        <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 transition">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                            Open Full View
-                                        </button>
-                                    </div>
-                            @endauth
+                    <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-white/5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/5 pb-4">
+                            <h3 class="font-black text-lg text-white uppercase tracking-tight italic">Manuscript Viewer</h3>
+                            <div class="flex items-center gap-2 desktop-only">
+                                <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                    Open Full View
+                                </button>
+                            </div>
                         </div>
                         
                         @php
@@ -218,143 +218,130 @@
                         @endphp
 
                         @if($manuscript)
-                            @auth
-                                <!-- Universal Viewer Wrapper -->
-                                <div id="pdf-viewer-wrapper">
-                                    <!-- Desktop Viewer -->
-                                    <div class="desktop-only relative border-4 border-gray-50 dark:border-gray-700 rounded-2xl overflow-hidden shadow-inner bg-gray-100 dark:bg-gray-900" id="pdf-container">
-                                        <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%" height="800px" style="min-height: 800px;" class="w-full h-[600px] md:h-[800px] bg-gray-500 border-0"></iframe>
-                                    </div>
+                            <!-- Universal Viewer Wrapper -->
+                            <div id="pdf-viewer-wrapper">
+                                <!-- Desktop Viewer -->
+                                <div class="desktop-only relative border-4 border-slate-800 rounded-2xl overflow-hidden shadow-inner bg-slate-950" id="pdf-container">
+                                    <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%" height="800px" style="min-height: 800px;" class="w-full h-[600px] md:h-[800px] bg-gray-500 border-0"></iframe>
+                                </div>
 
-                                    <!-- Mobile Viewer Fallback (Renders PDF to Canvas) -->
-                                    <div class="mobile-only">
-                                        <div class="bg-gray-900 border-2 border-indigo-500/30 rounded-2xl overflow-hidden shadow-2xl relative" id="mobile-pdf-wrapper" style="min-height: 400px;">
-                                            <!-- Canvas for PDF Rendering -->
-                                            <div id="mobile-canvas-container" class="flex justify-center bg-gray-800 p-2 overflow-hidden">
-                                                <canvas id="mobile-pdf-canvas" class="shadow-xl max-w-full h-auto"></canvas>
-                                            </div>
+                                <!-- Mobile Viewer Fallback (Renders PDF to Canvas) -->
+                                <div class="mobile-only">
+                                    <div class="bg-gray-900 border-2 border-indigo-500/30 rounded-2xl overflow-hidden shadow-2xl relative" id="mobile-pdf-wrapper" style="min-height: 400px;">
+                                        <!-- Canvas for PDF Rendering -->
+                                        <div id="mobile-canvas-container" class="flex justify-center bg-gray-800 p-2 overflow-hidden">
+                                            <canvas id="mobile-pdf-canvas" class="shadow-xl max-w-full h-auto"></canvas>
+                                        </div>
 
-                                            <!-- Mobile Controls -->
-                                            <div class="bg-gray-900/90 backdrop-blur-md p-4 border-t border-white/10 flex items-center justify-between">
-                                                <div class="flex items-center gap-2">
-                                                    <button onclick="mobilePrevPage()" class="p-2 bg-gray-800 text-white rounded-lg active:scale-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
-                                                    <span class="text-[10px] font-black text-white uppercase tracking-widest px-2"><span id="mobile-page-num">1</span> / <span id="mobile-page-count">-</span></span>
-                                                    <button onclick="mobileNextPage()" class="p-2 bg-gray-800 text-white rounded-lg active:scale-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
-                                                </div>
-                                                    <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
-                                                        <span>Full View</span>
-                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                                                    </button>
+                                        <!-- Mobile Controls -->
+                                        <div class="bg-gray-900/90 backdrop-blur-md p-4 border-t border-white/10 flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <button onclick="mobilePrevPage()" class="p-2 bg-gray-800 text-white rounded-lg active:scale-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+                                                <span class="text-[10px] font-black text-white uppercase tracking-widest px-2"><span id="mobile-page-num">1</span> / <span id="mobile-page-count">-</span></span>
+                                                <button onclick="mobileNextPage()" class="p-2 bg-gray-800 text-white rounded-lg active:scale-90 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></button>
                                             </div>
+                                                <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+                                                    <span>Full View</span>
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                                </button>
+                                        </div>
 
-                                            <!-- Loading Overlay -->
-                                            <div id="mobile-pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 z-10 transition-opacity duration-500">
-                                                <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                                                <p class="text-[9px] font-black text-white uppercase tracking-widest animate-pulse">Loading Preview...</p>
-                                            </div>
+                                        <!-- Loading Overlay -->
+                                        <div id="mobile-pdf-loading" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900 z-10 transition-opacity duration-500">
+                                            <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                                            <p class="text-[9px] font-black text-white uppercase tracking-widest animate-pulse">Loading Preview...</p>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-                                <script>
-                                    // Mobile PDF Engine
-                                    const m_pdfjsLib = window['pdfjs-dist/build/pdf'];
-                                    m_pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+                            <script>
+                                // Mobile PDF Engine
+                                const m_pdfjsLib = window['pdfjs-dist/build/pdf'];
+                                m_pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-                                    let m_pdfDoc = null, m_pageNum = 1, m_pageRendering = false;
-                                    const m_canvas = document.getElementById('mobile-pdf-canvas');
-                                    const m_ctx = m_canvas.getContext('2d');
+                                let m_pdfDoc = null, m_pageNum = 1, m_pageRendering = false;
+                                const m_canvas = document.getElementById('mobile-pdf-canvas');
+                                const m_ctx = m_canvas.getContext('2d');
 
-                                    function renderMobilePage(num) {
-                                        if (!m_pdfDoc) return;
-                                        m_pageRendering = true;
-                                        m_pdfDoc.getPage(num).then(function(page) {
-                                            // HD Rendering for Mobile (Retina/DPR Support)
-                                            const dpr = window.devicePixelRatio || 1;
-                                            const containerWidth = document.getElementById('mobile-canvas-container').clientWidth - 20;
-                                            
-                                            const unscaledViewport = page.getViewport({scale: 1.0});
-                                            const scale = containerWidth / unscaledViewport.width;
-                                            const viewport = page.getViewport({scale: scale});
+                                function renderMobilePage(num) {
+                                    if (!m_pdfDoc) return;
+                                    m_pageRendering = true;
+                                    m_pdfDoc.getPage(num).then(function(page) {
+                                        // HD Rendering for Mobile (Retina/DPR Support)
+                                        const dpr = window.devicePixelRatio || 1;
+                                        const containerWidth = document.getElementById('mobile-canvas-container').clientWidth - 20;
+                                        
+                                        const unscaledViewport = page.getViewport({scale: 1.0});
+                                        const scale = containerWidth / unscaledViewport.width;
+                                        const viewport = page.getViewport({scale: scale});
 
-                                            m_canvas.height = viewport.height * dpr;
-                                            m_canvas.width = viewport.width * dpr;
-                                            m_canvas.style.width = viewport.width + 'px';
-                                            m_canvas.style.height = viewport.height + 'px';
-                                            
-                                            m_ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                                        m_canvas.height = viewport.height * dpr;
+                                        m_canvas.width = viewport.width * dpr;
+                                        m_canvas.style.width = viewport.width + 'px';
+                                        m_canvas.style.height = viewport.height + 'px';
+                                        
+                                        m_ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-                                            const renderContext = { canvasContext: m_ctx, viewport: viewport };
-                                            page.render(renderContext).promise.then(function() {
-                                                m_pageRendering = false;
-                                                document.getElementById('mobile-page-num').textContent = num;
-                                                const loading = document.getElementById('mobile-pdf-loading');
-                                                if(loading) {
-                                                    loading.style.opacity = '0';
-                                                    setTimeout(() => loading.classList.add('hidden'), 500);
-                                                }
-                                            });
+                                        const renderContext = { canvasContext: m_ctx, viewport: viewport };
+                                        page.render(renderContext).promise.then(function() {
+                                            m_pageRendering = false;
+                                            document.getElementById('mobile-page-num').textContent = num;
+                                            const loading = document.getElementById('mobile-pdf-loading');
+                                            if(loading) {
+                                                loading.style.opacity = '0';
+                                                setTimeout(() => loading.classList.add('hidden'), 500);
+                                            }
                                         });
-                                    }
+                                    });
+                                }
 
-                                    function mobilePrevPage() { if (m_pageNum <= 1 || m_pageRendering) return; m_pageNum--; renderMobilePage(m_pageNum); }
-                                    function mobileNextPage() { if (m_pageNum >= m_pdfDoc.numPages || m_pageRendering) return; m_pageNum++; renderMobilePage(m_pageNum); }
+                                function mobilePrevPage() { if (m_pageNum <= 1 || m_pageRendering) return; m_pageNum--; renderMobilePage(m_pageNum); }
+                                function mobileNextPage() { if (m_pageNum >= m_pdfDoc.numPages || m_pageRendering) return; m_pageNum++; renderMobilePage(m_pageNum); }
 
-                                    // Start Mobile Engine if on mobile
-                                    if (window.innerWidth < 768) {
-                                        m_pdfjsLib.getDocument({
-                                            url: "{{ route('files.view', $manuscript) }}",
-                                            withCredentials: true
-                                        }).promise.then(function(pdfDoc_) {
-                                            m_pdfDoc = pdfDoc_;
-                                            document.getElementById('mobile-page-count').textContent = m_pdfDoc.numPages;
-                                            renderMobilePage(m_pageNum);
-                                        }).catch(err => {
-                                            console.error("Mobile PDF Error:", err);
-                                            document.getElementById('mobile-pdf-loading').innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Failed. Use Full View.</p>';
-                                        });
-                                    }
-                                </script>
+                                // Start Mobile Engine if on mobile
+                                if (window.innerWidth < 768) {
+                                    m_pdfjsLib.getDocument({
+                                        url: "{{ route('files.view', $manuscript) }}",
+                                        withCredentials: true
+                                    }).promise.then(function(pdfDoc_) {
+                                        m_pdfDoc = pdfDoc_;
+                                        document.getElementById('mobile-page-count').textContent = m_pdfDoc.numPages;
+                                        renderMobilePage(m_pageNum);
+                                    }).catch(err => {
+                                        console.error("Mobile PDF Error:", err);
+                                        document.getElementById('mobile-pdf-loading').innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Failed. Use Full View.</p>';
+                                    });
+                                }
+                            </script>
 
-                                <style>
-                                    @media (min-width: 768px) { .mobile-only { display: none !important; } .desktop-only { display: block !important; } }
-                                    @media (max-width: 767px) { .desktop-only { display: none !important; } .mobile-only { display: block !important; } }
-                                    .animate-bounce-short { animation: bounce-short 1s ease-in-out infinite; }
-                                    @keyframes bounce-short { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-                                </style>
+                            <style>
+                                @media (min-width: 768px) { .mobile-only { display: none !important; } .desktop-only { display: block !important; } }
+                                @media (max-width: 767px) { .desktop-only { display: none !important; } .mobile-only { display: block !important; } }
+                                .animate-bounce-short { animation: bounce-short 1s ease-in-out infinite; }
+                                @keyframes bounce-short { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+                            </style>
 
-                                <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-sm">
-                                            <span class="text-xl">📄</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-black text-gray-800 dark:text-white uppercase tracking-widest">{{ $manuscript->filename }}</p>
-                                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{{ number_format($manuscript->size / 1048576, 2) }} MB</p>
-                                        </div>
+                            <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-800 p-4 rounded-2xl border border-white/5">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center shadow-inner border border-white/5">
+                                        <span class="text-xl">📄</span>
                                     </div>
-                                    
-                                    <a href="{{ route('files.download', $manuscript->id) }}" class="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                        Download PDF
-                                    </a>
-                                </div>
-                            @else
-                                <div class="mt-4 p-12 border-4 border-dashed border-gray-200 bg-gray-50 rounded-xl flex flex-col items-center justify-center text-center">
-                                    <div class="w-20 h-20 bg-gray-200 text-gray-400 rounded-full flex items-center justify-center mb-4">
-                                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    <div>
+                                        <p class="text-xs font-black text-white uppercase tracking-widest">{{ $manuscript->filename }}</p>
+                                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ number_format($manuscript->size / 1048576, 2) }} MB</p>
                                     </div>
-                                    <h4 class="text-xl font-bold text-gray-900 mb-2">Manuscript is Secured</h4>
-                                    <p class="text-sm text-gray-500 mb-6 max-w-sm">Full research manuscripts and technical attachments can only be accessed by registered students and faculty members.</p>
-                                    <a href="{{ route('login') }}" class="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-200">
-                                        Login to View Full Project
-                                    </a>
                                 </div>
-                            @endauth
+                                
+                                <a href="{{ route('files.download', $manuscript->id) }}" class="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Download PDF
+                                </a>
+                            </div>
                         @else
-                            <div class="p-12 text-center bg-gray-50 rounded-lg text-gray-500">
-                                No manuscript file found for this record.
+                            <div class="p-12 text-center bg-slate-950 rounded-3xl text-slate-500 border border-white/5 font-black uppercase tracking-widest text-xs">
+                                No manuscript file detected.
                             </div>
                         @endif
                     </div>
@@ -363,16 +350,15 @@
                     @php
                         $canSeeAttachments = auth()->check() && (
                             auth()->user()->isAdmin() ||
-                            auth()->user()->isAdviser() ||
                             $project->authors->contains(auth()->user())
                         );
                     @endphp
 
                     @if($canSeeAttachments && $attachments->isNotEmpty())
-                        <div class="dark:bg-gray-800  overflow-hidden shadow-sm sm:rounded-lg p-6">
-                            <div class="flex items-center justify-between mb-4 border-b pb-2">
-                                <h3 class="font-bold text-lg">Project Attachments</h3>
-                                <span class="px-2 py-0.5 bg-gray-100 text-[10px] font-black text-gray-800 uppercase rounded">{{ $attachments->count() }} Technical Files</span>
+                        <div class="bg-slate-900 overflow-hidden shadow-2xl sm:rounded-3xl p-8 border border-white/5">
+                            <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                                <h3 class="font-black text-xl text-white uppercase tracking-tight">Project Attachments</h3>
+                                <span class="px-3 py-1 bg-slate-950 text-[10px] font-black text-slate-400 uppercase rounded-full border border-white/5 shadow-inner">{{ $attachments->count() }} Technical Files</span>
                             </div>
                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 @foreach($attachments as $file)
@@ -396,27 +382,27 @@
                                         };
                                         $fileUrl = route('files.view', $file);
                                     @endphp
-                                    <div class="flex flex-col border border-gray-100 rounded-xl bg-gray-50/50 hover:bg-gray-50 transition overflow-hidden">
-                                        <div class="flex items-center justify-between p-4">
-                                            <div class="flex items-center gap-3 overflow-hidden">
-                                                <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center shadow-sm border border-gray-100 flex-shrink-0">
+                                    <div class="flex flex-col border border-white/5 rounded-2xl bg-slate-950/50 hover:bg-white/[0.02] transition-all duration-300 overflow-hidden shadow-lg group">
+                                        <div class="flex items-center justify-between p-5">
+                                            <div class="flex items-center gap-4 overflow-hidden">
+                                                <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center shadow-inner border border-white/5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                                                     <span class="text-xl">{{ $icon }}</span>
                                                 </div>
                                                 <div class="flex flex-col overflow-hidden">
                                                     <div class="flex items-center gap-2">
-                                                        <span class="text-sm font-bold text-gray-900 truncate" title="{{ $file->filename }}">{{ $file->filename }}</span>
+                                                        <span class="text-sm font-black text-white truncate" title="{{ $file->filename }}">{{ $file->filename }}</span>
                                                         @if($isImage)
-                                                            <span class="bg-emerald-100 text-emerald-700 text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">Preview</span>
+                                                            <span class="bg-emerald-500/20 text-emerald-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-emerald-500/20">Media</span>
                                                         @elseif($isVideo)
-                                                            <span class="bg-indigo-100 text-indigo-700 text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest">Video Preview</span>
+                                                            <span class="bg-indigo-500/20 text-indigo-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-indigo-500/20">Stream</span>
                                                         @endif
                                                     </div>
-                                                    @if(auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isAdviser() || $project->authors->contains(auth()->user())))
-                                                        <span class="text-[10px] uppercase font-black text-gray-800 tracking-tighter">
+                                                    @if(auth()->check() && (auth()->user()->isAdmin() || $project->authors->contains(auth()->user())))
+                                                        <span class="text-[9px] uppercase font-black text-slate-500 tracking-widest mt-0.5">
                                                             {{ strtoupper($ext) }} • {{ number_format($file->size / 1048576, 2) }} MB
                                                         </span>
                                                     @else
-                                                        <span class="text-[10px] uppercase font-black text-gray-400 tracking-tighter">
+                                                        <span class="text-[9px] uppercase font-black text-slate-600 tracking-widest mt-0.5">
                                                             {{ strtoupper($ext) }}
                                                         </span>
                                                     @endif
@@ -424,12 +410,12 @@
                                             </div>
                                             <div class="flex items-center gap-2 pr-2">
                                                 @if($isPreviewable)
-                                                    <button onclick="openLightbox('{{ $fileUrl }}', '{{ $isImage ? 'image' : 'video' }}')" class="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="Preview File">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                    <button onclick="openLightbox('{{ $fileUrl }}', '{{ $isImage ? 'image' : 'video' }}')" class="p-2.5 text-indigo-400 hover:bg-indigo-500/20 rounded-xl transition-all" title="Preview File">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                                     </button>
                                                 @endif
-                                                <a href="{{ route('files.download', $file) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition" title="Download File">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                                <a href="{{ route('files.download', $file) }}" class="p-2.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition-all" title="Download File">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                                 </a>
                                             </div>
                                         </div>

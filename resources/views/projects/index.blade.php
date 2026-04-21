@@ -1,30 +1,31 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-start sm:items-center justify-between">
-            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                @guest
-                <a href="{{ route('home') }}" class="inline-flex w-max px-4 py-2 bg-gray-700/50 hover:bg-gray-600 border border-gray-500 rounded-md font-semibold text-xs text-white uppercase tracking-widest transition ease-in-out duration-150 items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Back to Home
-                </a>
-                @endguest
-                <h2 class="font-bold text-2xl text-white leading-tight">
-                    {{ __('Research Library') }}
-                </h2>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Integrated Header --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+                <div class="flex flex-col gap-4">
+                    @guest
+                    <a href="{{ route('home') }}" class="inline-flex w-max px-4 py-2 bg-slate-900/50 hover:bg-slate-800 border border-white/5 rounded-xl font-black text-[10px] text-slate-400 uppercase tracking-widest transition shadow-inner items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Home
+                    </a>
+                    @endguest
+                    <div>
+                        <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">Research Library</h2>
+                        <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Institutional Knowledge & Project Archive</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-2xl border border-white/5 shadow-inner">
+                    <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">Institutional Access Only</span>
+                </div>
             </div>
-            <div class="hidden md:flex items-center gap-2">
-                <span class="px-3 py-1 bg-white/20 text-white text-[10px] font-black uppercase rounded-full border border-white/30 italic">Program Restricted</span>
-            </div>
-        </div>
-    </x-slot>
-
-    <div class="py-4">
-        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            
             <div class="flex flex-col lg:flex-row gap-8 items-start">
                 <!-- Sidebar: Refinement Tools -->
                 <aside class="w-full lg:w-1/4 shrink-0 space-y-6 lg:sticky lg:top-8 lg:self-start lg:z-10">
-                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h3 class="font-black text-xs uppercase tracking-widest text-gray-400 mb-4 italic">Library Catalog</h3>
+                    <div class="bg-slate-900 p-6 rounded-xl shadow-sm border border-white/5">
+                        <h3 class="font-black text-xs uppercase tracking-widest text-slate-500 mb-4 italic">Library Catalog</h3>
                         
                         <!-- Search Form -->
                         <form method="GET" action="{{ route('projects.index') }}" class="space-y-4">
@@ -41,8 +42,8 @@
                                 }
                             </style>
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Search Records</label>
-                                <div class="relative w-full bg-white rounded-lg overflow-hidden flex items-center border border-gray-300 focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500">
+                                <label class="block text-xs font-bold mb-1 text-slate-400">Search Records</label>
+                                <div class="relative w-full bg-slate-800 rounded-lg overflow-hidden flex items-center border border-white/10 focus-within:ring-1 focus-within:ring-indigo-500 focus-within:border-indigo-500">
                                     <div id="sidebar-marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 0.50rem; right: 0.50rem; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                                         <div class="animate-sidebar-marquee text-sm text-gray-400">
                                             <div class="flex shrink-0">
@@ -57,7 +58,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 pl-3 pr-8 text-sm text-gray-900 bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="">
+                                    <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 pl-3 pr-8 text-sm text-white bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="">
                                     <button type="button" id="sidebar-clear-btn" class="absolute text-gray-400 hover:text-gray-600 hidden z-30 focus:outline-none" style="right: 10px; top: 50%; transform: translateY(-50%);" title="Clear search">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                     </button>
@@ -65,8 +66,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Year</label>
-                                <select name="year" class="w-full rounded-lg border-gray-300 text-sm">
+                                <label class="block text-xs font-bold mb-1 text-slate-400">Year</label>
+                                <select name="year" class="w-full rounded-lg border-white/10 bg-slate-800 text-white text-sm focus:ring-indigo-500 focus:border-indigo-500">
                                     <option value="">All Years</option>
                                     @foreach($years as $y)
                                         <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
@@ -75,8 +76,8 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Program</label>
-                                <select name="program" class="w-full rounded-lg border-gray-300 text-sm">
+                                <label class="block text-xs font-bold mb-1 text-slate-400">Program</label>
+                                <select name="program" class="w-full rounded-lg border-white/10 bg-slate-800 text-white text-sm focus:ring-indigo-500 focus:border-indigo-500">
                                     <option value="">All Programs</option>
                                     <option value="BSInT" {{ request('program') == 'BSInT' ? 'selected' : '' }}>BSInT</option>
                                     <option value="BSCS" {{ request('program') == 'BSCS' || request('program') == 'Com-Sci' ? 'selected' : '' }}>BSCS</option>
@@ -84,15 +85,37 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-gray-300">Category</label>
-                                <select name="specialization" class="w-full rounded-lg border-gray-300 text-sm" onchange="this.form.submit()">
+                                <label class="block text-xs font-bold mb-1 text-slate-400">Category</label>
+                                <select id="category-select" name="specialization" class="w-full rounded-lg border-white/10 bg-slate-800 text-white text-sm focus:ring-indigo-500 focus:border-indigo-500">
                                     <option value="">Select Category</option>
-                                    @foreach(\App\Models\Category::pluck('name') as $spec)
-                                        <option value="{{ $spec }}" {{ request('specialization') == $spec ? 'selected' : '' }}>
-                                            {{ $spec }}
+                                    @foreach(\App\Models\Category::where('name', '!=', 'Others')->get() as $cat)
+                                        <option value="{{ $cat->name }}" {{ request('specialization') == $cat->name ? 'selected' : '' }}>
+                                            {{ $cat->name }}
                                         </option>
                                     @endforeach
+                                    <option value="Others" {{ request('specialization') == 'Others' || request('category_text') ? 'selected' : '' }}>Others</option>
                                 </select>
+                                <div id="category-text-container" class="mt-2 {{ request('specialization') == 'Others' || request('category_text') ? '' : 'hidden' }}">
+                                    <input type="text" name="category_text" value="{{ request('category_text') }}" 
+                                           class="w-full rounded-lg border-white/10 bg-slate-800 text-white text-[10px] uppercase font-black tracking-widest focus:ring-indigo-500 focus:border-indigo-500 placeholder:text-slate-600 px-3 py-2" 
+                                           placeholder="Type custom category...">
+                                </div>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const select = document.getElementById('category-select');
+                                        const container = document.getElementById('category-text-container');
+                                        
+                                        select.addEventListener('change', function() {
+                                            if (this.value === 'Others') {
+                                                container.classList.remove('hidden');
+                                                container.querySelector('input').focus();
+                                            } else {
+                                                container.classList.add('hidden');
+                                            }
+                                        });
+                                    });
+                                </script>
                             </div>
 
                             <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 rounded-lg hover:bg-indigo-700 transition shadow-sm">
@@ -101,15 +124,15 @@
                         </form>
                     </div>
 
-                    <div class="bg-gray-200 p-6 rounded-xl border border-gray-100 italic">
-                        <p class="text-xs text-gray-700">"The true sign of intelligence is not knowledge but imagination." – Albert Einstein</p>
+                    <div class="bg-slate-900/50 p-6 rounded-xl border border-white/5 italic">
+                        <p class="text-xs text-slate-400">"The true sign of intelligence is not knowledge but imagination." – Albert Einstein</p>
                     </div>
                 </aside>
 
                 <!-- Main Content: Project Gallery -->
                 <div class="flex-1 w-full min-w-0">
                     @if($projects->isEmpty())
-                        <div class="bg-white dark:bg-gray-800 p-8 md:p-12 text-center rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div class="bg-slate-900 p-8 md:p-12 text-center rounded-xl shadow-sm border border-white/5">
                             <div class="text-4xl mb-4">📭</div>
                             <h3 class="text-lg font-bold text-gray-400">No records found</h3>
                             <p class="text-sm text-gray-400">Try adjusting your search filters or browse by category.</p>
@@ -117,7 +140,7 @@
                     @else
                         <div class="space-y-4 md:space-y-6">
                             @foreach($projects as $project)
-                                <article class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all group overflow-hidden">
+                                <article class="bg-slate-900 p-4 md:p-6 rounded-xl shadow-sm border border-white/5 hover:shadow-md transition-all group overflow-hidden">
                                     <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-6">
                                         <div class="flex-1 min-w-0">
                                             <div class="flex flex-wrap items-center gap-2 mb-3">
@@ -126,7 +149,12 @@
                                                         {{ $category->name }}
                                                     </span>
                                                 @endforeach
-                                                @if($project->categories->isEmpty())
+                                                @if($project->custom_category)
+                                                    <span class="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-indigo-100 dark:border-indigo-800">
+                                                        {{ $project->custom_category }}
+                                                    </span>
+                                                @endif
+                                                @if($project->categories->isEmpty() && !$project->custom_category)
                                                     <span class="bg-gray-50 dark:bg-gray-700 text-gray-400 text-[9px] font-black px-2 py-0.5 rounded uppercase tracking-tighter border border-gray-100 dark:border-gray-600">
                                                         General
                                                     </span>
@@ -141,8 +169,8 @@
                                                 @endif
                                             </div>
 
-                                            <h4 class="text-lg md:text-xl font-black text-gray-800 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-2 leading-tight">
-                                                <a href="{{ route('projects.show', $project) }}" class="block">{{ $project->title }}</a>
+                                            <h4 class="text-lg md:text-xl font-black text-gray-800 dark:text-white mb-2 leading-tight">
+                                                {{ $project->title }}
                                             </h4>
 
                                             <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 md:line-clamp-3 leading-relaxed mb-4">
@@ -161,11 +189,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="shrink-0 flex md:flex-col justify-center items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-700 md:pl-6">
-                                            <a href="{{ route('projects.show', $project) }}" class="w-full md:w-auto text-center px-4 py-2 md:py-1.5 bg-gray-50 dark:bg-gray-700/50 hover:bg-indigo-600 hover:text-white dark:text-gray-300 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                                        <div class="shrink-0 flex md:flex-col justify-center items-center gap-3 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-white/5 md:pl-6">
+                                            <a href="{{ route('projects.show', $project) }}" class="w-full md:w-auto text-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/30 transition-all">
                                                 View Details
                                             </a>
                                         </div>
+
                                     </div>
                                 </article>
                             @endforeach

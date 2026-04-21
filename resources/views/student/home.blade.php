@@ -1,22 +1,23 @@
 <x-app-layout>
     
-    <x-slot name="header">
-        <h2 class="font-bold text-2xl   text-white leading-tight">
-            {{ __('Student Library') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-
-
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Integrated Header --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+                <div>
+                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">Student Library</h2>
+                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Institutional Repository & Knowledge Base</p>
+                </div>
+            </div>
+            
             <!-- System Guide -->
-            <div class="bg-indigo-600 dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-2xl border border-indigo-500/30">
+            <div class="bg-indigo-900/40 overflow-hidden shadow-sm sm:rounded-2xl border border-indigo-500/30">
                 <div class="p-6 md:p-10">
                     <div class="mb-10">
                         <h3 class="text-3xl font-black text-white leading-tight mb-4">Welcome to your Capstone Repository! 👋</h3>
                         <p class="text-indigo-100 text-lg leading-relaxed max-w-3xl">
-                            You are part of the institutional memory. Whether you're here to research or to archive your <strong>legacy</strong>, use this guide to navigate the system effectively.
+                            You are part of the institutional memory. Whether you're here to research or to archive your <strong>work</strong>, use this guide to navigate the system effectively.
                         </p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -39,19 +40,19 @@
                                 <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                 <span class="text-sm font-black text-white uppercase tracking-wider">Verification</span>
                             </div>
-                            <p class="text-indigo-100 text-xs leading-relaxed">Track your progress as your Faculty Adviser reviews and confirms your digital record for permanent institutional archiving.</p>
+                            <p class="text-indigo-100 text-xs leading-relaxed">Track your progress as the Administrator reviews and confirms your submission for permanent institutional archiving.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- My Pending/Active Projects -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-xl border border-gray-100 dark:border-gray-700">
+            <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl border border-white/5">
                 <div class="p-4 md:p-8">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                         <div>
-                            <h3 class="text-xl font-black text-gray-800 dark:text-white">My Submissions</h3>
-                            <p class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-1">Track the status of your research manuscript</p>
+                            <h3 class="text-xl font-black text-white">My Submissions</h3>
+                            <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-1">Track the status of your research manuscript</p>
                         </div>
                         @php
                             $deadlineStr = \App\Models\Setting::get('submission_deadline');
@@ -61,29 +62,23 @@
                         @endphp
 
                         <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                            @if($submissionsOpen && !$isPastDeadline && !$hasSubmitted)
+                            @if($submissionsOpen && !$isPastDeadline)
                                 @if($deadlineStr)
-                                    <span class="text-[10px] font-black text-red-600 uppercase tracking-widest bg-red-50 dark:bg-red-900/40 px-3 py-2 rounded-lg border border-red-200 dark:border-red-800 animate-pulse text-center">
-                                        Deadline: {{ \Carbon\Carbon::parse($deadlineStr)->format('M d, Y h:i A') }}
+                                    <span class="text-[10px] font-black text-red-400 uppercase tracking-widest bg-red-950/50 px-3 py-2 rounded-xl border border-red-500/20 animate-pulse text-center">
+                                        Terminating: {{ \Carbon\Carbon::parse($deadlineStr)->format('M d, Y h:i A') }}
                                     </span>
                                 @endif
                                 <a href="{{ route('projects.create') }}" class="inline-flex items-center justify-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/></svg>
                                     Submit New Project
                                 </a>
-                            @elseif($hasSubmitted)
-                                <div class="bg-emerald-50 dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-800 rounded-xl px-4 py-2 flex items-center justify-center">
-                                    <span class="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
-                                        ✓ Submitted
-                                    </span>
-                                </div>
                             @else
-                                <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800 rounded-xl px-4 py-2 flex items-center justify-center">
-                                    <span class="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-widest">
+                                <div class="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2 flex items-center justify-center">
+                                    <span class="text-[10px] font-black text-red-400 uppercase tracking-widest">
                                         @if(!$submissionsOpen)
                                             ⚠️ Closed
                                         @else
-                                            ⚠️ Expired
+                                            ⚠️ Deadline Passed
                                         @endif
                                     </span>
                                 </div>
@@ -108,30 +103,36 @@
                                             <th class="px-6 py-4 text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    <tbody class="divide-y divide-white/5">
                                         @foreach($myProjects as $project)
-                                            <tr class="group hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition-colors">
+                                            <tr class="group hover:bg-white/[0.02] transition-colors">
                                                 <td class="px-6 py-4">
                                                     <div class="max-w-xs md:max-w-md">
-                                                        <div class="text-sm font-bold text-gray-800 dark:text-white mb-1 leading-snug truncate md:whitespace-normal">{{ $project->title }}</div>
+                                                        <div class="text-sm font-bold text-white mb-1 leading-snug truncate md:whitespace-normal">{{ $project->title }}</div>
                                                         <div class="flex items-center gap-2">
                                                             <span class="text-[9px] font-black uppercase tracking-tighter text-indigo-400 px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 rounded border border-indigo-100 dark:border-indigo-800">{{ $project->program }}</span>
                                                             <span class="text-[9px] font-bold text-gray-400 uppercase italic">{{ $project->year }}</span>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 italic whitespace-nowrap">{{ $project->adviser->name ?? 'N/A' }}</td>
+                                                <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 italic whitespace-nowrap">{{ $project->adviser_name ?? $project->adviser->name ?? 'N/A' }}</td>
                                                 <td class="px-6 py-4 text-center">
                                                     @php
                                                         $statusClasses = match($project->status) {
-                                                            'published' => 'bg-emerald-500 text-white border-emerald-600',
-                                                            'approved' => 'bg-indigo-600 text-white border-indigo-700',
-                                                            'rejected' => 'bg-red-100 text-red-600 border-red-200',
-                                                            default => 'bg-amber-100 text-amber-600 border-amber-200',
+                                                            'published' => 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+                                                            'approved' => 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
+                                                            'rejected' => 'bg-red-500/20 text-red-400 border-red-500/30',
+                                                            default => 'bg-amber-500/20 text-amber-400 border-amber-500/30',
                                                         };
                                                     @endphp
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border {{ $statusClasses }} shadow-sm">
-                                                        {{ $project->status }}
+                                                        @if($project->status === 'pending')
+                                                            Review Pending
+                                                        @elseif($project->status === 'approved')
+                                                            Published
+                                                        @else
+                                                            {{ $project->status }}
+                                                        @endif
                                                     </span>
                                                 </td>
                                                 <td class="px-6 py-4 text-center">
@@ -158,7 +159,7 @@
                                                 </td>
                                             </tr>
                                             @if($project->status === 'rejected' && $project->rejection_reason)
-                                            <tr class="bg-red-50/30 dark:bg-red-900/10">
+                                            <tr class="bg-red-500/5">
                                                 <td colspan="4" class="px-6 py-4">
                                                     <div class="flex items-start gap-3">
                                                         <div class="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5"></div>
@@ -180,10 +181,10 @@
             </div>
 
             <!-- Research CTA -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg border-2 border-dashed border-indigo-200">
+            <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border-2 border-dashed border-indigo-500/30">
                 <div class="p-8 text-center">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
-                        <span class="text-2xl">🔍</span>
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-indigo-500/10 text-indigo-400 rounded-2xl mb-6 border border-indigo-500/20 shadow-xl">
+                        <span class="text-3xl">🔍</span>
                     </div>
                     <h3 class="text-xl font-bold text-gray-200 mb-2">Ready to start your research?</h3>
                     <p class="text-gray-500 max-w-sm mx-auto mb-6">Explore thousands of verified capstone projects, manuscripts, and categories in our dedicated institutional library.</p>

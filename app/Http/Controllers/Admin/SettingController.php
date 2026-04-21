@@ -32,6 +32,7 @@ class SettingController extends Controller
             'repository_name' => Setting::get('repository_name', 'CSIT Capstone Repository'),
             'maintenance_mode' => Setting::get('maintenance_mode', '0'),
             'submissions_open' => Setting::get('submissions_open', '1'),
+            'log_retention_days' => Setting::get('log_retention_days', '90'),
             'submission_deadline_date' => $deadlineDate,
             'submission_deadline_time' => $deadlineTime,
         ];
@@ -52,6 +53,7 @@ class SettingController extends Controller
             'repository_name' => 'required|string|max:255',
             'maintenance_mode' => 'nullable|boolean',
             'submissions_open' => 'nullable|boolean',
+            'log_retention_days' => 'required|integer|min:7|max:3650',
             'submission_deadline_date' => 'nullable|date',
             'submission_deadline_time' => 'nullable|string',
         ]);
@@ -65,7 +67,7 @@ class SettingController extends Controller
 
         // Capture old values for logging
         $oldSettings = [];
-        $keysToLog = ['max_upload_size', 'max_attachment_size', 'allowed_file_types', 'academic_year', 'repository_name', 'maintenance_mode', 'submissions_open', 'submission_deadline'];
+        $keysToLog = ['max_upload_size', 'max_attachment_size', 'allowed_file_types', 'academic_year', 'repository_name', 'maintenance_mode', 'submissions_open', 'log_retention_days', 'submission_deadline'];
         foreach ($keysToLog as $k) {
             $oldSettings[$k] = Setting::get($k);
         }
@@ -108,6 +110,10 @@ class SettingController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.settings.index')->with('success', 'System settings updated successfully.');
+        // Proactive log pruning based on new retention setting
+        $days = (int) Setting::get('log_retention_days', '90');
+        \App\Models\ActivityLog::where('created_at', '<', now()->subDays($days))->delete();
+
+        return redirect()->route('admin.settings.index')->with('success', 'System settings updated and old logs pruned.');
     }
 }

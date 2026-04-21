@@ -14,104 +14,109 @@
             
             {{-- Show rejection feedback if project was returned --}}
             @if($project->status === 'rejected' && $project->rejection_reason)
-                <div class="mb-6 bg-red-50 border-2 border-red-200 rounded-2xl p-6 shadow-sm">
-                    <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="mb-8 bg-red-900/10 border-2 border-red-500/20 rounded-3xl p-8 shadow-2xl">
+                    <div class="flex items-start gap-6">
+                        <div class="flex-shrink-0 w-14 h-14 bg-red-500/20 rounded-2xl flex items-center justify-center border border-red-500/30">
+                            <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <h3 class="text-sm font-bold text-red-800 uppercase tracking-wider mb-1">Adviser's Feedback</h3>
-                            <p class="text-red-700 text-sm font-medium mb-2">Your adviser returned this project with the following feedback:</p>
-                            <div class="bg-white rounded-lg p-4 border border-red-200 text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{{ $project->rejection_reason }}</div>
-                            <p class="text-xs text-red-500 mt-2 italic">Please address the feedback below and save your changes to resubmit.</p>
+                            <h3 class="text-sm font-black text-red-400 uppercase tracking-[0.2em] mb-2">Adviser's Feedback</h3>
+                            <p class="text-slate-300 text-sm font-medium mb-4 leading-relaxed">Your adviser returned this project with the following requirements:</p>
+                            <div class="bg-slate-950/80 rounded-2xl p-5 border border-red-500/20 text-slate-200 text-sm leading-relaxed whitespace-pre-wrap font-medium shadow-inner italic">"{{ $project->rejection_reason }}"</div>
+                            <p class="text-xs text-red-400/60 mt-4 font-bold uppercase tracking-widest">Resubmission Required</p>
                         </div>
                     </div>
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-slate-900 overflow-hidden shadow-2xl sm:rounded-3xl p-8 border border-white/5">
                 <form id="edit-form" method="POST" action="{{ route('projects.update', $project) }}">
                     @csrf
                     @method('PUT')
 
-                    <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">Project Title</label>
-                        <input type="text" name="title" value="{{ old('title', $project->title) }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                        @error('title') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                    <div class="mb-6">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Project Title</label>
+                        <input type="text" name="title" value="{{ old('title', $project->title) }}" 
+                               class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600" 
+                               required>
+                        @error('title') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">Abstract</label>
-                        <textarea name="abstract" rows="6" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>{{ old('abstract', $project->abstract) }}</textarea>
-                        @error('abstract') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                    <div class="mb-6">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Abstract</label>
+                        <textarea name="abstract" rows="8" 
+                                  class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600 leading-relaxed" 
+                                  required>{{ old('abstract', $project->abstract) }}</textarea>
+                        @error('abstract') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div>
-                            <label class="block font-medium text-sm text-gray-700">Year</label>
-                            <input type="number" name="year" value="{{ old('year', $project->year) }}" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                            @error('year') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Year</label>
+                            <input type="number" name="year" value="{{ old('year', $project->year) }}" 
+                                   class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500" required>
+                            @error('year') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
-                            <label class="block font-medium text-sm text-gray-700">Adviser</label>
-                            <select name="adviser_id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="">Select adviser</option>
+                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Adviser</label>
+                            <select name="adviser_id" class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="" class="bg-slate-900">Select adviser</option>
                                 @foreach($advisers as $adv)
-                                    <option value="{{ $adv->id }}" {{ old('adviser_id', $project->adviser_id) == $adv->id ? 'selected' : '' }}>
+                                    <option value="{{ $adv->id }}" {{ old('adviser_id', $project->adviser_id) == $adv->id ? 'selected' : '' }} class="bg-slate-900">
                                         {{ $adv->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('adviser_id') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                            @error('adviser_id') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
-                            <label class="block font-medium text-sm text-gray-700">Program</label>
-                            <select name="program" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="" disabled {{ (old('program', $project->program)) ? '' : 'selected' }}>Choose Program</option>
+                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Program</label>
+                            <select name="program" class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="" disabled {{ (old('program', $project->program)) ? '' : 'selected' }} class="bg-slate-900">Choose Program</option>
                                 @foreach($programs as $prog)
-                                    <option value="{{ $prog->abbreviation }}" {{ old('program', $project->program) == $prog->abbreviation ? 'selected' : '' }}>
+                                    <option value="{{ $prog->abbreviation }}" {{ old('program', $project->program) == $prog->abbreviation ? 'selected' : '' }} class="bg-slate-900">
                                         {{ $prog->abbreviation }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('program') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                            @error('program') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 mb-3 text-center sm:text-left">Project Categories <span class="text-indigo-400 normal-case font-medium">(Select all that apply)</span></label>
+                    <div class="mb-10">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-4 text-center sm:text-left">Project Categories <span class="text-indigo-400 normal-case font-medium">(Select all that apply)</span></label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach($categories as $category)
-                                <label class="relative flex items-center p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 cursor-pointer transition-all group bg-gray-50/30">
+                                <label class="relative flex items-center p-4 rounded-2xl border border-white/5 hover:border-indigo-500/50 hover:bg-white/[0.02] cursor-pointer transition-all group bg-slate-950/50">
                                     <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
                                         {{ (is_array(old('categories')) && in_array($category->id, old('categories'))) || (!old('categories') && $project->categories->contains($category->id)) ? 'checked' : '' }}
-                                        class="w-5 h-5 rounded-lg border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
-                                    <span class="ml-3 text-sm font-bold text-gray-700 group-hover:text-indigo-700 transition-colors">
+                                        class="w-5 h-5 rounded-lg border-white/10 bg-slate-900 text-indigo-500 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
+                                    <span class="ml-3 text-sm font-bold text-slate-300 group-hover:text-white transition-colors">
                                         {{ $category->name }}
                                     </span>
                                 </label>
                             @endforeach
 
                             {{-- "Others" Option --}}
-                            <label class="relative flex items-center p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 cursor-pointer transition-all group bg-gray-50/30">
+                            <label class="relative flex items-center p-4 rounded-2xl border border-white/5 hover:border-indigo-500/50 hover:bg-white/[0.02] cursor-pointer transition-all group bg-slate-950/50">
                                 <input type="checkbox" id="other_category_trigger" name="other_category_trigger" 
                                     {{ old('other_category') ? 'checked' : '' }}
-                                    class="w-5 h-5 rounded-lg border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
-                                <span class="ml-3 text-sm font-bold text-gray-700 group-hover:text-indigo-700 transition-colors">
+                                    class="w-5 h-5 rounded-lg border-white/10 bg-slate-900 text-indigo-500 shadow-sm focus:ring-indigo-500 transition-all cursor-pointer">
+                                <span class="ml-3 text-sm font-bold text-slate-300 group-hover:text-white transition-colors">
                                     Others
                                 </span>
                             </label>
                         </div>
 
-                        <div id="other_category_container" class="{{ old('other_category') ? '' : 'hidden' }} mt-3">
+                        <div id="other_category_container" class="{{ old('other_category') ? '' : 'hidden' }} mt-4">
                             <input type="text" name="other_category" value="{{ old('other_category') }}" 
                                 placeholder="Specify other category name"
-                                class="w-full sm:w-1/2 rounded-xl border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm bg-indigo-50/30 px-4 py-3 font-bold placeholder:font-normal">
-                            <p class="text-[10px] text-indigo-400 mt-1 italic ml-1">This will be added as a new specialization for your project.</p>
+                                class="w-full sm:w-1/2 bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm px-4 py-3 font-bold placeholder:font-normal">
+                            <p class="text-[10px] text-indigo-400 mt-2 italic ml-1">This will be added as a new specialization for your project.</p>
                         </div>
                         
                         <script>
@@ -131,21 +136,21 @@
                         @error('categories') <p class="text-red-600 text-sm mt-3 font-semibold">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 mb-2">Keywords</label>
+                    <div class="mb-8">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Keywords</label>
                         <input type="text" name="keywords" 
                                value="{{ old('keywords', is_array($project->keywords) ? implode(', ', $project->keywords) : $project->keywords) }}" 
-                               class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                               class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600"
                                placeholder="e.g., machine learning, web app, IoT">
-                        <p class="text-[10px] text-gray-400 mt-1 italic">Separate keywords with commas.</p>
-                        @error('keywords') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+                        <p class="text-[10px] text-slate-500 mt-2 italic">Separate keywords with commas.</p>
+                        @error('keywords') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Authors (Editable) --}}
-                    <div class="mb-6">
-                        <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 mb-2">Authors & Collaborators</label>
+                    <div class="mb-10">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-4">Authors & Collaborators</label>
 
-                        <div id="authors-container" class="space-y-2">
+                        <div id="authors-container" class="space-y-3">
                             @php
                                 $authors = old('authors');
                                 if (!$authors) {
@@ -159,11 +164,11 @@
                                     <input type="text" name="authors[]" value="{{ $authorName }}" 
                                            {{ $authorName === $primaryAuthor ? 'readonly' : '' }}
                                            placeholder="Full name of group member"
-                                           class="flex-1 block w-full rounded-xl border-gray-300 {{ $authorName === $primaryAuthor ? 'bg-gray-100 cursor-not-allowed' : 'focus:border-indigo-500 focus:ring-indigo-500' }} shadow-sm text-sm">
+                                           class="flex-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white {{ $authorName === $primaryAuthor ? 'opacity-50 cursor-not-allowed' : 'focus:border-indigo-500 focus:ring-indigo-500' }} shadow-sm text-sm">
                                     
                                     @if($authorName !== $primaryAuthor)
                                         <button type="button" onclick="this.closest('.author-row').remove()"
-                                                class="w-8 h-8 flex items-center justify-center rounded-full bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-all flex-shrink-0"
+                                                class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-900/20 text-red-500 hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-500/20"
                                                 title="Remove">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -176,35 +181,35 @@
 
                         {{-- Add Author button --}}
                         <button type="button" id="add-author-btn"
-                                class="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-xs font-bold uppercase tracking-wider transition-all">
+                                class="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-900/20 hover:bg-indigo-900/40 text-indigo-400 text-[10px] font-black uppercase tracking-widest transition-all border border-indigo-500/20">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
                             </svg>
                             Add Author
                         </button>
 
-                        <p class="mt-2 text-[10px] text-gray-400 italic">Verify the full names of your research group members.</p>
-                        @error('authors') <p class="text-red-600 text-sm mt-1 font-semibold">{{ $message }}</p> @enderror
-                        @error('authors.*') <p class="text-red-600 text-sm mt-1 font-semibold">{{ $message }}</p> @enderror
+                        <p class="mt-3 text-[10px] text-slate-500 italic">Verify the full names of your research group members.</p>
+                        @error('authors') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+                        @error('authors.*') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
                     {{-- Manuscript status (read-only) --}}
-                    <div class="mb-6 p-4 bg-blue-50/50 rounded-xl border-2 border-dashed border-blue-200">
-                        <label class="block font-bold text-xs uppercase tracking-widest text-blue-600 mb-2">Manuscript (PDF)</label>
+                    <div class="mb-10 p-6 bg-slate-950 rounded-2xl border-2 border-dashed border-white/5">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-blue-400 mb-4">Manuscript (PDF)</label>
                         @php $manuscript = $project->files->firstWhere('type', 'manuscript'); @endphp
                         @if($manuscript)
-                            <div class="flex items-center gap-3 bg-white rounded-lg p-3 border border-blue-100">
-                                <span class="text-xl">📄</span>
+                            <div class="flex items-center gap-4 bg-slate-900 rounded-2xl p-4 border border-white/5 shadow-inner">
+                                <span class="text-2xl">📄</span>
                                 <div class="flex-1">
-                                    <p class="text-sm font-bold text-gray-800">{{ $manuscript->filename }}</p>
-                                    <p class="text-[10px] text-gray-500 uppercase font-black tracking-widest">
+                                    <p class="text-sm font-bold text-white leading-tight mb-1">{{ $manuscript->filename }}</p>
+                                    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">
                                         {{ number_format($manuscript->size / 1048576, 2) }} MB
                                     </p>
                                 </div>
-                                <span class="bg-green-100 text-green-700 text-[9px] font-black px-2 py-1 rounded uppercase tracking-widest">Uploaded</span>
+                                <span class="bg-emerald-900/30 text-emerald-500 text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest border border-emerald-500/20">Verified</span>
                             </div>
                         @endif
-                        <p class="text-[10px] text-blue-400 mt-2 font-semibold">To replace the manuscript PDF, please cancel this submission and create a new one.</p>
+                        <p class="text-[10px] text-slate-500 mt-4 font-medium italic">To replace the manuscript PDF, please contact system administration or create a new submission.</p>
                     </div>
 
                     {{-- Submit Area --}}
@@ -212,18 +217,18 @@
 
                         @if($project->status === 'rejected')
                             {{-- Resubmission info card --}}
-                            <div class="mb-6 rounded-2xl border border-amber-200 p-5" style="background: linear-gradient(to bottom right, #fffbeb, #fff7ed);">
-                                <div class="flex items-start gap-4">
-                                    <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shadow-sm">
-                                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="mb-8 rounded-[2rem] border border-amber-500/20 p-8 bg-amber-900/10 shadow-2xl">
+                                <div class="flex items-start gap-6">
+                                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-amber-500/20 flex items-center justify-center border border-amber-500/30">
+                                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 class="text-sm font-bold text-amber-800 mb-1">Ready to resubmit?</h4>
-                                        <p class="text-xs text-amber-700 leading-relaxed">
+                                        <h4 class="text-sm font-black text-amber-400 uppercase tracking-widest mb-2">Ready to resubmit?</h4>
+                                        <p class="text-sm text-slate-300 leading-relaxed font-medium">
                                             When you click <strong>"Save & Resubmit"</strong>, the project status will reset to <strong>Processing</strong> 
-                                            and your adviser will be notified via email to review the updated submission.
+                                            and your adviser will be notified to perform a fresh verification of your updates.
                                         </p>
                                     </div>
                                 </div>
@@ -232,8 +237,8 @@
 
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <a href="{{ route('student.home') }}" 
-                               class="group inline-flex items-center gap-2 px-8 py-3.5 bg-white hover:bg-gray-50 text-gray-600 hover:text-gray-800 font-bold rounded-xl text-sm transition-all border-2 border-gray-200 hover:border-gray-300 shadow-sm hover:shadow">
-                                <svg class="w-4 h-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               class="group inline-flex items-center gap-3 px-10 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-2xl text-sm transition-all border border-white/5 shadow-lg">
+                                <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                                 </svg>
                                 Cancel
@@ -286,11 +291,11 @@
                             @endif
                         </div>
 
-                        <p class="text-center text-[10px] text-gray-400 mt-5 uppercase font-bold tracking-widest flex items-center justify-center gap-2">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        <p class="text-center text-[10px] text-slate-500 mt-8 uppercase font-black tracking-[0.2em] flex items-center justify-center gap-2">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
-                            {{ $project->status === 'rejected' ? 'Your adviser will be notified of the resubmission' : 'Changes will be saved immediately' }}
+                            {{ $project->status === 'rejected' ? 'Institutional Resubmission Protocol' : 'Verified metadata update' }}
                         </p>
                     </div>
                 </form>
@@ -320,12 +325,12 @@
             row.className = 'flex items-center gap-2 author-row';
             row.innerHTML = `
                 <input type="text" name="authors[]" value="" placeholder="Full name of group member"
-                       class="flex-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                       class="flex-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm">
                 <button type="button" onclick="this.closest('.author-row').remove()"
-                        class="w-8 h-8 flex items-center justify-center rounded-full bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition-all flex-shrink-0"
+                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-900/20 text-red-500 hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-500/20"
                         title="Remove">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>`;
             container.appendChild(row);

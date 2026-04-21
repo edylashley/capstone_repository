@@ -34,6 +34,25 @@ class DashboardController extends Controller
             'open_tickets' => SupportTicket::where('status', 'pending')->count(),
         ];
 
+        // Check Security Engine Status
+        $securityStatus = 'offline';
+        if (config('repository.filescan_enabled')) {
+            $clamscan = config('repository.clamscan_path');
+            // Basic path resolution (check if it exists)
+            if (file_exists($clamscan)) {
+                if (str_contains(strtolower($clamscan), 'clamdscan')) {
+                    // Ping the daemon to see if it's responding
+                    $cmd = '"' . $clamscan . '" --ping 3 2>&1';
+                    @exec($cmd, $output, $exit);
+                    $securityStatus = ($exit === 0) ? 'online' : 'offline';
+                } else {
+                    // Standalone clamscan doesn't need a service
+                    $securityStatus = 'ready';
+                }
+            }
+        }
+        $stats['security_status'] = $securityStatus;
+
         return view('admin.dashboard', [
             'projects' => $projects,
             'stats' => $stats,

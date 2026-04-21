@@ -13,7 +13,6 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     public const ROLE_STUDENT = 'student';
-    public const ROLE_ADVISER = 'adviser';
     public const ROLE_ADMIN = 'admin';
 
     /**
@@ -62,10 +61,6 @@ class User extends Authenticatable
         return $this->role === self::ROLE_ADMIN;
     }
 
-    public function isAdviser(): bool
-    {
-        return $this->role === self::ROLE_ADVISER;
-    }
 
     public function isStudent(): bool
     {
@@ -73,10 +68,6 @@ class User extends Authenticatable
     }
 
     /* Relations */
-    public function advisedProjects()
-    {
-        return $this->hasMany(Project::class, 'adviser_id');
-    }
 
     public function authoredProjects()
     {

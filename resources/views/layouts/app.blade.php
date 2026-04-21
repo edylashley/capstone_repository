@@ -29,11 +29,22 @@
                 width: 100% !important;
             }
         }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased bg-slate-50 text-slate-900"
+<body class="font-sans antialiased bg-slate-950 text-slate-200"
     x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
     <div class="min-h-screen flex flex-col lg:flex-row">
         @auth
@@ -66,11 +77,11 @@
 
             <!-- Page Heading -->
             @if(isset($header) || View::hasSection('header'))
-                <header class="bg-gray-800 shadow-sm border-b border-gray-700">
+                <header class="bg-slate-900 shadow-2xl border-b border-white/5 relative z-30">
                     <div class="py-4 md:py-6 px-4 md:px-8 text-white flex items-center gap-4">
                         <!-- Toggle Button (Visible only when sidebar is collapsed on desktop) -->
                         <button @click="sidebarCollapsed = false" x-show="sidebarCollapsed" x-cloak
-                            class="hidden lg:block p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors focus:outline-none"
+                            class="hidden lg:block p-2 rounded-lg bg-slate-800 hover:bg-slate-700 transition-colors focus:outline-none"
                             title="Show Sidebar">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -116,25 +127,25 @@
                 x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="ease-in duration-200"
                 x-transition:leave-start="opacity-100 scale-100 translate-y-0"
                 x-transition:leave-end="opacity-0 scale-90 translate-y-4"
-                class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 flex flex-col items-center text-center">
+                class="relative bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-8 flex flex-col items-center text-center border border-white/10">
                 {{-- Animated Check Circle --}}
-                <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-5">
+                <div class="w-20 h-20 rounded-full bg-green-900/40 flex items-center justify-center mb-5 border border-green-500/30">
                     <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
 
                 {{-- Title --}}
-                <h3 class="text-xl font-black text-gray-800 mb-2">Success!</h3>
+                <h3 class="text-xl font-black text-white mb-2">Success!</h3>
 
                 {{-- Message --}}
-                <p class="text-sm text-gray-600 leading-relaxed mb-6">
+                <p class="text-sm text-slate-400 leading-relaxed mb-6">
                     {{ session('success') ?? session('status') }}
                 </p>
 
                 {{-- OK Button --}}
                 <button @click="open = false"
-                    class="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-200 hover:shadow-green-300 transition-all transform hover:-translate-y-0.5 uppercase text-sm tracking-wider">
+                    class="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg shadow-green-900/20 hover:shadow-green-900/40 transition-all transform hover:-translate-y-0.5 uppercase text-sm tracking-wider">
                     OK
                 </button>
             </div>
@@ -181,36 +192,35 @@
                 x-transition:leave-end="opacity-0 translate-y-8 sm:translate-y-0 sm:scale-95"
                 class="fixed inset-0 z-[9992] flex items-center justify-center p-4 sm:p-6 pointer-events-none">
                 <div
-                    class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden pointer-events-auto flex flex-col max-h-full">
+                    class="bg-slate-900 rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden pointer-events-auto flex flex-col max-h-full border border-white/10">
                     {{-- Header --}}
                     <div
-                        class="bg-gradient-to-r from-slate-900 to-slate-950 p-6 text-white flex justify-between items-center gap-4 shrink-0">
-                        <div class="flex items-center gap-3 pr-2">
+                        class="bg-gradient-to-br from-slate-800 to-slate-900 p-8 text-white flex justify-between items-center gap-4 shrink-0 border-b border-white/5">
+                        <div class="flex items-center gap-4 pr-2">
                             <div
-                                class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                class="w-12 h-12 bg-indigo-500/20 rounded-2xl flex items-center justify-center border border-indigo-500/30">
+                                <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                                     </path>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-black text-lg tracking-tight">System Support</h3>
-                                <p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Report an Issue or
-                                    Contact Admin</p>
+                                <h3 class="font-black text-xl tracking-tight">System Support</h3>
+                                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-0.5">Verified Communication Channel</p>
                             </div>
                         </div>
                         <button @click="supportOpen = false"
-                            class="text-white/60 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-lg p-2">
+                            class="text-slate-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 rounded-xl p-2.5">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                     d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
                     </div>
 
                     {{-- Form Body & Replies --}}
-                    <div class="p-6 overflow-y-auto custom-scrollbar">
+                    <div class="p-8 overflow-y-auto no-scrollbar">
                         @auth
                             @php
                                 $latestReply = \App\Models\SupportTicket::where('user_id', auth()->id())
@@ -220,28 +230,29 @@
                                     ->first();
                             @endphp
                             @if($latestReply)
-                                <div class="mb-6 bg-green-50 rounded-xl border border-green-200 overflow-hidden relative">
-                                    <div class="absolute top-0 right-0 pt-2 pr-3">
+                                <div class="mb-8 bg-emerald-500/10 rounded-[1.5rem] border border-emerald-500/20 overflow-hidden relative shadow-lg">
+                                    <div class="absolute top-0 right-0 pt-3 pr-4">
                                         @if($latestReply->expires_at)
-                                            <span class="text-[9px] font-bold text-green-600/60 uppercase tracking-widest">
-                                                Auto-deletes {{ $latestReply->expires_at->diffForHumans() }}
+                                            <span class="text-[9px] font-black text-emerald-500/40 uppercase tracking-[0.2em]">
+                                                Terminating {{ $latestReply->expires_at->diffForHumans() }}
                                             </span>
                                         @endif
                                     </div>
-                                    <div class="p-4 border-b border-green-200/50">
-                                        <div class="flex items-center gap-2 mb-1">
-                                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <h4 class="font-black text-sm text-green-800">Feedback from Admin</h4>
+                                    <div class="p-6">
+                                        <div class="flex items-center gap-3 mb-3">
+                                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                            <h4 class="font-black text-xs text-emerald-400 uppercase tracking-widest">Admin Resolution</h4>
                                         </div>
-                                        <p class="text-xs text-green-600 font-semibold mb-2">Regarding: {{ $latestReply->subject }}
-                                        </p>
-                                        <div class="bg-white/60 p-3 rounded-lg">
-                                            <p class="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">
-                                                {{ $latestReply->admin_reply }}
+                                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3 px-1">Sub: {{ $latestReply->subject }}</p>
+                                        <div class="bg-slate-950/50 p-4 rounded-xl border border-white/5 shadow-inner">
+                                            <p class="text-sm text-slate-200 leading-relaxed font-medium italic">
+                                                "{{ $latestReply->admin_reply }}"
                                             </p>
                                         </div>
                                     </div>
@@ -249,53 +260,49 @@
                             @endif
                         @endauth
 
-                        <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-5">
+                        <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6">
                             @csrf
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Issue Category <span
-                                        class="text-red-500">*</span></label>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Issue Category</label>
                                 <select name="category" required
-                                    class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
-                                    <option value="" disabled selected>Select the type of issue...</option>
-                                    <option value="bug">System Bug / Error</option>
-                                    <option value="correction">Request Record Correction</option>
-                                    <option value="account">Account / Login Issue</option>
-                                    <option value="general">General Question</option>
+                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner">
+                                    <option value="" disabled selected class="bg-slate-900">Select category...</option>
+                                    <option value="bug" class="bg-slate-900">System Bug / Error</option>
+                                    <option value="correction" class="bg-slate-900">Request Record Correction</option>
+                                    <option value="account" class="bg-slate-900">Account / Login Issue</option>
+                                    <option value="general" class="bg-slate-900">General Question</option>
                                 </select>
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Subject <span
-                                        class="text-red-500">*</span></label>
-                                <input type="text" name="subject" required placeholder="Brief title of your issue"
-                                    class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Subject</label>
+                                <input type="text" name="subject" required placeholder="Project verification issue"
+                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner placeholder:text-slate-600">
                             </div>
 
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-1">Details <span
-                                        class="text-red-500">*</span></label>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Protocol Details</label>
                                 <textarea name="message" rows="4" required
-                                    placeholder="Please provide specific details so the admin can assist you efficiently..."
-                                    class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm resize-none"></textarea>
+                                    placeholder="Provide detailed context for administrative review..."
+                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner resize-none placeholder:text-slate-600 leading-relaxed"></textarea>
                             </div>
 
                             @if(!auth()->check())
                                 <div>
-                                    <label class="block text-sm font-bold text-gray-700 mb-1">Your Email <span
-                                            class="text-red-500">*</span></label>
-                                    <input type="email" name="email" required placeholder="We need this to reply to you"
-                                        class="w-full rounded-xl border-gray-300 focus:border-slate-500 focus:ring-slate-500 shadow-sm text-sm">
+                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Contact Email</label>
+                                    <input type="email" name="email" required placeholder="Institutional email"
+                                        class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner placeholder:text-slate-600">
                                 </div>
                             @endif
 
-                            <div class="pt-2">
+                            <div class="pt-4">
                                 <button type="submit"
-                                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-slate-900 hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors">
-                                    Submit Ticket
+                                    class="w-full flex justify-center py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all shadow-xl shadow-indigo-900/40 transform hover:-translate-y-1 active:scale-[0.98]">
+                                    Transmit Ticket
                                 </button>
                                 <p
-                                    class="text-[10px] text-center text-gray-400 mt-3 font-semibold uppercase tracking-wider">
-                                    Admins typically respond within 24-48 hours.
+                                    class="text-[9px] text-center text-slate-500 mt-5 font-black uppercase tracking-widest opacity-60">
+                                    Queue Priority: Standard Institutional Response
                                 </p>
                             </div>
                         </form>

@@ -1,19 +1,21 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 items-start md:items-center">
-            <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">System Activity Logs</h2>
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black mt-1">Audit trail and system event tracking</p>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Integrated Header --}}
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
+                <div>
+                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">System Activity</h2>
+                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Audit Trail & Security Event Tracking</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-inner border border-white/5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Dashboard
+                    </a>
+                </div>
             </div>
-            <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600 whitespace-nowrap w-fit">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Dashboard
-            </a>
-        </div>
-    </x-slot>
-
-    <div class="py-4">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-bold mb-4">System Timeline</h3>
@@ -88,6 +90,11 @@
                                                         'support_ticket_created' => 'Submitted a support ticket: "' . ($meta['subject'] ?? 'Unknown') . '"',
                                                         'support_ticket_status_changed' => 'Changed status of support ticket: "' . ($meta['subject'] ?? 'Unknown') . '"',
                                                         'support_ticket_deleted' => 'Deleted support ticket: "' . ($meta['subject'] ?? 'Unknown') . '"',
+                                                        'profile_updated' => 'Updated their personal profile and contact information',
+                                                        'account_self_deleted' => 'Permanently deleted their own account from the system',
+                                                        'project_viewed' => 'Opened the detailed view for project: "' . ($meta['title'] ?? 'Unknown') . '"',
+                                                        'file_viewed' => 'Viewed/Streamed file: "' . ($meta['filename'] ?? 'Unknown') . '"',
+                                                        'file_downloaded' => 'Downloaded a local copy of: "' . ($meta['filename'] ?? 'Unknown') . '"',
                                                         default => str_replace('_', ' ', $log->action)
                                                     };
                                                 @endphp

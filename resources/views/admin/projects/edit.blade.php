@@ -58,15 +58,9 @@
 
                             <!-- Adviser -->
                             <div class="col-span-2">
-                                <x-input-label for="adviser_id" :value="__('Adviser')" class="text-white"/>
-                                <select id="adviser_id" name="adviser_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    @foreach($advisers as $adviser)
-                                        <option value="{{ $adviser->id }}" {{ $project->adviser_id === $adviser->id ? 'selected' : '' }}>
-                                            {{ $adviser->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <x-input-error :messages="$errors->get('adviser_id')" class="mt-2" />
+                                <x-input-label for="adviser_name" :value="__('Adviser Name')" class="text-white"/>
+                                <x-text-input id="adviser_name" class="block mt-1 w-full dark:bg-gray-900" type="text" name="adviser_name" :value="old('adviser_name', $project->adviser_name ?? $project->adviser?->name)" required />
+                                <x-input-error :messages="$errors->get('adviser_name')" class="mt-2" />
                             </div>
 
                             <!-- Abstract -->

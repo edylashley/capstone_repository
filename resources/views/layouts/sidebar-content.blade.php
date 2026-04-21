@@ -11,7 +11,7 @@
 </div>
 
 <!-- Navigation -->
-<nav class="flex-1 flex flex-col gap-1 py-4 px-3 overflow-y-auto custom-scrollbar">
+<nav class="flex-1 flex flex-col gap-1 py-4 px-3 overflow-y-auto custom-scrollbar no-scrollbar">
     <!-- Public Access -->
     <a href="{{ route('projects.index') }}"
         class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('projects.index') ? 'bg-slate-800 shadow-lg text-white' : 'text-slate-400' }}">
@@ -40,7 +40,7 @@
             $isPastDeadline = $deadlineStr && \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($deadlineStr));
             $hasSubmitted = auth()->check() && auth()->user()->isStudent() && auth()->user()->authoredProjects()->exists();
         @endphp
-        @if(\App\Models\Setting::get('submissions_open', '1') == '1' && !$isPastDeadline && !$hasSubmitted)
+        @if(\App\Models\Setting::get('submissions_open', '1') == '1' && !$isPastDeadline)
             <a href="{{ route('projects.create') }}"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('projects.create') ? 'bg-slate-800 shadow-lg text-white' : 'text-slate-400' }}">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,27 +65,6 @@
         </a>
     @endif
 
-    <!-- Faculty Specific -->
-    @if(auth()->user()->isAdviser())
-        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-slate-500">Mentorship</div>
-        <a href="{{ route('faculty.dashboard') }}"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('faculty.dashboard') ? 'bg-slate-800 shadow-lg text-white' : 'text-slate-400' }}">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222">
-                </path>
-            </svg>
-            <span class="font-bold tracking-tight">My Dashboard</span>
-        </a>
-        <a href="{{ route('faculty.review') }}"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('faculty.review') ? 'bg-slate-800 shadow-lg text-white' : 'text-slate-400' }}">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="font-bold tracking-tight">Verification Queue</span>
-        </a>
-    @endif
 
     <!-- Admin Specific -->
     @if(auth()->user()->isAdmin())

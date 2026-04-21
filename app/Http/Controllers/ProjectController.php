@@ -87,10 +87,23 @@ class ProjectController extends Controller
             }
         }
 
-        // Search by category
-        if ($request->filled('specialization')) {
-            $query->whereHas('categories', function ($q) use ($request) {
-                $q->where('name', $request->query('specialization'));
+        // Search by category (Dropdown + Text Search)
+        if ($request->filled('specialization') || $request->filled('category_text')) {
+            $catDropdown = $request->query('specialization');
+            $catText = $request->query('category_text');
+
+            $query->where(function($q) use ($catDropdown, $catText) {
+                if ($catDropdown) {
+                    $q->whereHas('categories', function ($sub) use ($catDropdown) {
+                        $sub->where('name', $catDropdown);
+                    })->orWhere('custom_category', 'like', '%'.$catDropdown.'%');
+                }
+                
+                if ($catText) {
+                    $q->whereHas('categories', function ($sub) use ($catText) {
+                        $sub->where('name', 'like', '%'.$catText.'%');
+                    })->orWhere('custom_category', 'like', '%'.$catText.'%');
+                }
             });
         }
 
@@ -146,25 +159,17 @@ class ProjectController extends Controller
             return redirect()->route('student.home')->withErrors(['submissions' => 'Submissions are currently closed or the deadline has passed.']);
         }
 
-        if (auth()->user()->isStudent() && auth()->user()->authoredProjects()->exists()) {
-            return redirect()->route('student.home')->withErrors(['submissions' => 'You have already submitted a project. Students are limited to one project submission.']);
-        }
-
-        $advisers = \App\Models\User::where('role', \App\Models\User::ROLE_ADVISER)->active()->get();
-        
-        // Get all active students
+        // Get all active students for author selection
         $students = \App\Models\User::where('role', \App\Models\User::ROLE_STUDENT)->active()->get();
 
-        // If current user is a student, ensure they are in the list regardless of active scope (for robustness)
         if (auth()->user()->isStudent() && !$students->contains(auth()->user())) {
             $students->push(auth()->user());
         }
 
-        // Fetch dynamic categories and programs
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
 
-        return view('projects.create', compact('advisers', 'students', 'categories', 'programs'));
+        return view('projects.create', compact('students', 'categories', 'programs'));
     }
 
     /**
@@ -175,14 +180,10 @@ class ProjectController extends Controller
         $deadlineStr = \App\Models\Setting::get('submission_deadline');
         $isPastDeadline = $deadlineStr && \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($deadlineStr));
 
-        if (auth()->user()->isStudent() && auth()->user()->authoredProjects()->exists()) {
-            return redirect()->route('student.home')->withErrors(['submissions' => 'You have already submitted a project. Students are limited to one project submission.']);
-        }
-
         $data = $request->validated();
 
         // Generate slug if not provided and ensure uniqueness
-        $slug = $data['slug'] ?? Str::slug($data['title']);
+        $slug = $data['slug'] ?? \Illuminate\Support\Str::slug($data['title']);
         $originalSlug = $slug;
         $i = 1;
         while (Project::where('slug', $slug)->exists()) {
@@ -194,23 +195,17 @@ class ProjectController extends Controller
             'slug' => $slug,
             'abstract' => $data['abstract'] ?? null,
             'year' => $data['year'],
-            'adviser_id' => $data['adviser_id'],
+            'adviser_name' => $data['adviser_name'],
+            'adviser_id' => null, // Explicitly null as we are moving away from adviser roles
             'status' => 'pending',
             'program' => $data['program'] ?? 'CSIT',
-            'specialization' => null, // Deprecated in favor of many-to-many
+            'specialization' => $request->other_category ?? null, 
+            'custom_category' => $request->other_category ?? null,
             'authors_list' => implode(', ', array_map('trim', $data['authors'])),
         ]);
 
         // Sync multiple categories
         $categoryIds = $request->categories ?? [];
-        if ($request->filled('other_category')) {
-            $newCat = \App\Models\Category::firstOrCreate([
-                'name' => ucwords(strtolower(trim($request->other_category)))
-            ]);
-            if (!in_array($newCat->id, $categoryIds)) {
-                $categoryIds[] = $newCat->id;
-            }
-        }
         $project->categories()->sync($categoryIds);
 
         // Attach ONLY the submitting author so they retain ownership to view/edit their submission
@@ -511,10 +506,10 @@ class ProjectController extends Controller
         }
 
         if ($request->wantsJson()) {
-            return response()->json(['message' => 'Project submitted and pending adviser verification', 'project_id' => $project->id], 201);
+            return response()->json(['message' => 'Project submitted and pending administrator review', 'project_id' => $project->id], 201);
         }
 
-        return redirect()->route('student.home')->with('success', 'Project submitted successfully and is pending adviser verification.');
+        return redirect()->route('student.home')->with('success', 'Project submitted successfully and is pending administrator review.');
     }
 
     /**
@@ -527,9 +522,24 @@ class ProjectController extends Controller
         // Access rules: published projects are public; unpublished require authorization
         if ($project->status !== 'published') {
             $user = auth()->user();
-            if (! $user || (! $user->isAdmin() && ! $user->isAdviser() && ! $project->authors->contains($user))) {
+            if (! $user || (! $user->isAdmin() && ! $project->authors->contains($user))) {
                 abort(403);
             }
+        }
+
+        // Log the view if user is logged in
+        if (auth()->check()) {
+            ActivityLog::create([
+                'user_id' => auth()->id(),
+                'action' => 'project_viewed',
+                'target_type' => 'project',
+                'target_id' => $project->id,
+                'ip' => request()->ip(),
+                'meta' => [
+                    'title' => $project->title,
+                    'status' => $project->status
+                ]
+            ]);
         }
 
         // If request expects JSON, return JSON
@@ -757,5 +767,87 @@ class ProjectController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Log and download a project file.
+     */
+    public function downloadFile(ProjectFile $file)
+    {
+        $fullPath = Storage::disk('public')->path($file->path);
+        abort_unless(file_exists($fullPath), 404);
+
+        if ($file->type === 'attachment') {
+            $user = auth()->user();
+            $project = $file->project;
+            $isOwner = $project && $project->authors->contains($user);
+            $isPrivileged = $user->isAdmin();
+
+            abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
+        }
+
+        // Log download
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'file_downloaded',
+            'target_type' => 'project_file',
+            'target_id' => $file->id,
+            'ip' => request()->ip(),
+            'meta' => [
+                'filename' => $file->filename,
+                'type' => $file->type,
+                'project_id' => $file->project_id
+            ]
+        ]);
+
+        return response()->download($fullPath, $file->filename);
+    }
+
+    /**
+     * Log and stream a project file.
+     */
+    public function viewFile(ProjectFile $file)
+    {
+        $fullPath = Storage::disk('public')->path($file->path);
+        abort_unless(file_exists($fullPath), 404);
+
+        if ($file->type === 'attachment') {
+            $user = auth()->user();
+            $project = $file->project;
+            $isOwner = $user && $project && ($project->authors->contains($user) || $project->adviser_id == $user->id);
+            $isPrivileged = $user && $user->isAdmin();
+
+            abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
+        }
+
+        // Log view
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'file_viewed',
+            'target_type' => 'project_file',
+            'target_id' => $file->id,
+            'ip' => request()->ip(),
+            'meta' => [
+                'filename' => $file->filename,
+                'type' => $file->type,
+                'project_id' => $file->project_id,
+                'guest' => !auth()->check()
+            ]
+        ]);
+
+        // Force PDF to be inline for better browser/mobile support (Streaming Option)
+        if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) === 'pdf') {
+            return response()->stream(function () use ($fullPath) {
+                readfile($fullPath);
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline',
+                'Content-Length' => filesize($fullPath),
+                'X-Content-Type-Options' => 'nosniff',
+                'Cache-Control' => 'private, max-age=0, must-revalidate',
+            ]);
+        }
+
+        return response()->file($fullPath);
     }
 }

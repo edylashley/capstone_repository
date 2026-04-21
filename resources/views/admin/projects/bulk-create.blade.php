@@ -80,14 +80,12 @@
 
     <script>
         // ── Template data ──────────────────────────────────────────────────────
-        const advisers = @json($advisers->map(fn($a) => ['id' => $a->id, 'name' => $a->name]));
         const categories = @json($categories->map(fn($c) => ['id' => $c->id, 'name' => $c->name]));
         const programs = @json($programs->map(fn($p) => ['abbreviation' => $p->abbreviation, 'name' => $p->name]));
         let projectIndex = 0;
 
         // ── Build project card HTML ────────────────────────────────────────────
         function createProjectCard(idx) {
-            const adviserOptions = advisers.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
             const programOptions = programs.map(p => `<option value="${p.abbreviation}">${p.abbreviation}</option>`).join('');
             const categoryCheckboxes = categories.map(c => `
                 <label class="flex items-center gap-2 p-2 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors group">
@@ -126,16 +124,9 @@
                             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Year <span class="text-red-500">*</span></label>
                             <input type="number" name="projects[${idx}][year]" value="${new Date().getFullYear()}" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
                         </div>
-                        <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Adviser</label>
-                            <select name="projects[${idx}][adviser_id]" class="adviser-select mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" onchange="toggleAdviserOther(this, ${idx})">
-                                <option value="">-- Not listed --</option>
-                                ${adviserOptions}
-                            </select>
-                        </div>
-                        <div id="adviser-other-${idx}">
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Other Adviser</label>
-                            <input type="text" name="projects[${idx}][adviser_name]" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                        <div class="col-span-2">
+                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Adviser Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="projects[${idx}][adviser_name]" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
                         </div>
                         <div>
                             <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Program <span class="text-red-500">*</span></label>
@@ -183,16 +174,6 @@
             return card;
         }
 
-        // ── Toggle adviser other input ─────────────────────────────────────────
-        function toggleAdviserOther(select, idx) {
-            const otherDiv = document.getElementById(`adviser-other-${idx}`);
-            if (select.value === '') {
-                otherDiv.classList.remove('hidden');
-            } else {
-                otherDiv.classList.add('hidden');
-                otherDiv.querySelector('input').value = '';
-            }
-        }
 
         // ── Add project ────────────────────────────────────────────────────────
         function addProject() {

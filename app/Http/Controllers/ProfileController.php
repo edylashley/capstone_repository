@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\ActivityLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,13 +27,27 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        $user->save();
+
+        // Log profile update
+        ActivityLog::create([
+            'user_id' => $user->id,
+            'action' => 'profile_updated',
+            'target_type' => 'user',
+            'target_id' => $user->id,
+            'ip' => $request->ip(),
+            'meta' => [
+                'name' => $user->name,
+                'email' => $user->email
+            ]
+        ]);
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
@@ -47,10 +62,24 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
+        $userId = $user->id;
+        $userName = $user->name;
 
         Auth::logout();
 
         $user->delete();
+
+        // Log self-deletion
+        ActivityLog::create([
+            'user_id' => $userId, // Use ID even though account is deleted
+            'action' => 'account_self_deleted',
+            'target_type' => 'user',
+            'target_id' => $userId,
+            'ip' => $request->ip(),
+            'meta' => [
+                'name' => $userName
+            ]
+        ]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
