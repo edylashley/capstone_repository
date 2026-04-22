@@ -8,7 +8,7 @@ class FileScanner
      * Run signature checks, manual heuristics, and ClamAV if available.
      * Returns array: ['ok' => bool, 'notes' => string]
      */
-    public function scan(string $path): array
+    public function scan(string $path, string $extractedText = ''): array
     {
         // 1. Basic properties
         $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
@@ -39,27 +39,39 @@ class FileScanner
         }
 
         // ═══════════════════════════════════════════════════════════════
-        // LAYER 3: Malicious Pattern Scanning
+        // LAYER 3: Malicious Pattern Scanning (Top 10 Heuristics)
         // ═══════════════════════════════════════════════════════════════
         $contents = file_get_contents($path);
+        $extractedText = '';
+
+        // If it's a PDF, extract text to catch threats hidden by formatting
+        if ($extension === 'pdf') {
+            $pdftotext = $this->which('pdftotext');
+            if ($pdftotext) {
+                $extractedText = (string) shell_exec("\"$pdftotext\" -q -layout " . escapeshellarg($path) . " -");
+            }
+        }
+
+        $searchSpace = $contents . "\n" . $extractedText;
 
         $signatures = [
-            //'EICAR Test Virus' => ['exact' => 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'],
-            'PHP Web Shell (eval)' => ['contains' => 'eval('],
-            'PHP Web Shell (system)' => ['contains' => 'system('],
-            'PHP Web Shell (exec)' => ['contains' => 'exec('],
-            'JavaScript eval injection' => ['contains' => 'eval('],
+            'PHP Web Shell (eval+base64)' => ['contains' => 'eval(base64_decode'],
+            'PHP Web Shell (system+input)' => ['contains' => 'system($_'],
+            'PHP Web Shell (exec+input)' => ['contains' => 'exec($_'],
+            'PHP Web Shell (shell_exec+input)' => ['contains' => 'shell_exec($_'],
+            'JavaScript Alert Prank' => ['contains' => '<script>alert('],
+            'JavaScript Document Cookie' => ['contains' => 'document.cookie'],
             'PowerShell Download Cradle' => ['regex' => '/powershell[^;]*\-[eE].*downloadstring/i'],
         ];
 
         foreach ($signatures as $name => $sig) {
-            if (isset($sig['exact']) && strpos($contents, $sig['exact']) !== false) {
+            if (isset($sig['exact']) && strpos($searchSpace, $sig['exact']) !== false) {
                 return ['ok' => false, 'notes' => "Threat detected: {$name}."];
             }
-            if (isset($sig['contains']) && stripos($contents, $sig['contains']) !== false) {
+            if (isset($sig['contains']) && stripos($searchSpace, $sig['contains']) !== false) {
                 return ['ok' => false, 'notes' => "Threat detected: {$name}."];
             }
-            if (isset($sig['regex']) && preg_match($sig['regex'], $contents)) {
+            if (isset($sig['regex']) && preg_match($sig['regex'], $searchSpace)) {
                 return ['ok' => false, 'notes' => "Threat detected: {$name}."];
             }
         }
@@ -72,7 +84,7 @@ class FileScanner
             $which = $this->which($clamscan);
             if (!$which) {
                 return [
-                    'ok' => false, 
+                    'ok' => false,
                     'notes' => "ClamAV not found at path: {$clamscan}",
                     'error_type' => 'system'
                 ];
@@ -88,18 +100,18 @@ class FileScanner
 
             if ($exit !== 0) {
                 $rawNotes = implode('\n', $output);
-                
+
                 // Sanitize: Replace the full path with just the filename
                 // Handle both forward and backward slashes for Windows/Linux consistency
                 $sanitizedNotes = str_replace($path, basename($path), $rawNotes);
                 $winPath = str_replace('/', '\\', $path);
                 $sanitizedNotes = str_replace($winPath, basename($winPath), $sanitizedNotes);
-                
+
                 // ClamAV Exit Codes: 0 = Clean, 1 = Virus Found, 2 = Error occurred
                 $errorType = ($exit === 1) ? 'threat' : 'system';
 
                 return [
-                    'ok' => false, 
+                    'ok' => false,
                     'notes' => trim($sanitizedNotes),
                     'error_type' => $errorType
                 ];
@@ -144,7 +156,11 @@ class FileScanner
         }
 
         $checker = PHP_OS_FAMILY === 'Windows' ? 'where' : 'which';
-        $path = trim((string) shell_exec($checker . ' ' . escapeshellarg($cmd)));
+        $output = shell_exec($checker . ' ' . escapeshellarg($cmd));
+        if (!$output) return null;
+
+        // 'where' on Windows can return multiple lines; take the first one
+        $path = trim(explode("\n", $output)[0]);
         return $path !== '' ? $path : null;
     }
 }

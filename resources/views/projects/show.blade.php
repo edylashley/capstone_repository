@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-start sm:items-center gap-4">
-            <h2 class="font-semibold text-xl text-white leading-tight flex-1 break-words opacity-90">{{ $project->title }}</h2>
+            <h2 class="font-semibold text-xl text-white leading-tight flex-1 break-words opacity-90 italic">Project Manuscript</h2>
             <a href="{{ url()->previous() }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600 shrink-0 whitespace-nowrap mt-1 sm:mt-0">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Go Back
@@ -16,10 +16,11 @@
                 <!-- Metadata Side -->
                 <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if(optional(auth()->user())->isAdmin()) lg:w-1/3 lg:min-w-[350px] @else w-full @endif border border-white/5 h-fit">
                     <div class="mb-4 space-y-2">
-                        <div class="flex justify-between items-start border-b border-white/5 pb-4 mb-4">
+                        <div class="flex justify-between items-start border-b border-white/5 pb-6 mb-6">
                             <div>
-                                <h3 class="text-xl font-black uppercase tracking-tight text-white leading-none mb-1">Project Details</h3>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">ID: #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
+                                <h3 class="text-xs font-black uppercase tracking-widest text-indigo-500 mb-3">Project Title</h3>
+                                <h1 class="text-2xl font-black text-white leading-tight mb-3">{{ $project->title }}</h1>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Digital Record #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>
                         </div>
 
@@ -255,11 +256,11 @@
                                 </div>
                             </div>
 
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+                            <script src="{{ asset('assets/vendor/pdfjs/pdf.min.js') }}"></script>
                             <script>
                                 // Mobile PDF Engine
                                 const m_pdfjsLib = window['pdfjs-dist/build/pdf'];
-                                m_pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                                m_pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('assets/vendor/pdfjs/pdf.worker.min.js') }}";
 
                                 let m_pdfDoc = null, m_pageNum = 1, m_pageRendering = false;
                                 const m_canvas = document.getElementById('mobile-pdf-canvas');

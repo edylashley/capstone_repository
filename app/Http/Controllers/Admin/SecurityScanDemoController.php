@@ -162,174 +162,63 @@ class SecurityScanDemoController extends Controller
             'description' => 'Search file contents for known malware signatures, exploit patterns, and dangerous payloads',
             'status' => 'pass',
             'details' => [],
-            'algorithm' => 'Scan binary content for: EICAR test string, PHP shells (eval/exec/system/passthru), JavaScript injection (document.write, eval), macro exploits (AutoOpen, Document_Open), embedded executables.',
+            'algorithm' => 'Scan binary content and extracted text for: EICAR test string, PHP shells (eval/exec/system), JavaScript injection, Obfuscated code, and PowerShell download cradles.',
         ];
 
         $contents = file_get_contents($fullPath);
-        $contentLower = strtolower($contents);
-        $patternsChecked = 0;
-        $patternsMatched = [];
+        
+        // Extract text if PDF for this step's demo too
+        $extractedText = '';
+        if ($extension === 'pdf') {
+            $pdftotext = $this->which('pdftotext');
+            if ($pdftotext) {
+                $extractedText = (string)shell_exec("\"$pdftotext\" -q -layout " . escapeshellarg($fullPath) . " -");
+            }
+        }
+        $searchSpace = $contents . "\n" . $extractedText;
 
-        // Pattern library
         $signatures = [
-            // EICAR Standard Anti-Malware Test File
-            /*
-            [
-                'name' => 'EICAR Test Virus',
-                'pattern' => 'X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*',
-                'type' => 'exact',
-                'severity' => 'malicious',
-                'description' => 'EICAR standard test file — industry-standard malware detection test',
-            ],
-            */
-
-            // PHP Remote Shells
-            [
-                'name' => 'PHP Shell (eval+base64)',
-                'pattern' => 'eval(base64_decode(',
-                'type' => 'contains_ci',
-                'severity' => 'malicious',
-                'description' => 'Obfuscated PHP code execution — common in webshells',
-            ],
-            [
-                'name' => 'PHP Shell (system)',
-                'pattern' => '<?php system(',
-                'type' => 'contains_ci',
-                'severity' => 'malicious',
-                'description' => 'PHP system() call — allows arbitrary command execution',
-            ],
-            [
-                'name' => 'PHP Shell (exec)',
-                'pattern' => '<?php exec(',
-                'type' => 'contains_ci',
-                'severity' => 'malicious',
-                'description' => 'PHP exec() call — allows arbitrary command execution',
-            ],
-            [
-                'name' => 'PHP Shell (passthru)',
-                'pattern' => 'passthru(',
-                'type' => 'contains_ci',
-                'severity' => 'malicious',
-                'description' => 'PHP passthru() — direct command execution with output',
-            ],
-            [
-                'name' => 'PHP Shell (shell_exec)',
-                'pattern' => 'shell_exec(',
-                'type' => 'contains_ci',
-                'severity' => 'warning',
-                'description' => 'PHP shell_exec() — may allow command injection',
-            ],
-            // JavaScript Injection
-            [
-                'name' => 'JavaScript eval()',
-                'pattern' => '<script>eval(',
-                'type' => 'contains_ci',
-                'severity' => 'malicious',
-                'description' => 'Embedded JavaScript with eval() — XSS/injection vector',
-            ],
-            [
-                'name' => 'JavaScript document.write',
-                'pattern' => '<script>document.write(',
-                'type' => 'contains_ci',
-                'severity' => 'warning',
-                'description' => 'Embedded JavaScript document.write — potential XSS',
-            ],
-            // Office Macro Exploits
-            [
-                'name' => 'VBA Macro AutoOpen',
-                'pattern' => 'Sub AutoOpen()',
-                'type' => 'contains_ci',
-                'severity' => 'warning',
-                'description' => 'VBA macro auto-execute on document open',
-            ],
-            [
-                'name' => 'VBA Macro Document_Open',
-                'pattern' => 'Sub Document_Open()',
-                'type' => 'contains_ci',
-                'severity' => 'warning',
-                'description' => 'VBA macro auto-execute on document open',
-            ],
-            [
-                'name' => 'PowerShell Download Cradle',
-                'pattern' => 'powershell',
-                'type' => 'regex',
-                'regex' => '/powershell[^;]*\-[eE].*downloadstring/i',
-                'severity' => 'malicious',
-                'description' => 'PowerShell download cradle — typically used for malware delivery',
-            ],
-            // SQL Injection (in uploaded text files)
-            [
-                'name' => 'SQL Injection Pattern',
-                'pattern' => "'; DROP TABLE",
-                'type' => 'contains_ci',
-                'severity' => 'warning',
-                'description' => 'SQL injection attempt pattern detected',
-            ],
-            // Embedded PE binary
-            [
-                'name' => 'Embedded Windows Executable',
-                'pattern' => 'This program cannot be run in DOS mode',
-                'type' => 'contains',
-                'severity' => 'warning',
-                'description' => 'Contains embedded Windows PE executable (potential dropper)',
-            ],
+            'PHP Web Shell (eval+base64)' => ['contains' => 'eval(base64_decode'],
+            'PHP Web Shell (system+input)' => ['contains' => 'system($_'],
+            'PHP Web Shell (exec+input)' => ['contains' => 'exec($_'],
+            'JavaScript Alert Prank' => ['contains' => '<script>alert('],
+            'JavaScript Document Cookie' => ['contains' => 'document.cookie'],
+            'PowerShell Download Cradle' => ['regex' => '/powershell[^;]*\-[eE].*downloadstring/i'],
         ];
 
-        foreach ($signatures as $sig) {
-            $patternsChecked++;
+        foreach ($signatures as $name => $sig) {
             $matched = false;
-
-            switch ($sig['type']) {
-                case 'exact':
-                    $matched = (strpos($contents, $sig['pattern']) !== false);
-                    break;
-                case 'contains':
-                    $matched = (strpos($contents, $sig['pattern']) !== false);
-                    break;
-                case 'contains_ci':
-                    $matched = (stripos($contents, $sig['pattern']) !== false);
-                    break;
-                case 'regex':
-                    $matched = (bool) preg_match($sig['regex'], $contents);
-                    break;
+            if (isset($sig['exact'])) {
+                $matched = (strpos($searchSpace, $sig['exact']) !== false);
+            } elseif (isset($sig['contains'])) {
+                $matched = (stripos($searchSpace, $sig['contains']) !== false);
+            } elseif (isset($sig['regex'])) {
+                $matched = (bool) preg_match($sig['regex'], $searchSpace);
             }
 
             if ($matched) {
-                $patternsMatched[] = $sig;
-                $step4['details'][] = "⚠ DETECTED [{$sig['severity']}]: {$sig['name']} — {$sig['description']}";
-
-                if ($sig['severity'] === 'malicious') {
-                    $step4['status'] = 'fail';
-                    $results['overall_verdict'] = 'malicious';
-                    $results['threats_found'][] = $sig['name'];
-                } elseif ($sig['severity'] === 'warning' && $step4['status'] !== 'fail') {
-                    $step4['status'] = 'warning';
-                    if ($results['overall_verdict'] !== 'malicious') {
-                        $results['overall_verdict'] = 'suspicious';
-                    }
-                    $results['threats_found'][] = $sig['name'] . ' (suspicious)';
-                }
+                $step4['status'] = 'fail';
+                $step4['details'][] = "⚠ DETECTED: {$name}";
+                $results['overall_verdict'] = 'malicious';
+                $results['threats_found'][] = $name;
             }
         }
 
-        $step4['details'][] = "Patterns checked: {$patternsChecked}";
-        $step4['details'][] = "Patterns matched: " . count($patternsMatched);
-
-        if (count($patternsMatched) === 0) {
-            $step4['details'][] = "✓ No known malicious patterns detected";
+        if ($step4['status'] === 'pass') {
+            $step4['details'][] = "✓ No common malicious patterns detected in raw content or text layer";
         }
 
         $results['steps'][] = $step4;
 
         // ═══════════════════════════════════════════════════════════════
-        // STEP 5: ClamAV Scan (if available)
+        // STEP 5: ClamAV Scan (Primary Engine)
         // ═══════════════════════════════════════════════════════════════
         $step5 = [
             'name' => 'ClamAV Antivirus Engine',
             'description' => 'Run file through ClamAV antivirus engine for deep signature and heuristic analysis',
             'status' => 'skip',
             'details' => [],
-            'algorithm' => 'Execute clamscan binary with the uploaded file. ClamAV checks against its database of 8M+ malware signatures, performs heuristic analysis and sandboxed emulation.',
+            'algorithm' => 'Execute clamdscan/clamscan binary with the uploaded file. ClamAV checks against its database of 8M+ malware signatures, performs heuristic analysis and sandboxed emulation.',
         ];
 
         $scanner = app(\App\Services\FileScanner::class);
@@ -354,7 +243,6 @@ class SecurityScanDemoController extends Controller
 
         $results['steps'][] = $step5;
 
-        // ═══════════════════════════════════════════════════════════════
         // ═══════════════════════════════════════════════════════════════
         // STEP 6: PDF-Specific Validation (if PDF)
         // ═══════════════════════════════════════════════════════════════
@@ -414,6 +302,13 @@ class SecurityScanDemoController extends Controller
         return response()->json($results);
     }
 
+    protected function which(string $cmd): ?string
+    {
+        $checker = PHP_OS_FAMILY === 'Windows' ? 'where' : 'which';
+        $path = trim((string) shell_exec($checker . ' ' . escapeshellarg($cmd)));
+        return $path !== '' ? $path : null;
+    }
+
     /**
      * Generate an EICAR test file for download.
      * The EICAR file is a harmless, industry-standard test for antivirus software.
@@ -429,13 +324,13 @@ class SecurityScanDemoController extends Controller
 
             case 'php-shell':
                 // Simulated PHP webshell (harmless text — just contains the pattern)
-                $content = "<?php\n// This is a SIMULATED malicious PHP webshell for testing purposes only.\n// It does NOT execute anything.\neval(base64_decode('dGVzdA==')); // decoded: 'test'\nsystem('whoami');\npassthru('ls -la');\n?>\n";
+                $content = "<?php\n// Malicious pattern: eval + base64_decode\neval(base64_decode('ZWNobyAiSGFja2VkIjs='));\n\n// Malicious pattern: system + user input\nsystem(\$_GET['cmd']);\n?>";
                 $filename = 'test_webshell.php.txt';
                 break;
 
             case 'js-injection':
                 // Simulated JavaScript injection file
-                $content = "<html>\n<body>\n<script>eval('alert(1)');</script>\n<script>document.write('<img src=x onerror=alert(1)>');</script>\n</body>\n</html>\n";
+                $content = "<html>\n<body>\n<script>alert('Your system is vulnerable to XSS!');</script>\n<script>document.cookie='session=stolen';</script>\n</body>\n</html>\n";
                 $filename = 'test_xss.html.txt';
                 break;
 

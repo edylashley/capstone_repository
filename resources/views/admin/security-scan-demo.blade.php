@@ -95,13 +95,13 @@
                         <div class="bg-gradient-to-br from-red-950/20 to-red-900/10 rounded-2xl p-5 border border-red-500/20 group hover:shadow-lg transition-all duration-300">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="w-10 h-10 bg-red-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                                    <svg class="w-5 h-5 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
                                 </div>
                                 <span class="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow-sm tracking-wider">LAYER 4</span>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white text-sm">Malicious Pattern Scanning</h4>
-                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Scans content for known malware signatures: EICAR test, PHP webshells, JS injection, VBA macros, PowerShell cradles, and more.</p>
+                                <h4 class="font-bold text-white text-sm">High-Confidence Heuristic Scan</h4>
+                                <p class="text-xs text-slate-400 mt-1 leading-relaxed">Scans for combined malicious patterns (e.g. eval + base64) that indicate active exploits. Optimized to ignore legitimate technical writing.</p>
                             </div>
                         </div>
 
@@ -133,7 +133,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="mt-6 flex items-start gap-3 p-4 bg-slate-950 rounded-xl border border-white/5">
                         <svg class="w-5 h-5 text-slate-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <div class="text-xs text-slate-400">

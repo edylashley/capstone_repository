@@ -294,18 +294,28 @@
         }
         .spinner-outer {
             animation: overlay-spin 1.8s linear infinite;
+            will-change: transform;
+            backface-visibility: hidden;
         }
         .spinner-inner {
             animation: overlay-spin-reverse 1.2s linear infinite;
+            will-change: transform;
+            backface-visibility: hidden;
         }
         .step-spinner-active {
             animation: overlay-spin .9s linear infinite;
+            will-change: transform;
+            backface-visibility: hidden;
         }
         .step-waiting-dot {
             animation: overlay-dot-pulse 1.6s ease-in-out infinite;
+            will-change: opacity, transform;
+            backface-visibility: hidden;
         }
         .step-active-glow {
             animation: overlay-pulse-glow 2s ease-in-out infinite;
+            will-change: box-shadow;
+            backface-visibility: hidden;
         }
     </style>
 
@@ -315,21 +325,15 @@
          aria-live="polite">
         <div class="bg-slate-900 rounded-[2.5rem] shadow-2xl p-12 flex flex-col items-center gap-8 max-w-sm w-full mx-4 border border-white/10">
 
-            <!-- Dual-ring Spinner -->
-            <div class="relative w-32 h-32">
+            <!-- Dual-ring Spinner (High-Performance CSS) -->
+            <div class="relative w-32 h-32 flex items-center justify-center">
                 <!-- Outer ring -->
-                <svg class="spinner-outer absolute inset-0 w-32 h-32" viewBox="0 0 50 50" fill="none">
-                    <circle cx="25" cy="25" r="21" stroke="rgba(255,255,255,0.05)" stroke-width="3"></circle>
-                    <path d="M25 4 a21 21 0 0 1 21 21" stroke="url(#grad-outer)" stroke-width="3" stroke-linecap="round"></path>
-                    <defs><linearGradient id="grad-outer" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#818cf8"/></linearGradient></defs>
-                </svg>
+                <div class="spinner-outer absolute inset-0 rounded-full border-[3px] border-white/5 border-t-indigo-500 border-r-indigo-500/40"></div>
                 <!-- Inner ring -->
-                <svg class="spinner-inner absolute inset-0 w-32 h-32" viewBox="0 0 50 50" fill="none">
-                    <path d="M25 12 a13 13 0 0 1 13 13" stroke="url(#grad-inner)" stroke-width="2.5" stroke-linecap="round"></path>
-                    <defs><linearGradient id="grad-inner" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a5b4fc"/><stop offset="100%" stop-color="#6366f1"/></linearGradient></defs>
-                </svg>
+                <div class="spinner-inner absolute inset-4 rounded-full border-[3px] border-white/5 border-b-indigo-400 border-l-indigo-400/40"></div>
+                
                 <!-- Centre icon -->
-                <div class="absolute inset-0 flex items-center justify-center">
+                <div class="relative z-10">
                     <svg class="w-12 h-12 text-indigo-400 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
@@ -345,10 +349,7 @@
             <!-- Step indicators -->
             <div class="w-full space-y-3">
                 <div id="step-upload" class="flex items-center gap-4 px-5 py-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 step-active-glow">
-                    <svg id="step-upload-spin" class="step-spinner-active w-5 h-5 text-indigo-400 flex-shrink-0" viewBox="0 0 24 24" fill="none">
-                        <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.05)" stroke-width="3"></circle>
-                        <path d="M12 2 a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
-                    </svg>
+                    <div id="step-upload-spin" class="step-spinner-active w-5 h-5 rounded-full border-2 border-white/5 border-t-indigo-400 flex-shrink-0"></div>
                     <span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Uploading Files</span>
                 </div>
                 <div id="step-scan" class="flex items-center gap-4 px-5 py-3 rounded-2xl bg-white/[0.02] border border-white/5 transition-all duration-500">
@@ -461,14 +462,16 @@
                 uploadStep.classList.replace('bg-indigo-500/10', 'bg-green-500/10');
                 uploadStep.classList.replace('border-indigo-500/20', 'border-green-500/20');
                 uploadStep.classList.remove('step-active-glow');
-                document.getElementById('step-upload-spin').outerHTML = '<svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+                // Replace spinner with a simple CSS checkmark
+                document.getElementById('step-upload-spin').outerHTML = '<div class="w-5 h-5 flex items-center justify-center text-green-500 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>';
 
                 const scanStep = document.getElementById('step-scan');
                 scanStep.classList.replace('bg-white/[0.02]', 'bg-indigo-500/10');
                 scanStep.classList.replace('border-white/5', 'border-indigo-500/20');
                 scanStep.classList.add('step-active-glow');
                 scanStep.querySelector('span').classList.replace('text-slate-500', 'text-indigo-400');
-                document.getElementById('step-scan-spin').outerHTML = '<svg id="step-scan-spin" class="step-spinner-active w-5 h-5 text-indigo-400 flex-shrink-0" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.05)" stroke-width="3"></circle><path d="M12 2 a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path></svg>';
+                // Use a CSS-only spinner
+                document.getElementById('step-scan-spin').outerHTML = '<div id="step-scan-spin" class="step-spinner-active w-5 h-5 rounded-full border-2 border-white/5 border-t-indigo-400 flex-shrink-0"></div>';
 
                 status.textContent = 'Running security scan…';
             }, 2500);
@@ -479,14 +482,16 @@
                 scanStep.classList.replace('bg-indigo-500/10', 'bg-green-500/10');
                 scanStep.classList.replace('border-indigo-500/20', 'border-green-500/20');
                 scanStep.classList.remove('step-active-glow');
-                document.getElementById('step-scan-spin').outerHTML = '<svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+                // Replace spinner with a simple CSS checkmark
+                document.getElementById('step-scan-spin').outerHTML = '<div class="w-5 h-5 flex items-center justify-center text-green-500 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div>';
 
                 const valStep = document.getElementById('step-validate');
                 valStep.classList.replace('bg-white/[0.02]', 'bg-indigo-500/10');
                 valStep.classList.replace('border-white/5', 'border-indigo-500/20');
                 valStep.classList.add('step-active-glow');
                 valStep.querySelector('span').classList.replace('text-slate-500', 'text-indigo-400');
-                document.getElementById('step-validate-spin').outerHTML = '<svg id="step-validate-spin" class="step-spinner-active w-5 h-5 text-indigo-400 flex-shrink-0" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.05)" stroke-width="3"></circle><path d="M12 2 a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path></svg>';
+                // Use a CSS-only spinner
+                document.getElementById('step-validate-spin').outerHTML = '<div id="step-validate-spin" class="step-spinner-active w-5 h-5 rounded-full border-2 border-white/5 border-t-indigo-400 flex-shrink-0"></div>';
 
                 status.textContent = 'Validating PDF content…';
             }, 5000);
@@ -527,7 +532,7 @@
             // Reset upload step
             const uploadStep = document.getElementById('step-upload');
             uploadStep.className = 'flex items-center gap-4 px-5 py-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 step-active-glow';
-            uploadStep.innerHTML = '<svg id="step-upload-spin" class="step-spinner-active w-5 h-5 text-indigo-400 flex-shrink-0" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.05)" stroke-width="3"></circle><path d="M12 2 a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path></svg><span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Uploading Files</span>';
+            uploadStep.innerHTML = '<div id="step-upload-spin" class="step-spinner-active w-5 h-5 rounded-full border-2 border-white/5 border-t-indigo-400 flex-shrink-0"></div><span class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Uploading Files</span>';
 
             // Reset scan step
             const scanStep = document.getElementById('step-scan');

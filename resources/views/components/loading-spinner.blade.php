@@ -9,6 +9,8 @@
     }
     .btn-spinner-icon {
         animation: btn-spin 0.7s linear infinite;
+        will-change: transform;
+        backface-visibility: hidden;
     }
 </style>
 

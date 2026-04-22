@@ -14,11 +14,18 @@ class SupportTicketController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'category' => 'required|in:bug,correction,account,general',
             'subject'  => 'required|string|max:255',
             'message'  => 'required|string|max:5000',
-        ]);
+        ];
+
+        // If guest, email is required. If auth, we use their account email.
+        if (!auth()->check()) {
+            $rules['email'] = 'required|email|max:255';
+        }
+
+        $validated = $request->validate($rules);
 
         // Silently prune any expired tickets
         SupportTicket::whereNotNull('expires_at')
@@ -26,15 +33,15 @@ class SupportTicketController extends Controller
             ->delete();
 
         $ticket = SupportTicket::create([
-            'user_id'  => auth()->id(),
-            'email'    => auth()->user()->email,
+            'user_id'  => auth()->id(), // nullable
+            'email'    => auth()->check() ? auth()->user()->email : $validated['email'],
             'category' => $validated['category'],
             'subject'  => $validated['subject'],
             'message'  => $validated['message'],
             'status'   => 'pending',
         ]);
 
-        // Log the activity
+        // Log the activity (user_id is nullable in ActivityLog too)
         ActivityLog::create([
             'user_id'     => auth()->id(),
             'action'      => 'support_ticket_created',
@@ -44,6 +51,7 @@ class SupportTicketController extends Controller
             'meta'        => [
                 'subject'  => $ticket->subject,
                 'category' => $ticket->category,
+                'is_guest' => !auth()->check(),
             ],
         ]);
 
@@ -56,6 +64,7 @@ class SupportTicketController extends Controller
     public function myTickets(): View
     {
         $tickets = SupportTicket::where('user_id', auth()->id())
+            ->where('category', '!=', 'security')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 

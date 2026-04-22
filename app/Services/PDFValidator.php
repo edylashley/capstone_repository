@@ -15,6 +15,7 @@ class PDFValidator
         $notes = [];
         $valid = true;
         $keywordsMissing = false;
+        $hasImageOnlyPage = false;
         // Try pdfinfo to get encryption status
         $isEncrypted = false;
         $pdfinfo = $this->which('pdfinfo');
@@ -49,21 +50,21 @@ class PDFValidator
         if ($pdftotext) {
             // Build command properly for Windows/Unix compatibility
             $escapedPath = escapeshellarg($path);
-            
+
             // Use shell_exec to preserve form-feed characters (\f) which mark page breaks
             // standard pdftotext outputs \f between pages in main output
             $cmd = "\"$pdftotext\" -q -layout $escapedPath -";
-            
+
             // Use shell_exec instead of exec to get raw output string with control chars
             $extracted = shell_exec($cmd);
-            
+
             if ($extracted !== null && strlen($extracted) > 0) {
                 $text = $extracted;
             } else {
                 // Fallback to exec if shell_exec fails or returns null
                 $output = [];
                 @exec($cmd . " 2>&1", $output, $exit);
-                if ($exit === 0 && ! empty($output)) {
+                if ($exit === 0 && !empty($output)) {
                     $text = implode("\n", $output);
                 } else {
                     $notes[] = "⚠ Text extraction failed (exit code: $exit). Using fallback method.";
@@ -88,20 +89,21 @@ class PDFValidator
         if (!$isBinaryFallback) {
             // Remove extra whitespace just to measure actual characters
             $cleanText = trim(preg_replace('/\s+/', ' ', $text));
-            // A typical 5+ page manuscript should have thousands of characters. If it has less than 150, it's likely a scan.
-            if (strlen($cleanText) < 150) {
+            // A typical manuscript should have thousands of characters. 
+            // We use a low threshold (10 chars) to allow short documents like resumes to pass.
+            if (strlen($cleanText) < 20) {
                 $valid = false;
                 $notes[] = 'Warning: No readable text detected. This appears to be a scanned image of a printed document. Please export your manuscript directly from Microsoft Word / Google Docs so the text is searchable.';
             }
         }
 
-        $requiredKeywords = config('repository.manuscript_required_keywords', ['approval','approved','approval page','signature','approved by']);
+        $requiredKeywords = config('repository.manuscript_required_keywords', ['approval', 'approved', 'approval page', 'signature', 'approved by']);
 
         $found = [];
         $foundLocations = [];
 
         if ($isBinaryFallback) {
-             foreach ($requiredKeywords as $kw) {
+            foreach ($requiredKeywords as $kw) {
                 if (stripos($text, $kw) !== false) {
                     $found[] = $kw;
                     $foundLocations[] = "$kw (Location unknown)";
@@ -110,10 +112,10 @@ class PDFValidator
         } else {
             // Split by form feed char \f (ASCII 12) to identify pages
             // Filter out empty trailing pages caused by trailing \f
-            $pagesContent = array_filter(explode("\f", trim($text)), function($val) {
+            $pagesContent = array_filter(explode("\f", trim($text)), function ($val) {
                 return $val !== ""; // Keep only pages that have something in them
             });
-            
+
             $hasImageOnlyPage = false;
 
             foreach ($pagesContent as $index => $pageText) {
@@ -132,7 +134,7 @@ class PDFValidator
                         $kwLocations[] = $index + 1;
                     }
                 }
-                
+
                 if (!empty($kwLocations)) {
                     $pageList = implode(', ', $kwLocations);
                     $notes[] = "[OK] Detected: $kw (Pages $pageList)";
@@ -150,7 +152,7 @@ class PDFValidator
             $notes[] = "[ERROR] Approval page or signatures not detected (no required keywords found).";
         } elseif (count($found) === 0 && $hasImageOnlyPage) {
             // If we have an image page, we mark it as "Valid but needs eyes"
-            $valid = true; 
+            $valid = true;
             $notes[] = "[!] Automated scan inconclusive due to scanned page. Human verification required.";
         }
 
@@ -164,9 +166,12 @@ class PDFValidator
 
     protected function which(string $cmd): ?string
     {
-        // Use 'where' on Windows, 'which' on Unix
         $checker = PHP_OS_FAMILY === 'Windows' ? 'where' : 'which';
-        $path = trim((string) shell_exec($checker . ' ' . escapeshellarg($cmd)));
+        $output = shell_exec($checker . ' ' . escapeshellarg($cmd));
+        if (!$output) return null;
+
+        // 'where' on Windows can return multiple lines; take the first one
+        $path = trim(explode("\n", $output)[0]);
         return $path !== '' ? $path : null;
     }
 }

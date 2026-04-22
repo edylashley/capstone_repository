@@ -48,8 +48,17 @@ class SupportTicket extends Model
             'correction' => 'Record Correction',
             'account'    => 'Account / Login Issue',
             'general'    => 'General Question',
+            'security'   => '🚨 SECURITY ALERT',
             default      => ucfirst($this->category),
         };
+    }
+
+    /**
+     * Check if this is an automated security alert.
+     */
+    public function getIsSecurityAlertAttribute(): bool
+    {
+        return $this->category === 'security';
     }
 
     /**
@@ -58,9 +67,11 @@ class SupportTicket extends Model
     public function getStatusBadgeAttribute(): string
     {
         return match ($this->status) {
-            'pending'  => 'bg-amber-100 text-amber-800 border-amber-300',
-            'resolved' => 'bg-green-100 text-green-800 border-green-300',
-            default    => 'bg-gray-100 text-gray-800 border-gray-300',
+            'pending'  => $this->category === 'security' 
+                            ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' 
+                            : 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+            'resolved' => 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+            default    => 'bg-slate-800 text-slate-400 border-white/5',
         };
     }
 }

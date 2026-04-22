@@ -287,14 +287,37 @@ class ProjectController extends Controller
             $scanResult = $scanner->scan($fullPath);
 
             if (! $scanResult['ok']) {
+                $isSystemError = (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system');
+                
+                // 1. Log the failure
                 \App\Models\ActivityLog::create([
                     'user_id' => $request->user()->id,
-                    'action' => 'manuscript_scan_failed',
+                    'action' => $isSystemError ? 'scanner_system_error' : 'security_threat_blocked',
                     'target_type' => 'project',
                     'target_id' => $project->id,
                     'ip' => $request->ip(),
-                    'meta' => ['notes' => $scanResult['notes']],
+                    'meta' => [
+                        'notes' => $scanResult['notes'],
+                        'filename' => $file->getClientOriginalName()
+                    ],
                 ]);
+
+                // 2. Create an automatic High-Priority Security Ticket for Admin
+                if (!$isSystemError) {
+                    \App\Models\SupportTicket::create([
+                        'user_id' => $request->user()->id,
+                        'email' => $request->user()->email,
+                        'category' => 'security',
+                        'subject' => '⚠️ SECURITY ALERT: Malicious Upload Blocked',
+                        'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
+                                     "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
+                                     "Action: Attempted to upload a file with a security threat.\n" .
+                                     "File: " . $file->getClientOriginalName() . "\n" .
+                                     "Threat Detected: " . $scanResult['notes'] . "\n\n" .
+                                     "The submission has been blocked and the temporary file has been shredded.",
+                        'status' => 'pending',
+                    ]);
+                }
 
                 // Cleanup stored file and DB records to block submission
                 Storage::disk('public')->delete($path);
@@ -306,7 +329,7 @@ class ProjectController extends Controller
                 $errorMsg .= "The file \"{$file->getClientOriginalName()}\" contains a restricted signature: " . str_replace('FOUND', '', $scanResult['notes']) . "\n\n";
                 $errorMsg .= "Your submission has been blocked for security reasons. Please ensure your files are clean and try again.";
 
-                if (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system') {
+                if ($isSystemError) {
                     $errorMsg = "⚠️ Scanner Service Error!\n\n";
                     $errorMsg .= "The system encountered an error while scanning the manuscript. Please contact the technical administrator.";
                 }
@@ -423,12 +446,12 @@ class ProjectController extends Controller
                 $attachScanResult = $scanner->scan($fullAttPath);
 
                 if (! $attachScanResult['ok']) {
-                    // Remove the flagged file
-                    Storage::disk('public')->delete($attPath);
-
+                    $isSystemError = (isset($attachScanResult['error_type']) && $attachScanResult['error_type'] === 'system');
+                    
+                    // 1. Log the failure
                     ActivityLog::create([
                         'user_id' => $request->user()->id,
-                        'action' => 'attachment_scan_failed',
+                        'action' => $isSystemError ? 'attachment_scanner_error' : 'attachment_threat_blocked',
                         'target_type' => 'project',
                         'target_id' => $project->id,
                         'ip' => $request->ip(),
@@ -438,7 +461,27 @@ class ProjectController extends Controller
                         ],
                     ]);
 
-                    // Clean up entire submission (project + all files uploaded so far)
+                    // 2. Create an automatic High-Priority Security Ticket for Admin
+                    if (!$isSystemError) {
+                        \App\Models\SupportTicket::create([
+                            'user_id' => $request->user()->id,
+                            'email' => $request->user()->email,
+                            'category' => 'security',
+                            'subject' => '⚠️ SECURITY ALERT: Malicious Attachment Blocked',
+                            'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
+                                         "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
+                                         "Action: Attempted to upload an attachment with a security threat.\n" .
+                                         "File: " . $attach->getClientOriginalName() . "\n" .
+                                         "Threat Detected: " . $attachScanResult['notes'] . "\n\n" .
+                                         "The entire submission has been blocked and the temporary files have been shredded.",
+                            'status' => 'pending',
+                        ]);
+                    }
+
+                    // Remove the flagged file
+                    Storage::disk('public')->delete($attPath);
+
+                    // Clean up entire submission
                     foreach ($project->files as $existingFile) {
                         Storage::disk('public')->delete($existingFile->path);
                     }
@@ -447,7 +490,7 @@ class ProjectController extends Controller
                     $project->delete();
 
                     $errorMsg = "⚠️ Security Threat Detected in Attachment!\n\n";
-                    if (isset($attachScanResult['error_type']) && $attachScanResult['error_type'] === 'system') {
+                    if ($isSystemError) {
                         $errorMsg = "⚠️ Scanner Service Error!\n\n";
                         $errorMsg .= "The security scanner encountered a system error while processing: {$attach->getClientOriginalName()}\n\n";
                         $errorMsg .= "Please contact the technical administrator for assistance.";
@@ -827,13 +870,21 @@ class ProjectController extends Controller
         $fullPath = Storage::disk('public')->path($file->path);
         abort_unless(file_exists($fullPath), 404);
 
-        if ($file->type === 'attachment') {
-            $user = auth()->user();
-            $project = $file->project;
-            $isOwner = $project && $project->authors->contains($user);
-            $isPrivileged = $user->isAdmin();
+        $project = $file->project;
+        $user = auth()->user();
 
+        // 1. Attachment Protection: Only owners and admins can download attachments
+        if ($file->type === 'attachment') {
+            $isOwner = $user && $project && $project->authors->contains($user);
+            $isPrivileged = $user && $user->isAdmin();
             abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
+        }
+
+        // 2. Manuscript Visibility: Guests can only download published manuscripts
+        if ($project->status !== 'published') {
+            $isOwner = $user && $project->authors->contains($user);
+            $isPrivileged = $user && $user->isAdmin();
+            abort_unless($isOwner || $isPrivileged, 403, 'This project has not been published yet.');
         }
 
         // Log download
@@ -846,11 +897,24 @@ class ProjectController extends Controller
             'meta' => [
                 'filename' => $file->filename,
                 'type' => $file->type,
-                'project_id' => $file->project_id
+                'project_id' => $file->project_id,
+                'guest' => !auth()->check()
             ]
         ]);
 
-        return response()->download($fullPath, $file->filename);
+        // Generate a clean filename from project title for manuscripts
+        $downloadName = $file->filename;
+        $isManuscript = strtolower($file->type) === 'manuscript' || strtolower($file->filename) === 'manuscript.pdf';
+        
+        if ($isManuscript && $project) {
+            $safeTitle = Str::slug($project->title);
+            if (empty($safeTitle)) {
+                $safeTitle = 'project-' . $project->id;
+            }
+            $downloadName = $safeTitle . '.pdf';
+        }
+
+        return response()->download($fullPath, $downloadName);
     }
 
     /**
@@ -861,13 +925,21 @@ class ProjectController extends Controller
         $fullPath = Storage::disk('public')->path($file->path);
         abort_unless(file_exists($fullPath), 404);
 
+        $project = $file->project;
+        $user = auth()->user();
+
+        // 1. Attachment Protection: Only owners and admins can view attachments
         if ($file->type === 'attachment') {
-            $user = auth()->user();
-            $project = $file->project;
             $isOwner = $user && $project && ($project->authors->contains($user) || $project->adviser_id == $user->id);
             $isPrivileged = $user && $user->isAdmin();
-
             abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
+        }
+
+        // 2. Manuscript Visibility: Guests can only view published manuscripts
+        if ($project->status !== 'published') {
+            $isOwner = $user && $project->authors->contains($user);
+            $isPrivileged = $user && $user->isAdmin();
+            abort_unless($isOwner || $isPrivileged, 403, 'This project has not been published yet.');
         }
 
         // Log view
@@ -887,11 +959,18 @@ class ProjectController extends Controller
 
         // Force PDF to be inline for better browser/mobile support (Streaming Option)
         if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) === 'pdf') {
+            $downloadName = $file->filename;
+            $isManuscript = strtolower($file->type) === 'manuscript' || strtolower($file->filename) === 'manuscript.pdf';
+
+            if ($isManuscript && $project) {
+                $downloadName = Str::slug($project->title) . '.pdf';
+            }
+
             return response()->stream(function () use ($fullPath) {
                 readfile($fullPath);
             }, 200, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline',
+                'Content-Disposition' => 'inline; filename="' . $downloadName . '"',
                 'Content-Length' => filesize($fullPath),
                 'X-Content-Type-Options' => 'nosniff',
                 'Cache-Control' => 'private, max-age=0, must-revalidate',

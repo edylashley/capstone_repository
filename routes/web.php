@@ -66,9 +66,10 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->gro
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}/cancel', [ProjectController::class, 'cancel'])->name('projects.cancel');
     Route::post('/projects/abort-submission', [ProjectController::class, 'abortSubmission'])->name('projects.abort-submission');
-    // Forced-download for any project file (bypasses browser inline rendering)
-    Route::get('/files/{file}/download', [ProjectController::class, 'downloadFile'])->name('files.download');
 });
+
+// Forced-download for any project file (bypasses browser inline rendering)
+Route::get('/files/{file}/download', [ProjectController::class, 'downloadFile'])->name('files.download');
 
 // Streaming view for project files (supports seeking/skipping in videos)
 Route::get('/files/{file}/view', [ProjectController::class, 'viewFile'])->name('files.view');
@@ -105,9 +106,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Support Ticket Submission (authenticated users)
+// Support Ticket Submission (Public & Auth)
+Route::post('/support/submit', [SupportTicketController::class, 'store'])->name('support.store');
+
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->group(function () {
-    Route::post('/support/submit', [SupportTicketController::class, 'store'])->name('support.store');
     Route::get('/my-tickets', [SupportTicketController::class, 'myTickets'])->name('support.my-tickets');
 });
 

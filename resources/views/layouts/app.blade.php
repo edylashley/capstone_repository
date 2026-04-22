@@ -167,7 +167,7 @@
         <div x-data="{ supportOpen: false }" class="relative z-[9990]">
             {{-- Floating Action Button --}}
             <button @click="supportOpen = true"
-                class="fixed bottom-6 right-6 w-14 h-14 bg-slate-900 hover:bg-black text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-slate-500 group"
+                class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-[0_0_20px_rgba(79,70,229,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 group"
                 title="Help & Support">
                 <svg class="w-6 h-6 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -318,7 +318,7 @@
             $adminOpenTickets = \App\Models\SupportTicket::where('status', 'pending')->count();
         @endphp
         <a href="{{ route('admin.support.index') }}"
-            class="fixed bottom-6 right-6 w-14 h-14 bg-slate-900 hover:bg-black text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-slate-500 group z-[9990]"
+            class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
             title="Support Tickets{{ $adminOpenTickets > 0 ? ' — ' . $adminOpenTickets . ' pending' : '' }}">
             <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
@@ -328,7 +328,9 @@
             </svg>
             @if($adminOpenTickets > 0)
                 <span
-                    class="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center shadow-lg animate-pulse ring-2 ring-white">{{ $adminOpenTickets }}</span>
+                    class="absolute -top-1.5 -right-1.5 w-6 h-6 bg-amber-400 text-slate-900 text-[10px] font-black rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-pulse ring-2 ring-slate-900">
+                    {{ $adminOpenTickets }}
+                </span>
             @endif
         </a>
     @endif

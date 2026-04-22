@@ -125,10 +125,10 @@
     }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="{{ asset('assets/vendor/pdfjs/pdf.min.js') }}"></script>
 <script>
     const pdfjsLib = window['pdfjs-dist/build/pdf'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('assets/vendor/pdfjs/pdf.worker.min.js') }}";
 
     let pdfDoc = null;
     let pageNum = 1;
