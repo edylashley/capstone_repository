@@ -49,7 +49,8 @@
                                 <span class="text-sm font-black text-white uppercase tracking-wider">Submission</span>
                             </div>
                             <p class="text-indigo-100 text-xs leading-relaxed">Upload your final defended manuscript in
-                                PDF format and all required **attachment files** via the secure submission portal.</p>
+                                PDF format and all required <strong>attachment files</strong> via the secure submission
+                                portal.</p>
                         </div>
                         <div
                             class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
@@ -154,7 +155,7 @@
                                                 </td>
                                                 <td
                                                     class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400 italic whitespace-nowrap">
-                                                    {{ $project->adviser_name ?? $project->adviser->name ?? 'N/A' }}
+                                                    {{ $project->adviser_name ?? 'N/A' }}
                                                 </td>
                                                 <td class="px-6 py-4 text-center">
                                                     @php
