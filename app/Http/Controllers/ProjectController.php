@@ -328,12 +328,8 @@ class ProjectController extends Controller
             // Determine specific validation message based on what failed
             $validatorMessage = 'Initial criteria met';
             if (!$validation['valid']) {
-                if ($validation['page_count_failed'] && $validation['keywords_missing']) {
-                    $validatorMessage = 'Critical issues detected';
-                } elseif ($validation['keywords_missing']) {
+                if ($validation['keywords_missing']) {
                     $validatorMessage = 'Missing required elements';
-                } elseif ($validation['page_count_failed']) {
-                    $validatorMessage = 'Needs adviser verification';
                 } else {
                     $validatorMessage = 'Warning: Manual review required';
                 }

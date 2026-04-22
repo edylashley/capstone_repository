@@ -14,11 +14,8 @@ class PDFValidator
     {
         $notes = [];
         $valid = true;
-        $pageCountFailed = false;
         $keywordsMissing = false;
-
-        // Try pdfinfo to get page count and encryption status
-        $pages = null;
+        // Try pdfinfo to get encryption status
         $isEncrypted = false;
         $pdfinfo = $this->which('pdfinfo');
         if ($pdfinfo) {
@@ -26,10 +23,6 @@ class PDFValidator
             @exec(escapeshellcmd("$pdfinfo " . escapeshellarg($path)) . " 2>&1", $output, $exit);
             if ($exit === 0) {
                 foreach ($output as $line) {
-                    if (stripos($line, 'Pages:') !== false) {
-                        $parts = preg_split('/\s+/', trim($line));
-                        $pages = (int) end($parts);
-                    }
                     if (stripos($line, 'Encrypted:') !== false && stripos($line, 'yes') !== false) {
                         $isEncrypted = true;
                     }
@@ -41,7 +34,6 @@ class PDFValidator
             return [
                 'valid' => false,
                 'notes' => ['Critical Error: This PDF is password-protected. Please export a version without a password or editing restrictions and try again.'],
-                'page_count_failed' => false,
                 'keywords_missing' => true
             ];
         }
@@ -165,7 +157,6 @@ class PDFValidator
         return [
             'valid' => $valid,
             'notes' => $notes,
-            'page_count_failed' => $pageCountFailed,
             'keywords_missing' => $keywordsMissing,
             'text' => trim($text),
         ];
