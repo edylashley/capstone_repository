@@ -22,8 +22,8 @@
                             </svg>
                         </div>
                         <div class="flex-1">
-                            <h3 class="text-sm font-black text-red-400 uppercase tracking-[0.2em] mb-2">Adviser's Feedback</h3>
-                            <p class="text-slate-300 text-sm font-medium mb-4 leading-relaxed">Your adviser returned this project with the following requirements:</p>
+                            <h3 class="text-sm font-black text-red-400 uppercase tracking-[0.2em] mb-2">Administrator Feedback</h3>
+                            <p class="text-slate-300 text-sm font-medium mb-4 leading-relaxed">The Administrator returned this project with the following requirements:</p>
                             <div class="bg-slate-950/80 rounded-2xl p-5 border border-red-500/20 text-slate-200 text-sm leading-relaxed whitespace-pre-wrap font-medium shadow-inner italic">"{{ $project->rejection_reason }}"</div>
                             <p class="text-xs text-red-400/60 mt-4 font-bold uppercase tracking-widest">Resubmission Required</p>
                         </div>
@@ -32,7 +32,7 @@
             @endif
 
             <div class="bg-slate-900 overflow-hidden shadow-2xl sm:rounded-3xl p-8 border border-white/5">
-                <form id="edit-form" method="POST" action="{{ route('projects.update', $project) }}">
+                <form id="edit-form" method="POST" action="{{ route('projects.update', $project) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -61,16 +61,11 @@
                         </div>
 
                         <div>
-                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Adviser</label>
-                            <select name="adviser_id" class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="" class="bg-slate-900">Select adviser</option>
-                                @foreach($advisers as $adv)
-                                    <option value="{{ $adv->id }}" {{ old('adviser_id', $project->adviser_id) == $adv->id ? 'selected' : '' }} class="bg-slate-900">
-                                        {{ $adv->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('adviser_id') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Technical Adviser</label>
+                            <input type="text" name="adviser_name" value="{{ old('adviser_name', $project->adviser_name ?? $project->adviser->name ?? '') }}" 
+                                   class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600" 
+                                   placeholder="Full name of your adviser" required>
+                            @error('adviser_name') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
                         <div>
@@ -193,24 +188,71 @@
                         @error('authors.*') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
-                    {{-- Manuscript status (read-only) --}}
+                    {{-- Manuscript Replacement --}}
                     <div class="mb-10 p-6 bg-slate-950 rounded-2xl border-2 border-dashed border-white/5">
                         <label class="block font-bold text-xs uppercase tracking-widest text-blue-400 mb-4">Manuscript (PDF)</label>
+                        
                         @php $manuscript = $project->files->firstWhere('type', 'manuscript'); @endphp
-                        @if($manuscript)
-                            <div class="flex items-center gap-4 bg-slate-900 rounded-2xl p-4 border border-white/5 shadow-inner">
-                                <span class="text-2xl">📄</span>
-                                <div class="flex-1">
-                                    <p class="text-sm font-bold text-white leading-tight mb-1">{{ $manuscript->filename }}</p>
-                                    <p class="text-[9px] text-slate-500 uppercase font-black tracking-widest">
-                                        {{ number_format($manuscript->size / 1048576, 2) }} MB
-                                    </p>
+                        
+                        {{-- Current File View --}}
+                        <div id="current-manuscript-container" class="{{ $manuscript ? '' : 'hidden' }}">
+                            @if($manuscript)
+                                <div class="flex items-center gap-4 bg-slate-900 rounded-2xl p-4 border border-white/5 shadow-inner mb-6">
+                                    <span class="text-2xl">📄</span>
+                                    <div class="flex-1">
+                                        <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mb-1">Current Version</p>
+                                        <p class="text-sm font-bold text-white leading-tight mb-1">{{ $manuscript->filename }}</p>
+                                        <p class="text-[9px] text-slate-400 font-medium">
+                                            {{ number_format($manuscript->size / 1048576, 2) }} MB • Uploaded {{ $manuscript->created_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                    <button type="button" onclick="removeCurrentManuscript()" 
+                                            class="p-2 bg-red-500/10 text-red-500 rounded-xl border border-red-500/20 hover:bg-red-500/20 transition-all"
+                                            title="Remove and Replace">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
                                 </div>
-                                <span class="bg-emerald-900/30 text-emerald-500 text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest border border-emerald-500/20">Verified</span>
+                            @endif
+                        </div>
+
+                        {{-- Replacement State --}}
+                        <div id="manuscript-upload-container" class="space-y-4">
+                            <div id="replacement-warning" class="hidden mb-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                                <p class="text-[10px] font-black text-amber-500 uppercase tracking-widest flex items-center gap-2">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                                    New manuscript file required
+                                </p>
                             </div>
-                        @endif
-                        <p class="text-[10px] text-slate-500 mt-4 font-medium italic">To replace the manuscript PDF, please contact system administration or create a new submission.</p>
+
+                            <label class="block text-sm font-bold text-slate-300">
+                                <span id="upload-label-text">{{ $manuscript ? 'Replace Manuscript (Optional)' : 'Upload Manuscript' }}</span>
+                            </label>
+                            
+                            <input type="file" id="manuscript_input" name="manuscript" accept=".pdf"
+                                   class="block w-full text-sm text-slate-400
+                                          file:mr-4 file:py-2 file:px-4
+                                          file:rounded-xl file:border-0
+                                          file:text-[10px] file:font-black file:uppercase file:tracking-widest
+                                          file:bg-indigo-600 file:text-white
+                                          hover:file:bg-indigo-700 transition-all cursor-pointer">
+                            <p class="text-[10px] text-slate-500 italic">Select a new PDF file to update your submission. Maximum size: 50MB.</p>
+                        </div>
+                        @error('manuscript') <p class="text-red-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
                     </div>
+
+                    <script>
+                        function removeCurrentManuscript() {
+                            if(confirm('Remove current manuscript? You will need to upload a new PDF to save your changes.')) {
+                                document.getElementById('current-manuscript-container').classList.add('hidden');
+                                document.getElementById('replacement-warning').classList.remove('hidden');
+                                document.getElementById('manuscript_input').required = true;
+                                document.getElementById('upload-label-text').textContent = 'Upload New Manuscript';
+                                document.getElementById('manuscript_input').click();
+                            }
+                        }
+                    </script>
 
                     {{-- Submit Area --}}
                     <div class="mt-10 pt-8 border-t border-gray-200">

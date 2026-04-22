@@ -25,7 +25,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                             <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Year Defended</strong> {{ $project->year }}</p>
-                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong> {{ $project->adviser->name ?? $project->adviser_name ?? '-' }}</p>
+                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Technical Adviser</strong> {{ $project->adviser_name ?? $project->adviser->name ?? '-' }}</p>
                             <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong> {{ $project->program ?? '-' }}</p>
                             <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong> {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
                         </div>
@@ -183,9 +183,9 @@
                                         @endif
                                     </div>
 
-                                    @if($project->status === 'pending' && $project->adviser_id === auth()->id())
+                                    @if($project->status === 'pending' && auth()->user()->isAdmin())
                                         <h4 class="font-black text-gray-400 uppercase text-xs mb-4">Verification Actions</h4>
-                                        <form method="POST" action="{{ route('faculty.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
+                                        <form method="POST" action="{{ route('admin.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
                                             @csrf
                                             <button type="submit" class="w-full bg-indigo-600 text-white font-black py-4 rounded-lg shadow-lg hover:shadow-xl hover:bg-indigo-700 transition-all border-b-4 border-indigo-800 active:translate-y-1 active:border-b-0 uppercase tracking-widest text-sm text-nowrap">
                                                 Confirm Final Record

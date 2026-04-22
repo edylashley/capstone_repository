@@ -4,7 +4,7 @@
 </div>
 
 <div style="text-align: center; color: #4b5563; font-size: 15px; line-height: 1.6; margin-bottom: 30px;">
-    Congratulations! Your project **"{{ $project->title }}"** has been approved by your adviser, **{{ $project->adviser->name }}**.
+    Congratulations! Your project **"{{ $project->title }}"** has been approved by the **Administrator**.
 </div>
 
 <div style="background-color: #ecfdf5; border: 1px solid #d1fae5; border-radius: 12px; padding: 25px; margin-bottom: 30px; text-align: left;">

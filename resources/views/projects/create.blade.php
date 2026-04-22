@@ -38,10 +38,10 @@
                         </div>
 
                         <div>
-                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Adviser Name</label>
+                            <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Technical Adviser</label>
                             <input type="text" name="adviser_name" value="{{ old('adviser_name') }}" 
                                    class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600" 
-                                   placeholder="Full name of your adviser" required>
+                                   placeholder="Full name of your technical adviser" required>
                             @error('adviser_name') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 

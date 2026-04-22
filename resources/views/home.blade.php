@@ -272,9 +272,9 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">3. Adviser Review</h3>
+                        <h3 class="text-lg font-bold text-white mb-2">3. Administrator Verification</h3>
                         <p class="text-slate-400 text-sm leading-relaxed">
-                            Faculty advisers review submitted projects for accuracy and compliance before they are
+                            The Administrator reviews submitted projects for accuracy and compliance before they are
                             officially published in the library.
                         </p>
                     </div>

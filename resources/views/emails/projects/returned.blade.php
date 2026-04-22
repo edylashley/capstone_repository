@@ -4,12 +4,12 @@
 </div>
 
 <div style="text-align: center; color: #4b5563; font-size: 15px; line-height: 1.6; margin-bottom: 30px;">
-    Your project **"{{ $project->title }}"** has been reviewed by your adviser, **{{ $project->adviser->name }}**, and requires some modifications before it can be published.
+    Your project **"{{ $project->title }}"** has been reviewed by the **Administrator** and requires some modifications before it can be published.
 </div>
 
 @if($project->rejection_reason)
 <div style="background-color: #fef2f2; border: 1px solid #fee2e2; border-radius: 12px; padding: 25px; margin-bottom: 30px; text-align: left;">
-    <strong style="color: #991b1b; font-size: 14px; display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Adviser's Feedback:</strong>
+    <strong style="color: #991b1b; font-size: 14px; display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">Administrator Feedback:</strong>
     <div style="color: #b91c1c; font-size: 14px; line-height: 1.6; font-style: italic;">
         "{{ $project->rejection_reason }}"
     </div>

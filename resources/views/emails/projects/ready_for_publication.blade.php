@@ -1,15 +1,15 @@
 <x-mail::message>
 # Project Ready for Publication
 
-**Adviser Verification Complete**
+**Administrator Verification Complete**
 
-The project **"{{ $project->title }}"** has been approved by Adviser **{{ $project->adviser->name }}**.
+The project **"{{ $project->title }}"** (Adviser: {{ $project->adviser_name }}) has been verified.
 
 It is now ready for your final verification and publication to the repository.
 
 **Project Details:**
 *   **Title:** {{ $project->title }}
-*   **Adviser:** {{ $project->adviser->name }}
+*   **Adviser:** {{ $project->adviser_name }}
 *   **Year:** {{ $project->year }}
 
 <x-mail::button :url="route('admin.projects.index')">

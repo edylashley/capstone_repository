@@ -47,13 +47,13 @@
                                     <div id="sidebar-marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 0.50rem; right: 0.50rem; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                                         <div class="animate-sidebar-marquee text-sm text-gray-400">
                                             <div class="flex shrink-0">
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
                                             </div>
                                             <div class="flex shrink-0">
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
                                                 <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
                                             </div>
                                         </div>
@@ -183,7 +183,7 @@
                                                     <span class="text-gray-400 truncate">{{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</span>
                                                 </div>
                                                 <div class="flex items-center gap-2 overflow-hidden">
-                                                    <span class="text-indigo-400/80 shrink-0">Adviser:</span>
+                                                    <span class="text-indigo-400/80 shrink-0">Technical Adviser:</span>
                                                     <span class="text-gray-400 truncate">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
                                                 </div>
                                             </div>

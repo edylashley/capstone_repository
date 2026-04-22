@@ -565,11 +565,10 @@ class ProjectController extends Controller
                 ->with('error', 'This project can no longer be edited because it has been ' . $project->status . '.');
         }
 
-        $advisers = \App\Models\User::where('role', \App\Models\User::ROLE_ADVISER)->active()->get();
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
 
-        return view('projects.edit', compact('project', 'advisers', 'categories', 'programs'));
+        return view('projects.edit', compact('project', 'categories', 'programs'));
     }
 
     /**
@@ -602,9 +601,9 @@ class ProjectController extends Controller
             ],
             'abstract' => 'required|string',
             'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
-            'categories' => 'required_without:other_category|array',
+            'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
-            'other_category' => ['nullable', 'string', 'max:50', 'required_if:other_category_trigger,on'],
+            'other_category' => ['nullable', 'string', 'max:50'],
             'program' => [
                 'required', 
                 'string', 
@@ -612,10 +611,11 @@ class ProjectController extends Controller
                     ? Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())
                     : Rule::in([auth()->user()->program])
             ],
-            'adviser_id' => 'required|exists:users,id',
+            'adviser_name' => 'required|string|max:255',
             'keywords' => 'nullable|string',
             'authors' => 'required|array|min:1',
             'authors.*' => 'required|string|max:255',
+            'manuscript' => 'nullable|file|mimes:pdf|max:51200', // Optional on edit
         ], [
             'title.unique' => 'A project with this exact title already exists in the system. Please revise your title.',
         ]);
@@ -634,14 +634,68 @@ class ProjectController extends Controller
             'title' => $validated['title'],
             'abstract' => $validated['abstract'],
             'year' => $validated['year'],
-            'specialization' => null, // Deprecated
             'program' => $validated['program'],
-            'adviser_id' => $validated['adviser_id'],
+            'adviser_name' => $validated['adviser_name'],
             'keywords' => $keywords,
+            'custom_category' => $validated['other_category'] ?? null,
             'authors_list' => implode(', ', array_map('trim', $validated['authors'])),
             'status' => 'pending', // Reset to pending for re-review
             'rejection_reason' => null, // Clear previous feedback
         ]);
+
+        // Handle Manuscript Replacement
+        if ($request->hasFile('manuscript')) {
+            $file = $request->file('manuscript');
+            
+            // 1. Delete old manuscript
+            $oldManuscripts = $project->files()->where('type', 'manuscript')->get();
+            foreach ($oldManuscripts as $old) {
+                Storage::disk('public')->delete($old->path);
+                $old->delete();
+            }
+
+            // 2. Store new file
+            $year = $project->year ?: 'unknown';
+            $dir = "projects/{$year}/{$project->slug}";
+            $filename = 'manuscript.pdf';
+            $path = $file->storeAs($dir, $filename, 'public');
+            
+            $fullPath = Storage::disk('public')->path($path);
+            $fileHash = hash_file('sha256', $fullPath);
+
+            $projectFile = \App\Models\ProjectFile::create([
+                'project_id' => $project->id,
+                'type' => 'manuscript',
+                'filename' => $filename,
+                'path' => $path,
+                'mime_type' => $file->getClientMimeType(),
+                'size' => $file->getSize(),
+                'file_hash' => $fileHash,
+                'uploaded_by' => $user->id,
+                'is_primary' => true,
+            ]);
+
+            // 3. Re-run scans and validation
+            $scanner = app(\App\Services\FileScanner::class);
+            $scanResult = $scanner->scan($fullPath);
+            
+            // Even if scan fails here, we let it through but log it for admin review
+            // Since it's a resubmission, blocking here might be too harsh if they are fixing things
+            // But we'll still run the PDF Validator for the dashboard report
+            $validator = app(\App\Services\PDFValidator::class);
+            $validation = $validator->validate($fullPath);
+
+            $combinedNotes = [
+                '✓ Security Scan: ' . ($scanResult['ok'] ? 'Clean' : 'Warning: ' . $scanResult['notes']),
+                '✓ Validator: ' . ($validation['valid'] ? 'Initial criteria met' : 'Warning: Manual review required')
+            ];
+            $combinedNotes = array_merge($combinedNotes, $validation['notes']);
+
+            $project->update([
+                'manuscript_validated' => $validation['valid'],
+                'manuscript_validation_notes' => implode("\n", $combinedNotes),
+            ]);
+        }
 
         // Sync categories
         $categoryIds = $validated['categories'] ?? [];
