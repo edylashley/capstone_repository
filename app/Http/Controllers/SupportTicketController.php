@@ -6,6 +6,7 @@ use App\Models\ActivityLog;
 use App\Models\SupportTicket;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class SupportTicketController extends Controller
 {
@@ -15,9 +16,10 @@ class SupportTicketController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'category' => 'required|in:bug,correction,account,general',
-            'subject'  => 'required|string|max:255',
+            'category' => 'required|in:bug,correction,account,general,others',
+            'subject'  => 'nullable|string|max:255',
             'message'  => 'required|string|max:5000',
+            'custom_category' => 'nullable|string|max:100',
         ];
 
         // If guest, email is required. If auth, we use their account email.
@@ -32,11 +34,16 @@ class SupportTicketController extends Controller
             ->where('expires_at', '<=', now())
             ->delete();
 
+        $category = $validated['category'];
+        if ($category === 'others' && !empty($validated['custom_category'])) {
+            $category = $validated['custom_category'];
+        }
+
         $ticket = SupportTicket::create([
             'user_id'  => auth()->id(), // nullable
             'email'    => auth()->check() ? auth()->user()->email : $validated['email'],
-            'category' => $validated['category'],
-            'subject'  => $validated['subject'],
+            'category' => $category,
+            'subject'  => $validated['subject'] ?? Str::limit($validated['message'], 50),
             'message'  => $validated['message'],
             'status'   => 'pending',
         ]);
@@ -86,8 +93,12 @@ class SupportTicketController extends Controller
         }
 
         // Filter by category
-        if ($request->filled('category') && in_array($request->category, ['bug', 'correction', 'account', 'general'])) {
-            $query->where('category', $request->category);
+        if ($request->filled('category')) {
+            if ($request->category === 'others') {
+                $query->whereNotIn('category', ['bug', 'correction', 'account', 'general', 'security']);
+            } elseif (in_array($request->category, ['bug', 'correction', 'account', 'general'])) {
+                $query->where('category', $request->category);
+            }
         }
 
         // Search
@@ -111,6 +122,16 @@ class SupportTicketController extends Controller
         ];
 
         return view('admin.support.index', compact('tickets', 'stats'));
+    }
+
+    /**
+     * Admin: return JSON count of pending tickets for real-time notifications.
+     */
+    public function getPendingCount(): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'count' => SupportTicket::where('status', 'pending')->count()
+        ]);
     }
 
     /**
@@ -149,6 +170,11 @@ class SupportTicketController extends Controller
 
         $ticket->update($updateData);
 
+        // If resolved, notify the user via email (works for both guests and registered students)
+        if ($validated['status'] === 'resolved') {
+            \Illuminate\Support\Facades\Mail::to($ticket->email)->queue(new \App\Mail\SupportTicketResolved($ticket));
+        }
+
         ActivityLog::create([
             'user_id'     => auth()->id(),
             'action'      => 'support_ticket_status_changed',
@@ -163,15 +189,24 @@ class SupportTicketController extends Controller
             ],
         ]);
 
-        $msg = $validated['status'] === 'resolved'
-            ? 'Ticket resolved. The user will see your reply and the record will auto-delete in 3 days.'
-            : 'Ticket reopened.';
+        $msg = 'Ticket updated.';
+        if ($validated['status'] === 'resolved') {
+            if ($ticket->category === 'security') {
+                $msg = 'Security alert acknowledged and logged.';
+            } elseif ($ticket->user_id) {
+                $msg = 'Ticket resolved. The student will see your reply on their dashboard and via email.';
+            } else {
+                $msg = 'Ticket resolved. An email notification has been sent to the guest at ' . $ticket->email . '.';
+            }
+        } else {
+            $msg = 'Ticket reopened.';
+        }
 
         return back()->with('success', $msg);
     }
 
     /**
-     * Admin: delete a ticket.
+     * Admin: delete a single ticket.
      */
     public function destroy(SupportTicket $ticket)
     {
@@ -190,6 +225,34 @@ class SupportTicketController extends Controller
         ]);
 
         return redirect()->route('admin.support.index')->with('success', 'Ticket deleted successfully.');
+    }
+
+    /**
+     * Admin: bulk delete tickets.
+     */
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        if (empty($ids)) {
+            return back()->with('error', 'No tickets selected.');
+        }
+
+        $count = SupportTicket::whereIn('id', $ids)->count();
+        SupportTicket::whereIn('id', $ids)->delete();
+
+        ActivityLog::create([
+            'user_id'     => auth()->id(),
+            'action'      => 'support_ticket_bulk_deleted',
+            'target_type' => 'support_ticket',
+            'target_id'   => 0,
+            'ip'          => $request->ip(),
+            'meta'        => [
+                'count' => $count,
+                'ids' => $ids,
+            ],
+        ]);
+
+        return back()->with('success', $count . ' tickets deleted successfully.');
     }
 }
 

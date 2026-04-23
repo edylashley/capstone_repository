@@ -104,10 +104,9 @@
                             <option value="bug" {{ request('category') === 'bug' ? 'selected' : '' }}>System Bug</option>
                             <option value="correction" {{ request('category') === 'correction' ? 'selected' : '' }}>Record
                                 Correction</option>
-                            <option value="account" {{ request('category') === 'account' ? 'selected' : '' }}>Account
-                                Issue</option>
-                            <option value="general" {{ request('category') === 'general' ? 'selected' : '' }}>General
-                            </option>
+                            <option value="account" {{ request('category') === 'account' ? 'selected' : '' }}>Account Issue</option>
+                            <option value="general" {{ request('category') === 'general' ? 'selected' : '' }}>General</option>
+                            <option value="others" {{ request('category') === 'others' ? 'selected' : '' }}>Others</option>
                         </select>
                     </div>
                     <button type="submit"
@@ -124,7 +123,42 @@
             </div>
 
             {{-- Tickets List --}}
-            <div class="bg-slate-900 rounded-2xl shadow-sm border border-white/5 overflow-hidden">
+            <div class="bg-slate-900 rounded-2xl shadow-sm border border-white/5 overflow-hidden" 
+                 x-data="{ 
+                    selected: [], 
+                    allSelected: false,
+                    toggleAll() {
+                        if (this.allSelected) {
+                            this.selected = @js($tickets->pluck('id'));
+                        } else {
+                            this.selected = [];
+                        }
+                    }
+                 }">
+                
+                {{-- Bulk Action Bar --}}
+                <div x-show="selected.length > 0" 
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 -translate-y-4"
+                     x-transition:enter-end="opacity-100 translate-y-0"
+                     class="p-4 bg-indigo-600 border-b border-indigo-500 flex items-center justify-between">
+                    <p class="text-xs font-black text-white uppercase tracking-widest">
+                        <span x-text="selected.length"></span> Tickets Selected
+                    </p>
+                    <form action="{{ route('admin.support.bulk-delete') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete these ' + selected.length + ' tickets? This cannot be undone.')">
+                        @csrf
+                        <template x-for="id in selected" :key="id">
+                            <input type="hidden" name="ids[]" :value="id">
+                        </template>
+                        <button type="submit" class="px-4 py-2 bg-white text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-all shadow-lg flex items-center gap-2">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            Delete Selected
+                        </button>
+                    </form>
+                </div>
+
                 @if($tickets->isEmpty())
                     <div class="p-12 text-center bg-slate-950">
                         <div
@@ -139,56 +173,80 @@
                         <p class="text-xs text-slate-500 mt-2">No support inquiries require immediate intervention.</p>
                     </div>
                 @else
+                    {{-- Select All Header --}}
+                    <div class="p-4 bg-slate-950/50 border-b border-white/5 flex items-center gap-4">
+                        <div class="flex items-center">
+                            <input type="checkbox" x-model="allSelected" @change="toggleAll()" class="w-4 h-4 rounded border-white/10 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Selection Matrix / Archive Control</span>
+                    </div>
+
                     <div class="divide-y divide-white/5">
                         @foreach($tickets as $ticket)
-                            <a href="{{ route('admin.support.show', $ticket) }}"
-                                class="flex items-center gap-4 p-5 hover:bg-white/[0.02] transition-colors group">
+                            <div class="relative flex items-center gap-4 p-5 hover:bg-white/[0.02] transition-colors group">
+                                {{-- Checkbox --}}
+                                <div class="flex-shrink-0 z-10">
+                                    <input type="checkbox" :value="{{ $ticket->id }}" x-model="selected" class="w-4 h-4 rounded border-white/10 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                                </div>
+
                                 {{-- Status Indicator --}}
-                                <div class="flex-shrink-0">
+                                <div class="flex-shrink-0 cursor-pointer" onclick="window.location.href='{{ route('admin.support.show', $ticket) }}'">
                                     @if($ticket->status === 'pending')
                                         <div class="w-3 h-3 bg-amber-500 rounded-full ring-4 ring-amber-500/20 animate-pulse"></div>
-
                                     @else
                                         <div class="w-3 h-3 bg-emerald-500 rounded-full ring-4 ring-emerald-500/20"></div>
                                     @endif
                                 </div>
 
                                 {{-- Ticket Info --}}
-                                <div class="flex-1 min-w-0">
+                                <a href="{{ route('admin.support.show', $ticket) }}" class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 mb-1">
-                                        <h4
-                                            class="font-black text-sm text-white truncate group-hover:text-indigo-400 transition-colors">
-                                            {{ $ticket->subject }}</h4>
+                                        <h4 class="font-black text-sm text-white truncate group-hover:text-indigo-400 transition-colors">
+                                            {{ $ticket->category_label }}</h4>
                                         <span
                                             class="flex-shrink-0 text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border {{ $ticket->status_badge }}">
                                             {{ str_replace('_', ' ', $ticket->status) }}
                                         </span>
                                     </div>
-                                    <p class="text-xs text-slate-500 truncate">{{ Str::limit($ticket->message, 100) }}</p>
+                                    <p class="text-xs text-slate-500 truncate">{{ $ticket->subject }}</p>
                                     <div class="flex items-center gap-3 mt-1.5">
                                         <span class="text-[10px] font-bold text-slate-500">
                                             <span class="text-slate-300">{{ $ticket->user?->name ?? $ticket->email }}</span>
                                         </span>
-                                        <span
-                                            class="text-[10px] font-bold text-indigo-400 bg-indigo-900/30 px-2 py-0.5 rounded-full border border-indigo-500/20">{{ $ticket->category_label }}</span>
                                     </div>
-                                </div>
+                                </a>
 
-                                {{-- Timestamp --}}
-                                <div class="flex-shrink-0 text-right">
-                                    <p class="text-xs font-bold text-gray-400">{{ $ticket->created_at->diffForHumans() }}</p>
-                                    @if($ticket->replied_at)
-                                        <p class="text-[10px] text-green-500 font-bold mt-0.5">✓ Replied</p>
-                                    @endif
-                                </div>
+                                {{-- Actions --}}
+                                <div class="flex items-center gap-4">
+                                    {{-- Timestamp --}}
+                                    <div class="hidden sm:block flex-shrink-0 text-right">
+                                        <p class="text-xs font-bold text-gray-400">{{ $ticket->created_at->diffForHumans() }}</p>
+                                        @if($ticket->replied_at)
+                                            <p class="text-[10px] text-green-500 font-bold mt-0.5">✓ Replied</p>
+                                        @endif
+                                    </div>
 
-                                {{-- Arrow --}}
-                                <svg class="w-5 h-5 text-slate-700 group-hover:text-white transition-all transform group-hover:translate-x-1 duration-300 flex-shrink-0"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7">
-                                    </path>
-                                </svg>
-                            </a>
+                                    {{-- Individual Delete --}}
+                                    <form action="{{ route('admin.support.destroy', $ticket) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this ticket?')" class="flex-shrink-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="p-2 text-slate-600 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100" title="Delete Ticket">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            </svg>
+                                        </button>
+                                    </form>
+
+                                    {{-- Arrow --}}
+                                    <a href="{{ route('admin.support.show', $ticket) }}" class="flex-shrink-0">
+                                        <svg class="w-5 h-5 text-slate-700 group-hover:text-white transition-all transform group-hover:translate-x-1 duration-300"
+                                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
 

@@ -45,7 +45,7 @@ class NewSubmission extends Mailable
             markdown: 'emails.projects.new_submission',
             with: [
                 'projectTitle' => $this->project->title,
-                'studentNames' => $this->project->authors->pluck('name')->join(', '),
+                'studentNames' => optional($this->project->authors)->pluck('name')->join(', ') ?? 'Student Authors',
                 'projectYear' => $this->project->year,
             ],
         );

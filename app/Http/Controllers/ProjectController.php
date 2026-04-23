@@ -237,9 +237,13 @@ class ProjectController extends Controller
             $checksum = hash_file('sha256', $fullPath);
             $fileHash = hash_file('sha256', $fullPath); // Calculate content hash for duplicate detection
 
-            // Check for duplicate content across ALL projects
+            // Check for duplicate content across ACTIVE projects
             $duplicateFile = \App\Models\ProjectFile::where('file_hash', $fileHash)
                 ->where('type', 'manuscript')
+                ->whereHas('project', function($query) {
+                    // This automatically filters out soft-deleted projects
+                    $query->whereNull('deleted_at'); 
+                })
                 ->with('project')
                 ->first();
 
@@ -315,7 +319,7 @@ class ProjectController extends Controller
                                      "File: " . $file->getClientOriginalName() . "\n" .
                                      "Threat Detected: " . $scanResult['notes'] . "\n\n" .
                                      "The submission has been blocked and the temporary file has been shredded.",
-                        'status' => 'pending',
+                        'status' => 'resolved',
                     ]);
                 }
 
@@ -474,7 +478,7 @@ class ProjectController extends Controller
                                          "File: " . $attach->getClientOriginalName() . "\n" .
                                          "Threat Detected: " . $attachScanResult['notes'] . "\n\n" .
                                          "The entire submission has been blocked and the temporary files have been shredded.",
-                            'status' => 'pending',
+                            'status' => 'resolved',
                         ]);
                     }
 
@@ -535,13 +539,14 @@ class ProjectController extends Controller
             'meta' => ['title' => $project->title, 'slug' => $project->slug],
         ]);
 
-        // Send email notification to adviser
+        // Send email notification to Admin
         try {
-            if ($project->adviser) {
-                \Illuminate\Support\Facades\Mail::to($project->adviser)->queue(new \App\Mail\NewSubmission($project));
+            $admin = \App\Models\User::where('role', 'admin')->first();
+            if ($admin) {
+                \Illuminate\Support\Facades\Mail::to($admin)->queue(new \App\Mail\NewSubmission($project));
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to send new submission email: ' . $e->getMessage());
+            \Log::error('Failed to send new submission email to admin: ' . $e->getMessage());
         }
 
         if ($request->wantsJson()) {
@@ -556,7 +561,7 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        $project = Project::with(['authors','adviser','files','verification'])->findOrFail($id);
+        $project = Project::withTrashed()->with(['authors','adviser','files','verification'])->findOrFail($id);
 
         // Access rules: published projects are public; unpublished require authorization
         if ($project->status !== 'published') {
@@ -765,17 +770,20 @@ class ProjectController extends Controller
             ],
         ]);
 
-        // Notify adviser about the resubmission
-        if ($wasRejected && $project->adviser) {
+        // Notify admin about the resubmission
+        if ($wasRejected) {
             try {
-                \Illuminate\Support\Facades\Mail::to($project->adviser)->queue(new \App\Mail\NewSubmission($project));
+                $admin = \App\Models\User::where('role', 'admin')->first();
+                if ($admin) {
+                    \Illuminate\Support\Facades\Mail::to($admin)->queue(new \App\Mail\NewSubmission($project));
+                }
             } catch (\Exception $e) {
                 \Log::error('Failed to send resubmission email: ' . $e->getMessage());
             }
         }
 
         $message = $wasRejected
-            ? 'Project updated and resubmitted for adviser review.'
+            ? 'Project updated and resubmitted for administrator review.'
             : 'Project updated successfully.';
 
         return redirect()->route('student.home')->with('success', $message);
@@ -807,8 +815,8 @@ class ProjectController extends Controller
         // Detach authors
         $project->authors()->detach();
 
-        // Delete project
-        $project->delete();
+        // Delete project (Hard Delete for cancelled drafts)
+        $project->forceDelete();
 
         return redirect()->route('student.home')->with('success', 'Submission cancelled successfully.');
     }
@@ -837,7 +845,7 @@ class ProjectController extends Controller
             }
             $recentProject->files()->delete();
             $recentProject->authors()->detach();
-            $recentProject->delete();
+            $recentProject->forceDelete();
 
             ActivityLog::create([
                 'user_id' => $user->id,

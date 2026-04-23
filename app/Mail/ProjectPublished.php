@@ -45,7 +45,7 @@ class ProjectPublished extends Mailable
             markdown: 'emails.projects.published',
             with: [
                 'projectTitle' => $this->project->title,
-                'adviserName' => $this->project->adviser->name,
+                'adviserName' => $this->project->adviser_name ?? $this->project->adviser?->name ?? 'Administrator',
                 'projectYear' => $this->project->year,
             ],
         );

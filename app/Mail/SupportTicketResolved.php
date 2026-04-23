@@ -9,21 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ReadyForPublication extends Mailable
+class SupportTicketResolved extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     */
-    public $project;
+    public $ticket;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($project)
+    public function __construct($ticket)
     {
-        $this->project = $project;
+        $this->ticket = $ticket;
     }
 
     /**
@@ -32,7 +29,7 @@ class ReadyForPublication extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Project Ready for Final Review: ' . $this->project->title,
+            subject: 'Support Ticket Resolved: #' . $this->ticket->id,
         );
     }
 
@@ -42,19 +39,12 @@ class ReadyForPublication extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.projects.ready_for_publication',
-            with: [
-                'projectTitle' => $this->project->title,
-                'adviserName' => $this->project->adviser_name ?? $this->project->adviser?->name ?? 'Administrator',
-                'projectYear' => $this->project->year,
-            ],
+            markdown: 'emails.support-resolved',
         );
     }
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     public function attachments(): array
     {

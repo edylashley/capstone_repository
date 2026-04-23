@@ -18,7 +18,8 @@
                 <div class="p-6">
                     <div class="flex items-start justify-between gap-4 mb-4">
                         <div>
-                            <h3 class="text-lg font-black text-white">{{ $ticket->subject }}</h3>
+                            <h3 class="text-lg font-black text-white uppercase tracking-tight">{{ $ticket->category_label }}</h3>
+                            <p class="text-sm text-slate-400 font-medium mt-1">{{ $ticket->subject }}</p>
                             <div class="flex items-center gap-2 mt-1.5">
                                 <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border {{ $ticket->status_badge }}">
                                     {{ str_replace('_', ' ', $ticket->status) }}
@@ -159,7 +160,7 @@
                         <label class="block text-sm font-bold text-slate-300 mb-2">Your Reply to the User <span class="text-red-500">*</span></label>
                         <textarea
                             name="admin_reply"
-                            rows="5"
+                            rows="12"
                             required
                             class="w-full rounded-xl border-white/5 bg-slate-950 text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm resize-none placeholder-slate-600"
                         >{{ old('admin_reply', "Hello,\n\nWe have received your support ticket regarding '" . $ticket->subject . "'.\n\nWe have looked into the issue and resolved it according to your request. If you have further issues, please don't hesitate to reach out again.\n\nThank you,\nAdmin Team") }}</textarea>

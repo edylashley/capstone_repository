@@ -75,10 +75,16 @@ class StoreProjectRequest extends FormRequest
                 'string',
                 'max:255',
                 Rule::unique('projects')->where(function ($query) {
-                    return $query->where('status', '!=', 'rejected');
+                    return $query->where('status', '!=', 'rejected')
+                                 ->whereNull('deleted_at');
                 })
             ],
-            'slug' => ['nullable','string','max:255','unique:projects,slug'],
+            'slug' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('projects', 'slug')->whereNull('deleted_at')
+            ],
             'abstract' => ['required','string'],
             'year' => $yearRules,
             'adviser_name' => ['required','string','max:255'],

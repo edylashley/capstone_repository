@@ -45,7 +45,7 @@ class ProjectReturned extends Mailable
             markdown: 'emails.projects.returned',
             with: [
                 'projectTitle' => $this->project->title,
-                'adviserName' => $this->project->adviser->name,
+                'adviserName' => $this->project->adviser_name ?? $this->project->adviser?->name ?? 'Administrator',
                 'rejectionReason' => $this->project->rejection_reason,
             ],
         );

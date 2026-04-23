@@ -37,15 +37,24 @@
 
         /* Hide scrollbar for IE, Edge and Firefox */
         .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        /* Performance Optimization: Pause heavy animations when modal is open */
+        .overflow-hidden .animate-cyber-grid,
+        .overflow-hidden .animate-float {
+            animation-play-state: paused !important;
         }
     </style>
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased bg-slate-950 text-slate-200"
-    x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
+<body class="font-sans antialiased bg-slate-950 text-slate-200 transition-all duration-500"
+    :class="{ 'overflow-hidden': sidebarOpen || (typeof supportOpen !== 'undefined' && supportOpen) }"
+    x-data="{ sidebarOpen: false, sidebarCollapsed: false, supportOpen: false }">
     <div class="min-h-screen flex flex-col lg:flex-row">
         @auth
             @if(!request()->is('/'))
@@ -58,7 +67,8 @@
             <!-- Mobile Header (Visible only on small screens) -->
             @auth
                 @if(!request()->is('/'))
-                    <div class="lg:hidden bg-slate-950 text-white p-4 flex items-center justify-between shadow-md border-b border-white/5">
+                    <div
+                        class="lg:hidden bg-slate-950 text-white p-4 flex items-center justify-between shadow-md border-b border-white/5">
                         <div class="flex items-center gap-3">
                             <img src="{{ asset('images/system-logo.jpg') }}"
                                 class="w-12 h-12 object-contain rounded-full shadow-lg border-2 border-white/20"
@@ -129,7 +139,8 @@
                 x-transition:leave-end="opacity-0 scale-90 translate-y-4"
                 class="relative bg-slate-900 rounded-2xl shadow-2xl w-full max-w-sm p-8 flex flex-col items-center text-center border border-white/10">
                 {{-- Animated Check Circle --}}
-                <div class="w-20 h-20 rounded-full bg-green-900/40 flex items-center justify-center mb-5 border border-green-500/30">
+                <div
+                    class="w-20 h-20 rounded-full bg-green-900/40 flex items-center justify-center mb-5 border border-green-500/30">
                     <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                     </svg>
@@ -164,7 +175,7 @@
 
     {{-- ── Global Support / Report Issue FAB & Modal ─────────────────── --}}
     @if(!auth()->check() || !auth()->user()->isAdmin())
-        <div x-data="{ supportOpen: false }" class="relative z-[9990]">
+        <div x-data="{ selectedCategory: '' }" class="relative z-[9990]">
             {{-- Floating Action Button --}}
             <button @click="supportOpen = true"
                 class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-[0_0_20px_rgba(79,70,229,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 group"
@@ -181,7 +192,7 @@
             <div x-show="supportOpen" x-cloak x-transition:enter="ease-out duration-300"
                 x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                 x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[9991]"
+                x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-950/80 z-[9991]"
                 @click="supportOpen = false"></div>
 
             {{-- Support Modal Content --}}
@@ -207,7 +218,8 @@
                             </div>
                             <div>
                                 <h3 class="font-black text-xl tracking-tight">System Support</h3>
-                                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-0.5">Verified Communication Channel</p>
+                                <p class="text-slate-400 text-[10px] font-black uppercase tracking-widest mt-0.5">Verified
+                                    Communication Channel</p>
                             </div>
                         </div>
                         <button @click="supportOpen = false"
@@ -230,7 +242,8 @@
                                     ->first();
                             @endphp
                             @if($latestReply)
-                                <div class="mb-8 bg-emerald-500/10 rounded-[1.5rem] border border-emerald-500/20 overflow-hidden relative shadow-lg">
+                                <div
+                                    class="mb-8 bg-emerald-500/10 rounded-[1.5rem] border border-emerald-500/20 overflow-hidden relative shadow-lg">
                                     <div class="absolute top-0 right-0 pt-3 pr-4">
                                         @if($latestReply->expires_at)
                                             <span class="text-[9px] font-black text-emerald-500/40 uppercase tracking-[0.2em]">
@@ -240,16 +253,17 @@
                                     </div>
                                     <div class="p-6">
                                         <div class="flex items-center gap-3 mb-3">
-                                            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
                                                 <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
                                             </div>
-                                            <h4 class="font-black text-xs text-emerald-400 uppercase tracking-widest">Admin Resolution</h4>
+                                            <h4 class="font-black text-xs text-emerald-400 uppercase tracking-widest">Admin
+                                                Resolution</h4>
                                         </div>
-                                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3 px-1">Sub: {{ $latestReply->subject }}</p>
                                         <div class="bg-slate-950/50 p-4 rounded-xl border border-white/5 shadow-inner">
                                             <p class="text-sm text-slate-200 leading-relaxed font-medium italic">
                                                 "{{ $latestReply->admin_reply }}"
@@ -263,33 +277,45 @@
                         <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6">
                             @csrf
                             <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Issue Category</label>
-                                <select name="category" required
-                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner">
+                                <label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Issue
+                                    Category</label>
+                                <select name="category" x-model="selectedCategory" required
+                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold">
                                     <option value="" disabled selected class="bg-slate-900">Select category...</option>
                                     <option value="bug" class="bg-slate-900">System Bug / Error</option>
                                     <option value="correction" class="bg-slate-900">Request Record Correction</option>
                                     <option value="account" class="bg-slate-900">Account / Login Issue</option>
                                     <option value="general" class="bg-slate-900">General Question</option>
+                                    <option value="others" class="bg-slate-900">Others (Please specify)</option>
                                 </select>
                             </div>
 
-                            <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Subject</label>
-                                <input type="text" name="subject" required placeholder="Project verification issue"
-                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner placeholder:text-slate-600">
+                            <div x-show="selectedCategory === 'others'" x-cloak x-transition class="mt-4">
+                                <label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Specify
+                                    Category</label>
+                                <input type="text" name="custom_category" :required="selectedCategory === 'others'"
+                                    placeholder="e.g. Feedback, UI Improvement"
+                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold placeholder:text-slate-600">
                             </div>
 
+
+
                             <div>
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Protocol Details</label>
+                                <label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Issue
+                                    Details</label>
                                 <textarea name="message" rows="4" required
                                     placeholder="Provide detailed context for administrative review..."
-                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner resize-none placeholder:text-slate-600 leading-relaxed"></textarea>
+                                    class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold resize-none placeholder:text-slate-600 leading-relaxed"></textarea>
                             </div>
 
                             @if(!auth()->check())
                                 <div>
-                                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Contact Email</label>
+                                    <label
+                                        class="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Contact
+                                        Email</label>
                                     <input type="email" name="email" required placeholder="Institutional email"
                                         class="w-full bg-slate-950 border-white/10 rounded-2xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm py-3.5 px-4 font-bold shadow-inner placeholder:text-slate-600">
                                 </div>
@@ -314,24 +340,30 @@
 
     {{-- ── Admin: Floating Support Notification Icon ──────────────────── --}}
     @if(auth()->check() && auth()->user()->isAdmin())
-        @php
-            $adminOpenTickets = \App\Models\SupportTicket::where('status', 'pending')->count();
-        @endphp
         <a href="{{ route('admin.support.index') }}"
+            x-data="{ 
+                count: {{ \App\Models\SupportTicket::where('status', 'pending')->count() }},
+                async updateCount() {
+                    try {
+                        const response = await fetch('{{ route('admin.support.count') }}');
+                        const data = await response.json();
+                        this.count = data.count;
+                    } catch (e) {}
+                }
+            }" x-init="setInterval(() => updateCount(), 30000)"
             class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
-            title="Support Tickets{{ $adminOpenTickets > 0 ? ' — ' . $adminOpenTickets . ' pending' : '' }}">
+            :title="'Support Tickets' + (count > 0 ? ' — ' + count + ' pending' : '')">
             <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                 </path>
             </svg>
-            @if($adminOpenTickets > 0)
-                <span
+            <template x-if="count > 0">
+                <span x-text="count"
                     class="absolute -top-1.5 -right-1.5 w-6 h-6 bg-amber-400 text-slate-900 text-[10px] font-black rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-pulse ring-2 ring-slate-900">
-                    {{ $adminOpenTickets }}
                 </span>
-            @endif
+            </template>
         </a>
     @endif
 </body>

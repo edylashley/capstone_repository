@@ -50,11 +50,17 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::post('/security-scan-demo/scan', [\App\Http\Controllers\Admin\SecurityScanDemoController::class, 'scan'])->name('security-demo.scan');
     Route::get('/security-scan-demo/test-file/{type}', [\App\Http\Controllers\Admin\SecurityScanDemoController::class, 'downloadTestFile'])->name('security-demo.test-file');
 
-    // Support Ticket Management
+    Route::get('/support/count', [SupportTicketController::class, 'getPendingCount'])->name('support.count');
+    Route::post('/support/bulk-delete', [SupportTicketController::class, 'bulkDelete'])->name('support.bulk-delete');
     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
     Route::patch('/support/{ticket}/status', [SupportTicketController::class, 'updateStatus'])->name('support.status');
     Route::delete('/support/{ticket}', [SupportTicketController::class, 'destroy'])->name('support.destroy');
+
+    // Central Archive Center
+    Route::get('/archive', [\App\Http\Controllers\Admin\ArchiveController::class, 'index'])->name('archive.index');
+    Route::post('/archive/{type}/{id}/restore', [\App\Http\Controllers\Admin\ArchiveController::class, 'restore'])->name('archive.restore');
+    Route::delete('/archive/{type}/{id}/force', [\App\Http\Controllers\Admin\ArchiveController::class, 'forceDelete'])->name('archive.force-delete');
 });
 
 // Apply last.activity to protected routes that require auth
@@ -78,7 +84,8 @@ Route::get('/files/{file}/view', [ProjectController::class, 'viewFile'])->name('
 Route::get('/projects/{project}', [\App\Http\Controllers\ProjectController::class, 'show'])->name('projects.show');
 
 // Dedicated Full-Screen Viewer (Bypasses mobile download issues)
-Route::get('/projects/{project}/viewer', function (\App\Models\Project $project) {
+Route::get('/projects/{id}/viewer', function ($id) {
+    $project = \App\Models\Project::withTrashed()->findOrFail($id);
     return view('projects.viewer', compact('project'));
 })->name('projects.viewer');
 

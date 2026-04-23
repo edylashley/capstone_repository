@@ -16,8 +16,16 @@
                         <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Institutional Knowledge & Project Archive</p>
                     </div>
                 </div>
-                <div class="hidden md:flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-2xl border border-white/5 shadow-inner">
-                    <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">Institutional Access Only</span>
+                <div class="hidden md:flex items-center gap-3">
+                    @guest
+                    <a href="{{ route('login') }}" class="inline-flex w-max px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-500/50 rounded-xl font-black text-[10px] uppercase tracking-widest transition shadow-lg shadow-indigo-900/20 items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                        Sign In
+                    </a>
+                    @endguest
+                    <div class="bg-slate-900/50 px-4 py-2 rounded-2xl border border-white/5 shadow-inner">
+                        <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest italic">Institutional Access Only</span>
+                    </div>
                 </div>
             </div>
             
@@ -47,13 +55,13 @@
                                     <div id="sidebar-marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 0.50rem; right: 0.50rem; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                                         <div class="animate-sidebar-marquee text-sm text-gray-400">
                                             <div class="flex shrink-0">
-                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
                                             </div>
                                             <div class="flex shrink-0">
-                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, tech adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
                                                 <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
                                             </div>
                                         </div>
@@ -132,10 +140,20 @@
                 <!-- Main Content: Project Gallery -->
                 <div class="flex-1 w-full min-w-0">
                     @if($projects->isEmpty())
-                        <div class="bg-slate-900 p-8 md:p-12 text-center rounded-xl shadow-sm border border-white/5">
-                            <div class="text-4xl mb-4">📭</div>
-                            <h3 class="text-lg font-bold text-gray-400">No records found</h3>
-                            <p class="text-sm text-gray-400">Try adjusting your search filters or browse by category.</p>
+                        <div class="bg-slate-900 p-16 md:p-24 text-center rounded-3xl shadow-2xl border border-white/5 relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-indigo-500/[0.02] group-hover:bg-indigo-500/[0.04] transition-colors"></div>
+                            <div class="relative z-10 flex flex-col items-center justify-center">
+                                <div class="relative mb-8">
+                                    <div class="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full"></div>
+                                    <svg class="w-24 h-24 text-slate-700 relative z-10 opacity-30 group-hover:opacity-50 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl font-black text-white uppercase tracking-[0.2em] mb-3">No Records Found</h3>
+                                <p class="text-slate-500 text-xs font-bold uppercase tracking-widest max-w-sm mx-auto leading-relaxed">
+                                    Your search did not return any matches. Try adjusting your filters or browsing by category.
+                                </p>
+                            </div>
                         </div>
                     @else
                         <div class="space-y-4 md:space-y-6">
@@ -183,7 +201,7 @@
                                                     <span class="text-gray-400 truncate">{{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</span>
                                                 </div>
                                                 <div class="flex items-center gap-2 overflow-hidden">
-                                                    <span class="text-indigo-400/80 shrink-0">Technical Adviser:</span>
+                                                    <span class="text-indigo-400/80 shrink-0">Adviser:</span>
                                                     <span class="text-gray-400 truncate">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
                                                 </div>
                                             </div>

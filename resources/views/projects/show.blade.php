@@ -11,6 +11,23 @@
 
     <div class="py-6 md:py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if($project->trashed())
+                <div class="mb-8 bg-rose-500/10 border border-rose-500/30 rounded-3xl p-6 flex items-center justify-between shadow-2xl shadow-rose-500/10 animate-pulse">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">⚠️</span>
+                        <div>
+                            <h3 class="text-rose-500 font-black uppercase tracking-widest text-sm">Archived Record</h3>
+                            <p class="text-rose-400/70 text-xs font-bold">This project is currently in the Central Archive. It is hidden from the public library.</p>
+                        </div>
+                    </div>
+                    <form action="{{ route('admin.archive.restore', ['type' => 'project', 'id' => $project->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="px-6 py-2.5 bg-rose-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/40">
+                            Restore Now
+                        </button>
+                    </form>
+                </div>
+            @endif
             <div class="flex flex-col gap-6 @if(optional(auth()->user())->isAdmin()) lg:flex-row @endif">
                 
                 <!-- Metadata Side -->
@@ -26,7 +43,7 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
                             <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Year Defended</strong> {{ $project->year }}</p>
-                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Technical Adviser</strong> {{ $project->adviser_name ?? $project->adviser->name ?? '-' }}</p>
+                            <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong> {{ $project->adviser_name ?? $project->adviser->name ?? '-' }}</p>
                             <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong> {{ $project->program ?? '-' }}</p>
                             <p class="text-sm text-slate-400"><strong class="text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong> {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
                         </div>
@@ -56,7 +73,7 @@
                             </div>
                         </div>
 
-                        @if($project->status === 'published' || (auth()->check() && (auth()->user()->isAdmin() || $project->authors->contains(auth()->user()))))
+                        @if(!$project->trashed() && ($project->status === 'published' || (auth()->check() && (auth()->user()->isAdmin() || $project->authors->contains(auth()->user())))))
                             @if($project->status === 'published')
                                 <div class="mt-4 p-5 border-2 border-emerald-500/30 bg-emerald-500/10 rounded-2xl shadow-sm">
                                     <span class="text-white/50 uppercase text-[10px] font-bold tracking-widest block mb-1">RECORD STATUS:</span> 
@@ -112,7 +129,7 @@
                         </style>
                             <!-- ADVISER DECISION HUB ACTION -->
                             <!-- SYSTEM VERIFICATION REPORT (Visible to Faculty/Admin always if notes exist) -->
-                            @if(optional(auth()->user())->isAdmin() && $project->manuscript_validation_notes)
+                            @if(!$project->trashed() && optional(auth()->user())->isAdmin() && $project->manuscript_validation_notes)
                                 <div class="mt-8 pt-6 border-t border-gray-700/50">
                                     <!-- Assistant's Report Card -->
                                     <div class="mb-6 p-4 rounded-xl {{ $project->manuscript_validated ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-yellow-500/10 border border-yellow-500/20' }}">
@@ -184,7 +201,7 @@
                                         @endif
                                     </div>
 
-                                    @if($project->status === 'pending' && auth()->user()->isAdmin())
+                                    @if(!$project->trashed() && $project->status === 'pending' && auth()->user()->isAdmin())
                                         <h4 class="font-black text-gray-400 uppercase text-xs mb-4">Verification Actions</h4>
                                         <form method="POST" action="{{ route('admin.projects.approve', $project) }}" onsubmit="return confirm('Confirm that this is the final, defended version of the project?');">
                                             @csrf

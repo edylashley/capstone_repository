@@ -52,9 +52,26 @@
 
                                 {{-- Status Info --}}
                                 @if($ticket->status === 'resolved')
-                                    <div class="flex items-center gap-2 mt-3 p-3 bg-green-900/20 rounded-xl border border-green-500/20">
-                                        <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                        <p class="text-xs font-semibold text-green-400">This ticket has been resolved by the administrator.</p>
+                                    <div class="mt-3 space-y-3">
+                                        <div class="flex items-center gap-2 p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                                            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                            <p class="text-xs font-semibold text-emerald-400">This ticket has been resolved by the administrator.</p>
+                                        </div>
+                                        
+                                        @if($ticket->admin_reply)
+                                            <div class="p-6 bg-indigo-500/5 rounded-2xl border border-indigo-500/10 border-l-4 border-l-indigo-500/50 shadow-inner">
+                                                <div class="flex items-center gap-3 mb-4">
+                                                    {{-- Premium Badge Icon --}}
+                                                    <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/20">
+                                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <h5 class="text-[10px] font-black uppercase text-indigo-400 tracking-[0.25em]">Administrator Response</h5>
+                                                </div>
+                                                <p class="text-sm text-slate-300 leading-relaxed italic whitespace-pre-wrap pl-1">"{{ $ticket->admin_reply }}"</p>
+                                            </div>
+                                        @endif
                                     </div>
                                 @elseif($ticket->status === 'pending')
                                     <div class="flex items-center gap-2 mt-3 p-3 bg-amber-900/20 rounded-xl border border-amber-500/20">

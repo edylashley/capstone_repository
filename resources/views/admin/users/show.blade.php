@@ -18,6 +18,23 @@
 
     <div class="py-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if($user->trashed())
+                <div class="mb-6 bg-rose-500/10 border border-rose-500/30 rounded-3xl p-6 flex items-center justify-between shadow-2xl shadow-rose-500/10 animate-pulse">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">👤</span>
+                        <div>
+                            <h3 class="text-rose-500 font-black uppercase tracking-widest text-sm">Archived Account</h3>
+                            <p class="text-rose-400/70 text-xs font-bold">This user account is currently in the Central Archive. They cannot log in until restored.</p>
+                        </div>
+                    </div>
+                    <form action="{{ route('admin.archive.restore', ['type' => 'user', 'id' => $user->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="px-6 py-2.5 bg-rose-500 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/40">
+                            Restore Account
+                        </button>
+                    </form>
+                </div>
+            @endif
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 <!-- User Basic Info Card -->

@@ -34,10 +34,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function show(User $user): View
+    public function show($id): View
     {
+        $user = User::withTrashed()->findOrFail($id);
+        
         $user->load(['authoredProjects' => function($q) {
-            $q->orderBy('year', 'desc');
+            $q->withTrashed()->orderBy('year', 'desc');
         }]);
 
         // Get recent activity for this user

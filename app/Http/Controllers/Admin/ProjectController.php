@@ -82,10 +82,7 @@ class ProjectController extends Controller
                 \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectPublished($project));
             }
             
-            // Email Adviser
-            if ($project->adviser) {
-                \Illuminate\Support\Facades\Mail::to($project->adviser)->queue(new \App\Mail\ProjectPublished($project));
-            }
+
         } catch (\Exception $e) {
             \Log::error('Failed to send project publication email: ' . $e->getMessage());
         }
@@ -291,7 +288,7 @@ class ProjectController extends Controller
      */
     public function edit(string $id)
     {
-        $project = \App\Models\Project::findOrFail($id);
+        $project = \App\Models\Project::withTrashed()->findOrFail($id);
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
         
@@ -303,7 +300,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $project = \App\Models\Project::findOrFail($id);
+        $project = \App\Models\Project::withTrashed()->findOrFail($id);
         
         $validated = $request->validate([
             'title' => [
@@ -352,12 +349,9 @@ class ProjectController extends Controller
         $projectTitle = $project->title;
         $projectId = $project->id;
         
-        // Delete associated files from storage
-        foreach ($project->files as $file) {
-            if (\Storage::disk('public')->exists($file->path)) {
-                \Storage::disk('public')->delete($file->path);
-            }
-        }
+        // We no longer delete files here because we want them to be restorable 
+        // from the Central Archive. Physical file deletion now happens only 
+        // during a "Force Delete/Purge" in the Archive Center.
         
         // Log the deletion before removing the record
         \App\Models\ActivityLog::create([
