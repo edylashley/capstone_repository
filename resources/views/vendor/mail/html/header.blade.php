@@ -1,33 +1,41 @@
 @props(['url'])
 <tr>
-<td class="header" align="center" style="text-align: center !important; padding: 30px 0;">
-<a href="{{ $url }}" style="display: inline-block; text-decoration: none; width: 100%;">
-<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
-    <tr>
-        <td align="center" style="padding-bottom: 20px;">
-            {{-- Using a reliable public placeholder for local testing --}}
-            @php
-                // Use a professional, lightweight public icon for now to prevent Gmail clipping
-                // When you go live, this will be your actual public logo URL.
-                $logoUrl = 'https://img.icons8.com/clouds/100/000000/graduation-cap.png';
-                
-                // If you want to use your local logo, it must be small. 
-                // Since Base64 made the email too large, we'll stick to a hosted icon for the best experience.
-            @endphp
-            <img src="{{ $logoUrl }}" alt="Logo" style="height: 80px; width: 80px; display: block; margin: 0 auto;">
-        </td>
-    </tr>
-    <tr>
-        <td align="center" style="text-align: center !important;">
-            <h2 style="color: #4f46e5 !important; margin: 0 !important; font-size: 24px !important; font-weight: 900 !important; text-transform: uppercase !important; letter-spacing: 2px !important; line-height: 1.2 !important; text-align: center !important;">
-                CSIT Capstone Library
-            </h2>
-            <p style="color: #64748b !important; font-size: 11px !important; font-weight: bold !important; text-transform: uppercase !important; margin: 8px 0 0 0 !important; letter-spacing: 1.5px !important; line-height: 1 !important; text-align: center !important;">
-                Official Institutional Archive
-            </p>
-        </td>
-    </tr>
-</table>
-</a>
-</td>
+    <td class="header" align="center" style="text-align: center !important; padding: 30px 0;">
+        <a href="{{ $url }}" style="display: inline-block; text-decoration: none; width: 100%;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
+                <tr>
+                    <td align="center" style="padding-bottom: 20px;">
+                        {{-- Using a reliable public placeholder for local testing --}}
+                        @php
+                            $logoPath = public_path('images/system-logo.jpg');
+                            $logoData = '';
+
+                            if (file_exists($logoPath)) {
+                                $type = pathinfo($logoPath, PATHINFO_EXTENSION);
+                                $data = file_get_contents($logoPath);
+                                $logoData = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                            } else {
+                                // Fallback to a clean public icon if file is missing
+                                $logoData = 'https://img.icons8.com/clouds/100/000000/graduation-cap.png';
+                            }
+                        @endphp
+                        <img src="{{ $logoData }}" alt="Logo"
+                            style="height: 80px; width: 80px; display: block; margin: 0 auto; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="text-align: center !important;">
+                        <h2
+                            style="color: #4f46e5 !important; margin: 0 !important; font-size: 24px !important; font-weight: 900 !important; text-transform: uppercase !important; letter-spacing: 2px !important; line-height: 1.2 !important; text-align: center !important;">
+                            CSIT Capstone Library
+                        </h2>
+                        <p
+                            style="color: #64748b !important; font-size: 11px !important; font-weight: bold !important; text-transform: uppercase !important; margin: 8px 0 0 0 !important; letter-spacing: 1.5px !important; line-height: 1 !important; text-align: center !important;">
+                            Official Institutional Archive
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </a>
+    </td>
 </tr>

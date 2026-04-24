@@ -59,6 +59,17 @@
         @auth
             @if(!request()->is('/'))
                 @include('layouts.sidebar')
+
+                <!-- Simple Sidebar Arrow Toggle -->
+                <button @click="sidebarCollapsed = false" 
+                        x-show="sidebarCollapsed" 
+                        x-cloak
+                        class="fixed top-1/2 left-0 -translate-y-1/2 z-[50] hidden lg:flex w-8 h-12 items-center justify-center rounded-r-xl bg-indigo-600/20 hover:bg-indigo-600 text-white transition-all group border border-l-0 border-indigo-500/30"
+                        title="Show Sidebar">
+                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
             @endif
         @endauth
 

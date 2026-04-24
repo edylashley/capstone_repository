@@ -1,6 +1,7 @@
 <!-- Logo -->
 <div class="flex flex-col items-center py-4 px-2 border-b border-slate-700/50">
     <button @click="sidebarCollapsed = true"
+        title="Collapse Sidebar"
         class="relative w-32 h-32 flex items-center justify-center overflow-hidden rounded-full shadow-[0_0_50px_-10px_rgba(99,102,241,0.6)] bg-slate-950/80 backdrop-blur-md transition duration-300 border-4 border-indigo-500/30 hover:scale-105 hover:shadow-indigo-500/80 focus:outline-none group">
         <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Capstone Repository"
             class="w-full h-full object-cover transform scale-120 transition-transform duration-300 group-hover:scale-135" />
