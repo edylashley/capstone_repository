@@ -191,7 +191,9 @@
 
                                 {{-- Status Indicator --}}
                                 <div class="flex-shrink-0 cursor-pointer" onclick="window.location.href='{{ route('admin.support.show', $ticket) }}'">
-                                    @if($ticket->status === 'pending')
+                                    @if($ticket->category === 'security')
+                                        <div class="w-3 h-3 bg-rose-500 rounded-full ring-4 ring-rose-500/20"></div>
+                                    @elseif($ticket->status === 'pending')
                                         <div class="w-3 h-3 bg-amber-500 rounded-full ring-4 ring-amber-500/20 animate-pulse"></div>
                                     @else
                                         <div class="w-3 h-3 bg-emerald-500 rounded-full ring-4 ring-emerald-500/20"></div>
@@ -205,7 +207,7 @@
                                             {{ $ticket->category_label }}</h4>
                                         <span
                                             class="flex-shrink-0 text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border {{ $ticket->status_badge }}">
-                                            {{ str_replace('_', ' ', $ticket->status) }}
+                                            {{ $ticket->status_label }}
                                         </span>
                                     </div>
                                     <p class="text-xs text-slate-500 truncate">{{ $ticket->subject }}</p>

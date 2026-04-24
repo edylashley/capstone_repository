@@ -64,9 +64,6 @@ class StoreProjectRequest extends FormRequest
         if ($yearSetting) {
             $yearRules[] = 'min:' . $yearSetting;
             $yearRules[] = 'max:' . $yearSetting;
-        } else {
-            $yearRules[] = 'min:2000';
-            $yearRules[] = 'max:' . (date('Y') + 1);
         }
         
         return [

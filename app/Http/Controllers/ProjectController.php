@@ -253,7 +253,8 @@ class ProjectController extends Controller
                 
                 // CRITICAL FIX: The project was already created in database, we MUST delete it now!
                 // Since this happened inside the same request, we can safely force delete it.
-                $project->delete(); // This cascades to authors pivot table automatically
+                $project->authors()->detach();
+                $project->forceDelete();
                 
                 $duplicateProject = $duplicateFile->project;
                 $errorMessage = "⚠️ Duplicate Content Detected!\n\n";
@@ -327,7 +328,7 @@ class ProjectController extends Controller
                 Storage::disk('public')->delete($path);
                 \App\Models\ProjectFile::where('project_id', $project->id)->delete();
                 $project->authors()->detach();
-                $project->delete();
+                $project->forceDelete();
 
                 $errorMsg = "⚠️ Security Threat Detected in Manuscript!\n\n";
                 $errorMsg .= "The file \"{$file->getClientOriginalName()}\" contains a restricted signature: " . str_replace('FOUND', '', $scanResult['notes']) . "\n\n";
@@ -376,39 +377,27 @@ class ProjectController extends Controller
             $project->save();
 
             // STRICT VERIFICATION: If validation failed, reject the submission entirely
-            if (! $validation['valid']) {
-                \App\Models\ActivityLog::create([
-                    'user_id' => $request->user()->id,
-                    'action' => 'manuscript_verification_failed',
-                    'target_type' => 'project',
-                    'target_id' => $project->id, // Note: ID will be of deleted record, but logs text
-                    'ip' => $request->ip(),
-                    'meta' => ['notes' => $validation['notes']],
-                ]);
+            // 4. Run PDF validation heuristics (LOG ONLY, NO BLOCKING per user request)
+            $validator = app(\App\Services\PDFValidator::class);
+            $validation = $validator->validate($fullPath);
 
-                // Cleanup: Delete file and project record
-                Storage::disk('public')->delete($path);
-                \App\Models\ProjectFile::where('project_id', $project->id)->delete();
-                $project->authors()->detach();
-                $project->delete();
+            $combinedNotes = [
+                '[OK] Security Scan: Clean (No threats detected)',
+            ];
+            $combinedNotes = array_merge($combinedNotes, $validation['notes']);
 
-                $errorMsg = "System Verification Report Failed:\n" . implode("\n", $validation['notes']);
-                
-                if ($request->expectsJson() || $request->wantsJson()) {
-                    return response()->json(['message' => 'Verification failed', 'errors' => ['manuscript' => [$errorMsg]]], 422);
-                }
-
-                return redirect()->back()->withInput()
-                    ->withErrors(['manuscript' => $errorMsg]);
-            }
+            $project->update([
+                'manuscript_validated' => $validation['valid'],
+                'manuscript_validation_notes' => implode("\n", $combinedNotes),
+            ]);
 
             \App\Models\ActivityLog::create([
                 'user_id' => $request->user()->id,
-                'action' => 'manuscript_validated',
+                'action' => 'manuscript_verified',
                 'target_type' => 'project',
                 'target_id' => $project->id,
                 'ip' => $request->ip(),
-                'meta' => ['valid' => $project->manuscript_validated, 'notes' => $combinedNotes, 'scan_ok' => $scanOk],
+                'meta' => ['valid' => $validation['valid'], 'notes' => $combinedNotes],
             ]);
 
 
@@ -427,7 +416,7 @@ class ProjectController extends Controller
                     }
                     $project->files()->delete();
                     $project->authors()->detach();
-                    $project->delete();
+                    $project->forceDelete();
                     return redirect()->back()->withInput()
                         ->withErrors(['attachments' => "Upload interrupted: The server's OS-level antivirus intercepted and shredded \"{$attach->getClientOriginalName()}\" immediately before the server could process it!"]);
                 }
@@ -440,7 +429,7 @@ class ProjectController extends Controller
                     }
                     $project->files()->delete();
                     $project->authors()->detach();
-                    $project->delete();
+                    $project->forceDelete();
                     return redirect()->back()->withInput()
                         ->withErrors(['attachments' => "OS Firewall Interception: The host operating system quarantined and locked \"{$attach->getClientOriginalName()}\" during transfer. Threat blocked."]);
                 }
@@ -491,7 +480,7 @@ class ProjectController extends Controller
                     }
                     $project->files()->delete();
                     $project->authors()->detach();
-                    $project->delete();
+                    $project->forceDelete();
 
                     $errorMsg = "⚠️ Security Threat Detected in Attachment!\n\n";
                     if ($isSystemError) {
@@ -648,7 +637,7 @@ class ProjectController extends Controller
                 })
             ],
             'abstract' => 'required|string',
-            'year' => 'required|integer|min:2000|max:' . (date('Y') + 1),
+            'year' => 'required|integer',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'other_category' => ['nullable', 'string', 'max:50'],
@@ -711,6 +700,29 @@ class ProjectController extends Controller
             $fullPath = Storage::disk('public')->path($path);
             $fileHash = hash_file('sha256', $fullPath);
 
+            // 1.5 CHECK FOR DUPLICATE CONTENT
+            $duplicateFile = \App\Models\ProjectFile::where('file_hash', $fileHash)
+                ->where('type', 'manuscript')
+                ->where('project_id', '!=', $project->id) // Don't match against itself if they re-upload the same file
+                ->whereHas('project', function($query) {
+                    $query->whereNull('deleted_at'); 
+                })
+                ->with('project')
+                ->first();
+
+            if ($duplicateFile) {
+                Storage::disk('public')->delete($path);
+                
+                $duplicateProject = $duplicateFile->project;
+                $errorMessage = "⚠️ Duplicate Content Detected!\n\n";
+                $errorMessage .= "This new PDF is identical to a manuscript already submitted in:\n";
+                $errorMessage .= "• Project: \"{$duplicateProject->title}\"\n";
+                $errorMessage .= "• Submitted by: " . $duplicateProject->authors->pluck('name')->join(', ') . "\n";
+                $errorMessage .= "Please ensure you are submitting original work.";
+
+                return redirect()->back()->withInput()->withErrors(['manuscript' => $errorMessage]);
+            }
+
             $projectFile = \App\Models\ProjectFile::create([
                 'project_id' => $project->id,
                 'type' => 'manuscript',
@@ -727,21 +739,77 @@ class ProjectController extends Controller
             $scanner = app(\App\Services\FileScanner::class);
             $scanResult = $scanner->scan($fullPath);
             
-            // Even if scan fails here, we let it through but log it for admin review
-            // Since it's a resubmission, blocking here might be too harsh if they are fixing things
-            // But we'll still run the PDF Validator for the dashboard report
+            // STRICT SECURITY: Block if threat is detected
+            if (!$scanResult['ok']) {
+                $isSystemError = (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system');
+                
+                // 1. Log the failure
+                \App\Models\ActivityLog::create([
+                    'user_id' => $user->id,
+                    'action' => $isSystemError ? 'update_scanner_system_error' : 'update_security_threat_blocked',
+                    'target_type' => 'project',
+                    'target_id' => $project->id,
+                    'ip' => $request->ip(),
+                    'meta' => [
+                        'notes' => $scanResult['notes'],
+                        'filename' => $file->getClientOriginalName()
+                    ],
+                ]);
+
+                // 2. Security Ticket for Admin
+                if (!$isSystemError) {
+                    \App\Models\SupportTicket::create([
+                        'user_id' => $user->id,
+                        'email' => $user->email,
+                        'category' => 'security',
+                        'subject' => '⚠️ SECURITY ALERT: Malicious Update Blocked',
+                        'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
+                                     "Student: " . $user->name . " (ID: " . $user->id . ")\n" .
+                                     "Action: Attempted to UPDATE a project with a malicious file.\n" .
+                                     "File: " . $file->getClientOriginalName() . "\n" .
+                                     "Threat Detected: " . $scanResult['notes'] . "\n\n" .
+                                     "The update was blocked and the malicious file was shredded immediately.",
+                        'status' => 'resolved',
+                    ]);
+                }
+
+                // Cleanup ONLY the new bad file, keep the project record (rejected state)
+                Storage::disk('public')->delete($path);
+                $projectFile->delete(); // Delete the file record we just created
+
+                $errorMsg = "⚠️ Security Threat Detected!\n\n";
+                $errorMsg .= "The file \"{$file->getClientOriginalName()}\" contains a restricted signature: " . str_replace('FOUND', '', $scanResult['notes']) . "\n\n";
+                $errorMsg .= "Your update has been blocked for security reasons.";
+
+                if ($request->expectsJson() || $request->wantsJson()) {
+                    return response()->json(['message' => 'Security scan failed', 'errors' => ['manuscript' => [$errorMsg]]], 422);
+                }
+
+                return redirect()->back()->withInput()->withErrors(['manuscript' => $errorMsg]);
+            }
+
+            // 4. Run PDF validation heuristics (LOG ONLY, NO BLOCKING per user request)
             $validator = app(\App\Services\PDFValidator::class);
             $validation = $validator->validate($fullPath);
 
             $combinedNotes = [
-                '✓ Security Scan: ' . ($scanResult['ok'] ? 'Clean' : 'Warning: ' . $scanResult['notes']),
-                '✓ Validator: ' . ($validation['valid'] ? 'Initial criteria met' : 'Warning: Manual review required')
+                '[OK] Security Scan: Clean (No threats detected)',
             ];
             $combinedNotes = array_merge($combinedNotes, $validation['notes']);
 
             $project->update([
                 'manuscript_validated' => $validation['valid'],
                 'manuscript_validation_notes' => implode("\n", $combinedNotes),
+            ]);
+
+            // Log the resubmission validation
+            \App\Models\ActivityLog::create([
+                'user_id' => $user->id,
+                'action' => 'update_manuscript_verified',
+                'target_type' => 'project',
+                'target_id' => $project->id,
+                'ip' => $request->ip(),
+                'meta' => ['valid' => $validation['valid'], 'notes' => $combinedNotes],
             ]);
         }
 
@@ -769,6 +837,54 @@ class ProjectController extends Controller
                 'was_rejected' => $wasRejected,
             ],
         ]);
+
+        // Handle Additional Attachments
+        if ($request->hasFile('attachments')) {
+            $scanner = app(\App\Services\FileScanner::class);
+            $year = $project->year ?: 'unknown';
+            $dir = "projects/{$year}/{$project->slug}/attachments";
+
+            foreach ($request->file('attachments') as $file) {
+                // 1. Temporary store for scanning
+                $tempPath = $file->store('temp', 'public');
+                $tempFullPath = Storage::disk('public')->path($tempPath);
+
+                // 2. Scan
+                $scanResult = $scanner->scan($tempFullPath);
+                if (!$scanResult['ok']) {
+                    Storage::disk('public')->delete($tempPath);
+                    $errorMsg = "⚠️ Security Threat Detected in Attachment: \"{$file->getClientOriginalName()}\"!\n\n";
+                    $errorMsg .= "The file contains a restricted signature. Update blocked.";
+                    return redirect()->back()->withInput()->withErrors(['attachments' => $errorMsg]);
+                }
+
+                // 3. Move to permanent location
+                $filename = $file->getClientOriginalName();
+                // Ensure unique filename if needed
+                if (Storage::disk('public')->exists("{$dir}/{$filename}")) {
+                    $filename = time() . '_' . $filename;
+                }
+                $path = $file->storeAs($dir, $filename, 'public');
+                $fullPath = Storage::disk('public')->path($path);
+                $fileHash = hash_file('sha256', $fullPath);
+
+                // 4. Create record
+                \App\Models\ProjectFile::create([
+                    'project_id' => $project->id,
+                    'type' => 'attachment',
+                    'filename' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'mime_type' => $file->getClientMimeType(),
+                    'size' => $file->getSize(),
+                    'file_hash' => $fileHash,
+                    'uploaded_by' => $user->id,
+                    'is_primary' => false,
+                ]);
+
+                // Cleanup temp
+                Storage::disk('public')->delete($tempPath);
+            }
+        }
 
         // Notify admin about the resubmission
         if ($wasRejected) {

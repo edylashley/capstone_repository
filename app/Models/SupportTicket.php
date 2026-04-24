@@ -62,14 +62,32 @@ class SupportTicket extends Model
     }
 
     /**
+     * Human-readable status label.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        if ($this->category === 'security') {
+            return 'THREAT BLOCKED';
+        }
+
+        return match ($this->status) {
+            'pending'  => 'PENDING',
+            'resolved' => 'RESOLVED',
+            default    => strtoupper($this->status),
+        };
+    }
+
+    /**
      * Status badge CSS classes.
      */
     public function getStatusBadgeAttribute(): string
     {
+        if ($this->category === 'security') {
+            return 'bg-rose-500/10 text-rose-500 border-rose-500/30 shadow-lg shadow-rose-500/5';
+        }
+
         return match ($this->status) {
-            'pending'  => $this->category === 'security' 
-                            ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' 
-                            : 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+            'pending'  => 'bg-amber-500/10 text-amber-500 border-amber-500/20',
             'resolved' => 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
             default    => 'bg-slate-800 text-slate-400 border-white/5',
         };

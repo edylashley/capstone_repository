@@ -124,15 +124,7 @@ class SupportTicketController extends Controller
         return view('admin.support.index', compact('tickets', 'stats'));
     }
 
-    /**
-     * Admin: return JSON count of pending tickets for real-time notifications.
-     */
-    public function getPendingCount(): \Illuminate\Http\JsonResponse
-    {
-        return response()->json([
-            'count' => SupportTicket::where('status', 'pending')->count()
-        ]);
-    }
+
 
     /**
      * Admin: view a single ticket.
@@ -253,6 +245,23 @@ class SupportTicketController extends Controller
         ]);
 
         return back()->with('success', $count . ' tickets deleted successfully.');
+    }
+    /**
+     * Admin: get count of pending tickets and recent security alerts.
+     */
+    public function getPendingCount()
+    {
+        // Count all actually pending tickets
+        $pendingCount = SupportTicket::where('status', 'pending')->count();
+        
+        // Also count security alerts from the last 24 hours so Admin sees them as "new" notifications
+        $recentSecurityCount = SupportTicket::where('category', 'security')
+            ->where('created_at', '>=', now()->subDay())
+            ->count();
+
+        return response()->json([
+            'count' => $pendingCount + $recentSecurityCount
+        ]);
     }
 }
 

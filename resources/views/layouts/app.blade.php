@@ -342,7 +342,7 @@
     @if(auth()->check() && auth()->user()->isAdmin())
         <a href="{{ route('admin.support.index') }}"
             x-data="{ 
-                count: {{ \App\Models\SupportTicket::where('status', 'pending')->count() }},
+                count: {{ \App\Models\SupportTicket::where(function($q) { $q->where('status', 'pending')->orWhere(function($q2) { $q2->where('category', 'security')->where('created_at', '>=', now()->subDay()); }); })->count() }},
                 async updateCount() {
                     try {
                         const response = await fetch('{{ route('admin.support.count') }}');

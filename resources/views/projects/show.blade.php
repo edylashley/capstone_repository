@@ -153,7 +153,7 @@
                                                     @php $hasPrintedHeader = true; @endphp
                                                 @endif
                                                 <div class="flex items-start gap-2">
-                                                    <span class="text-xs {{ str_contains($note, '✓') || !str_contains($note, 'Warning') ? 'text-emerald-500' : 'text-yellow-500' }}">●</span>
+                                                    <span class="text-xs {{ str_contains($note, '[ERROR]') ? 'text-red-500' : (str_contains($note, 'Warning') || str_contains($note, '!') || str_contains($note, '(i)') ? 'text-yellow-500' : 'text-emerald-500') }}">●</span>
                                                     <p class="text-[11px] leading-tight text-gray-300">
                                                         @if(str_starts_with($note, 'Detected:'))
                                                             @php
@@ -185,7 +185,7 @@
                                         @if(!$project->manuscript_validated)
                                             <div class="mt-4 p-2 bg-yellow-500/20 rounded-lg border border-yellow-500/30">
                                                 <p class="text-[9px] text-gray-300 leading-tight italic">
-                                                    <strong>Note:</strong> Signature page or min. page count not detected. Please manually verify the uploaded PDF before confirming.
+                                                    <strong>Note:</strong> Required page (Approval Sheet) not detected in text. Please manually verify the uploaded PDF (specifically the Approval Sheet) before confirming.
                                                 </p>
                                             </div>
                                         @endif

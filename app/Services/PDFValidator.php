@@ -85,44 +85,27 @@ class PDFValidator
             }
         }
 
-        // Scanned Image Check: If the system successfully ran pdftotext but found almost no actual words.
-        if (!$isBinaryFallback) {
-            // Remove extra whitespace just to measure actual characters
-            $cleanText = trim(preg_replace('/\s+/', ' ', $text));
-            // A typical manuscript should have thousands of characters. 
-            // We use a low threshold (10 chars) to allow short documents like resumes to pass.
-            if (strlen($cleanText) < 20) {
-                $valid = false;
-                $notes[] = 'Warning: No readable text detected. This appears to be a scanned image of a printed document. Please export your manuscript directly from Microsoft Word / Google Docs so the text is searchable.';
-            }
-        }
-
         $requiredKeywords = config('repository.manuscript_required_keywords', ['approval', 'approved', 'approval page', 'signature', 'approved by']);
-
         $found = [];
-        $foundLocations = [];
+        $hasImageOnlyPage = false;
 
         if ($isBinaryFallback) {
             foreach ($requiredKeywords as $kw) {
                 if (stripos($text, $kw) !== false) {
                     $found[] = $kw;
-                    $foundLocations[] = "$kw (Location unknown)";
                 }
             }
         } else {
             // Split by form feed char \f (ASCII 12) to identify pages
-            // Filter out empty trailing pages caused by trailing \f
             $pagesContent = array_filter(explode("\f", trim($text)), function ($val) {
-                return $val !== ""; // Keep only pages that have something in them
+                return $val !== "";
             });
 
-            $hasImageOnlyPage = false;
-
             foreach ($pagesContent as $index => $pageText) {
-                // If a page has almost no text (less than 20 chars), it's likely a scan or image-only
                 if (strlen(trim($pageText)) < 20) {
                     $hasImageOnlyPage = true;
-                    $notes[] = "(i) Page " . ($index + 1) . " detected as image-only/scanned. (Likely the Signed Approval Sheet)";
+                    // Log specific image pages only if helpful
+                    $notes[] = "(i) Page " . ($index + 1) . " detected as image/scan.";
                 }
             }
 
@@ -134,26 +117,34 @@ class PDFValidator
                         $kwLocations[] = $index + 1;
                     }
                 }
-
                 if (!empty($kwLocations)) {
-                    $pageList = implode(', ', $kwLocations);
-                    $notes[] = "[OK] Detected: $kw (Pages $pageList)";
+                    $notes[] = "[OK] Detected: $kw (Page " . implode(', ', $kwLocations) . ")";
                 }
-            }
-
-            if ($hasImageOnlyPage && count($found) === 0) {
-                $notes[] = "(!) Manual Audit Advised: Keywords not found in text, but an image-only page was detected. Please verify signatures in the HD Viewer.";
             }
         }
 
-        if (count($found) === 0 && !$hasImageOnlyPage) {
-            $valid = false;
-            $keywordsMissing = true;
-            $notes[] = "[ERROR] Approval page or signatures not detected (no required keywords found).";
-        } elseif (count($found) === 0 && $hasImageOnlyPage) {
-            // If we have an image page, we mark it as "Valid but needs eyes"
-            $valid = true;
-            $notes[] = "[!] Automated scan inconclusive due to scanned page. Human verification required.";
+        // Total pages (we can count \f chars + 1)
+        $pageCount = substr_count($text, "\f") + 1;
+
+        $minPages = config('repository.min_manuscript_pages', 5);
+
+        if (count($found) === 0) {
+            // HYBRID LOGIC: Allow multi-page scanned documents but with a warning
+            if ($hasImageOnlyPage && $pageCount >= $minPages) {
+                $valid = true;
+                $notes[] = "[✔] Structural Bypass: Signatures/Keywords not found in text, but a multi-page scan was detected. Likely a Signed Approval Sheet. Please verify manually.";
+            } else {
+                $valid = false;
+                $keywordsMissing = true;
+
+                if ($pageCount < $minPages) {
+                    $notes[] = "[ERROR] Document too short ({$pageCount} pg). Manuscripts must be complete research works. (Min: {$minPages} pg)";
+                } elseif (!$hasImageOnlyPage) {
+                    $notes[] = "[ERROR] Required sections (Approval Sheet, signatures, etc.) not detected. Also, please ensure your PDF is text-searchable (exported from Word/Google Docs).";
+                } else {
+                    $notes[] = "[ERROR] Content verification failed. No required keywords found even in scanned pages.";
+                }
+            }
         }
 
         return [
@@ -161,6 +152,7 @@ class PDFValidator
             'notes' => $notes,
             'keywords_missing' => $keywordsMissing,
             'text' => trim($text),
+            'page_count' => $pageCount
         ];
     }
 
@@ -168,7 +160,8 @@ class PDFValidator
     {
         $checker = PHP_OS_FAMILY === 'Windows' ? 'where' : 'which';
         $output = shell_exec($checker . ' ' . escapeshellarg($cmd));
-        if (!$output) return null;
+        if (!$output)
+            return null;
 
         // 'where' on Windows can return multiple lines; take the first one
         $path = trim(explode("\n", $output)[0]);

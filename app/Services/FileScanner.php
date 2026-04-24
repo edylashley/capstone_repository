@@ -62,6 +62,8 @@ class FileScanner
             'JavaScript Alert Prank' => ['contains' => '<script>alert('],
             'JavaScript Document Cookie' => ['contains' => 'document.cookie'],
             'PowerShell Download Cradle' => ['regex' => '/powershell[^;]*\-[eE].*downloadstring/i'],
+            'EICAR Antivirus Test File' => ['contains' => 'X50!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'],
+            'EICAR Antivirus (Fuzzy)' => ['contains' => 'EICAR-STANDARD-ANTIVIRUS-TEST-FILE'],
         ];
 
         foreach ($signatures as $name => $sig) {
@@ -80,40 +82,101 @@ class FileScanner
         // LAYER 4: ClamAV Engine (if enabled)
         // ═══════════════════════════════════════════════════════════════
         if (config('repository.filescan_enabled', false)) {
-            $clamscan = config('repository.clamscan_path', 'clamscan');
-            $which = $this->which($clamscan);
-            if (!$which) {
-                return [
-                    'ok' => false,
-                    'notes' => "ClamAV not found at path: {$clamscan}",
-                    'error_type' => 'system'
-                ];
+            $clamscanPath = config('repository.clamscan_path', 'clamscan');
+            $executable = $this->which($clamscanPath);
+
+            if (!$executable) {
+                return ['ok' => false, 'notes' => "ClamAV not found: {$clamscanPath}", 'error_type' => 'system'];
             }
 
-            $cmd = escapeshellarg($which) . ' --no-summary ' . escapeshellarg($path);
-            $output = [];
+            // Standardize path for Windows ClamAV
+            $realPath = realpath($path) ?: $path;
+            $isClamd = str_contains(strtolower($executable), 'clamdscan');
+            
+            // STAGE 1: Scan the raw file
+            $args = ['--no-summary'];
+            if ($isClamd) $args[] = '--stream';
+            $args[] = $realPath;
 
-            $originalLimit = (int) ini_get('max_execution_time');
-            set_time_limit(300); // 5 minutes for slow servers
-            @exec($cmd . ' 2>&1', $output, $exit);
-            set_time_limit($originalLimit);
+            $result = \Illuminate\Support\Facades\Process::timeout(120)->run(array_merge([$executable], $args));
 
-            if ($exit !== 0) {
-                $rawNotes = implode('\n', $output);
+            // STAGE 2: Deep Analysis (Decompression Fallback)
+            // If raw scan was clean, we try to uncompress PDF streams manually to expose hidden threats
+            if ($result->successful() && $extension === 'pdf') {
+                $rawContents = file_get_contents($path);
+                $uncompressedParts = "";
+                
+                // Simple regex to find FlateDecode streams which is where most text/scripts are hidden
+                if (preg_match_all('/stream[\r\n]+(.*?)[\r\n]+endstream/s', $rawContents, $matches)) {
+                    foreach ($matches[1] as $stream) {
+                        try {
+                            // Try standard gzuncompress
+                            $decompressed = @gzuncompress($stream);
+                            
+                            // If that fails, try zlib_decode (handles more formats)
+                            if (!$decompressed && function_exists('zlib_decode')) {
+                                $decompressed = @zlib_decode($stream);
+                            }
 
-                // Sanitize: Replace the full path with just the filename
-                // Handle both forward and backward slashes for Windows/Linux consistency
-                $sanitizedNotes = str_replace($path, basename($path), $rawNotes);
-                $winPath = str_replace('/', '\\', $path);
-                $sanitizedNotes = str_replace($winPath, basename($winPath), $sanitizedNotes);
+                            // If still fails, it might be raw deflate (no headers)
+                            if (!$decompressed) {
+                                $decompressed = @gzinflate($stream);
+                            }
 
-                // ClamAV Exit Codes: 0 = Clean, 1 = Virus Found, 2 = Error occurred
-                $errorType = ($exit === 1) ? 'threat' : 'system';
+                            if ($decompressed) {
+                                $uncompressedParts .= $decompressed . "\n";
+                                
+                                // RECURSIVE HEURISTIC CHECK: 
+                                // Check if the decompressed part itself contains a known threat signature
+                                foreach ($signatures as $name => $sig) {
+                                    if (isset($sig['contains']) && stripos($decompressed, $sig['contains']) !== false) {
+                                        return ['ok' => false, 'notes' => "Threat detected in compressed stream: {$name}."];
+                                    }
+                                }
+                            }
+                        } catch (\Throwable $e) {}
+                    }
+                }
+
+                $scanTarget = $extractedText . "\n" . $uncompressedParts;
+                
+                if (!empty(trim($scanTarget))) {
+                    $tmpFile = tempnam(sys_get_temp_dir(), 'pdf_deep_');
+                    file_put_contents($tmpFile, $scanTarget);
+                    
+                    $args = ['--no-summary'];
+                    if ($isClamd) $args[] = '--stream';
+                    $args[] = $tmpFile;
+
+                    $deepResult = \Illuminate\Support\Facades\Process::timeout(60)->run(array_merge([$executable], $args));
+                    
+                    if (!$deepResult->successful()) {
+                        $result = $deepResult; 
+                        $realPath = "Deep Scanned Content (Uncompressed)"; 
+                    }
+                    @unlink($tmpFile);
+                }
+            }
+
+            // Log for debugging
+            \Illuminate\Support\Facades\Log::debug("ClamAV Scan Result", [
+                'exit_code' => $result->exitCode(),
+                'output'    => $result->output(),
+            ]);
+
+            if (!$result->successful()) {
+                $output = $result->output() ?: $result->errorOutput();
+                
+                // ClamAV Exit Codes: 1 = Virus Found, anything else = Error
+                $isThreat = ($result->exitCode() === 1);
+                
+                // Sanitize output (remove full paths)
+                $sanitized = str_replace([$realPath, dirname($realPath)], [basename($realPath), '...'], $output);
 
                 return [
                     'ok' => false,
-                    'notes' => trim($sanitizedNotes),
-                    'error_type' => $errorType
+                    'notes' => trim($sanitized) ?: "Scanner error (Code: {$result->exitCode()})",
+                    'error_type' => $isThreat ? 'threat' : 'system'
                 ];
             }
         }

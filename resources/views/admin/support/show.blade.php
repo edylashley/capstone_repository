@@ -22,7 +22,7 @@
                             <p class="text-sm text-slate-400 font-medium mt-1">{{ $ticket->subject }}</p>
                             <div class="flex items-center gap-2 mt-1.5">
                                 <span class="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full border {{ $ticket->status_badge }}">
-                                    {{ str_replace('_', ' ', $ticket->status) }}
+                                    {{ $ticket->status_label }}
                                 </span>
                                 <span class="text-[10px] font-bold text-indigo-400 bg-indigo-900/30 px-2.5 py-0.5 rounded-full border border-indigo-500/20">
                                     {{ $ticket->category_label }}
