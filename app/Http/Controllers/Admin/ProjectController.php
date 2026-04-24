@@ -75,14 +75,11 @@ class ProjectController extends Controller
             'meta' => ['published_at' => $project->published_at->toDateTimeString()],
         ]);
 
-        // Send email notification to students and adviser
+        // Send email notification to students
         try {
-            // Email Authors
             foreach ($project->authors as $author) {
                 \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectPublished($project));
             }
-            
-
         } catch (\Exception $e) {
             \Log::error('Failed to send project publication email: ' . $e->getMessage());
         }

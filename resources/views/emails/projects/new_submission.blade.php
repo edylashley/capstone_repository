@@ -9,8 +9,8 @@ Head's up! A new manuscript has been submitted for your review.
 
 Please review the manuscript and provide your validation.
 
-<x-mail::button :url="route('faculty.review')">
-Go to Review Dashboard
+<x-mail::button :url="route('admin.projects.index')">
+Go to Admin Dashboard
 </x-mail::button>
 
 Thanks,<br>

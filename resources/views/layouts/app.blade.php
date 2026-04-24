@@ -30,17 +30,31 @@
             }
         }
 
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        /* Custom Premium Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
         }
 
-        /* Hide scrollbar for IE, Edge and Firefox */
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
+        ::-webkit-scrollbar-track {
+            background: #020617; /* Slate 950 */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569; /* Slate 600 - Brighter for better visibility */
+            border-radius: 20px;
+            border: 3px solid #020617; 
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1; /* Indigo 500 */
+        }
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 #020617;
         }
 
         /* Performance Optimization: Pause heavy animations when modal is open */

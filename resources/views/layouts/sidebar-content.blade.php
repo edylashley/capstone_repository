@@ -12,7 +12,7 @@
 </div>
 
 <!-- Navigation -->
-<nav class="flex-1 flex flex-col gap-1 py-4 px-3 overflow-y-auto custom-scrollbar no-scrollbar">
+<nav class="flex-1 flex flex-col gap-1 py-4 px-3 overflow-y-auto">
     <!-- Public Access -->
     <a href="{{ route('projects.index') }}"
         class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('projects.index') ? 'bg-slate-800 shadow-lg text-white' : 'text-slate-400' }}">
