@@ -100,7 +100,7 @@
                                         class="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Status</th>
                                     <th
-                                        class="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
+                                        class="px-6 py-3 text-center text-xs font-medium text-slate-400 uppercase tracking-wider">
                                         Actions</th>
                                 </tr>
                             </thead>
@@ -152,7 +152,7 @@
                                                                         </span>
                                                                     @endif
                                                                 </td>
-                                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex items-center justify-end gap-3"
+                                                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex items-center justify-center gap-3"
                                                                     @click.stop>
                                                                     @if(!$user->is_active)
                                                                         {{-- Approval Flow --}}
@@ -176,7 +176,7 @@
                                                                     @else
                                                                         {{-- Standard Management Flow --}}
                                                                         <a href="{{ route('admin.users.edit', $user) }}"
-                                                                            class="inline-flex items-center gap-1 px-3 py-1 bg-slate-800 text-indigo-400 hover:text-white hover:bg-indigo-600 border border-white/5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                                                                            class="inline-flex items-center gap-1 px-4 py-1.5 bg-indigo-600/10 text-indigo-400 hover:bg-indigo-600 hover:text-white border border-indigo-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all transform hover:-translate-y-0.5">
                                                                             Edit
                                                                         </a>
 
@@ -187,7 +187,9 @@
                                                                                 @csrf
                                                                                 @method('DELETE')
                                                                                 <button type="submit"
-                                                                                    class="text-slate-500 hover:text-rose-500 font-bold uppercase text-[10px] tracking-widest transition-colors ml-2">Delete</button>
+                                                                                    class="px-4 py-1.5 bg-rose-600/10 text-rose-500 border border-rose-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all transform hover:-translate-y-0.5">
+                                                                                    Delete
+                                                                                </button>
                                                                             </form>
                                                                         @endif
                                                                     @endif

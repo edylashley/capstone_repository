@@ -60,6 +60,7 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
 
     // Central Archive Center
     Route::get('/archive', [\App\Http\Controllers\Admin\ArchiveController::class, 'index'])->name('archive.index');
+    Route::post('/archive/bulk', [\App\Http\Controllers\Admin\ArchiveController::class, 'bulkAction'])->name('archive.bulk');
     Route::post('/archive/{type}/{id}/restore', [\App\Http\Controllers\Admin\ArchiveController::class, 'restore'])->name('archive.restore');
     Route::delete('/archive/{type}/{id}/force', [\App\Http\Controllers\Admin\ArchiveController::class, 'forceDelete'])->name('archive.force-delete');
 });
