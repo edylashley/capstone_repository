@@ -5,22 +5,12 @@
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
                 <tr>
                     <td align="center" style="padding-bottom: 20px;">
-                        {{-- Using a reliable public placeholder for local testing --}}
-                        @php
-                            $logoPath = public_path('images/system-logo.jpg');
-                            $logoData = '';
-
-                            if (file_exists($logoPath)) {
-                                $type = pathinfo($logoPath, PATHINFO_EXTENSION);
-                                $data = file_get_contents($logoPath);
-                                $logoData = 'data:image/' . $type . ';base64,' . base64_encode($data);
-                            } else {
-                                // Fallback to a clean public icon if file is missing
-                                $logoData = 'https://img.icons8.com/clouds/100/000000/graduation-cap.png';
-                            }
-                        @endphp
-                        <img src="{{ $logoData }}" alt="Logo"
-                            style="height: 80px; width: 80px; display: block; margin: 0 auto; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        {{-- 
+                            CRITICAL FIX: Removed Base64 image embedding which was causing 500KB+ email sizes.
+                            Using a standard public URL for the logo icon instead.
+                        --}}
+                        <img src="https://img.icons8.com/clouds/100/000000/graduation-cap.png" alt="Logo"
+                            style="height: 80px; width: 80px; display: block; margin: 0 auto;">
                     </td>
                 </tr>
                 <tr>
