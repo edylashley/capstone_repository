@@ -55,7 +55,6 @@ class ArchiveController extends Controller
 
         $model->restore();
 
-        // Redirect back to the specific tab
         return redirect()->route('admin.archive.index', ['tab' => $request->get('tab', 'projects')])
             ->with('success', 'Item has been successfully restored.');
     }
@@ -68,54 +67,63 @@ class ArchiveController extends Controller
             return back()->with('error', 'Item not found in archive.');
         }
 
-        // If it's a project, physically delete its files from storage
         if ($type === 'project') {
             foreach ($model->files as $file) {
                 if (\Illuminate\Support\Facades\Storage::disk('public')->exists($file->path)) {
                     \Illuminate\Support\Facades\Storage::disk('public')->delete($file->path);
                 }
             }
-            // Delete the file records from DB
             $model->files()->delete();
         }
 
         $model->forceDelete();
 
-        // Redirect back to the specific tab
         return redirect()->route('admin.archive.index', ['tab' => $request->get('tab', 'projects')])
             ->with('success', 'Item has been permanently purged from the system.');
     }
 
     /**
-     * Handle bulk actions for archived items
+     * Handle bulk/all actions for archived items
      */
     public function bulkAction(Request $request)
     {
         $validated = $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'required|integer',
             'action' => 'required|in:restore,delete',
             'type' => 'required|in:project,user,category',
+            'all' => 'nullable|boolean',
+            'ids' => 'nullable|array',
         ]);
 
-        $ids = $validated['ids'];
         $action = $validated['action'];
         $type = $validated['type'];
         $count = 0;
 
-        foreach ($ids as $id) {
-            $model = $this->getModel($type, $id);
-            if (!$model) continue;
+        // Get the target items
+        if ($request->has('all') && $request->all) {
+            $query = match($type) {
+                'project' => Project::onlyTrashed(),
+                'user' => User::onlyTrashed(),
+                'category' => Category::onlyTrashed(),
+            };
+            $items = $query->get();
+        } else {
+            $ids = $request->input('ids', []);
+            $items = match($type) {
+                'project' => Project::onlyTrashed()->whereIn('id', $ids)->get(),
+                'user' => User::onlyTrashed()->whereIn('id', $ids)->get(),
+                'category' => Category::onlyTrashed()->whereIn('id', $ids)->get(),
+            };
+        }
 
+        foreach ($items as $model) {
             if ($action === 'restore') {
-                // Simplified conflict check for bulk
+                // Conflict skip for bulk
                 if ($type === 'project' && Project::where('title', $model->title)->exists()) continue;
                 if ($type === 'user' && User::where('email', $model->email)->exists()) continue;
                 
                 $model->restore();
                 $count++;
             } else {
-                // Permanent Delete
                 if ($type === 'project') {
                     foreach ($model->files as $file) {
                         \Illuminate\Support\Facades\Storage::disk('public')->delete($file->path);
