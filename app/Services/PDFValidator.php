@@ -105,7 +105,7 @@ class PDFValidator
                 if (strlen(trim($pageText)) < 20) {
                     $hasImageOnlyPage = true;
                     // Log specific image pages only if helpful
-                    $notes[] = "(i) Page " . ($index + 1) . " detected as image/scan.";
+                    $notes[] = "(i) Page " . ($index + 1) . " might an image-only page.";
                 }
             }
 
@@ -132,7 +132,7 @@ class PDFValidator
             // HYBRID LOGIC: Allow multi-page scanned documents but with a warning
             if ($hasImageOnlyPage && $pageCount >= $minPages) {
                 $valid = true;
-                $notes[] = "[✔] Structural Bypass: Signatures/Keywords not found in text, but a multi-page scan was detected. Likely a Signed Approval Sheet. Please verify manually.";
+                $notes[] = "[i] Manual Verification Needed: Signatures/Keywords not found in text, but a possible scanned document was detected. Please check this page manually if it is the signed approval sheet.";
             } else {
                 $valid = false;
                 $keywordsMissing = true;
@@ -140,7 +140,7 @@ class PDFValidator
                 if ($pageCount < $minPages) {
                     $notes[] = "[ERROR] Document too short ({$pageCount} pg). Manuscripts must be complete research works. (Min: {$minPages} pg)";
                 } elseif (!$hasImageOnlyPage) {
-                    $notes[] = "[ERROR] Required sections (Approval Sheet, signatures, etc.) not detected. Also, please ensure your PDF is text-searchable (exported from Word/Google Docs).";
+                    $notes[] = "[ERROR] Required sections (Approval Sheet, signatures, etc.) not detected. Check manually for the Approval Sheet page.";
                 } else {
                     $notes[] = "[ERROR] Content verification failed. No required keywords found even in scanned pages.";
                 }
