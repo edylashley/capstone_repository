@@ -137,12 +137,21 @@
                                         <p class="text-[10px] text-slate-600 uppercase font-black tracking-tighter">{{ $project->deleted_at->diffForHumans() }}</p>
                                     </td>
                                     <td class="p-5 text-right">
-                                        <form action="{{ route('admin.archive.restore', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all" title="Restore">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                            </button>
-                                        </form>
+                                        <div class="flex items-center justify-end gap-2">
+                                            <form action="{{ route('admin.archive.restore', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all" title="Restore">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.archive.force-delete', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}" method="POST" class="inline" onsubmit="return confirm('WARNING: This will permanently delete this project. Proceed?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all" title="Delete Permanently">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                              @empty
@@ -202,12 +211,21 @@
                                         <p class="text-[10px] text-slate-600 uppercase font-black tracking-tighter">{{ $user->deleted_at->diffForHumans() }}</p>
                                     </td>
                                     <td class="p-5 text-right">
-                                        <form action="{{ route('admin.archive.restore', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all" title="Restore">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                                            </button>
-                                        </form>
+                                        <div class="flex items-center justify-end gap-2">
+                                            <form action="{{ route('admin.archive.restore', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all" title="Restore">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.archive.force-delete', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}" method="POST" class="inline" onsubmit="return confirm('WARNING: This will permanently delete this user account. Proceed?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-all" title="Delete Permanently">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                              @empty
