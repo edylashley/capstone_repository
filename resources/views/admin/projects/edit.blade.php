@@ -47,7 +47,7 @@
                             <div>
                                 <x-input-label for="status" :value="__('Status')" class="text-white"/>
                                 <select id="status" name="status" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    @foreach(['pending', 'verified', 'approved', 'published', 'archived'] as $status)
+                                    @foreach(['pending', 'approved', 'published', 'archived'] as $status)
                                         <option value="{{ $status }}" {{ $project->status === $status ? 'selected' : '' }}>
                                             {{ ucfirst($status) }}
                                         </option>

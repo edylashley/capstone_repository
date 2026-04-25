@@ -2,10 +2,12 @@
     <div class="text-center mb-6">
         <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                </path>
             </svg>
         </div>
-        <h2 class="text-xl font-bold text-gray-800">Verify Your Email</h2>
+        <h2 class="text-xl font-bold text-indigo-800">Verify Your Email</h2>
         <p class="text-sm text-gray-500 mt-2">
             We've sent a 6-digit verification code to
         </p>
@@ -29,15 +31,27 @@
                 Verification Code
             </label>
             <div class="flex justify-center gap-2" id="code-inputs">
-                <input type="text" maxlength="1" class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" data-index="0" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-                <input type="text" maxlength="1" class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" data-index="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-                <input type="text" maxlength="1" class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" data-index="2" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+                <input type="text" maxlength="1"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    data-index="0" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+                <input type="text" maxlength="1"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    data-index="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+                <input type="text" maxlength="1"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    data-index="2" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
                 <div class="flex items-center">
                     <span class="text-gray-400 font-bold text-xl">–</span>
                 </div>
-                <input type="text" maxlength="1" class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" data-index="3" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-                <input type="text" maxlength="1" class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" data-index="4" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
-                <input type="text" maxlength="1" class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" data-index="5" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+                <input type="text" maxlength="1"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    data-index="3" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+                <input type="text" maxlength="1"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    data-index="4" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
+                <input type="text" maxlength="1"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    data-index="5" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
             </div>
             <!-- Hidden field to hold the complete code -->
             <input type="hidden" name="code" id="verification-code" />
@@ -52,7 +66,9 @@
         </div>
 
         <!-- Verify Button -->
-        <button type="submit" id="verify-btn" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg" disabled>
+        <button type="submit" id="verify-btn"
+            class="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-lg"
+            disabled>
             Verify & Create Account
         </button>
     </form>
@@ -62,7 +78,8 @@
         <p class="text-sm text-gray-500 mb-2">Didn't receive the code?</p>
         <form method="POST" action="{{ route('register.resend-code') }}" class="inline">
             @csrf
-            <button type="submit" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
+            <button type="submit"
+                class="text-sm font-semibold text-indigo-600 hover:text-indigo-700 hover:underline transition-colors">
                 Resend Code
             </button>
         </form>

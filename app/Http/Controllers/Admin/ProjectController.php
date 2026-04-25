@@ -101,7 +101,7 @@ class ProjectController extends Controller
         if ($request->filled('status')) {
             $status = $request->query('status');
             if ($status === 'pending') {
-                $query->whereIn('status', ['pending', 'approved', 'verified']);
+                $query->where('status', 'pending');
             } else {
                 $query->where('status', $status);
             }
@@ -312,7 +312,7 @@ class ProjectController extends Controller
             'authors_list' => 'nullable|string|max:1000',
             'adviser_name' => 'required|string|max:255',
             'abstract' => 'nullable|string',
-            'status' => 'required|in:pending,verified,approved,published,archived',
+            'status' => 'required|in:pending,approved,published,archived',
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
@@ -651,7 +651,7 @@ class ProjectController extends Controller
     {
         $project = \App\Models\Project::findOrFail($id);
 
-        if (!in_array($project->status, ['pending', 'approved', 'verified'])) {
+        if (!in_array($project->status, ['pending', 'approved'])) {
             return redirect()->back()->with('error', 'Project is not in a confirmable state');
         }
 

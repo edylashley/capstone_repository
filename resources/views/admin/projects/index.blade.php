@@ -126,9 +126,9 @@
                                         class="rounded-md border-white/10 bg-slate-800 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-slate-900 shadow-sm">
                                 </th>
                                 <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                    Project Workspace</th>
+                                    Project Title</th>
                                 <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                                    Institutional Metadata</th>
+                                    Project Information</th>
                                 <th
                                     class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">
                                     Project Status</th>
@@ -168,7 +168,7 @@
                                                     class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Class
                                                     of {{ $project->year }}</span>
                                                 <span
-                                                    class="text-[9px] px-2 py-0.5 {{ $project->program === 'BSInT' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : 'bg-slate-700 text-slate-300 border-white/10' }} rounded-lg font-black uppercase tracking-tighter border shadow-sm transition-all duration-300">{{ $project->program }}</span>
+                                                    class="text-[9px] px-2 py-0.5 {{ $project->program === 'BSInT' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' : (stripos($project->program, 'COM-SCI') !== false || stripos($project->program, 'CS') !== false ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-slate-700 text-slate-300 border-white/10') }} rounded-lg font-black uppercase tracking-tighter border shadow-sm transition-all duration-300">{{ $project->program }}</span>
                                             </div>
                                         </div>
                                     </td>
@@ -179,6 +179,9 @@
                                         @elseif($project->status === 'archived')
                                             <span
                                                 class="px-3 py-1 bg-slate-800 text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/5">Archived</span>
+                                        @elseif($project->status === 'rejected')
+                                            <span
+                                                class="px-3 py-1 bg-rose-500/10 text-rose-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-rose-500/20 shadow-[0_0_15px_-5px_rgba(244,63,94,0.3)]">Returned</span>
                                         @else
                                             <span
                                                 class="px-3 py-1 bg-amber-500/10 text-amber-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-500/30 shadow-[0_0_15px_-5px_rgba(245,158,11,0.3)]">Pending</span>

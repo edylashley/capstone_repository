@@ -68,6 +68,45 @@
                 }
             }
 
+            /* ═══ SOFT TECH REVEAL ANIMATIONS ═══ */
+            @keyframes tech-reveal {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.92);
+                    filter: blur(10px);
+                    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                    filter: blur(0px);
+                    box-shadow: 0 0 60px -10px rgba(56, 189, 248, 0.6);
+                }
+            }
+
+            @keyframes text-fade-in {
+                from {
+                    opacity: 0;
+                }
+
+                to {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes text-slide-up {
+                from {
+                    opacity: 0;
+                    transform: translateY(25px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             .animate-cyber-grid {
                 animation: cyber-grid 20s linear infinite;
             }
@@ -78,6 +117,21 @@
 
             .animate-binary-rain {
                 animation: binary-rain linear infinite;
+            }
+
+            .animate-soft-tech-reveal {
+                animation: tech-reveal 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            }
+
+            .logo-container {
+                opacity: 0;
+                transform: scale(0.92);
+                filter: blur(10px);
+                transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, filter 0.5s ease;
+            }
+
+            .logo-container:hover {
+                /* Hover effect is handled by the image scale, no extra container glow needed */
             }
         </style>
 
@@ -97,16 +151,19 @@
                     <div
                         class="flex flex-col md:flex-row items-center justify-center lg:justify-start lg:items-start gap-4">
                         <div
-                            class="flex-shrink-0 w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 flex items-center justify-center overflow-hidden rounded-full shadow-[0_0_80px_-10px_rgba(99,102,241,0.8)] bg-slate-950/80 backdrop-blur-md animate-float border-4 border-indigo-400/50 group">
+                            class="flex-shrink-0 w-32 h-32 md:w-48 md:h-48 lg:w-56 lg:h-56 flex items-center justify-center overflow-hidden rounded-full bg-white border-4 border-white/80 group logo-container animate-soft-tech-reveal shadow-2xl">
                             <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Logo"
-                                class="w-full h-full object-cover transform scale-120 group-hover:scale-135 transition-transform duration-500 ease-in-out animate-pop-in" />
+                                class="w-full h-full object-cover transform scale-100 hover:scale-125 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" />
                         </div>
                         <div class="text-center lg:text-left flex-shrink-0">
                             <h1
-                                class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-2 whitespace-nowrap md:whitespace-normal animate-fade-in-up">
-                                <span class="text-teal-300 drop-shadow-lg">CSIT</span><br>
-                                <span class="text-blue-100">Capstone</span><br>
-                                <span class="text-blue-100">Repository</span>
+                                class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-2 whitespace-nowrap md:whitespace-normal">
+                                <span
+                                    class="text-teal-300 drop-shadow-lg inline-block opacity-0 animate-[text-fade-in_0.8s_ease-out_0.2s_forwards]">CSIT</span><br>
+                                <div class="opacity-0 animate-[text-slide-up_0.8s_ease-out_0.5s_forwards]">
+                                    <span class="text-blue-100">Capstone</span><br>
+                                    <span class="text-blue-100">Repository</span>
+                                </div>
                             </h1>
                         </div>
                     </div>
@@ -332,12 +389,12 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Force replay of logo pop-in animation
-            const logo = document.querySelector('.animate-pop-in');
+            // Force replay of tech reveal animations
+            const logo = document.querySelector('.logo-container');
             if (logo) {
-                logo.classList.remove('animate-pop-in');
+                logo.style.animation = 'none';
                 void logo.offsetWidth; // Trigger reflow
-                logo.classList.add('animate-pop-in');
+                logo.style.animation = null;
             }
 
             // Smooth CSS Marquee Placeholder behavior

@@ -37,18 +37,21 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #020617; /* Slate 950 */
+            background: #020617;
+            /* Slate 950 */
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #475569; /* Slate 600 - Brighter for better visibility */
+            background: #475569;
+            /* Slate 600 - Brighter for better visibility */
             border-radius: 20px;
-            border: 3px solid #020617; 
+            border: 3px solid #020617;
             transition: all 0.3s ease;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1; /* Indigo 500 */
+            background: #6366f1;
+            /* Indigo 500 */
         }
 
         /* Firefox */
@@ -75,12 +78,11 @@
                 @include('layouts.sidebar')
 
                 <!-- Simple Sidebar Arrow Toggle -->
-                <button @click="sidebarCollapsed = false" 
-                        x-show="sidebarCollapsed" 
-                        x-cloak
-                        class="fixed top-1/2 left-0 -translate-y-1/2 z-[50] hidden lg:flex w-8 h-12 items-center justify-center rounded-r-xl bg-indigo-600/20 hover:bg-indigo-600 text-white transition-all group border border-l-0 border-indigo-500/30"
-                        title="Show Sidebar">
-                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button @click="sidebarCollapsed = false" x-show="sidebarCollapsed" x-cloak
+                    class="fixed top-1/2 left-0 -translate-y-1/2 z-[50] hidden lg:flex w-8 h-12 items-center justify-center rounded-r-xl bg-indigo-600/20 hover:bg-indigo-600 text-white transition-all group border border-l-0 border-indigo-500/30"
+                    title="Show Sidebar">
+                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </button>
@@ -365,17 +367,18 @@
 
     {{-- ── Admin: Floating Support Notification Icon ──────────────────── --}}
     @if(auth()->check() && auth()->user()->isAdmin())
-        <a href="{{ route('admin.support.index') }}"
-            x-data="{ 
-                count: {{ \App\Models\SupportTicket::where(function($q) { $q->where('status', 'pending')->orWhere(function($q2) { $q2->where('category', 'security')->where('created_at', '>=', now()->subDay()); }); })->count() }},
-                async updateCount() {
-                    try {
-                        const response = await fetch('{{ route('admin.support.count') }}');
-                        const data = await response.json();
-                        this.count = data.count;
-                    } catch (e) {}
-                }
-            }" x-init="setInterval(() => updateCount(), 30000)"
+        <a href="{{ route('admin.support.index') }}" x-data="{ 
+                    count: {{ \App\Models\SupportTicket::where(function ($q) {
+            $q->where('status', 'pending')->orWhere(function ($q2) {
+                $q2->where('category', 'security')->where('created_at', '>=', now()->subDay()); }); })->count() }},
+                    async updateCount() {
+                        try {
+                            const response = await fetch('{{ route('admin.support.count') }}');
+                            const data = await response.json();
+                            this.count = data.count;
+                        } catch (e) {}
+                    }
+                }" x-init="setInterval(() => updateCount(), 30000)"
             class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
             :title="'Support Tickets' + (count > 0 ? ' — ' + count + ' pending' : '')">
             <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"

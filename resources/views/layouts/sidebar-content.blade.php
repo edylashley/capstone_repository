@@ -1,7 +1,6 @@
 <!-- Logo -->
 <div class="flex flex-col items-center py-4 px-2 border-b border-slate-700/50">
-    <button @click="sidebarCollapsed = true"
-        title="Collapse Sidebar"
+    <button @click="sidebarCollapsed = true" title="Collapse Sidebar"
         class="relative w-32 h-32 flex items-center justify-center overflow-hidden rounded-full shadow-[0_0_50px_-10px_rgba(99,102,241,0.6)] bg-slate-950/80 backdrop-blur-md transition duration-300 border-4 border-indigo-500/30 hover:scale-105 hover:shadow-indigo-500/80 focus:outline-none group">
         <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Capstone Repository"
             class="w-full h-full object-cover transform scale-120 transition-transform duration-300 group-hover:scale-135" />
@@ -127,17 +126,18 @@
             </svg>
             <span class="font-bold tracking-tight">Security Scan Demo</span>
         </a>
-        <a href="{{ route('admin.support.index') }}"
-            x-data="{ 
-                count: {{ \App\Models\SupportTicket::where(function($q) { $q->where('status', 'pending')->orWhere(function($q2) { $q2->where('category', 'security')->where('created_at', '>=', now()->subDay()); }); })->count() }},
-                async updateCount() {
-                    try {
-                        const response = await fetch('{{ route('admin.support.count') }}');
-                        const data = await response.json();
-                        this.count = data.count;
-                    } catch (e) { }
-                }
-            }" x-init="setInterval(() => updateCount(), 30000)"
+        <a href="{{ route('admin.support.index') }}" x-data="{ 
+                    count: {{ \App\Models\SupportTicket::where(function ($q) {
+            $q->where('status', 'pending')->orWhere(function ($q2) {
+                $q2->where('category', 'security')->where('created_at', '>=', now()->subDay()); }); })->count() }},
+                    async updateCount() {
+                        try {
+                            const response = await fetch('{{ route('admin.support.count') }}');
+                            const data = await response.json();
+                            this.count = data.count;
+                        } catch (e) { }
+                    }
+                }" x-init="setInterval(() => updateCount(), 30000)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.support.*') ? 'bg-slate-800 shadow-md text-white' : 'text-slate-400' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
