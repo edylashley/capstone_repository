@@ -10,10 +10,34 @@
         </div>
     </x-slot>
 
-    <div class="py-12" x-data="{ tab: '{{ request('tab', 'projects') }}' }">
+    <div class="py-12" x-data="{ 
+        tab: '{{ request('tab', 'projects') }}',
+        selectedProjects: [],
+        selectedUsers: [],
+        
+        toggleAllProjects() {
+            if (this.selectedProjects.length === {{ $trashedProjects->count() }}) {
+                this.selectedProjects = [];
+            } else {
+                this.selectedProjects = [
+                    @foreach($trashedProjects as $p) '{{ $p->id }}', @endforeach
+                ];
+            }
+        },
+        
+        toggleAllUsers() {
+            if (this.selectedUsers.length === {{ $trashedUsers->count() }}) {
+                this.selectedUsers = [];
+            } else {
+                this.selectedUsers = [
+                    @foreach($trashedUsers as $u) '{{ $u->id }}', @endforeach
+                ];
+            }
+        }
+    }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {{-- Unified Control Bar (Tabs + Bulk Actions) --}}
+            {{-- Unified Control Bar --}}
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 {{-- Tab Navigation --}}
                 <div class="flex items-center gap-2 bg-slate-900 p-1.5 rounded-2xl border border-white/5 w-fit">
@@ -31,47 +55,61 @@
                     </button>
                 </div>
 
-                {{-- Bulk Actions (In-line) --}}
+                {{-- Bulk/Selected Actions --}}
                 <div class="flex items-center gap-3">
-                    {{-- Restore All Button --}}
+                    {{-- Restore Selected/All --}}
                     <form action="{{ route('admin.archive.bulk') }}" method="POST" 
                           x-show="(tab === 'projects' && {{ $trashedProjects->count() }} > 0) || (tab === 'users' && {{ $trashedUsers->count() }} > 0)">
                         @csrf
                         <input type="hidden" name="type" :value="tab === 'projects' ? 'project' : 'user'">
                         <input type="hidden" name="action" value="restore">
-                        <input type="hidden" name="all" value="1">
                         <input type="hidden" name="tab" :value="tab">
+                        
+                        {{-- Determine if ALL or SELECTED --}}
+                        <input type="hidden" name="all" :value="(tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? '1' : '0'">
+                        <template x-for="id in (tab === 'projects' ? selectedProjects : selectedUsers)" :key="id">
+                            <input type="hidden" name="ids[]" :value="id">
+                        </template>
+
                         <button type="submit" 
                                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600/10 text-emerald-500 border border-emerald-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all shadow-lg">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                            Restore All <span x-text="tab === 'projects' ? 'Projects' : 'Users'"></span>
+                            <span x-text="(tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? 'Restore All' : 'Restore Selected'"></span>
                         </button>
                     </form>
 
-                    {{-- Empty Trash Button --}}
+                    {{-- Delete Selected/All --}}
                     <form action="{{ route('admin.archive.bulk') }}" method="POST" 
                           x-show="(tab === 'projects' && {{ $trashedProjects->count() }} > 0) || (tab === 'users' && {{ $trashedUsers->count() }} > 0)"
-                          onsubmit="return confirm('CRITICAL WARNING: This will PERMANENTLY DELETE every single record in the ' + (tab === 'projects' ? 'Project' : 'User') + ' trash. This action cannot be reversed. Proceed?')">
+                          onsubmit="return confirm('WARNING: This will PERMANENTLY delete ' + ((tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? 'ALL' : 'SELECTED') + ' items. This cannot be undone. Proceed?')">
                         @csrf
                         <input type="hidden" name="type" :value="tab === 'projects' ? 'project' : 'user'">
                         <input type="hidden" name="action" value="delete">
-                        <input type="hidden" name="all" value="1">
                         <input type="hidden" name="tab" :value="tab">
+                        
+                        <input type="hidden" name="all" :value="(tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? '1' : '0'">
+                        <template x-for="id in (tab === 'projects' ? selectedProjects : selectedUsers)" :key="id">
+                            <input type="hidden" name="ids[]" :value="id">
+                        </template>
+
                         <button type="submit" 
                                 class="inline-flex items-center gap-2 px-5 py-2.5 bg-rose-600/10 text-rose-500 border border-rose-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all shadow-lg">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            Empty Trash
+                            <span x-text="(tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? 'Empty Trash' : 'Purge Selected'"></span>
                         </button>
                     </form>
                 </div>
             </div>
 
-            {{-- Projects Tab Content --}}
+            {{-- Projects Tab --}}
             <div x-show="tab === 'projects'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                 <div class="bg-slate-900 border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-950 border-b border-white/5">
+                                <th class="p-5 w-10">
+                                    <input type="checkbox" @click="toggleAllProjects()" :checked="selectedProjects.length === {{ $trashedProjects->count() }} && {{ $trashedProjects->count() }} > 0" class="rounded border-white/10 bg-slate-800 text-indigo-600 focus:ring-indigo-500">
+                                </th>
                                 <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Project Information</th>
                                 <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Deleted On</th>
                                 <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right">Actions</th>
@@ -79,7 +117,10 @@
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             @forelse($trashedProjects as $project)
-                                <tr class="hover:bg-white/[0.02] transition-colors group">
+                                <tr class="hover:bg-white/[0.02] transition-colors group" :class="selectedProjects.includes('{{ $project->id }}') ? 'bg-indigo-500/5' : ''">
+                                    <td class="p-5">
+                                        <input type="checkbox" value="{{ $project->id }}" x-model="selectedProjects" class="rounded border-white/10 bg-slate-800 text-indigo-600 focus:ring-indigo-500">
+                                    </td>
                                     <td class="p-5">
                                         <div class="flex items-center gap-4">
                                             <div class="w-10 h-10 rounded-xl bg-slate-950 border border-white/5 flex items-center justify-center text-lg shadow-inner">📄</div>
@@ -95,27 +136,18 @@
                                         <p class="text-xs font-bold text-slate-400">{{ $project->deleted_at->format('M d, Y') }}</p>
                                         <p class="text-[10px] text-slate-600 uppercase font-black tracking-tighter">{{ $project->deleted_at->diffForHumans() }}</p>
                                     </td>
-                                    <td class="p-5">
-                                        <div class="flex items-center justify-end gap-2">
-                                            <form action="{{ route('admin.archive.restore', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="px-4 py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-emerald-500/20">
-                                                    Restore
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('admin.archive.force-delete', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}" method="POST" onsubmit="return confirm('WARNING: This will permanently delete this project. Proceed?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="px-4 py-2 bg-rose-600/10 hover:bg-rose-600 text-rose-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-rose-500/20">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <td class="p-5 text-right">
+                                        <form action="{{ route('admin.archive.restore', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all" title="Restore">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                              @empty
                                 <tr>
-                                    <td colspan="3" class="p-24 text-center">
+                                    <td colspan="4" class="p-24 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <div class="relative mb-6">
                                                 <div class="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full"></div>
@@ -134,12 +166,15 @@
                 </div>
             </div>
 
-            {{-- Users Tab Content --}}
+            {{-- Users Tab --}}
             <div x-show="tab === 'users'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
                 <div class="bg-slate-900 border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-slate-950 border-b border-white/5">
+                                <th class="p-5 w-10">
+                                    <input type="checkbox" @click="toggleAllUsers()" :checked="selectedUsers.length === {{ $trashedUsers->count() }} && {{ $trashedUsers->count() }} > 0" class="rounded border-white/10 bg-slate-800 text-indigo-600 focus:ring-indigo-500">
+                                </th>
                                 <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Account Details</th>
                                 <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Deleted On</th>
                                 <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right">Actions</th>
@@ -147,7 +182,10 @@
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             @forelse($trashedUsers as $user)
-                                <tr class="hover:bg-white/[0.02] transition-colors group">
+                                <tr class="hover:bg-white/[0.02] transition-colors group" :class="selectedUsers.includes('{{ $user->id }}') ? 'bg-indigo-500/5' : ''">
+                                    <td class="p-5">
+                                        <input type="checkbox" value="{{ $user->id }}" x-model="selectedUsers" class="rounded border-white/10 bg-slate-900 text-indigo-600 focus:ring-indigo-500">
+                                    </td>
                                     <td class="p-5">
                                         <div class="flex items-center gap-4">
                                             <div class="w-10 h-10 rounded-xl bg-slate-950 border border-white/5 flex items-center justify-center text-lg shadow-inner">👤</div>
@@ -163,27 +201,18 @@
                                         <p class="text-xs font-bold text-slate-400">{{ $user->deleted_at->format('M d, Y') }}</p>
                                         <p class="text-[10px] text-slate-600 uppercase font-black tracking-tighter">{{ $user->deleted_at->diffForHumans() }}</p>
                                     </td>
-                                    <td class="p-5">
-                                        <div class="flex items-center justify-end gap-2">
-                                            <form action="{{ route('admin.archive.restore', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="px-4 py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-emerald-500/20">
-                                                    Restore
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('admin.archive.force-delete', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}" method="POST" onsubmit="return confirm('WARNING: This will permanently delete this user account. Proceed?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="px-4 py-2 bg-rose-600/10 hover:bg-rose-600 text-rose-500 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-rose-500/20">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </div>
+                                    <td class="p-5 text-right">
+                                        <form action="{{ route('admin.archive.restore', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit" class="p-2 text-emerald-500 hover:bg-emerald-500/10 rounded-lg transition-all" title="Restore">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                              @empty
                                 <tr>
-                                    <td colspan="3" class="p-24 text-center">
+                                    <td colspan="4" class="p-24 text-center">
                                         <div class="flex flex-col items-center justify-center">
                                             <div class="relative mb-6">
                                                 <div class="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full"></div>
