@@ -181,13 +181,12 @@
                                                 class="px-3 py-1 bg-slate-800 text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/5">Archived</span>
                                         @else
                                             <span
-                                                class="px-3 py-1 bg-amber-500/10 text-amber-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-500/30 shadow-[0_0_15px_-5px_rgba(245,158,11,0.3)]">Review
-                                                Pending</span>
+                                                class="px-3 py-1 bg-amber-500/10 text-amber-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-500/30 shadow-[0_0_15px_-5px_rgba(245,158,11,0.3)]">Pending</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">
-                                            @if(in_array($project->status, ['pending', 'approved', 'verified']))
+                                            @if(!in_array($project->status, ['published', 'archived']))
                                                 <div class="flex flex-col gap-1.5 min-w-[80px]">
                                                     <form method="POST"
                                                         action="{{ route('admin.projects.approve', $project->id) }}"
