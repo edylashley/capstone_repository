@@ -171,6 +171,30 @@ class UserController extends Controller
             ->with('success', 'User ' . ($user->student_id ?? $user->name) . ' has been approved and activated.');
     }
 
+    public function reject(User $user): RedirectResponse
+    {
+        $name = $user->name;
+        $userId = $user->id;
+        
+        // Move to Trash (Soft Delete)
+        $user->delete();
+
+        // Log the rejection
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'account_rejected',
+            'target_type' => 'user',
+            'target_id' => $userId,
+            'ip' => request()->ip(),
+            'meta' => [
+                'rejected_name' => $name
+            ]
+        ]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Account for '$name' has been rejected and moved to Trash.");
+    }
+
     public function destroy(User $user): RedirectResponse
     {
         // Prevent self-deletion
@@ -196,6 +220,6 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('admin.users.index')
-            ->with('success', "User account for '$name' has been permanently deleted.");
+            ->with('success', "User account for '$name' has been moved to Trash.");
     }
 }

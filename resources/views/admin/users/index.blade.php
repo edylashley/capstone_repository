@@ -155,27 +155,41 @@
                                                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex items-center justify-end gap-3"
                                                                     @click.stop>
                                                                     @if(!$user->is_active)
+                                                                        {{-- Approval Flow --}}
                                                                         <form action="{{ route('admin.users.approve', $user) }}" method="POST"
                                                                             class="inline">
                                                                             @csrf
                                                                             <button type="submit"
-                                                                                class="px-3 py-1 bg-green-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-green-700 shadow-sm transition-all">
+                                                                                class="px-4 py-1.5 bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 shadow-lg shadow-emerald-900/20 transition-all transform hover:-translate-y-0.5">
                                                                                 Approve
                                                                             </button>
                                                                         </form>
-                                                                    @endif
-                                                                    <a href="{{ route('admin.users.edit', $user) }}"
-                                                                        class="text-indigo-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors">Edit</a>
-
-                                                                    @if($user->id !== auth()->id())
-                                                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                                                        <form action="{{ route('admin.users.reject', $user) }}" method="POST"
                                                                             class="inline"
-                                                                            onsubmit="return confirm('Are you sure you want to PERMANENTLY delete this user? This cannot be undone.');">
+                                                                            onsubmit="return confirm('Reject this registration? The account will be moved to Trash.');">
                                                                             @csrf
-                                                                            @method('DELETE')
                                                                             <button type="submit"
-                                                                                class="text-red-400 hover:text-white font-bold uppercase text-[10px] tracking-widest transition-colors">Delete</button>
+                                                                                class="px-4 py-1.5 bg-rose-600/10 text-rose-500 border border-rose-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all transform hover:-translate-y-0.5">
+                                                                                Reject
+                                                                            </button>
                                                                         </form>
+                                                                    @else
+                                                                        {{-- Standard Management Flow --}}
+                                                                        <a href="{{ route('admin.users.edit', $user) }}"
+                                                                            class="inline-flex items-center gap-1 px-3 py-1 bg-slate-800 text-indigo-400 hover:text-white hover:bg-indigo-600 border border-white/5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all">
+                                                                            Edit
+                                                                        </a>
+
+                                                                        @if($user->id !== auth()->id())
+                                                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                                                                class="inline"
+                                                                                onsubmit="return confirm('Move this account to Trash?');">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <button type="submit"
+                                                                                    class="text-slate-500 hover:text-rose-500 font-bold uppercase text-[10px] tracking-widest transition-colors ml-2">Delete</button>
+                                                                            </form>
+                                                                        @endif
                                                                     @endif
                                                                 </td>
                                                             </tr>
