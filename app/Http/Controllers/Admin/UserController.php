@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\ActivityLog;
+use App\Mail\AccountApproved;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -152,6 +154,9 @@ class UserController extends Controller
     {
         $user->is_active = true;
         $user->save();
+
+        // Send approval notification email
+        Mail::to($user->email)->send(new AccountApproved($user));
 
         // Log the approval
         ActivityLog::create([

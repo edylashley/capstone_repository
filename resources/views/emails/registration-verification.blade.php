@@ -3,29 +3,24 @@
 
 Hello **{{ $userName }}**,
 
-We received a request to register an account with the email address **{{ $email }}**. Use the verification code below to complete your registration:
+Thank you for joining the **{{ config('app.name') }}**. To complete your registration, please enter the following verification code:
 
 <x-mail::panel>
-<div style="text-align: center;">
-<div style="text-transform: uppercase; font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 3px; margin-bottom: 10px;">
-Your Verification Code
+<div style="text-align: center; padding: 20px 0;">
+<div style="text-transform: uppercase; font-size: 11px; font-weight: 800; color: #38bdf8; letter-spacing: 4px; margin-bottom: 12px;">
+Security Verification Code
 </div>
-<div style="font-size: 42px; font-weight: 900; letter-spacing: 10px; color: #4f46e5; font-family: monospace;">
+<div style="font-size: 48px; font-weight: 900; letter-spacing: 12px; color: #f8fafc; font-family: 'Courier New', Courier, monospace; text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);">
 {{ $code }}
 </div>
-<div style="font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 15px; text-transform: uppercase;">
-This code expires in 10 minutes
+<div style="font-size: 11px; color: #64748b; font-weight: 700; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">
+Expires in 10 minutes
 </div>
 </div>
 </x-mail::panel>
 
-<div style="background-color: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 15px; margin-top: 20px;">
-<strong style="color: #92400e; font-size: 14px;">⚠️ Important Security Note</strong><br>
-<span style="color: #b45309; font-size: 13px;">If you did not request this registration, please ignore this email.</span>
-</div>
+If you did not request this registration, please ignore this email.
 
-Enter this code on the registration page to verify your email and continue setting up your account.
-
-Thanks,<br>
-{{ config('app.name') }}
+Regards,<br>
+**{{ config('app.name') }} Team**
 </x-mail::message>

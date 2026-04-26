@@ -1,17 +1,17 @@
 <x-mail::message>
-# Ticket Resolved
+# Support Request Resolved
 
-Your support request regarding **"{{ $ticket->subject }}"** has been reviewed and resolved.
+Your support request regarding **"{{ $ticket->subject }}"** has been marked as resolved by the administrative team.
 
 @if($ticket->admin_reply)
 <x-mail::panel>
-**Official Administrator Response:**
-*{{ $ticket->admin_reply }}*
+<div style="color: #38bdf8; font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 5px;">Administrator Resolution Notes</div>
+<div style="color: #f1f5f9;">{{ $ticket->admin_reply }}</div>
 </x-mail::panel>
 @endif
 
-If you have further questions, please visit our support portal.
+If you believe this ticket was closed in error or have further questions, please submit a new request through the portal.
 
-Thanks,<br>
-{{ config('app.name') }}
+Regards,<br>
+**{{ config('app.name') }} Support Team**
 </x-mail::message>

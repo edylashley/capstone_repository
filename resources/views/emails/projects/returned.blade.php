@@ -1,25 +1,27 @@
 <x-mail::message>
-# Project Returned for Revisions
+# Project Revision Required
 
-Your project **"{{ $project->title }}"** has been reviewed and requires modifications before it can be published.
+Your submission **"{{ $project->title }}"** has been reviewed by the administrative team. Some modifications are required before it can be officially published.
 
 @if($project->rejection_reason)
 <x-mail::panel>
-**Administrator Feedback:**
-*{{ $project->rejection_reason }}*
+<div style="color: #38bdf8; font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 5px;">Administrator Feedback</div>
+<div style="font-style: italic; color: #f1f5f9;">"{{ $project->rejection_reason }}"</div>
 </x-mail::panel>
 @endif
 
-### Next Steps:
-1. Go to your **Student Dashboard**.
-2. Locate the returned project in your list.
-3. Click **"Edit"** to update your submission.
-4. Make the necessary corrections and resubmit for review.
+### Required Actions:
+1. Log in to your **Student Dashboard**.
+2. Locate this project in the **"Returned"** section.
+3. Click **"Edit"** to address the feedback.
+4. Resubmit for final administrative review.
 
 <x-mail::button :url="route('student.home')">
-Go to Student Dashboard
+Open Student Dashboard
 </x-mail::button>
 
-Thanks,<br>
-{{ config('app.name') }}
+If you have questions, please reach out to the department office.
+
+Regards,<br>
+**{{ config('app.name') }} Administration**
 </x-mail::message>
