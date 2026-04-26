@@ -119,8 +119,14 @@
                                                                                 {{ $user->student_id ?? 'N/A' }}
                                                                             </div>
                                                                             @if($user->program)
-                                                                                <span
-                                                                                    class="text-[9px] px-2 py-0.5 bg-slate-800 text-slate-300 rounded-full font-black uppercase border border-white/5 group-hover:bg-slate-700 transition-colors">
+                                                                                @php
+                                                                                    $programColor = match($user->program) {
+                                                                                        'BSInT' => 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20 group-hover:bg-indigo-500/20',
+                                                                                        'Com-Sci' => 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 group-hover:bg-emerald-500/20',
+                                                                                        default => 'bg-slate-800 text-slate-300 border-white/5 group-hover:bg-slate-700',
+                                                                                    };
+                                                                                @endphp
+                                                                                <span class="text-[9px] px-2 py-0.5 rounded-full font-black uppercase border tracking-tighter transition-all duration-300 {{ $programColor }}">
                                                                                     {{ $user->program }}
                                                                                 </span>
                                                                             @endif
