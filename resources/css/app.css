@@ -65,3 +65,15 @@
     }
 
 }
+
+/* ── Light Mode: Force gray body text to black for readability ──────── */
+/* Only applies outside of dark mode. Excludes placeholder text. */
+:root:not(.dark) .text-gray-400,
+:root:not(.dark) .text-gray-500,
+:root:not(.dark) .text-gray-600,
+:root:not(.dark) .text-slate-400,
+:root:not(.dark) .text-slate-500,
+:root:not(.dark) .text-slate-600 {
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity)); /* gray-900 */
+}

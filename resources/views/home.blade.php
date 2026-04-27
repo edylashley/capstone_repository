@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="relative min-h-screen w-full pb-12 bg-slate-950 overflow-hidden">
+    <div
+        class="relative min-h-screen w-full pb-12 bg-gray-50 dark:bg-slate-950 overflow-hidden transition-colors duration-300">
         {{-- ═══ CYBER BACKGROUND LAYERS ═══ --}}
         <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
             <!-- Perspective Grid -->
-            <div class="absolute inset-0" style="perspective: 1000px;">
+            <div class="absolute inset-0"
+                style="perspective: 1000px; mask-image: linear-gradient(to top, black 20%, transparent 100%); -webkit-mask-image: linear-gradient(to top, black 20%, transparent 100%);">
                 <div
-                    class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px] [transform:rotateX(60deg)_translateY(-200px)_scale(2)] animate-cyber-grid">
+                    class="absolute inset-0 bg-[linear-gradient(to_right,#94a3b8_1px,transparent_1px),linear-gradient(to_bottom,#94a3b8_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:40px_40px] [transform:rotateX(60deg)_translateY(-200px)_scale(2)] animate-cyber-grid">
                 </div>
             </div>
 
@@ -68,6 +70,17 @@
                 }
             }
 
+            /* ═══ GLOW THEME VARIABLES ═══ */
+            :root {
+                --logo-glow: rgba(79, 70, 229, 0.65);
+                /* Indigo 600 glow for light mode */
+            }
+
+            .dark {
+                --logo-glow: rgba(56, 189, 248, 0.85);
+                /* Sky 400 glow for dark mode */
+            }
+
             /* ═══ SOFT TECH REVEAL ANIMATIONS ═══ */
             @keyframes tech-reveal {
                 0% {
@@ -81,7 +94,7 @@
                     opacity: 1;
                     transform: scale(1);
                     filter: blur(0px);
-                    box-shadow: 0 0 60px -10px rgba(56, 189, 248, 0.6);
+                    box-shadow: 0 0 60px -10px var(--logo-glow);
                 }
             }
 
@@ -157,27 +170,31 @@
                         </div>
                         <div class="text-center lg:text-left flex-shrink-0">
                             <h1
-                                class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-2 whitespace-nowrap md:whitespace-normal">
+                                class="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-gray-900 dark:text-white mb-2 whitespace-nowrap md:whitespace-normal">
                                 <span
-                                    class="text-teal-300 drop-shadow-lg inline-block opacity-0 animate-[text-fade-in_0.8s_ease-out_0.2s_forwards]">CSIT</span><br>
+                                    class="text-blue-600 dark:text-teal-300 drop-shadow-[0_0_15px_rgba(37,99,235,0.4)] dark:drop-shadow-[0_0_15px_rgba(45,212,191,0.5)] inline-block opacity-0 animate-[text-fade-in_0.8s_ease-out_0.2s_forwards]">CSIT</span><br>
                                 <div class="opacity-0 animate-[text-slide-up_0.8s_ease-out_0.5s_forwards]">
-                                    <span class="text-blue-100">Capstone</span><br>
-                                    <span class="text-blue-100">Repository</span>
+                                    <span
+                                        class="text-indigo-900 dark:text-blue-100 drop-shadow-[0_0_12px_rgba(49,46,129,0.3)] dark:drop-shadow-[0_0_15px_rgba(224,231,255,0.3)]">Capstone</span><br>
+                                    <span
+                                        class="text-indigo-900 dark:text-blue-100 drop-shadow-[0_0_12px_rgba(49,46,129,0.3)] dark:drop-shadow-[0_0_15px_rgba(224,231,255,0.3)]">Repository</span>
                                 </div>
                             </h1>
                         </div>
                     </div>
 
-                    <div class="space-y-6 text-white text-center lg:text-left animate-fade-in-up delay-200">
+                    <div
+                        class="space-y-6 text-gray-900 dark:text-white text-center lg:text-left animate-fade-in-up delay-200">
                         <div>
-                            <p class="text-blue-200 font-bold text-xs uppercase tracking-widest mb-3">Institutional Platform
+                            <p class="text-indigo-600 dark:text-blue-200 font-bold text-xs uppercase tracking-widest mb-3">
+                                University Platform
                             </p>
-                            <h2 class="text-2xl md:text-3xl font-bold text-white leading-tight mb-4">
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
                                 Centralized Web-Based Management System for Capstone Projects in NORSU
                             </h2>
                         </div>
 
-                        <p class="text-blue-100 text-lg leading-relaxed">
+                        <p class="text-gray-600 dark:text-blue-100 text-lg leading-relaxed">
                             A centralized digital archive for storing, verifying, and preserving student capstone research.
                             This platform ensures long-term accessibility of project manuscripts and source code for the
                             university community.
@@ -203,7 +220,7 @@
                             </style>
                             <form action="{{ route('projects.index') ?? '#' }}" method="GET">
                                 <div
-                                    class="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex items-center ring-1 ring-white/20 focus-within:ring-2 focus-within:ring-teal-500/50 focus-within:shadow-teal-500/20 transition-all duration-300 group/search">
+                                    class="relative w-full bg-white/90 dark:bg-white/5 backdrop-blur-xl border border-gray-300 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden flex items-center ring-1 ring-gray-200 dark:ring-white/20 focus-within:ring-2 focus-within:ring-teal-500/50 focus-within:shadow-teal-500/20 transition-all duration-300 group/search">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
                                         <svg class="w-5 h-5 text-teal-400 group-focus-within/search:scale-110 transition-transform"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,7 +234,7 @@
                                         class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-300"
                                         style="left: 2rem; right: 7rem; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);">
                                         <div
-                                            class="whitespace-nowrap animate-smooth-marquee text-sm text-slate-400 font-medium">
+                                            class="whitespace-nowrap animate-smooth-marquee text-sm text-gray-500 dark:text-slate-400 font-medium">
                                             Find past projects: Search by capstone titles, authors, faculty advisers, or
                                             keywords... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Find
                                             projects: Search by capstone titles, authors, faculty advisers, or keywords...
@@ -225,10 +242,10 @@
                                     </div>
 
                                     <input type="search" id="dynamic-search" name="keyword"
-                                        class="block w-full py-5 pl-14 pr-[140px] text-sm text-white placeholder-slate-500 bg-transparent outline-none focus:ring-0 border-0 relative z-20"
+                                        class="block w-full py-5 pl-14 pr-[140px] text-sm text-gray-900 dark:text-white placeholder-transparent bg-transparent outline-none focus:ring-0 border-0 relative z-20"
                                         placeholder="" required>
                                     <button type="button" id="clear-search-btn"
-                                        class="absolute text-slate-400 hover:text-white hidden z-30 focus:outline-none"
+                                        class="absolute text-slate-400 hover:text-gray-900 dark:hover:text-white hidden z-30 focus:outline-none"
                                         style="right: 120px; top: 50%; transform: translateY(-50%);" title="Clear search">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -243,10 +260,10 @@
                             </form>
 
                             <div
-                                class="flex flex-wrap items-center justify-center lg:justify-between gap-4 pt-6 mt-6 border-t border-white/20">
+                                class="flex flex-wrap items-center justify-center lg:justify-between gap-4 pt-6 mt-6 border-t border-gray-300 dark:border-white/20">
                                 <!-- Browse Button on Left -->
                                 <a href="{{ route('projects.index') }}"
-                                    class="inline-flex items-center px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg backdrop-blur-sm border border-white/20 transition-colors duration-200 shadow-sm hover:shadow-lg">
+                                    class="inline-flex items-center px-5 py-2.5 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white text-sm font-medium rounded-lg backdrop-blur-sm border border-gray-300 dark:border-white/20 transition-colors duration-200 shadow-sm hover:shadow-lg">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
@@ -258,11 +275,11 @@
                                 <!-- Auth Buttons on Right -->
                                 <div class="flex flex-wrap gap-3">
                                     <a href="{{ route('login') }}"
-                                        class="px-6 py-2.5 bg-white text-slate-900 rounded-lg font-bold hover:bg-blue-50 shadow transition-all duration-200 text-sm">
+                                        class="px-6 py-2.5 bg-indigo-600 dark:bg-white text-white dark:text-slate-900 rounded-lg font-bold hover:bg-indigo-700 dark:hover:bg-blue-50 shadow transition-all duration-200 text-sm">
                                         Login
                                     </a>
                                     <a href="{{ route('register') }}"
-                                        class="px-6 py-2.5 bg-white/10 text-white border border-white/30 rounded-lg font-bold hover:bg-white/20 backdrop-blur-md shadow transition-all duration-200 text-sm">
+                                        class="px-6 py-2.5 bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white border border-gray-300 dark:border-white/30 rounded-lg font-bold hover:bg-gray-200 dark:hover:bg-white/20 backdrop-blur-md shadow transition-all duration-200 text-sm">
                                         Register
                                     </a>
                                 </div>
@@ -273,13 +290,13 @@
 
             <!-- How to Use System Guide -->
             <h2
-                class="text-2xl font-bold text-slate-200 mb-6 text-center uppercase tracking-widest animate-fade-in-up delay-300">
+                class="text-2xl font-bold text-gray-900 dark:text-slate-200 mb-6 text-center uppercase tracking-widest animate-fade-in-up delay-300">
                 System Guide </h2>
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 animate-fade-in-up delay-500">
                 <!-- Step 1 -->
                 <div
-                    class="group bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-slate-800 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20 font-black text-6xl text-indigo-400 z-0">01</div>
+                    class="group bg-white dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-gray-200 dark:border-slate-800 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-40 font-black text-6xl text-indigo-400 z-0">01</div>
                     <div class="relative z-10">
                         <div
                             class="w-14 h-14 bg-indigo-500/10 text-indigo-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
@@ -288,8 +305,8 @@
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">1. Check Your Idea</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed">
+                        <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-2">1. Check Your Idea</h3>
+                        <p class="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
                             Use the search bar to explore existing capstone projects and verify if your idea has already
                             been completed by a previous group.
                         </p>
@@ -298,8 +315,8 @@
 
                 <!-- Step 2 -->
                 <div
-                    class="group bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-slate-800 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20 font-black text-6xl text-purple-400 z-0">02</div>
+                    class="group bg-white dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-gray-200 dark:border-slate-800 hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-40 font-black text-6xl text-purple-400 z-0">02</div>
                     <div class="relative z-10">
                         <div
                             class="w-14 h-14 bg-purple-500/10 text-purple-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300">
@@ -308,8 +325,8 @@
                                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12"></path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">2. Upload Your Work</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed">
+                        <h3 class="text-lg font-bold text-purple-600 dark:text-purple-400 mb-2">2. Upload Your Work</h3>
+                        <p class="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
                             Authorized students can log in to submit their final capstone work and provide comprehensive
                             details about their systems.
                         </p>
@@ -318,8 +335,8 @@
 
                 <!-- Step 3 -->
                 <div
-                    class="group bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-slate-800 hover:border-teal-500/50 hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20 font-black text-6xl text-teal-400 z-0">03</div>
+                    class="group bg-white dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-gray-200 dark:border-slate-800 hover:border-teal-500/50 hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-40 font-black text-6xl text-teal-400 z-0">03</div>
                     <div class="relative z-10">
                         <div
                             class="w-14 h-14 bg-teal-500/10 text-teal-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-teal-600 group-hover:text-white transition-colors duration-300">
@@ -329,8 +346,9 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">3. Administrator Verification</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed">
+                        <h3 class="text-lg font-bold text-teal-600 dark:text-teal-400 mb-2">3. Administrator Verification
+                        </h3>
+                        <p class="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
                             The Administrator reviews submitted projects for accuracy and compliance before they are
                             officially published in the library.
                         </p>
@@ -339,8 +357,8 @@
 
                 <!-- Step 4 -->
                 <div
-                    class="group bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-slate-800 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-4 opacity-20 font-black text-6xl text-blue-400 z-0">04</div>
+                    class="group bg-white dark:bg-slate-900/50 backdrop-blur-md p-8 rounded-2xl border border-gray-200 dark:border-slate-800 hover:border-blue-500/50 hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-40 font-black text-6xl text-blue-400 z-0">04</div>
                     <div class="relative z-10">
                         <div
                             class="w-14 h-14 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
@@ -350,8 +368,8 @@
                                 </path>
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">4. Explore Projects</h3>
-                        <p class="text-slate-400 text-sm leading-relaxed">
+                        <h3 class="text-lg font-bold text-blue-600 dark:text-blue-400 mb-2">4. Explore Projects</h3>
+                        <p class="text-gray-600 dark:text-slate-400 text-sm leading-relaxed">
                             Access project abstracts publicly, or log in to securely download full manuscripts and verified
                             source code files.
                         </p>

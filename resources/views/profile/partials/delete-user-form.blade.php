@@ -1,6 +1,6 @@
 <section class="space-y-6">
-    <p class="text-sm text-slate-400 leading-relaxed font-medium">
-        {{ __('Once your account is deleted, all of its resources and data will be permanently purged from the institutional memory. This action is irreversible.') }}
+    <p class="text-sm text-gray-600 dark:text-slate-400 leading-relaxed font-medium">
+        {{ __('Once your account is deleted, all of its data will be permanently removed. This action cannot be undone.') }}
     </p>
 
     <button
@@ -10,15 +10,15 @@
     >{{ __('Initiate Termination') }}</button>
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-8 bg-slate-900 border border-white/5 rounded-3xl overflow-hidden">
+        <form method="post" action="{{ route('profile.destroy') }}" class="p-8 bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 rounded-3xl overflow-hidden transition-colors">
             @csrf
             @method('delete')
 
-            <h2 class="text-2xl font-black text-white uppercase tracking-tighter mb-4">
+            <h2 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tighter mb-4">
                 {{ __('Confirm Deletion') }}
             </h2>
 
-            <p class="text-sm text-slate-400 leading-relaxed font-medium mb-8">
+            <p class="text-sm text-gray-600 dark:text-slate-400 leading-relaxed font-medium mb-8">
                 {{ __('Please enter your credentials to authorize the permanent deletion of your profile. All associated metadata and file pointers will be destroyed.') }}
             </p>
 
@@ -31,7 +31,7 @@
                         <svg class="w-4 h-4 text-slate-500 group-focus-within:text-red-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     </div>
                     <input id="password" name="password" type="password" 
-                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-950/50 border border-white/5 rounded-2xl text-white text-sm font-bold placeholder-slate-600 focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 transition-all shadow-inner" 
+                        class="block w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-slate-950/50 border border-gray-200 dark:border-white/5 rounded-2xl text-gray-900 dark:text-white text-sm font-bold placeholder-gray-400 dark:placeholder-slate-600 focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 transition-all shadow-sm dark:shadow-inner" 
                         placeholder="Enter password to confirm">
                 </div>
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
@@ -39,7 +39,7 @@
 
             <div class="mt-10 flex justify-end gap-4">
                 <button type="button" x-on:click="$dispatch('close')" 
-                    class="px-6 py-3 text-slate-400 hover:text-white font-black uppercase text-[10px] tracking-widest transition-colors">
+                    class="px-6 py-3 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white font-black uppercase text-[10px] tracking-widest transition-colors">
                     {{ __('Abort') }}
                 </button>
 

@@ -5,11 +5,11 @@
             {{-- Integrated Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
                 <div>
-                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">Academic Programs</h2>
-                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Institutional Registry & Departmental Nodes</p>
+                    <h2 class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">Academic Programs</h2>
+                    <p class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Manage Programs & Departments</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-inner border border-white/5">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 dark:bg-slate-900/50 text-gray-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-gray-200 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Dashboard
                     </a>
@@ -38,43 +38,43 @@
                 </div>
             @endif
 
-            <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-white/5">
-                <div class="p-0 sm:p-6 text-white">
+            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
+                <div class="p-0 sm:p-6 text-gray-900 dark:text-white">
                     
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-white/5">
-                            <thead class="bg-slate-800">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5">
+                            <thead class="bg-gray-50 dark:bg-slate-800 transition-colors">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Name</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Abbr</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Description</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Usage Count</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Name</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Abbr</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Description</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Usage Count</th>
+                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-slate-900 divide-y divide-white/5">
+                            <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-white/5 transition-colors">
                                 @foreach($programs as $program)
                                     @php
                                         $projectCount = \App\Models\Project::where('program', $program->abbreviation)->count();
                                         $userCount = \App\Models\User::where('program', $program->abbreviation)->count();
                                     @endphp
-                                    <tr class="hover:bg-white/[0.02] transition-colors">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-white">
                                             {{ $program->name }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-indigo-600 dark:text-indigo-400 font-black">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 dark:text-indigo-400 font-black">
                                             {{ $program->abbreviation }}
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-slate-400 min-w-[200px] max-w-xs truncate">
+                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-slate-400 min-w-[200px] max-w-xs truncate">
                                             {{ $program->description ?? 'No description' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                                            <div class="flex flex-col gap-1">
-                                                <a href="{{ route('admin.projects.index', ['program' => $program->abbreviation]) }}" class="px-2.5 py-1 inline-flex text-[8px] leading-5 font-black uppercase tracking-widest rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors">
-                                                    {{ $projectCount }} projects
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-500">
+                                            <div class="flex items-center gap-1.5">
+                                                <a href="{{ route('admin.projects.index', ['program' => $program->abbreviation]) }}" class="px-2 py-0.5 inline-flex text-[7px] leading-4 font-black uppercase tracking-widest rounded-md bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors" title="Projects">
+                                                    {{ $projectCount }} PRJ
                                                 </a>
-                                                <a href="{{ route('admin.users.index', ['program' => $program->abbreviation]) }}" class="px-2.5 py-1 inline-flex text-[8px] leading-5 font-black uppercase tracking-widest rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-200 dark:hover:bg-emerald-800/50 transition-colors">
-                                                    {{ $userCount }} users
+                                                <a href="{{ route('admin.users.index', ['program' => $program->abbreviation]) }}" class="px-2 py-0.5 inline-flex text-[7px] leading-4 font-black uppercase tracking-widest rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-200 dark:hover:bg-emerald-800/50 transition-colors" title="Users">
+                                                    {{ $userCount }} USR
                                                 </a>
                                             </div>
                                         </td>
@@ -121,32 +121,32 @@
     </div>
 
     <!-- Create Modal -->
-    <div id="add-program-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden z-50 overflow-y-auto p-4">
-        <div class="relative top-10 mx-auto p-8 border w-full max-w-xl shadow-2xl rounded-[2rem] bg-slate-900 border-slate-800">
+    <div id="add-program-modal" class="fixed inset-0 bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm hidden z-50 overflow-y-auto p-4 transition-colors">
+        <div class="relative top-10 mx-auto p-8 border w-full max-w-xl shadow-2xl rounded-[2rem] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 transition-colors">
             <div class="mt-3">
-                <h3 class="text-2xl font-black text-white mb-6 uppercase tracking-tighter">Add New Program</h3>
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tighter">Add New Program</h3>
                 <form action="{{ route('admin.programs.store') }}" method="POST" class="space-y-6">
                     @csrf
                     <div class="text-left">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Full Program Name</label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-slate-400 mb-2">Full Program Name</label>
                         <input type="text" name="name" placeholder="e.g. Bachelor of Science in Information Technology" required 
-                            class="block w-full px-5 py-4 border border-slate-700 rounded-2xl bg-slate-950/50 text-white placeholder-slate-600 focus:bg-slate-950 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm">
+                            class="block w-full px-5 py-4 border border-gray-300 dark:border-slate-700 rounded-2xl bg-gray-50 dark:bg-slate-950/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-600 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 transition-all sm:text-sm">
                     </div>
                     <div class="text-left">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Abbreviation (For Filtering)</label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-slate-400 mb-2">Abbreviation (For Filtering)</label>
                         <input type="text" name="abbreviation" placeholder="e.g. BSIT" required 
-                            class="block w-full px-5 py-4 border border-slate-700 rounded-2xl bg-slate-950/50 text-white placeholder-slate-600 focus:bg-slate-950 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm">
+                            class="block w-full px-5 py-4 border border-gray-300 dark:border-slate-700 rounded-2xl bg-gray-50 dark:bg-slate-950/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-600 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 transition-all sm:text-sm">
                     </div>
                     <div class="text-left">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Description (Optional)</label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-slate-400 mb-2">Description (Optional)</label>
                         <textarea name="description" rows="4" 
-                            class="block w-full px-5 py-4 border border-slate-700 rounded-2xl bg-slate-950/50 text-white placeholder-slate-600 focus:bg-slate-950 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm" placeholder="Briefly describe the program scope..."></textarea>
+                            class="block w-full px-5 py-4 border border-gray-300 dark:border-slate-700 rounded-2xl bg-gray-50 dark:bg-slate-950/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-600 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 transition-all sm:text-sm" placeholder="Briefly describe the program scope..."></textarea>
                     </div>
-                    <div class="flex justify-end gap-3 pt-6 border-t border-slate-800">
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-slate-800">
                         <button type="button" onclick="document.getElementById('add-program-modal').classList.add('hidden')" 
-                            class="px-6 py-3 bg-slate-800 text-slate-300 font-bold uppercase text-[10px] tracking-widest rounded-xl hover:bg-slate-700 transition-all">Cancel</button>
+                            class="px-6 py-3 bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-widest rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700 transition-all">Cancel</button>
                         <button type="submit" 
-                            class="px-8 py-3 bg-indigo-600 text-white font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-900/20 border border-indigo-500/50">Save Program</button>
+                            class="px-8 py-3 bg-blue-600 dark:bg-indigo-600 text-white font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-blue-700 dark:hover:bg-indigo-700 transition-all shadow-lg shadow-blue-900/20 dark:shadow-indigo-900/20 border border-blue-500/50 dark:border-indigo-500/50">Save Program</button>
                     </div>
                 </form>
             </div>
@@ -154,33 +154,33 @@
     </div>
 
     <!-- Edit Modal -->
-    <div id="edit-program-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden z-50 overflow-y-auto p-4">
-        <div class="relative top-10 mx-auto p-8 border w-full max-w-xl shadow-2xl rounded-[2rem] bg-slate-900 border-slate-800">
+    <div id="edit-program-modal" class="fixed inset-0 bg-gray-900/50 dark:bg-slate-950/80 backdrop-blur-sm hidden z-50 overflow-y-auto p-4 transition-colors">
+        <div class="relative top-10 mx-auto p-8 border w-full max-w-xl shadow-2xl rounded-[2rem] bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 transition-colors">
             <div class="mt-3">
-                <h3 class="text-2xl font-black text-white mb-6 uppercase tracking-tighter">Edit Program</h3>
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-6 uppercase tracking-tighter">Edit Program</h3>
                 <form id="edit-program-form" method="POST" class="space-y-6">
                     @csrf
                     @method('PUT')
                     <div class="text-left">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Full Program Name</label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-slate-400 mb-2">Full Program Name</label>
                         <input type="text" name="name" id="edit-program-name" required 
-                            class="block w-full px-5 py-4 border border-slate-700 rounded-2xl bg-slate-950/50 text-white placeholder-slate-600 focus:bg-slate-950 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm">
+                            class="block w-full px-5 py-4 border border-gray-300 dark:border-slate-700 rounded-2xl bg-gray-50 dark:bg-slate-950/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-600 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 transition-all sm:text-sm">
                     </div>
                     <div class="text-left">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Abbreviation</label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-slate-400 mb-2">Abbreviation</label>
                         <input type="text" name="abbreviation" id="edit-program-abbr" required 
-                            class="block w-full px-5 py-4 border border-slate-700 rounded-2xl bg-slate-950/50 text-white placeholder-slate-600 focus:bg-slate-950 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm">
+                            class="block w-full px-5 py-4 border border-gray-300 dark:border-slate-700 rounded-2xl bg-gray-50 dark:bg-slate-950/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-600 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 transition-all sm:text-sm">
                     </div>
                     <div class="text-left">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">Description (Optional)</label>
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-gray-700 dark:text-slate-400 mb-2">Description (Optional)</label>
                         <textarea name="description" id="edit-program-desc" rows="4" 
-                            class="block w-full px-5 py-4 border border-slate-700 rounded-2xl bg-slate-950/50 text-white placeholder-slate-600 focus:bg-slate-950 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all sm:text-sm"></textarea>
+                            class="block w-full px-5 py-4 border border-gray-300 dark:border-slate-700 rounded-2xl bg-gray-50 dark:bg-slate-950/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-600 focus:bg-white dark:focus:bg-slate-950 focus:ring-2 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 transition-all sm:text-sm"></textarea>
                     </div>
-                    <div class="flex justify-end gap-3 pt-6 border-t border-slate-800">
+                    <div class="flex justify-end gap-3 pt-6 border-t border-gray-200 dark:border-slate-800">
                         <button type="button" onclick="document.getElementById('edit-program-modal').classList.add('hidden')" 
-                            class="px-6 py-3 bg-slate-800 text-slate-300 font-bold uppercase text-[10px] tracking-widest rounded-xl hover:bg-slate-700 transition-all">Cancel</button>
+                            class="px-6 py-3 bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-slate-300 font-bold uppercase text-[10px] tracking-widest rounded-xl hover:bg-gray-300 dark:hover:bg-slate-700 transition-all">Cancel</button>
                         <button type="submit" 
-                            class="px-8 py-3 bg-indigo-600 text-white font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-900/20 border border-indigo-500/50">Update</button>
+                            class="px-8 py-3 bg-blue-600 dark:bg-indigo-600 text-white font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-blue-700 dark:hover:bg-indigo-700 transition-all shadow-lg shadow-blue-900/20 dark:shadow-indigo-900/20 border border-blue-500/50 dark:border-indigo-500/50">Update</button>
                     </div>
                 </form>
             </div>

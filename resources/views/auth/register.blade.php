@@ -4,7 +4,7 @@
 
         <!-- Name Field -->
         <div>
-            <label for="name" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Full Name
             </label>
             <div class="relative">
@@ -15,7 +15,7 @@
                     </svg>
                 </div>
                 <input id="name"
-                    class="block w-full pr-4 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     style="padding-left: 2.75rem !important;"
                     type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
                     placeholder="Enter your full name" />
@@ -25,7 +25,7 @@
 
         <!-- Student ID Field -->
         <div>
-            <label for="student_id" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="student_id" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Student ID
             </label>
             <div class="relative">
@@ -36,19 +36,19 @@
                     </svg>
                 </div>
                 <input id="student_id"
-                    class="block w-full pr-4 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     style="padding-left: 2.75rem !important;"
                     type="text" name="student_id" value="{{ old('student_id') }}" required
                     placeholder="Enter your 9-digit ID (e.g., 202312345)" />
             </div>
-            <p class="text-[10px] text-slate-500 mt-1 italic">Note: Only CSIT students with a valid 9-digit I.D. are
+            <p class="text-xs text-gray-500 dark:text-slate-500 mt-1 italic">Note: Only CSIT students with a valid 9-digit I.D. are
                 eligible.</p>
             <x-input-error :messages="$errors->get('student_id')" class="mt-2" />
         </div>
 
         <!-- Program Case -->
         <div>
-            <label for="program" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="program" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Degree Program
             </label>
             <div class="relative">
@@ -60,7 +60,7 @@
                     </svg>
                 </div>
                 <select id="program" name="program"
-                    class="block w-full py-3 border border-slate-700 rounded-xl bg-slate-800 text-white focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     style="text-indent: 2.25rem !important;"
                     required>
                     <option value="" disabled {{ old('program') ? '' : 'selected' }}>Choose Program</option>
@@ -75,13 +75,13 @@
         </div>
 
         <div class="bg-indigo-500/10 p-4 rounded-xl border border-indigo-500/30 mb-6">
-            <p class="text-xs text-indigo-300 leading-relaxed">
+            <p class="text-xs text-indigo-700 dark:text-indigo-300 leading-relaxed">
                 <strong>Account Verification Required:</strong> After registration, your account will be reviewed by the
                 Department Administrator to verify your CSIT student status. You will be able to log in once approved.
             </p>
         </div>
         <div>
-            <label for="email" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Email Address
             </label>
             <div class="relative">
@@ -93,7 +93,7 @@
                     </svg>
                 </div>
                 <input id="email"
-                    class="block w-full pr-4 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     style="padding-left: 2.75rem !important;"
                     type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
                     placeholder="Enter your email" />
@@ -103,7 +103,7 @@
 
         <!-- Password -->
         <div>
-            <label for="password" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Password
             </label>
             <div class="relative">
@@ -115,7 +115,7 @@
                     </svg>
                 </div>
                 <input id="password"
-                    class="block w-full pr-12 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-12 py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     style="padding-left: 2.75rem !important;"
                     type="password" name="password" required autocomplete="new-password"
                     placeholder="Create a password" />
@@ -135,7 +135,7 @@
 
         <!-- Confirm Password -->
         <div>
-            <label for="password_confirmation" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Confirm Password
             </label>
             <div class="relative">
@@ -146,7 +146,7 @@
                     </svg>
                 </div>
                 <input id="password_confirmation"
-                    class="block w-full pr-12 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="block w-full pr-12 py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     style="padding-left: 2.75rem !important;"
                     type="password" name="password_confirmation" required autocomplete="new-password"
                     placeholder="Confirm your password" />
@@ -172,11 +172,11 @@
         </button>
 
         <!-- Login Link -->
-        <div class="text-center pt-4 border-t border-slate-800">
-            <p class="text-sm text-slate-400">
+        <div class="text-center pt-4 border-t border-gray-200 dark:border-slate-800">
+            <p class="text-sm text-gray-600 dark:text-slate-400">
                 Already have an account?
                 <a href="{{ route('login') }}"
-                    class="font-semibold text-indigo-400 hover:text-indigo-300 hover:underline transition-colors">
+                    class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 hover:underline transition-colors">
                     Sign in here
                 </a>
             </p>

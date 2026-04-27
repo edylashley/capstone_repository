@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">Bulk Direct Entry</h2>
-                <p class="text-xs text-indigo-200 mt-1 uppercase tracking-widest font-black">Upload multiple legacy
+                <h2 class="font-bold text-2xl text-gray-900 dark:text-white leading-tight">Bulk Direct Entry</h2>
+                <p class="text-xs text-blue-600 dark:text-indigo-200 mt-1 uppercase tracking-widest font-black">Upload multiple legacy
                     capstone projects at once</p>
             </div>
             <a href="{{ route('admin.projects.index') }}" 
-                class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600">
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-300 dark:border-gray-600">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Back to List
             </a>
@@ -49,23 +49,23 @@
                 <!-- Add Project Button -->
                 <div class="mt-6 flex items-center gap-4">
                     <button type="button" id="add-project-btn"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-gray-700 text-indigo-600 dark:text-indigo-400 font-black text-xs uppercase tracking-widest rounded-2xl border-2 border-dashed border-indigo-300 dark:border-indigo-600 hover:border-indigo-500 transition-all shadow-sm">
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 text-blue-600 dark:text-indigo-400 font-black text-xs uppercase tracking-widest rounded-2xl border-2 border-dashed border-blue-300 dark:border-indigo-600 hover:border-blue-500 transition-all shadow-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M12 4v16m8-8H4" />
                         </svg>
                         Add Another Project
                     </button>
-                    <span id="project-counter" class="text-[10px] text-gray-400 font-black uppercase tracking-widest">0
+                    <span id="project-counter" class="text-[10px] text-gray-500 dark:text-gray-400 font-black uppercase tracking-widest">0
                         Projects</span>
                 </div>
 
                 <!-- Submit -->
-                <div class="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
+                <div class="mt-8 pt-6 border-t border-gray-200 dark:border-white/5 flex items-center justify-between transition-colors">
                     <a href="{{ route('admin.projects.index') }}"
-                        class="text-sm font-bold text-gray-500 hover:text-gray-800">Cancel</a>
+                        class="text-sm font-bold text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-white transition-colors">Cancel</a>
                     <button id="submit-btn" type="submit"
-                        class="inline-flex items-center gap-2 px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm uppercase tracking-widest rounded-xl shadow-lg hover:shadow-indigo-500/30 transition transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 dark:bg-indigo-600 hover:bg-blue-700 dark:hover:bg-indigo-700 text-white font-black text-sm uppercase tracking-widest rounded-xl shadow-lg hover:shadow-blue-500/30 dark:hover:shadow-indigo-500/30 transition transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                         disabled>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -88,17 +88,17 @@
         function createProjectCard(idx) {
             const programOptions = programs.map(p => `<option value="${p.abbreviation}">${p.abbreviation}</option>`).join('');
             const categoryCheckboxes = categories.map(c => `
-                <label class="flex items-center gap-2 p-2 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors group">
-                    <input type="checkbox" name="projects[${idx}][categories][]" value="${c.id}" class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                    <span class="text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">${c.name}</span>
+                <label class="flex items-center gap-2 p-2 rounded border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 cursor-pointer transition-colors group">
+                    <input type="checkbox" name="projects[${idx}][categories][]" value="${c.id}" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
+                    <span class="text-xs font-semibold text-gray-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-indigo-400">${c.name}</span>
                 </label>
             `).join('');
 
             const card = document.createElement('div');
-            card.className = 'bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-2xl border border-gray-100 dark:border-gray-700 project-card';
+            card.className = 'bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-lg sm:rounded-2xl border border-gray-200 dark:border-white/5 project-card transition-colors';
             card.dataset.index = idx;
             card.innerHTML = `
-                <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-3 flex items-center justify-between">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-indigo-600 dark:to-indigo-700 px-6 py-3 flex items-center justify-between transition-colors">
                     <span class="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
                         <span class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center text-[10px]">${idx + 1}</span>
                         Project Entry #${idx + 1}
@@ -110,27 +110,27 @@
                 <div class="p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Project Title <span class="text-red-500">*</span></label>
-                            <input type="text" name="projects[${idx}][title]" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Project Title <span class="text-red-500">*</span></label>
+                            <input type="text" name="projects[${idx}][title]" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm transition-colors" required>
                         </div>
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Authors (Comma-separated) <span class="text-red-500">*</span></label>
-                            <input type="text" name="projects[${idx}][authors_list]" placeholder="e.g. John Doe, Jane Smith" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Authors (Comma-separated) <span class="text-red-500">*</span></label>
+                            <input type="text" name="projects[${idx}][authors_list]" placeholder="e.g. John Doe, Jane Smith" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm transition-colors" required>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Year <span class="text-red-500">*</span></label>
-                            <input type="number" name="projects[${idx}][year]" value="${new Date().getFullYear()}" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Year <span class="text-red-500">*</span></label>
+                            <input type="number" name="projects[${idx}][year]" value="${new Date().getFullYear()}" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm transition-colors" required>
                         </div>
                         <div class="col-span-2">
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Adviser Name <span class="text-red-500">*</span></label>
-                            <input type="text" name="projects[${idx}][adviser_name]" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Adviser Name <span class="text-red-500">*</span></label>
+                            <input type="text" name="projects[${idx}][adviser_name]" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm transition-colors" required>
                         </div>
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Program <span class="text-red-500">*</span></label>
-                            <select name="projects[${idx}][program]" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Program <span class="text-red-500">*</span></label>
+                            <select name="projects[${idx}][program]" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm transition-colors" required>
                                 <option value="" disabled selected>Choose...</option>
                                 ${programOptions}
                             </select>
@@ -139,34 +139,34 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300 mb-2">Categories <span class="text-red-500">*</span></label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-32 overflow-y-auto pr-2 border border-gray-200 dark:border-gray-700 rounded-lg p-2 bg-gray-50 dark:bg-gray-900/50">
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300 mb-2">Categories <span class="text-red-500">*</span></label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-32 overflow-y-auto pr-2 border border-gray-200 dark:border-slate-700 rounded-lg p-2 bg-gray-50 dark:bg-slate-800/50 transition-colors">
                                 ${categoryCheckboxes}
                             </div>
                         </div>
                         <div>
-                            <label class="block font-medium text-sm text-gray-700 dark:text-gray-300">Abstract <span class="text-gray-400 text-[10px] uppercase">(Optional)</span></label>
-                            <textarea name="projects[${idx}][abstract]" rows="2" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm" placeholder="Paste abstract here..."></textarea>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Abstract <span class="text-gray-500 dark:text-slate-400 text-[10px] uppercase">(Optional)</span></label>
+                            <textarea name="projects[${idx}][abstract]" rows="2" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm transition-colors" placeholder="Paste abstract here..."></textarea>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600">
-                            <label class="block font-bold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-300 mb-2">Main Manuscript (PDF) <span class="text-red-500">*</span></label>
+                        <div class="p-4 bg-blue-50/50 dark:bg-slate-800 rounded-xl border-2 border-dashed border-blue-200 dark:border-slate-600 transition-colors">
+                            <label class="block font-bold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-2">Main Manuscript (PDF) <span class="text-red-500">*</span></label>
                             <input type="file" accept="application/pdf" name="projects[${idx}][manuscript]" required
-                                   class="block w-full text-sm text-gray-700 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 transition-all cursor-pointer">
-                            <p class="text-[10px] text-blue-500 dark:text-blue-300 mt-1.5 font-semibold">PDF only &mdash; max 50 MB</p>
+                                   class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-blue-600 dark:file:bg-blue-500 file:text-white hover:file:bg-blue-700 dark:hover:file:bg-blue-600 transition-all cursor-pointer">
+                            <p class="text-[10px] text-blue-500 dark:text-blue-400 mt-1.5 font-semibold">PDF only &mdash; max 50 MB</p>
                         </div>
 
-                        <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600">
-                            <label class="block font-bold text-xs uppercase tracking-widest text-indigo-600 dark:text-indigo-300 mb-2">
+                        <div class="p-4 bg-indigo-50/50 dark:bg-slate-800 rounded-xl border-2 border-dashed border-indigo-200 dark:border-slate-600 transition-colors">
+                            <label class="block font-bold text-xs uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-2">
                                 Attachments
-                                <span class="normal-case font-normal text-gray-500 dark:text-gray-400">(Optional)</span>
+                                <span class="normal-case font-normal text-gray-500 dark:text-slate-400">(Optional)</span>
                             </label>
                             <input type="file" name="projects[${idx}][attachments][]" multiple
                                    accept=".zip,.rar,.7z,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.mp4,.avi,.mov,.sql,.txt,.csv,.json,.xml,.jpg,.jpeg,.png,.gif,.md"
-                                   class="block w-full text-sm text-gray-700 dark:text-gray-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-gray-200 file:text-gray-700 hover:file:bg-gray-300 transition-all cursor-pointer">
-                            <p class="text-[10px] text-indigo-500 dark:text-indigo-300 mt-1.5 font-semibold">Max 200 MB per file</p>
+                                   class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-blue-600 dark:file:bg-blue-500 file:text-white hover:file:bg-blue-700 dark:hover:file:bg-blue-600 transition-all cursor-pointer">
+                            <p class="text-[10px] text-indigo-500 dark:text-indigo-400 mt-1.5 font-semibold">Max 200 MB per file</p>
                         </div>
                     </div>
                 </div>

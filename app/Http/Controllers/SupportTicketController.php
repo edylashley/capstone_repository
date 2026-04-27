@@ -17,8 +17,8 @@ class SupportTicketController extends Controller
     {
         $rules = [
             'category' => 'required|in:bug,correction,account,general,others',
-            'subject'  => 'nullable|string|max:255',
-            'message'  => 'required|string|max:5000',
+            'subject' => 'nullable|string|max:255',
+            'message' => 'required|string|max:5000',
             'custom_category' => 'nullable|string|max:100',
         ];
 
@@ -40,23 +40,23 @@ class SupportTicketController extends Controller
         }
 
         $ticket = SupportTicket::create([
-            'user_id'  => auth()->id(), // nullable
-            'email'    => auth()->check() ? auth()->user()->email : $validated['email'],
+            'user_id' => auth()->id(), // nullable
+            'email' => auth()->check() ? auth()->user()->email : $validated['email'],
             'category' => $category,
-            'subject'  => $validated['subject'] ?? Str::limit($validated['message'], 50),
-            'message'  => $validated['message'],
-            'status'   => 'pending',
+            'subject' => $validated['subject'] ?? Str::limit($validated['message'], 50),
+            'message' => $validated['message'],
+            'status' => 'pending',
         ]);
 
         // Log the activity (user_id is nullable in ActivityLog too)
         ActivityLog::create([
-            'user_id'     => auth()->id(),
-            'action'      => 'support_ticket_created',
+            'user_id' => auth()->id(),
+            'action' => 'support_ticket_created',
             'target_type' => 'support_ticket',
-            'target_id'   => $ticket->id,
-            'ip'          => $request->ip(),
-            'meta'        => [
-                'subject'  => $ticket->subject,
+            'target_id' => $ticket->id,
+            'ip' => $request->ip(),
+            'meta' => [
+                'subject' => $ticket->subject,
                 'category' => $ticket->category,
                 'is_guest' => !auth()->check(),
             ],
@@ -106,18 +106,18 @@ class SupportTicketController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('subject', 'like', "%{$search}%")
-                  ->orWhere('message', 'like', "%{$search}%")
-                  ->orWhereHas('user', function ($q2) use ($search) {
-                      $q2->where('name', 'like', "%{$search}%");
-                  });
+                    ->orWhere('message', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($q2) use ($search) {
+                        $q2->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
         $tickets = $query->paginate(15)->withQueryString();
 
         $stats = [
-            'total'    => SupportTicket::count(),
-            'pending'  => SupportTicket::where('status', 'pending')->count(),
+            'total' => SupportTicket::count(),
+            'pending' => SupportTicket::where('status', 'pending')->count(),
             'resolved' => SupportTicket::where('status', 'resolved')->count(),
         ];
 
@@ -142,22 +142,24 @@ class SupportTicketController extends Controller
     public function updateStatus(Request $request, SupportTicket $ticket)
     {
         $validated = $request->validate([
-            'status'      => 'required|in:pending,resolved',
+            'status' => 'required|in:pending,resolved',
             'admin_reply' => 'nullable|string|max:2000',
         ]);
 
         $oldStatus = $ticket->status;
 
-        $updateData = ['status' => $validated['status']];
+        $updateData = [
+            'status' => $validated['status'],
+        ];
 
         if ($validated['status'] === 'resolved') {
             // Store the admin reply and schedule auto-deletion in 3 days
             $updateData['admin_reply'] = $validated['admin_reply'] ?? null;
-            $updateData['expires_at']  = now()->addDays(3);
+            $updateData['expires_at'] = now()->addDays(3);
         } else {
             // Reopened — clear reply and expiry
             $updateData['admin_reply'] = null;
-            $updateData['expires_at']  = null;
+            $updateData['expires_at'] = null;
         }
 
         $ticket->update($updateData);
@@ -168,12 +170,12 @@ class SupportTicketController extends Controller
         }
 
         ActivityLog::create([
-            'user_id'     => auth()->id(),
-            'action'      => 'support_ticket_status_changed',
+            'user_id' => auth()->id(),
+            'action' => 'support_ticket_status_changed',
             'target_type' => 'support_ticket',
-            'target_id'   => $ticket->id,
-            'ip'          => $request->ip(),
-            'meta'        => [
+            'target_id' => $ticket->id,
+            'ip' => $request->ip(),
+            'meta' => [
                 'subject' => $ticket->subject,
                 'changes' => [
                     'status' => ['from' => $oldStatus, 'to' => $validated['status']],
@@ -181,20 +183,7 @@ class SupportTicketController extends Controller
             ],
         ]);
 
-        $msg = 'Ticket updated.';
-        if ($validated['status'] === 'resolved') {
-            if ($ticket->category === 'security') {
-                $msg = 'Security alert acknowledged and logged.';
-            } elseif ($ticket->user_id) {
-                $msg = 'Ticket resolved. The student will see your reply on their dashboard and via email.';
-            } else {
-                $msg = 'Ticket resolved. An email notification has been sent to the guest at ' . $ticket->email . '.';
-            }
-        } else {
-            $msg = 'Ticket reopened.';
-        }
-
-        return back()->with('success', $msg);
+        return back()->with('success', 'Ticket updated.');
     }
 
     /**
@@ -206,12 +195,12 @@ class SupportTicketController extends Controller
         $ticket->delete();
 
         ActivityLog::create([
-            'user_id'     => auth()->id(),
-            'action'      => 'support_ticket_deleted',
+            'user_id' => auth()->id(),
+            'action' => 'support_ticket_deleted',
             'target_type' => 'support_ticket',
-            'target_id'   => 0,
-            'ip'          => request()->ip(),
-            'meta'        => [
+            'target_id' => 0,
+            'ip' => request()->ip(),
+            'meta' => [
                 'subject' => $subject,
             ],
         ]);
@@ -233,12 +222,12 @@ class SupportTicketController extends Controller
         SupportTicket::whereIn('id', $ids)->delete();
 
         ActivityLog::create([
-            'user_id'     => auth()->id(),
-            'action'      => 'support_ticket_bulk_deleted',
+            'user_id' => auth()->id(),
+            'action' => 'support_ticket_bulk_deleted',
             'target_type' => 'support_ticket',
-            'target_id'   => 0,
-            'ip'          => $request->ip(),
-            'meta'        => [
+            'target_id' => 0,
+            'ip' => $request->ip(),
+            'meta' => [
                 'count' => $count,
                 'ids' => $ids,
             ],
@@ -253,7 +242,7 @@ class SupportTicketController extends Controller
     {
         // Count all actually pending tickets
         $pendingCount = SupportTicket::where('status', 'pending')->count();
-        
+
         // Also count security alerts from the last 24 hours so Admin sees them as "new" notifications
         $recentSecurityCount = SupportTicket::where('category', 'security')
             ->where('created_at', '>=', now()->subDay())

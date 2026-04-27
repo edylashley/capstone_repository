@@ -2,10 +2,10 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="font-bold text-2xl text-white leading-tight">Admin Direct Entry</h2>
-                <p class="text-xs text-indigo-200 mt-1 uppercase tracking-widest font-black">Instantly publish a legacy capstone project</p>
+                <h2 class="font-bold text-2xl text-gray-900 dark:text-white leading-tight">Admin Direct Entry</h2>
+                <p class="text-xs text-blue-600 dark:text-indigo-200 mt-1 uppercase tracking-widest font-black">Instantly publish a legacy capstone project</p>
             </div>
-            <a href="{{ route('admin.projects.index') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600">
+            <a href="{{ route('admin.projects.index') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-300 dark:border-gray-600">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Back to List
             </a>
@@ -14,52 +14,52 @@
 
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg p-6 transition-colors">
                 <form id="project-form" method="POST" action="{{ route('admin.projects.store') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">Project Title</label>
-                        <input type="text" name="title" value="{{ old('title') }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                        <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Project Title</label>
+                        <input type="text" name="title" value="{{ old('title') }}" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" required>
                         @error('title') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">Authors (Comma-separated)</label>
-                        <input type="text" name="authors_list" value="{{ old('authors_list') }}" placeholder="e.g. John Doe, Jane Smith" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                        <p class="mt-1 text-[10px] text-gray-400 italic">Enter the full names of the alumni authors separated by commas.</p>
+                        <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Authors (Comma-separated)</label>
+                        <input type="text" name="authors_list" value="{{ old('authors_list') }}" placeholder="e.g. John Doe, Jane Smith" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" required>
+                        <p class="mt-1 text-[10px] text-gray-500 dark:text-slate-400 italic">Enter the full names of the alumni authors separated by commas.</p>
                         @error('authors_list') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700">Abstract</label>
-                        <textarea name="abstract" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" rows="3" required>{{ old('abstract') }}</textarea>
+                        <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Abstract</label>
+                        <textarea name="abstract" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" rows="3" required>{{ old('abstract') }}</textarea>
                         @error('abstract') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                         <div>
-                            <label class="block font-medium text-sm text-gray-700">Year Defended</label>
-                            <input type="number" name="year" value="{{ old('year', date('Y')) }}" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Year Defended</label>
+                            <input type="number" name="year" value="{{ old('year', date('Y')) }}" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" required>
                             @error('year') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                         </div>
 
                         <div class="col-span-1 md:col-span-2">
-                            <label class="block font-medium text-sm text-gray-700">Adviser Name</label>
-                            <input type="text" name="adviser_name" value="{{ old('adviser_name') }}" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Adviser Name</label>
+                            <input type="text" name="adviser_name" value="{{ old('adviser_name') }}" placeholder="e.g. Dr. Alan Turing" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" required>
                             @error('adviser_name') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
                     <div class="mb-4">
-                        <label class="block font-medium text-sm text-gray-700 mb-2">Project Categories</label>
+                        <label class="block font-medium text-sm text-gray-700 dark:text-slate-300 mb-2">Project Categories</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach($categories as $category)
-                                <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/50 cursor-pointer transition-all group">
+                                <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-indigo-500/50 hover:bg-blue-50/50 dark:hover:bg-indigo-500/10 cursor-pointer transition-all group">
                                     <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
                                         {{ (is_array(old('categories')) && in_array($category->id, old('categories'))) ? 'checked' : '' }}
-                                        class="w-4 h-4 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                                    <span class="text-sm font-semibold text-gray-700 group-hover:text-indigo-700">{{ $category->name }}</span>
+                                        class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
+                                    <span class="text-sm font-semibold text-gray-700 dark:text-slate-300 group-hover:text-blue-700 dark:group-hover:text-indigo-400">{{ $category->name }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -67,8 +67,8 @@
                     </div>
 
                     <div class="mb-6">
-                        <label class="block font-medium text-sm text-gray-700">Program</label>
-                        <select name="program" class="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                        <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Program</label>
+                        <select name="program" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" required>
                             <option value="" disabled {{ old('program') ? '' : 'selected' }}>Choose Program</option>
                             @foreach($programs as $prog)
                                 <option value="{{ $prog->abbreviation }}" {{ old('program') == $prog->abbreviation ? 'selected' : '' }}>
@@ -80,15 +80,15 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="p-4 bg-blue-50/50 rounded-xl border-2 border-dashed border-blue-200">
-                            <label class="block font-bold text-xs uppercase tracking-widest text-blue-600 mb-2">Main Manuscript (PDF)</label>
-                            <input type="file" accept="application/pdf" name="manuscript" required class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-blue-600 file:text-white hover:file:bg-blue-700 transition-all cursor-pointer">
-                            <p class="text-[10px] text-blue-400 mt-1.5 font-semibold">PDF only &mdash; max 50 MB</p>
+                        <div class="p-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-xl border-2 border-dashed border-blue-200 dark:border-blue-500/20 transition-colors">
+                            <label class="block font-bold text-xs uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-2">Main Manuscript (PDF)</label>
+                            <input type="file" accept="application/pdf" name="manuscript" required class="block w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-black file:bg-blue-600 dark:file:bg-blue-500 file:text-white hover:file:bg-blue-700 dark:hover:file:bg-blue-600 transition-all cursor-pointer">
+                            <p class="text-[10px] text-blue-500 dark:text-blue-400 mt-1.5 font-semibold">PDF only &mdash; max 50 MB</p>
                             @error('manuscript') <div class="text-red-600 text-sm mt-1 font-semibold whitespace-pre-wrap">{{ $message }}</div> @enderror
                         </div>
 
-                        <div class="p-4 bg-indigo-50/50 rounded-xl border-2 border-dashed border-indigo-200">
-                            <label class="block font-bold text-xs uppercase tracking-widest text-indigo-600 mb-3">
+                        <div class="p-4 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-xl border-2 border-dashed border-indigo-200 dark:border-indigo-500/20 transition-colors">
+                            <label class="block font-bold text-xs uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-3">
                                 Attachments
                                 <span class="normal-case font-normal text-gray-400">(ZIP, RAR, MP4, PDF, Word, Excel, PowerPoint, SQL, Images, CSV, JSON &amp; more)</span>
                             </label>
@@ -105,17 +105,17 @@
                             <div id="attachment-queue" class="space-y-2 mb-3 empty:hidden"></div>
 
                             {{-- Empty state --}}
-                            <p id="attachment-empty" class="text-xs text-indigo-300 italic mb-3">No files added yet.</p>
+                            <p id="attachment-empty" class="text-xs text-indigo-500 dark:text-indigo-400 italic mb-3">No files added yet.</p>
 
                             {{-- Add File button --}}
                             <button type="button" id="add-attachment-btn"
-                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-wider transition-all shadow-sm hover:shadow-indigo-200">
+                                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white text-xs font-black uppercase tracking-wider transition-all shadow-sm hover:shadow-indigo-200 dark:hover:shadow-indigo-900/30">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"/>
                                 </svg>
                                 Add File
                             </button>
-                            <p class="text-[10px] text-indigo-400 mt-2 font-semibold">Max 200 MB per file. Click <strong>Add File</strong> again to add more.</p>
+                            <p class="text-[10px] text-indigo-500 dark:text-indigo-400 mt-2 font-semibold">Max 200 MB per file. Click <strong>Add File</strong> again to add more.</p>
 
                             @error('attachments') <div class="text-red-600 text-sm mt-2 font-semibold">{{ $message }}</div> @enderror
                             @foreach($errors->get('attachments.*') as $attachError)
@@ -126,10 +126,10 @@
                         </div>
                     </div>
 
-                    <div class="mt-8 pt-8 border-t border-gray-100 flex items-center justify-end gap-4">
-                        <a href="{{ route('admin.projects.index') }}" class="text-sm font-bold text-gray-500 hover:text-gray-800">Cancel</a>
+                    <div class="mt-8 pt-8 border-t border-gray-100 dark:border-white/5 flex items-center justify-end gap-4 transition-colors">
+                        <a href="{{ route('admin.projects.index') }}" class="text-sm font-bold text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-white transition-colors">Cancel</a>
                         <button id="submit-btn" type="submit"
-                                class="inline-flex items-center gap-2 px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-sm uppercase tracking-widest rounded-xl shadow-lg hover:shadow-indigo-500/30 transition transform hover:-translate-y-0.5">
+                                class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 dark:bg-indigo-600 hover:bg-blue-700 dark:hover:bg-indigo-700 text-white font-black text-sm uppercase tracking-widest rounded-xl shadow-lg hover:shadow-blue-500/30 dark:hover:shadow-indigo-500/30 transition transform hover:-translate-y-0.5">
                             <span id="btn-text">Submit & Publish Record</span>
                         </button>
                     </div>
@@ -166,12 +166,12 @@
                 const ext = file.name.split('.').pop().toUpperCase();
                 const size = file.size < 1048576 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / 1048576).toFixed(1) + ' MB';
                 const row = document.createElement('div');
-                row.className = 'flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-indigo-100 shadow-sm text-xs';
+                row.className = 'flex items-center gap-2 px-3 py-2 bg-white dark:bg-slate-800 rounded-xl border border-indigo-100 dark:border-indigo-500/20 shadow-sm text-xs transition-colors';
                 row.innerHTML = `
-                    <span class="px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded font-black text-[9px] flex-shrink-0">${ext}</span>
-                    <span class="flex-1 truncate text-gray-700 font-semibold">${file.name}</span>
-                    <span class="text-gray-400 flex-shrink-0">${size}</span>
-                    <button type="button" data-index="${i}" class="remove-attachment ml-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 flex-shrink-0" title="Remove">
+                    <span class="px-1.5 py-0.5 bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 rounded font-black text-[9px] flex-shrink-0">${ext}</span>
+                    <span class="flex-1 truncate text-gray-700 dark:text-slate-200 font-semibold">${file.name}</span>
+                    <span class="text-gray-500 dark:text-slate-400 flex-shrink-0">${size}</span>
+                    <button type="button" data-index="${i}" class="remove-attachment ml-1 w-5 h-5 flex items-center justify-center rounded-full bg-red-50 dark:bg-red-500/10 hover:bg-red-100 dark:hover:bg-red-500/20 text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 flex-shrink-0 transition-colors" title="Remove">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>`;
                 queueEl.appendChild(row);

@@ -6,7 +6,7 @@
 
         <!-- Email Field -->
         <div>
-            <label for="email" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Email Address
             </label>
             <div class="relative">
@@ -16,7 +16,7 @@
                     </svg>
                 </div>
                 <input id="email" 
-                       class="block w-full pl-10 pr-4 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" 
+                       class="block w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all" 
                        type="email" 
                        name="email" 
                        value="{{ old('email') }}" 
@@ -29,7 +29,7 @@
 
         <!-- Password Field -->
         <div>
-            <label for="password" class="block text-sm font-semibold text-slate-300 mb-2">
+            <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-slate-300 mb-2">
                 Password
             </label>
             <div class="relative">
@@ -39,7 +39,7 @@
                     </svg>
                 </div>
                 <input id="password" 
-                       class="block w-full pl-10 pr-12 py-3 border border-slate-700 rounded-xl bg-slate-800/50 text-white placeholder-slate-500 focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                       class="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800/50 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                        type="password" 
                        name="password" 
                        required 
@@ -60,11 +60,11 @@
         <!-- Remember Me & Forgot Password -->
         <div class="flex items-center justify-between">
             <label class="flex items-center">
-                <input type="checkbox" name="remember" class="rounded border-slate-700 bg-slate-800 text-indigo-600 shadow-sm focus:ring-indigo-500">
-                <span class="ml-2 text-sm text-slate-400">Remember me</span>
+                <input type="checkbox" name="remember" class="rounded border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                <span class="ml-2 text-sm text-gray-600 dark:text-slate-400">Remember me</span>
             </label>
             @if (Route::has('password.request'))
-                <a class="text-sm font-semibold text-indigo-400 hover:text-indigo-300 hover:underline transition-colors" href="{{ route('password.request') }}">
+                <a class="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 hover:underline transition-colors" href="{{ route('password.request') }}">
                     Forgot Password?
                 </a>
             @endif
@@ -76,10 +76,10 @@
         </button>
 
         <!-- Register Link -->
-        <div class="text-center pt-4 border-t border-slate-800">
-            <p class="text-sm text-slate-400">
+        <div class="text-center pt-4 border-t border-gray-200 dark:border-slate-800">
+            <p class="text-sm text-gray-600 dark:text-slate-400">
                 Don't have an account? 
-                <a href="{{ route('register') }}" class="font-semibold text-indigo-400 hover:text-indigo-300 hover:underline transition-colors">
+                <a href="{{ route('register') }}" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 hover:underline transition-colors">
                     Sign up here
                 </a>
             </p>

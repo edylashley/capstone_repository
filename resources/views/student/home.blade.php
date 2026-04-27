@@ -6,76 +6,76 @@
             {{-- Integrated Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
                 <div>
-                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">Student Library
+                    <h2 class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">Student Library
                     </h2>
-                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">
-                        Institutional Repository & Knowledge Base</p>
+                    <p class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">
+                        Your Projects & Research Library</p>
                 </div>
             </div>
 
             <!-- System Guide -->
-            <div class="bg-indigo-900/40 overflow-hidden shadow-sm sm:rounded-2xl border border-indigo-500/30">
+            <div class="bg-blue-50 dark:bg-indigo-900/40 overflow-hidden shadow-sm sm:rounded-2xl border border-blue-200 dark:border-indigo-500/30 transition-colors">
                 <div class="p-6 md:p-10">
                     <div class="mb-10">
-                        <h3 class="text-3xl font-black text-white leading-tight mb-4">Welcome to your Capstone
+                        <h3 class="text-3xl font-black text-gray-900 dark:text-white leading-tight mb-4">Welcome to your Capstone
                             Repository! 👋</h3>
-                        <p class="text-indigo-100 text-lg leading-relaxed">
-                            You are part of the institutional memory. Whether you're here to research or to upload your
+                        <p class="text-gray-600 dark:text-indigo-100 text-lg leading-relaxed">
+                            Welcome! Whether you're here to research or to upload your
                             <strong>work</strong>, use this guide to navigate the system effectively.
                         </p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div
-                            class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                            class="bg-white dark:bg-white/5 p-4 rounded-xl border border-gray-200 dark:border-white/10 hover:shadow-md dark:hover:bg-white/10 transition-all">
                             <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor"
+                                <svg class="w-5 h-5 text-blue-500 dark:text-indigo-300" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                 </svg>
-                                <span class="text-sm font-black text-white uppercase tracking-wider">Discovery</span>
+                                <span class="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">Discovery</span>
                             </div>
-                            <p class="text-indigo-100 text-xs leading-relaxed">Explore the institutional library to
+                            <p class="text-gray-500 dark:text-indigo-100 text-xs leading-relaxed">Browse the library to
                                 research previous works and manuscripts for your own inspiration.</p>
                         </div>
                         <div
-                            class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                            class="bg-white dark:bg-white/5 p-4 rounded-xl border border-gray-200 dark:border-white/10 hover:shadow-md dark:hover:bg-white/10 transition-all">
                             <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-emerald-300" fill="none" stroke="currentColor"
+                                <svg class="w-5 h-5 text-emerald-500 dark:text-emerald-300" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                 </svg>
-                                <span class="text-sm font-black text-white uppercase tracking-wider">Submission</span>
+                                <span class="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">Submission</span>
                             </div>
-                            <p class="text-indigo-100 text-xs leading-relaxed">Upload your final defended manuscript in
-                                PDF format and all required <strong>attachment files</strong> via the secure submission
-                                portal.</p>
+                            <p class="text-gray-500 dark:text-indigo-100 text-xs leading-relaxed">Upload your final defended manuscript in
+                                PDF format and all required <strong>attachment files</strong> through the submission
+                                page.</p>
                         </div>
                         <div
-                            class="bg-white/5 p-4 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
+                            class="bg-white dark:bg-white/5 p-4 rounded-xl border border-gray-200 dark:border-white/10 hover:shadow-md dark:hover:bg-white/10 transition-all">
                             <div class="flex items-center gap-3 mb-2">
-                                <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor"
+                                <svg class="w-5 h-5 text-amber-500 dark:text-amber-300" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="text-sm font-black text-white uppercase tracking-wider">Verification</span>
+                                <span class="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider">Verification</span>
                             </div>
-                            <p class="text-indigo-100 text-xs leading-relaxed">Track your progress as the Administrator
-                                reviews and confirms your submission for permanent institutional archiving.</p>
+                            <p class="text-gray-500 dark:text-indigo-100 text-xs leading-relaxed">Track your progress as the Administrator
+                                reviews and approves your submission for publishing.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- My Pending/Active Projects -->
-            <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl border border-white/5">
+            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-md sm:rounded-xl border border-gray-200 dark:border-white/5 transition-colors">
                 <div class="p-4 md:p-8">
                     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                         <div>
-                            <h3 class="text-xl font-black text-white">My Submissions</h3>
-                            <p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mt-1">Track the
+                            <h3 class="text-xl font-black text-gray-900 dark:text-white">My Submissions</h3>
+                            <p class="text-[10px] text-gray-500 dark:text-slate-500 uppercase tracking-widest font-bold mt-1">Track the
                                 status of your research manuscript</p>
                         </div>
                         @php
@@ -90,7 +90,7 @@
                                 @if($deadlineStr)
                                     <span
                                         class="text-[10px] font-black text-red-400 uppercase tracking-widest bg-red-950/50 px-3 py-2 rounded-xl border border-red-500/20 animate-pulse text-center">
-                                        Terminating: {{ \Carbon\Carbon::parse($deadlineStr)->format('M d, Y h:i A') }}
+                                        Deadline: {{ \Carbon\Carbon::parse($deadlineStr)->format('M d, Y h:i A') }}
                                     </span>
                                 @endif
                                 <a href="{{ route('projects.create') }}"
@@ -136,13 +136,13 @@
                                             <th class="px-6 py-4 text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-white/5">
+                                    <tbody class="divide-y divide-gray-100 dark:divide-white/5">
                                         @foreach($myProjects as $project)
-                                            <tr class="group hover:bg-white/[0.02] transition-colors">
+                                            <tr class="group hover:bg-gray-50 dark:hover:bg-white/[0.02] transition-colors">
                                                 <td class="px-6 py-4">
                                                     <div class="max-w-xs md:max-w-md">
                                                         <div
-                                                            class="text-sm font-bold text-white mb-1 leading-snug truncate md:whitespace-normal">
+                                                            class="text-sm font-bold text-gray-900 dark:text-white mb-1 leading-snug truncate md:whitespace-normal">
                                                             {{ $project->title }}
                                                         </div>
                                                         <div class="flex items-center gap-2">
@@ -180,8 +180,8 @@
                                                 <td class="px-6 py-4 text-center">
                                                     <div class="inline-flex flex-col items-start gap-2 text-left">
                                                         <a href="{{ route('projects.show', $project) }}"
-                                                            class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-indigo-400 transition-all">
-                                                            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-500 transition-colors"
+                                                            class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-300 hover:text-blue-600 dark:hover:text-indigo-400 transition-all">
+                                                            <svg class="w-3.5 h-3.5 text-gray-400 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-indigo-500 transition-colors"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -193,8 +193,8 @@
                                                         </a>
                                                         @if($project->status === 'pending' || $project->status === 'rejected')
                                                             <a href="{{ route('projects.edit', $project) }}"
-                                                                class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-emerald-400 transition-all">
-                                                                <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-500 transition-colors"
+                                                                class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all">
+                                                                <svg class="w-3.5 h-3.5 text-gray-400 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors"
                                                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         stroke-width="2.5"
@@ -208,8 +208,8 @@
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button type="submit"
-                                                                    class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
-                                                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-red-500 transition-colors"
+                                                                    class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-300 hover:text-red-600 dark:hover:text-red-400 transition-all bg-transparent border-0 p-0 cursor-pointer text-left">
+                                                                    <svg class="w-3.5 h-3.5 text-gray-400 dark:text-slate-400 group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors"
                                                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2.5"
@@ -252,17 +252,17 @@
 
             <!-- Research CTA -->
             <div
-                class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border-2 border-dashed border-indigo-500/30">
+                class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-md sm:rounded-lg border-2 border-dashed border-blue-200 dark:border-indigo-500/30 transition-colors">
                 <div class="p-8 text-center">
                     <div
-                        class="inline-flex items-center justify-center w-20 h-20 bg-indigo-500/10 text-indigo-400 rounded-2xl mb-6 border border-indigo-500/20 shadow-xl">
+                        class="inline-flex items-center justify-center w-20 h-20 bg-blue-50 dark:bg-indigo-500/10 text-blue-500 dark:text-indigo-400 rounded-2xl mb-6 border border-blue-100 dark:border-indigo-500/20 shadow-sm dark:shadow-xl">
                         <span class="text-3xl">🔍</span>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-200 mb-2">Ready to start your research?</h3>
-                    <p class="text-gray-500 max-w-sm mx-auto mb-6">Explore thousands of verified capstone projects,
-                        manuscripts, and categories in our dedicated institutional library.</p>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-gray-200 mb-2">Ready to start your research?</h3>
+                    <p class="text-gray-500 max-w-sm mx-auto mb-6">Explore thousands of capstone projects,
+                        manuscripts, and categories in our research library.</p>
                     <a href="{{ route('projects.index') }}"
-                        class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-indigo-700 transition transform hover:-translate-y-0.5">
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 dark:bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 dark:hover:bg-indigo-700 transition transform hover:-translate-y-0.5">
                         Go to Browse Repository &rarr;
                     </a>
                 </div>

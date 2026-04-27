@@ -1,10 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-start sm:items-center gap-4">
-            <h2 class="font-semibold text-xl text-white leading-tight flex-1 break-words opacity-90 italic">Project
+            <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight flex-1 break-words opacity-90 italic">Project
                 Manuscript</h2>
             <a href="{{ url()->previous() }}"
-                class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600 shrink-0 whitespace-nowrap mt-1 sm:mt-0">
+                class="inline-flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-200 dark:border-gray-600 shrink-0 whitespace-nowrap mt-1 sm:mt-0">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                         d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -41,41 +41,41 @@
 
                 <!-- Metadata Side -->
                 <div
-                    class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-6 @if(optional(auth()->user())->isAdmin()) lg:w-1/3 lg:min-w-[350px] @else w-full @endif border border-white/5 h-fit">
+                    class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-sm sm:rounded-xl p-4 md:p-6 @if(optional(auth()->user())->isAdmin()) lg:w-1/3 lg:min-w-[350px] @else w-full @endif border border-gray-200 dark:border-white/5 h-fit transition-colors duration-300">
                     <div class="mb-4 space-y-2">
-                        <div class="flex justify-between items-start border-b border-white/5 pb-6 mb-6">
+                        <div class="flex justify-between items-start border-b border-gray-200 dark:border-white/5 pb-6 mb-6">
                             <div>
-                                <h3 class="text-xs font-black uppercase tracking-widest text-indigo-500 mb-3">Project
+                                <h3 class="text-xs font-black uppercase tracking-widest text-blue-600 dark:text-indigo-500 mb-3">Project
                                     Title</h3>
-                                <h1 class="text-2xl font-black text-white leading-tight mb-3">{{ $project->title }}</h1>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Digital Record
+                                <h1 class="text-2xl font-black text-gray-900 dark:text-white leading-tight mb-3">{{ $project->title }}</h1>
+                                <p class="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest">Digital Record
                                     #{{ str_pad($project->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                            <p class="text-sm text-slate-400"><strong
-                                    class="text-white uppercase text-[10px] tracking-widest block mb-1">Year
+                            <p class="text-sm text-gray-600 dark:text-slate-400"><strong
+                                    class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Year
                                     Defended</strong> {{ $project->year }}</p>
-                            <p class="text-sm text-slate-400"><strong
-                                    class="text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong>
+                            <p class="text-sm text-gray-600 dark:text-slate-400"><strong
+                                    class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Adviser</strong>
                                 {{ $project->adviser_name ?? $project->adviser->name ?? '-' }}</p>
-                            <p class="text-sm text-slate-400"><strong
-                                    class="text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong>
+                            <p class="text-sm text-gray-600 dark:text-slate-400"><strong
+                                    class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Program</strong>
                                 {{ $project->program ?? '-' }}</p>
-                            <p class="text-sm text-slate-400"><strong
-                                    class="text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong>
+                            <p class="text-sm text-gray-600 dark:text-slate-400"><strong
+                                    class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-1">Authors</strong>
                                 {{ $project->authors_list ?: $project->authors->pluck('name')->join(', ') }}</p>
                         </div>
-                        <div class="pt-4 border-t border-white/5 mt-4">
+                        <div class="pt-4 border-t border-gray-200 dark:border-white/5 mt-4">
                             <strong
-                                class="text-white uppercase text-[10px] tracking-widest block mb-2 text-indigo-500">Abstract</strong>
-                            <p class="text-sm text-slate-300 italic leading-relaxed">{{ $project->abstract }}</p>
+                                class="text-blue-600 dark:text-indigo-500 uppercase text-[10px] tracking-widest block mb-2">Abstract</strong>
+                            <p class="text-sm text-gray-700 dark:text-slate-300 italic leading-relaxed">{{ $project->abstract }}</p>
                         </div>
 
-                        <div class="pt-4 border-t border-white/5 mt-4">
+                        <div class="pt-4 border-t border-gray-200 dark:border-white/5 mt-4">
                             <strong
-                                class="text-white uppercase text-[10px] tracking-widest block mb-2">Categories</strong>
+                                class="text-gray-900 dark:text-white uppercase text-[10px] tracking-widest block mb-2">Categories</strong>
                             <div class="text-sm mt-1 flex flex-wrap gap-2">
                                 @foreach($project->categories as $category)
                                     <span
@@ -113,7 +113,7 @@
                                         </div>
                                         <span
                                             class="text-emerald-400 font-black text-sm uppercase tracking-tight italic">Official
-                                            Institutional Record</span>
+                                            Published Record</span>
                                     </div>
                                 </div>
                             @elseif($project->status === 'approved')
@@ -293,15 +293,15 @@
 
                 <!-- PDF Layout (Side or Bottom) -->
                 <div class="flex-1 min-w-0 space-y-6">
-                    <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-white/5">
+                    <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-gray-200 dark:border-white/5 transition-colors duration-300">
                         <div
-                            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/5 pb-4">
-                            <h3 class="font-black text-lg text-white uppercase tracking-tight italic">Manuscript Viewer
+                            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-200 dark:border-white/5 pb-4">
+                            <h3 class="font-black text-lg text-gray-900 dark:text-white uppercase tracking-tight italic">Manuscript Viewer
                             </h3>
                             @auth
                                 <div class="flex items-center gap-2 desktop-only">
                                     <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')"
-                                        class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition">
+                                        class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-slate-700 transition">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                                 d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -346,16 +346,16 @@
                             <!-- Universal Viewer Wrapper -->
                             <div id="pdf-viewer-wrapper">
                                 <!-- Desktop Viewer -->
-                                <div class="desktop-only relative border-4 border-slate-800 rounded-2xl overflow-hidden shadow-inner bg-slate-950 min-h-[800px]"
+                                <div class="desktop-only relative border-4 border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-inner bg-gray-100 dark:bg-slate-950 min-h-[800px]"
                                     id="pdf-container">
                                     @auth
                                         <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%"
                                             height="800px" style="min-height: 800px;"
-                                            class="w-full h-[600px] md:h-[800px] bg-gray-500 border-0"></iframe>
+                                            class="w-full h-[600px] md:h-[800px] bg-gray-200 dark:bg-gray-500 border-0"></iframe>
                                     @else
                                         <!-- Guest Desktop Viewer (Locked to 5 Pages) -->
                                         <div id="desktop-guest-viewer"
-                                            class="bg-slate-950 flex flex-col items-center justify-start h-[800px] overflow-y-auto p-8 custom-scrollbar scroll-smooth">
+                                            class="bg-gray-100 dark:bg-slate-950 flex flex-col items-center justify-start h-[800px] overflow-y-auto p-8 custom-scrollbar scroll-smooth">
                                             <div id="desktop-canvas-container"
                                                 class="flex flex-col gap-12 items-center pb-20 w-full">
                                                 <!-- Pages will be rendered here -->
@@ -363,12 +363,12 @@
 
                                             <!-- Loading Overlay -->
                                             <div id="desktop-pdf-loading"
-                                                class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 z-10">
+                                                class="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-slate-900 z-10">
                                                 <div
-                                                    class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4">
+                                                    class="w-12 h-12 border-4 border-blue-500 dark:border-indigo-500 border-t-transparent rounded-full animate-spin mb-4">
                                                 </div>
                                                 <p
-                                                    class="text-xs font-black text-white uppercase tracking-widest animate-pulse">
+                                                    class="text-xs font-black text-gray-900 dark:text-white uppercase tracking-widest animate-pulse">
                                                     Loading Secured Preview...</p>
                                             </div>
                                         </div>
@@ -706,23 +706,23 @@
                                 </style>
 
                                 <div
-                                    class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-800 p-4 rounded-2xl border border-white/5">
+                                    class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50 dark:bg-slate-800 p-4 rounded-2xl border border-gray-200 dark:border-white/5 transition-colors">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center shadow-inner border border-white/5">
+                                            class="w-10 h-10 bg-white dark:bg-slate-950 rounded-xl flex items-center justify-center shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5">
                                             <span class="text-xl">📄</span>
                                         </div>
                                         <div>
-                                            <p class="text-xs font-black text-white uppercase tracking-widest">
+                                            <p class="text-xs font-black text-gray-900 dark:text-white uppercase tracking-widest">
                                                 {{ $manuscript->filename }}</p>
-                                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                                            <p class="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest">
                                                 {{ number_format($manuscript->size / 1048576, 2) }} MB</p>
                                         </div>
                                     </div>
 
                                     @auth
                                         <a href="{{ route('files.download', $manuscript->id) }}"
-                                            class="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                                            class="w-full sm:w-auto px-8 py-3 bg-blue-600 dark:bg-gray-900 hover:bg-blue-700 dark:hover:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-md dark:shadow-lg dark:hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
                                                     d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -733,7 +733,7 @@
                                 </div>
                         @else
                             <div
-                                class="p-12 text-center bg-slate-950 rounded-3xl text-slate-500 border border-white/5 font-black uppercase tracking-widest text-xs">
+                                class="p-12 text-center bg-gray-50 dark:bg-slate-950 rounded-3xl text-gray-500 dark:text-slate-500 border border-gray-200 dark:border-white/5 font-black uppercase tracking-widest text-xs">
                                 No manuscript file detected.
                             </div>
                         @endif
@@ -748,11 +748,11 @@
                     @endphp
 
                     @if($canSeeAttachments && $attachments->isNotEmpty())
-                        <div class="bg-slate-900 overflow-hidden shadow-2xl sm:rounded-3xl p-8 border border-white/5">
-                            <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                <h3 class="font-black text-xl text-white uppercase tracking-tight">Project Attachments</h3>
+                        <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-2xl sm:rounded-3xl p-8 border border-gray-200 dark:border-white/5 transition-colors">
+                            <div class="flex items-center justify-between mb-8 border-b border-gray-200 dark:border-white/5 pb-6">
+                                <h3 class="font-black text-xl text-gray-900 dark:text-white uppercase tracking-tight">Project Attachments</h3>
                                 <span
-                                    class="px-3 py-1 bg-slate-950 text-[10px] font-black text-slate-400 uppercase rounded-full border border-white/5 shadow-inner">{{ $attachments->count() }}
+                                    class="px-3 py-1 bg-gray-100 dark:bg-slate-950 text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase rounded-full border border-gray-200 dark:border-white/5 shadow-sm dark:shadow-inner">{{ $attachments->count() }}
                                     Technical Files</span>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -778,34 +778,34 @@
                                         $fileUrl = route('files.view', $file);
                                     @endphp
                                     <div
-                                        class="flex flex-col border border-white/5 rounded-2xl bg-slate-950/50 hover:bg-white/[0.02] transition-all duration-300 overflow-hidden shadow-lg group">
+                                        class="flex flex-col border border-gray-200 dark:border-white/5 rounded-2xl bg-gray-50 dark:bg-slate-950/50 hover:bg-white dark:hover:bg-white/[0.02] transition-all duration-300 overflow-hidden shadow-sm dark:shadow-lg group">
                                         <div class="flex items-center justify-between p-5">
                                             <div class="flex items-center gap-4 overflow-hidden">
                                                 <div
-                                                    class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center shadow-inner border border-white/5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                                    class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                                                     <span class="text-xl">{{ $icon }}</span>
                                                 </div>
                                                 <div class="flex flex-col overflow-hidden">
                                                     <div class="flex items-center gap-2">
-                                                        <span class="text-sm font-black text-white truncate"
+                                                        <span class="text-sm font-black text-gray-900 dark:text-white truncate"
                                                             title="{{ $file->filename }}">{{ $file->filename }}</span>
                                                         @if($isImage)
                                                             <span
-                                                                class="bg-emerald-500/20 text-emerald-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-emerald-500/20">Media</span>
+                                                                class="bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-emerald-200 dark:border-emerald-500/20">Media</span>
                                                         @elseif($isVideo)
                                                             <span
-                                                                class="bg-indigo-500/20 text-indigo-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-indigo-500/20">Stream</span>
+                                                                class="bg-blue-50 dark:bg-indigo-500/20 text-blue-600 dark:text-indigo-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-blue-200 dark:border-indigo-500/20">Stream</span>
                                                         @endif
                                                     </div>
                                                     @if(auth()->check() && (auth()->user()->isAdmin() || $project->authors->contains(auth()->user())))
                                                         <span
-                                                            class="text-[9px] uppercase font-black text-slate-500 tracking-widest mt-0.5">
+                                                            class="text-[9px] uppercase font-black text-gray-500 dark:text-slate-500 tracking-widest mt-0.5">
                                                             {{ strtoupper($ext) }} • {{ number_format($file->size / 1048576, 2) }}
                                                             MB
                                                         </span>
                                                     @else
                                                         <span
-                                                            class="text-[9px] uppercase font-black text-slate-600 tracking-widest mt-0.5">
+                                                            class="text-[9px] uppercase font-black text-gray-600 dark:text-slate-600 tracking-widest mt-0.5">
                                                             {{ strtoupper($ext) }}
                                                         </span>
                                                     @endif
@@ -815,7 +815,7 @@
                                                 @if($isPreviewable)
                                                     <button
                                                         onclick="openLightbox('{{ $fileUrl }}', '{{ $isImage ? 'image' : 'video' }}')"
-                                                        class="p-2.5 text-indigo-400 hover:bg-indigo-500/20 rounded-xl transition-all"
+                                                        class="p-2.5 text-blue-500 dark:text-indigo-400 hover:bg-blue-50 dark:hover:bg-indigo-500/20 rounded-xl transition-all"
                                                         title="Preview File">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -826,7 +826,7 @@
                                                     </button>
                                                 @endif
                                                 <a href="{{ route('files.download', $file) }}"
-                                                    class="p-2.5 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                                                    class="p-2.5 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-all"
                                                     title="Download File">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"

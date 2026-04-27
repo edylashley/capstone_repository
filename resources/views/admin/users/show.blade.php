@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-white leading-tight">
+            <h2 class="font-semibold text-xl text-gray-900 dark:text-white leading-tight">
                 {{ __('User Profile') }}: {{ $user->name }}
             </h2>
             <div class="flex gap-2">
                 <a href="{{ route('admin.users.edit', $user) }}" class="px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition ease-in-out duration-150">
                     Edit User
                 </a>
-                <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-800 dark:bg-gray-700 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-700 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-700 dark:border-gray-600">
+                <a href="{{ route('admin.users.index') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-all shadow-sm hover:shadow-md border border-gray-300 dark:border-gray-600">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Back to List
                 </a>
@@ -39,7 +39,7 @@
                 
                 <!-- User Basic Info Card -->
                 <div class="lg:col-span-1">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                    <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg p-6 transition-colors">
                         <div class="text-center mb-6">
                             <div class="flex justify-center mb-4">
                                 <!-- Ultra-Strict Circle Fix -->
@@ -54,7 +54,7 @@
                             <p class="text-gray-500 dark:text-gray-400 text-sm">{{ $user->email }}</p>
                         </div>
 
-                        <div class="space-y-4 pt-6 border-t border-gray-100 dark:border-gray-700">
+                        <div class="space-y-4 pt-6 border-t border-gray-100 dark:border-slate-700 transition-colors">
                             <div>
                                 <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Account Role</label>
                                 <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -105,8 +105,8 @@
                     </div>
 
                     <!-- Recent Activity Card -->
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mt-6 p-6">
-                        <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-700 pb-2">Recent Activity Log</h4>
+                    <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg mt-6 p-6 transition-colors">
+                        <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-200 dark:border-slate-700 pb-2 transition-colors">Recent Activity Log</h4>
                         <div class="space-y-4">
                             @forelse($activities as $log)
                                 @php
@@ -137,7 +137,7 @@
                                 <div class="flex gap-3 items-start">
                                     <div class="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 {{ $dotColors }}"></div>
                                     <div>
-                                        <p class="text-xs text-gray-300 leading-snug">
+                                        <p class="text-xs text-gray-600 dark:text-gray-300 leading-snug">
                                             <span class="{{ $textColors }} font-bold uppercase tracking-tighter">{{ str_replace('_', ' ', $log->action) }}</span>
                                         </p>
                                         <span class="text-[9px] text-gray-500 uppercase font-black tracking-widest">{{ $log->created_at->diffForHumans() }}</span>
@@ -152,14 +152,14 @@
 
                 <!-- Projects / Submissions Card -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg transition-colors">
                         <div class="p-6">
-                                <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-700 pb-2">Project Submissions</h4>
+                                <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-200 dark:border-slate-700 pb-2 transition-colors">Project Submissions</h4>
                                 @php $projects = $user->authoredProjects; @endphp
 
                             <div class="space-y-6">
                                 @forelse($projects as $project)
-                                    <div class="relative group bg-gray-900/40 rounded-2xl border border-gray-700/50 p-5 hover:border-indigo-500/50 transition-all duration-300">
+                                    <div class="relative group bg-gray-50 dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-indigo-500/50 transition-all duration-300">
                                         <div class="flex justify-between items-start gap-4">
                                             <div class="flex-1">
                                                 <div class="flex items-center gap-2 mb-2">
@@ -172,21 +172,21 @@
                                                     @endif
                                                     <span class="text-[10px] text-gray-500 font-bold tracking-widest">{{ $project->year }}</span>
                                                 </div>
-                                                <h5 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors leading-tight mb-2">
+                                                <h5 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-indigo-400 transition-colors leading-tight mb-2">
                                                     {{ $project->title }}
                                                 </h5>
-                                                <p class="text-sm text-gray-400 line-clamp-2 italic mb-4">
+                                                <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 italic mb-4">
                                                     {{ Str::limit($project->abstract, 180) }}
                                                 </p>
                                                 
-                                                <div class="flex flex-wrap gap-4 pt-4 border-t border-gray-700/50">
+                                                <div class="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-slate-700/50 transition-colors">
                                                     <div>
                                                         <span class="text-[9px] uppercase font-black text-gray-500 tracking-widest block mb-1">Adviser</span>
-                                                        <span class="text-xs text-gray-300 font-bold tracking-tight">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
+                                                        <span class="text-xs text-gray-800 dark:text-gray-300 font-bold tracking-tight">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
                                                     </div>
                                                     <div>
                                                         <span class="text-[9px] uppercase font-black text-gray-500 tracking-widest block mb-1">Category</span>
-                                                        <span class="text-xs text-gray-300 font-bold tracking-tight">
+                                                        <span class="text-xs text-gray-800 dark:text-gray-300 font-bold tracking-tight">
                                                             @if($project->categories->isNotEmpty())
                                                                 {{ $project->categories->pluck('name')->join(', ') }}
                                                             @else
@@ -197,11 +197,11 @@
                                                 </div>
                                             </div>
                                             <div class="flex flex-col gap-2">
-                                                <a href="{{ route('projects.show', $project) }}" class="flex items-center justify-center p-2 rounded-xl bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:bg-indigo-600 hover:border-indigo-500 transition-all shadow-sm" title="View Full Project">
+                                                <a href="{{ route('projects.show', $project) }}" class="flex items-center justify-center p-2 rounded-xl bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-blue-600 hover:border-blue-500 dark:hover:bg-indigo-600 dark:hover:border-indigo-500 transition-all shadow-sm" title="View Full Project">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                                 </a>
                                                  @if(auth()->user()->isAdmin())
-                                                <a href="{{ route('admin.projects.edit', $project) }}" class="flex items-center justify-center p-2 rounded-xl bg-gray-800 border border-gray-700 text-gray-400 hover:text-white hover:bg-emerald-600 hover:border-emerald-500 transition-all shadow-sm" title="Manage Project Metadata">
+                                                <a href="{{ route('admin.projects.edit', $project) }}" class="flex items-center justify-center p-2 rounded-xl bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-emerald-600 hover:border-emerald-500 transition-all shadow-sm" title="Manage Project Metadata">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                                 </a>
                                                 @endif
@@ -209,7 +209,7 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="text-center py-10 bg-gray-900/20 rounded-2xl border border-dashed border-gray-700">
+                                    <div class="text-center py-10 bg-gray-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 transition-colors">
                                         <p class="text-gray-500 italic text-sm">No project records found for this user.</p>
                                     </div>
                                 @endforelse

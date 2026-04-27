@@ -19,7 +19,7 @@
                     </h2>
                     <p
                         style="color: #38bdf8 !important; font-size: 10px !important; font-weight: 800 !important; text-transform: uppercase !important; margin: 6px 0 0 0 !important; letter-spacing: 1.5px !important; line-height: 1 !important;">
-                        Official Institutional Archive
+                        Official Research Archive
                     </p>
                 </td>
             </tr>

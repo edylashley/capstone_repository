@@ -12,18 +12,67 @@
 
         <link rel="icon" type="image/jpg" href="{{ asset('images/system-logo.jpg') }}">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Theme Initialization -->
+        <script>
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-6 bg-slate-950">
+    <body class="font-sans antialiased text-gray-900 dark:text-slate-200" x-data="{ 
+        theme: localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+        toggleTheme() {
+            this.theme = this.theme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', this.theme);
+            if (this.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    }">
+        <!-- Universal Theme Toggle -->
+        <div class="fixed top-4 right-4 z-[100] flex items-center">
+            <button @click="toggleTheme()" title="Toggle Light/Dark Mode"
+                class="p-2.5 rounded-xl transition-all duration-500 shadow-xl border focus:outline-none focus:ring-2 group overflow-hidden relative"
+                :class="theme === 'dark' ? 'bg-white/90 backdrop-blur-md border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-900/80 backdrop-blur-md border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
+
+                <!-- Subtle Hover Glow -->
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    :class="theme === 'dark' ? 'bg-gradient-to-tr from-amber-500/20 to-yellow-500/20' : 'bg-gradient-to-tr from-indigo-500/20 to-purple-500/20'">
+                </div>
+
+                <template x-if="theme === 'dark'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:rotate-90 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 19.071l-.707-.707M7.929 4.929l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z">
+                        </path>
+                    </svg>
+                </template>
+                <template x-if="theme === 'light'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:-rotate-12 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </template>
+            </button>
+        </div>
+        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-6 bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
             <!-- Decorative background elements -->
             <div class="fixed inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full opacity-5 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-600 rounded-full opacity-5 blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+                <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-600 rounded-full opacity-10 dark:opacity-5 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-600 rounded-full opacity-10 dark:opacity-5 blur-3xl translate-y-1/2 -translate-x-1/2"></div>
             </div>
         
-            <div class="relative w-full sm:max-w-md bg-slate-900 shadow-2xl rounded-2xl overflow-hidden border border-slate-800 shadow-indigo-500/10 backdrop-blur-xl">
+            <div class="relative w-full sm:max-w-md bg-white dark:bg-slate-900 shadow-2xl rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-800 shadow-indigo-500/10 backdrop-blur-xl transition-colors duration-300">
                 <!-- Header with gradient -->
-                <div class="bg-gradient-to-br from-indigo-600 via-slate-800 to-slate-900 p-4 text-center">
+                <div class="bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700 dark:from-indigo-600 dark:via-slate-800 dark:to-slate-900 p-4 text-center transition-colors duration-300">
                     <div class="flex flex-col items-center">
                         <div class="w-32 h-32 flex items-center justify-center overflow-hidden mb-4 rounded-full shadow-lg bg-white border-4 border-white/20">
                             <img src="{{ asset('images/system-logo.jpg') }}" alt="Portal Logo" class="w-full h-full object-cover transform scale-100 hover:scale-125 transition-transform duration-500" />
@@ -48,7 +97,7 @@
                                 @if(request()->cookie('returning_user'))
                                     Sign in to your account
                                 @else
-                                    Access your institutional repository
+                                    Sign in to your account
                                 @endif
                             @elseif(request()->routeIs('register'))
                                 Join the NORSU CSIT community

@@ -5,59 +5,61 @@
             {{-- Integrated Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
                 <div>
-                    <h2 class="font-black text-4xl text-white uppercase tracking-tighter leading-none">System Activity</h2>
-                    <p class="text-[10px] text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Audit Trail & Security Event Tracking</p>
+                    <h2 class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">System Activity</h2>
+                    <p class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Audit Trail & Security Event Tracking</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 hover:text-white transition-all shadow-inner border border-white/5">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 dark:bg-slate-900/50 text-gray-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-gray-200 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Dashboard
                     </a>
                 </div>
             </div>
             
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
+                <div class="p-6 text-gray-900 dark:text-white">
                     <h3 class="text-lg font-bold mb-4">System Timeline</h3>
                     
                     <div class="max-h-[600px] overflow-y-auto pr-2 custom-scrollbar space-y-4">
                         <style>
                             .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-                            .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+                            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
                             .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
                             .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+                            .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+                            .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
                         </style>
                         @foreach($logs as $log)
                             @php
                                 $statusClasses = match(true) {
-                                    str_contains($log->action, 'login') => 'border-green-500 bg-white shadow-green-500/5',
-                                    str_contains($log->action, 'logout') => 'border-red-500 bg-white shadow-red-500/5',
-                                    str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') => 'border-emerald-500 bg-white shadow-emerald-500/5',
-                                    str_contains($log->action, 'failed') || str_contains($log->action, 'error') || str_contains($log->action, 'blocked') => 'border-orange-500 bg-white shadow-orange-500/5',
-                                    str_contains($log->action, 'create') || str_contains($log->action, 'upload') || str_contains($log->action, 'request') => 'border-blue-500 bg-white shadow-blue-500/5',
-                                    default => 'border-slate-200 bg-white shadow-slate-500/5',
+                                    str_contains($log->action, 'login') => 'border-emerald-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'logout') => 'border-rose-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') => 'border-emerald-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'failed') || str_contains($log->action, 'error') || str_contains($log->action, 'blocked') => 'border-amber-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'create') || str_contains($log->action, 'upload') || str_contains($log->action, 'request') => 'border-blue-500 bg-white dark:bg-slate-800/50',
+                                    default => 'border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/50',
                                 };
 
                                 $badgeClasses = match(true) {
                                     str_contains($log->action, 'login') || str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') => 'bg-emerald-600 text-white',
-                                    str_contains($log->action, 'logout') || str_contains($log->action, 'failed') || str_contains($log->action, 'blocked') => 'bg-red-600 text-white',
+                                    str_contains($log->action, 'logout') || str_contains($log->action, 'failed') || str_contains($log->action, 'blocked') => 'bg-rose-600 text-white',
                                     str_contains($log->action, 'create') || str_contains($log->action, 'upload') || str_contains($log->action, 'request') => 'bg-indigo-600 text-white',
-                                    default => 'bg-gray-200 text-gray-800',
+                                    default => 'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-300',
                                 };
                             @endphp
-                            <div class="flex items-start gap-4 p-4 border-l-4 {{ $statusClasses }} rounded-r-lg transition-all hover:shadow-sm">
+                            <div class="flex items-start gap-4 p-4 border-l-4 border-y border-r border-y-gray-200 border-r-gray-200 dark:border-y-white/5 dark:border-r-white/5 {{ $statusClasses }} rounded-r-lg transition-all hover:shadow-sm">
                                 <div class="flex-shrink-0 mt-1">
-                                    <span class="p-2 bg-white rounded-full shadow-sm">
+                                    <span class="p-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-full shadow-sm">
                                         @if(str_contains($log->action, 'user')) 👤 @elseif(str_contains($log->action, 'project')) 📂 @else ⚙️ @endif
                                     </span>
                                 </div>
                                 <div class="flex-1">
                                     <div class="flex justify-between items-start">
                                         <div>
-                                            <p class="font-black text-sm text-black">
+                                            <p class="font-black text-sm text-gray-900 dark:text-white">
                                                 {{ $log->user->name ?? 'System' }}
                                             </p>
-                                            <p class="text-[14px] text-gray-900 font-bold leading-tight">
+                                            <p class="text-[14px] text-gray-700 dark:text-gray-300 font-bold leading-tight">
                                                 @php
                                                     $meta = $log->meta ?? [];
                                                     $description = match($log->action) {
@@ -106,44 +108,44 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <span class="text-xs text-gray-800 font-black whitespace-nowrap ml-4">{{ $log->created_at ? $log->created_at->diffForHumans() : 'N/A' }}</span>
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-black whitespace-nowrap ml-4">{{ $log->created_at ? $log->created_at->diffForHumans() : 'N/A' }}</span>
                                     </div>
                                     <div class="flex items-center gap-2 mt-2">
-                                        <div style="color: #000 !important;" class="text-[10px] font-black bg-gray-200 px-2 py-0.5 rounded border border-gray-400 uppercase tracking-tighter">
+                                        <div class="text-[10px] text-gray-700 dark:text-gray-300 font-black bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-gray-300 dark:border-slate-600 uppercase tracking-tighter">
                                             IP: {{ $log->ip }}
                                         </div>
-                                        <div style="color: #000 !important;" class="text-[10px] font-black bg-gray-200 px-2 py-0.5 rounded border border-gray-400 uppercase tracking-tighter">
+                                        <div class="text-[10px] text-gray-700 dark:text-gray-300 font-black bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-gray-300 dark:border-slate-600 uppercase tracking-tighter">
                                             ID: {{ $log->target_id }}
                                         </div>
                                     </div>
 
                                     @if($log->meta)
-                                        <div class="mt-4 p-4 rounded-xl bg-gray-200 border border-gray-400 shadow-inner relative overflow-hidden">
+                                        <div class="mt-4 p-4 rounded-xl bg-gray-100 dark:bg-slate-950/50 border border-gray-300 dark:border-white/5 shadow-inner relative overflow-hidden">
                                             @if(isset($log->meta['changes']))
                                                 <div class="space-y-4">
                                                     @foreach($log->meta['changes'] as $field => $change)
-                                                        <div class="flex flex-col items-center justify-center p-2 bg-white/50 rounded-lg border border-gray-300 shadow-sm">
-                                                            <span style="color: #000 !important;" class="text-[11px] font-black uppercase tracking-widest mb-2 block border-b border-gray-300 w-full text-center pb-1">{{ str_replace('_', ' ', $field) }}</span>
+                                                        <div class="flex flex-col items-center justify-center p-2 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm">
+                                                            <span class="text-gray-800 dark:text-slate-200 text-[11px] font-black uppercase tracking-widest mb-2 block border-b border-gray-200 dark:border-slate-700 w-full text-center pb-1">{{ str_replace('_', ' ', $field) }}</span>
                                                             <div class="flex items-center gap-4">
                                                                 @if(is_array($change))
                                                                     <div class="flex flex-col items-center">
-                                                                        <span class="text-[8px] font-black text-red-600 uppercase mb-0.5">FROM</span>
-                                                                        <span style="color: #000 !important;" class="text-sm bg-red-100 border border-red-300 px-3 py-1 rounded font-black line-through shadow-sm">{{ $change['from'] ?: 'None' }}</span>
+                                                                        <span class="text-[8px] font-black text-red-600 dark:text-red-400 uppercase mb-0.5">FROM</span>
+                                                                        <span class="text-gray-900 dark:text-red-300 text-sm bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 px-3 py-1 rounded font-black line-through shadow-sm">{{ $change['from'] ?: 'None' }}</span>
                                                                     </div>
-                                                                    <span style="color: #000 !important;" class="font-black text-2xl">→</span>
+                                                                    <span class="text-gray-400 dark:text-slate-500 font-black text-2xl">→</span>
                                                                     <div class="flex flex-col items-center">
-                                                                        <span class="text-[8px] font-black text-green-600 uppercase mb-0.5">TO</span>
-                                                                        <span style="color: #000 !important;" class="text-sm bg-green-100 border border-green-300 px-3 py-1 rounded font-black shadow-sm">{{ $change['to'] ?: 'None' }}</span>
+                                                                        <span class="text-[8px] font-black text-green-600 dark:text-green-400 uppercase mb-0.5">TO</span>
+                                                                        <span class="text-gray-900 dark:text-green-300 text-sm bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 px-3 py-1 rounded font-black shadow-sm">{{ $change['to'] ?: 'None' }}</span>
                                                                     </div>
                                                                 @else
-                                                                    <span style="color: #000 !important;" class="text-sm bg-blue-100 border border-blue-300 px-3 py-1 rounded font-black shadow-sm">{{ $change ?: 'None' }}</span>
+                                                                    <span class="text-gray-900 dark:text-blue-300 text-sm bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 px-3 py-1 rounded font-black shadow-sm">{{ $change ?: 'None' }}</span>
                                                                 @endif
                                                             </div>
                                                         </div>
                                                     @endforeach
                                                 </div>
                                             @else
-                                                <div style="color: #000 !important;" class="text-[11px] font-mono font-bold leading-relaxed bg-white p-3 rounded-lg border border-gray-300 shadow-sm whitespace-pre-wrap break-all">
+                                                <div class="text-gray-800 dark:text-slate-300 text-[11px] font-mono font-bold leading-relaxed bg-white dark:bg-slate-900 p-3 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm whitespace-pre-wrap break-all">
                                                     {{ json_encode($log->meta, JSON_PRETTY_PRINT) }}
                                                 </div>
                                             @endif

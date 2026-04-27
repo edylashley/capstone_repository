@@ -376,7 +376,6 @@ class ProjectController extends Controller
             }
             $project->save();
 
-            // STRICT VERIFICATION: If validation failed, reject the submission entirely
             // 4. Run PDF validation heuristics (LOG ONLY, NO BLOCKING per user request)
             $validator = app(\App\Services\PDFValidator::class);
             $validation = $validator->validate($fullPath);
@@ -1162,3 +1161,4 @@ class ProjectController extends Controller
         }
     }
 }
+

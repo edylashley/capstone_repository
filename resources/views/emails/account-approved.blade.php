@@ -5,13 +5,13 @@
 
     <x-mail::panel>
         You now have full access to the **{{ config('app.name') }}**. You can start submitting your capstone
-        manuscripts, tracking your publication status, and exploring the institutional archives.
+        manuscripts, tracking your publication status, and exploring the research library.
     </x-mail::panel>
 
     ### What can you do now?
     * **Submit Manuscripts:** Upload your final project for review.
     * **Track Status:** Monitor the validation and publication process.
-    * **Explore:** Browse through years of institutional research.
+    * **Explore:** Browse through years of published capstone research.
 
     <x-mail::button :url="route('login')">
         Go to Login Page

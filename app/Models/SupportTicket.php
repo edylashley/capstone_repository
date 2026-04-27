@@ -15,6 +15,7 @@ class SupportTicket extends Model
         'category',
         'subject',
         'message',
+        'attachment_path',
         'admin_reply',
         'status',
         'expires_at',
@@ -23,6 +24,7 @@ class SupportTicket extends Model
     protected $casts = [
         'expires_at' => 'datetime',
     ];
+
 
     /**
      * Prunable query — delete tickets whose expires_at has passed.
@@ -44,12 +46,12 @@ class SupportTicket extends Model
     public function getCategoryLabelAttribute(): string
     {
         return match ($this->category) {
-            'bug'        => 'System Bug / Error',
+            'bug' => 'System Bug / Error',
             'correction' => 'Record Correction',
-            'account'    => 'Account / Login Issue',
-            'general'    => 'General Question',
-            'security'   => '🚨 SECURITY ALERT',
-            default      => ucfirst($this->category),
+            'account' => 'Account / Login Issue',
+            'general' => 'General Question',
+            'security' => '🚨 SECURITY ALERT',
+            default => ucfirst($this->category),
         };
     }
 
@@ -71,9 +73,9 @@ class SupportTicket extends Model
         }
 
         return match ($this->status) {
-            'pending'  => 'PENDING',
+            'pending' => 'PENDING',
             'resolved' => 'RESOLVED',
-            default    => strtoupper($this->status),
+            default => strtoupper($this->status),
         };
     }
 
@@ -87,10 +89,20 @@ class SupportTicket extends Model
         }
 
         return match ($this->status) {
-            'pending'  => 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+            'pending' => 'bg-amber-500/10 text-amber-500 border-amber-500/20',
             'resolved' => 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
-            default    => 'bg-slate-800 text-slate-400 border-white/5',
+            default => 'bg-slate-800 text-slate-400 border-white/5',
         };
+    }
+
+    /**
+     * Get the count of pending tickets and recent security alerts for admin notifications.
+     */
+    public static function getNotificationCount(): int
+    {
+        return static::where('status', 'pending')
+            ->orWhere(fn($q) => $q->where('category', 'security')->where('created_at', '>=', now()->subDay()))
+            ->count();
     }
 }
 

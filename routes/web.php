@@ -15,7 +15,7 @@ Route::any('/', function () {
 Route::get('/projects', [\App\Http\Controllers\ProjectController::class, 'indexPage'])->name('projects.index');
 
 Route::get('/dashboard', function (Request $request) {
-    
+
     return match ($request->user()->role) {
         'admin' => redirect()->route('admin.dashboard'),
         'student' => redirect()->route('student.home'),
@@ -35,11 +35,11 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::post('/users/{user}/approve', [\App\Http\Controllers\Admin\UserController::class, 'approve'])->name('users.approve');
     Route::post('/users/{user}/reject', [\App\Http\Controllers\Admin\UserController::class, 'reject'])->name('users.reject');
     Route::get('/logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('logs');
-    
+
     // System Settings
     Route::get('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
-    
+
     // Manage Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['create', 'show', 'edit']);
 
@@ -74,6 +74,7 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->gro
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
     Route::delete('/projects/{project}/cancel', [ProjectController::class, 'cancel'])->name('projects.cancel');
     Route::post('/projects/abort-submission', [ProjectController::class, 'abortSubmission'])->name('projects.abort-submission');
+
 });
 
 // Forced-download for any project file (bypasses browser inline rendering)
@@ -122,4 +123,4 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->gro
     Route::get('/my-tickets', [SupportTicketController::class, 'myTickets'])->name('support.my-tickets');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
