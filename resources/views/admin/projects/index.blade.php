@@ -189,7 +189,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">
-                                            @if(!in_array($project->status, ['published', 'archived']))
+                                            @if(!in_array($project->status, ['published', 'archived', 'rejected']))
                                                 <div class="flex flex-col gap-1.5 min-w-[80px]">
                                                     <form method="POST"
                                                         action="{{ route('admin.projects.approve', $project->id) }}"

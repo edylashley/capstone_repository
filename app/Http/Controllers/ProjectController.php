@@ -21,7 +21,7 @@ class ProjectController extends Controller
         $query = Project::query()->where('status', 'published');
 
         if ($request->filled('title')) {
-            $query->where('title', 'like', '%'.$request->query('title').'%');
+            $query->where('title', 'like', '%' . $request->query('title') . '%');
         }
 
         if ($request->filled('year')) {
@@ -30,13 +30,13 @@ class ProjectController extends Controller
 
         if ($request->filled('adviser')) {
             $query->whereHas('adviser', function ($q) use ($request) {
-                $q->where('name', 'like', '%'.$request->query('adviser').'%');
+                $q->where('name', 'like', '%' . $request->query('adviser') . '%');
             });
         }
 
         if ($request->filled('author')) {
             $query->whereHas('authors', function ($q) use ($request) {
-                $q->where('name', 'like', '%'.$request->query('author').'%');
+                $q->where('name', 'like', '%' . $request->query('author') . '%');
             });
         }
 
@@ -45,7 +45,7 @@ class ProjectController extends Controller
             $query->whereJsonContains('keywords', $keyword);
         }
 
-        $projects = $query->with(['authors','adviser','files'])->paginate(15);
+        $projects = $query->with(['authors', 'adviser', 'files'])->paginate(15);
 
         return response()->json($projects);
     }
@@ -67,7 +67,7 @@ class ProjectController extends Controller
 
         // Search by title
         if ($request->filled('title')) {
-            $query->where('title', 'like', '%'.$request->query('title').'%');
+            $query->where('title', 'like', '%' . $request->query('title') . '%');
         }
 
         // Search by year
@@ -92,17 +92,17 @@ class ProjectController extends Controller
             $catDropdown = $request->query('specialization');
             $catText = $request->query('category_text');
 
-            $query->where(function($q) use ($catDropdown, $catText) {
+            $query->where(function ($q) use ($catDropdown, $catText) {
                 if ($catDropdown) {
                     $q->whereHas('categories', function ($sub) use ($catDropdown) {
                         $sub->where('name', $catDropdown);
-                    })->orWhere('custom_category', 'like', '%'.$catDropdown.'%');
+                    })->orWhere('custom_category', 'like', '%' . $catDropdown . '%');
                 }
-                
+
                 if ($catText) {
                     $q->whereHas('categories', function ($sub) use ($catText) {
-                        $sub->where('name', 'like', '%'.$catText.'%');
-                    })->orWhere('custom_category', 'like', '%'.$catText.'%');
+                        $sub->where('name', 'like', '%' . $catText . '%');
+                    })->orWhere('custom_category', 'like', '%' . $catText . '%');
                 }
             });
         }
@@ -110,30 +110,30 @@ class ProjectController extends Controller
         // Intelligent Multi-Term Search
         if ($request->filled('keyword')) {
             $rawKeyword = trim($request->query('keyword'));
-            
+
             // Extract exact matches grouped by quotes or just spaces (e.g. "Mobile Apps" Android)
             preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $rawKeyword, $matches);
-            $terms = array_map(function($term) {
+            $terms = array_map(function ($term) {
                 return trim($term, '"\'');
             }, $matches[0] ?? []);
-            
+
             // Require ALL terms to be present SOMEWHERE in the project
             $query->where(function ($q) use ($terms) {
                 foreach ($terms as $term) {
                     $q->where(function ($subQ) use ($term) {
-                        $subQ->where('title', 'like', '%'.$term.'%')
-                            ->orWhere('abstract', 'like', '%'.$term.'%')
-                            ->orWhere('year', 'like', '%'.$term.'%')
-                            ->orWhere('authors_list', 'like', '%'.$term.'%')
-                            ->orWhere('adviser_name', 'like', '%'.$term.'%')
+                        $subQ->where('title', 'like', '%' . $term . '%')
+                            ->orWhere('abstract', 'like', '%' . $term . '%')
+                            ->orWhere('year', 'like', '%' . $term . '%')
+                            ->orWhere('authors_list', 'like', '%' . $term . '%')
+                            ->orWhere('adviser_name', 'like', '%' . $term . '%')
                             ->orWhereHas('authors', function ($authorQ) use ($term) {
-                                $authorQ->where('name', 'like', '%'.$term.'%');
+                                $authorQ->where('name', 'like', '%' . $term . '%');
                             })
                             ->orWhereHas('adviser', function ($adviserQ) use ($term) {
-                                $adviserQ->where('name', 'like', '%'.$term.'%');
+                                $adviserQ->where('name', 'like', '%' . $term . '%');
                             })
-                            ->orWhere('keywords', 'like', '%'.$term.'%')
-                            ->orWhere('full_text', 'like', '%'.$term.'%');
+                            ->orWhere('keywords', 'like', '%' . $term . '%')
+                            ->orWhere('full_text', 'like', '%' . $term . '%');
                     });
                 }
             });
@@ -143,7 +143,7 @@ class ProjectController extends Controller
 
         // Get all distinct years from the database for the filter dropdown
         $years = Project::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
-        
+
         return view('projects.index', compact('projects', 'years'));
     }
 
@@ -154,7 +154,7 @@ class ProjectController extends Controller
     {
         $deadlineStr = \App\Models\Setting::get('submission_deadline');
         $isPastDeadline = $deadlineStr && \Carbon\Carbon::now()->greaterThan(\Carbon\Carbon::parse($deadlineStr));
-        
+
         if (auth()->user()->isStudent() && (\App\Models\Setting::get('submissions_open', '1') == '0' || $isPastDeadline)) {
             return redirect()->route('student.home')->withErrors(['submissions' => 'Submissions are currently closed or the deadline has passed.']);
         }
@@ -199,7 +199,7 @@ class ProjectController extends Controller
             'adviser_id' => null, // Explicitly null as we are moving away from adviser roles
             'status' => 'pending',
             'program' => $data['program'] ?? 'CSIT',
-            'specialization' => $request->other_category ?? null, 
+            'specialization' => $request->other_category ?? null,
             'custom_category' => $request->other_category ?? null,
             'authors_list' => implode(', ', array_map('trim', $data['authors'])),
         ]);
@@ -214,7 +214,7 @@ class ProjectController extends Controller
         // Store manuscript (PDF-only enforced by request)
         if ($request->hasFile('manuscript')) {
             $file = $request->file('manuscript');
-            
+
             if (!$file->isValid() || !$file->getRealPath() || !file_exists($file->getRealPath())) {
                 $project->delete(); // Rollback project creation
                 return redirect()->back()->withInput()
@@ -224,7 +224,7 @@ class ProjectController extends Controller
             $year = $project->year ?: 'unknown';
             $dir = "projects/{$year}/{$project->slug}";
             $filename = 'manuscript.pdf';
-            
+
             try {
                 $path = $file->storeAs($dir, $filename, 'public');
             } catch (\Throwable $e) {
@@ -240,9 +240,9 @@ class ProjectController extends Controller
             // Check for duplicate content across ACTIVE projects
             $duplicateFile = \App\Models\ProjectFile::where('file_hash', $fileHash)
                 ->where('type', 'manuscript')
-                ->whereHas('project', function($query) {
+                ->whereHas('project', function ($query) {
                     // This automatically filters out soft-deleted projects
-                    $query->whereNull('deleted_at'); 
+                    $query->whereNull('deleted_at');
                 })
                 ->with('project')
                 ->first();
@@ -250,12 +250,12 @@ class ProjectController extends Controller
             if ($duplicateFile) {
                 // Delete the just-uploaded file since it's a duplicate
                 Storage::disk('public')->delete($path);
-                
+
                 // CRITICAL FIX: The project was already created in database, we MUST delete it now!
                 // Since this happened inside the same request, we can safely force delete it.
                 $project->authors()->detach();
                 $project->forceDelete();
-                
+
                 $duplicateProject = $duplicateFile->project;
                 $errorMessage = "⚠️ Duplicate Content Detected!\n\n";
                 $errorMessage .= "This PDF has identical content to a manuscript already submitted in:\n";
@@ -291,9 +291,9 @@ class ProjectController extends Controller
             $scanner = app(\App\Services\FileScanner::class);
             $scanResult = $scanner->scan($fullPath);
 
-            if (! $scanResult['ok']) {
+            if (!$scanResult['ok']) {
                 $isSystemError = (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system');
-                
+
                 // 1. Log the failure
                 \App\Models\ActivityLog::create([
                     'user_id' => $request->user()->id,
@@ -315,11 +315,11 @@ class ProjectController extends Controller
                         'category' => 'security',
                         'subject' => '⚠️ SECURITY ALERT: Malicious Upload Blocked',
                         'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
-                                     "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
-                                     "Action: Attempted to upload a file with a security threat.\n" .
-                                     "File: " . $file->getClientOriginalName() . "\n" .
-                                     "Threat Detected: " . $scanResult['notes'] . "\n\n" .
-                                     "The submission has been blocked and the temporary file has been shredded.",
+                            "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
+                            "Action: Attempted to upload a file with a security threat.\n" .
+                            "File: " . $file->getClientOriginalName() . "\n" .
+                            "Threat Detected: " . $scanResult['notes'] . "\n\n" .
+                            "The submission has been blocked and the temporary file has been shredded.",
                         'status' => 'resolved',
                     ]);
                 }
@@ -438,9 +438,9 @@ class ProjectController extends Controller
                 // Security scan each attachment
                 $attachScanResult = $scanner->scan($fullAttPath);
 
-                if (! $attachScanResult['ok']) {
+                if (!$attachScanResult['ok']) {
                     $isSystemError = (isset($attachScanResult['error_type']) && $attachScanResult['error_type'] === 'system');
-                    
+
                     // 1. Log the failure
                     ActivityLog::create([
                         'user_id' => $request->user()->id,
@@ -462,11 +462,11 @@ class ProjectController extends Controller
                             'category' => 'security',
                             'subject' => '⚠️ SECURITY ALERT: Malicious Attachment Blocked',
                             'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
-                                         "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
-                                         "Action: Attempted to upload an attachment with a security threat.\n" .
-                                         "File: " . $attach->getClientOriginalName() . "\n" .
-                                         "Threat Detected: " . $attachScanResult['notes'] . "\n\n" .
-                                         "The entire submission has been blocked and the temporary files have been shredded.",
+                                "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
+                                "Action: Attempted to upload an attachment with a security threat.\n" .
+                                "File: " . $attach->getClientOriginalName() . "\n" .
+                                "Threat Detected: " . $attachScanResult['notes'] . "\n\n" .
+                                "The entire submission has been blocked and the temporary files have been shredded.",
                             'status' => 'resolved',
                         ]);
                     }
@@ -550,12 +550,12 @@ class ProjectController extends Controller
      */
     public function show(string $id)
     {
-        $project = Project::withTrashed()->with(['authors','adviser','files','verification'])->findOrFail($id);
+        $project = Project::withTrashed()->with(['authors', 'adviser', 'files', 'verification'])->findOrFail($id);
 
         // Access rules: published projects are public; unpublished require authorization
         if ($project->status !== 'published') {
             $user = auth()->user();
-            if (! $user || (! $user->isAdmin() && ! $project->authors->contains($user))) {
+            if (!$user || (!$user->isAdmin() && !$project->authors->contains($user))) {
                 abort(403);
             }
         }
@@ -592,12 +592,12 @@ class ProjectController extends Controller
         $user = auth()->user();
 
         // Only authors can edit
-        if (! $project->authors->contains($user)) {
+        if (!$project->authors->contains($user)) {
             abort(403, 'You are not authorized to edit this project.');
         }
 
         // Only pending or rejected projects can be edited
-        if (! in_array($project->status, ['pending', 'rejected'])) {
+        if (!in_array($project->status, ['pending', 'rejected'])) {
             return redirect()->route('projects.show', $project)
                 ->with('error', 'This project can no longer be edited because it has been ' . $project->status . '.');
         }
@@ -617,12 +617,12 @@ class ProjectController extends Controller
         $user = $request->user();
 
         // Only authors can update
-        if (! $project->authors->contains($user)) {
+        if (!$project->authors->contains($user)) {
             abort(403, 'You are not authorized to update this project.');
         }
 
         // Only pending or rejected projects can be updated
-        if (! in_array($project->status, ['pending', 'rejected'])) {
+        if (!in_array($project->status, ['pending', 'rejected'])) {
             return redirect()->route('projects.show', $project)
                 ->with('error', 'This project can no longer be edited.');
         }
@@ -642,11 +642,11 @@ class ProjectController extends Controller
             'categories.*' => 'exists:categories,id',
             'other_category' => ['nullable', 'string', 'max:50'],
             'program' => [
-                'required', 
-                'string', 
-                auth()->user()->isAdmin() 
-                    ? Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())
-                    : Rule::in([auth()->user()->program])
+                'required',
+                'string',
+                auth()->user()->isAdmin()
+                ? Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())
+                : Rule::in([auth()->user()->program])
             ],
             'adviser_name' => 'required|string|max:255',
             'keywords' => 'nullable|string',
@@ -683,7 +683,7 @@ class ProjectController extends Controller
         // Handle Manuscript Replacement
         if ($request->hasFile('manuscript')) {
             $file = $request->file('manuscript');
-            
+
             // 1. Delete old manuscript
             $oldManuscripts = $project->files()->where('type', 'manuscript')->get();
             foreach ($oldManuscripts as $old) {
@@ -696,7 +696,7 @@ class ProjectController extends Controller
             $dir = "projects/{$year}/{$project->slug}";
             $filename = 'manuscript.pdf';
             $path = $file->storeAs($dir, $filename, 'public');
-            
+
             $fullPath = Storage::disk('public')->path($path);
             $fileHash = hash_file('sha256', $fullPath);
 
@@ -704,15 +704,15 @@ class ProjectController extends Controller
             $duplicateFile = \App\Models\ProjectFile::where('file_hash', $fileHash)
                 ->where('type', 'manuscript')
                 ->where('project_id', '!=', $project->id) // Don't match against itself if they re-upload the same file
-                ->whereHas('project', function($query) {
-                    $query->whereNull('deleted_at'); 
+                ->whereHas('project', function ($query) {
+                    $query->whereNull('deleted_at');
                 })
                 ->with('project')
                 ->first();
 
             if ($duplicateFile) {
                 Storage::disk('public')->delete($path);
-                
+
                 $duplicateProject = $duplicateFile->project;
                 $errorMessage = "⚠️ Duplicate Content Detected!\n\n";
                 $errorMessage .= "This new PDF is identical to a manuscript already submitted in:\n";
@@ -738,11 +738,11 @@ class ProjectController extends Controller
             // 3. Re-run scans and validation
             $scanner = app(\App\Services\FileScanner::class);
             $scanResult = $scanner->scan($fullPath);
-            
+
             // STRICT SECURITY: Block if threat is detected
             if (!$scanResult['ok']) {
                 $isSystemError = (isset($scanResult['error_type']) && $scanResult['error_type'] === 'system');
-                
+
                 // 1. Log the failure
                 \App\Models\ActivityLog::create([
                     'user_id' => $user->id,
@@ -764,11 +764,11 @@ class ProjectController extends Controller
                         'category' => 'security',
                         'subject' => '⚠️ SECURITY ALERT: Malicious Update Blocked',
                         'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
-                                     "Student: " . $user->name . " (ID: " . $user->id . ")\n" .
-                                     "Action: Attempted to UPDATE a project with a malicious file.\n" .
-                                     "File: " . $file->getClientOriginalName() . "\n" .
-                                     "Threat Detected: " . $scanResult['notes'] . "\n\n" .
-                                     "The update was blocked and the malicious file was shredded immediately.",
+                            "Student: " . $user->name . " (ID: " . $user->id . ")\n" .
+                            "Action: Attempted to UPDATE a project with a malicious file.\n" .
+                            "File: " . $file->getClientOriginalName() . "\n" .
+                            "Threat Detected: " . $scanResult['notes'] . "\n\n" .
+                            "The update was blocked and the malicious file was shredded immediately.",
                         'status' => 'resolved',
                     ]);
                 }
@@ -913,18 +913,18 @@ class ProjectController extends Controller
         $user = $request->user();
 
         // Check if user is an author
-        if (! $project->authors->contains($user)) {
-             abort(403, 'Unauthorized action.');
+        if (!$project->authors->contains($user)) {
+            abort(403, 'Unauthorized action.');
         }
 
         // Can only cancel if pending or rejected (not yet approved/archived)
         if (!in_array($project->status, ['pending', 'rejected'])) {
-             return redirect()->back()->with('error', 'Cannot cancel submission. Project is already ' . $project->status . '.');
+            return redirect()->back()->with('error', 'Cannot cancel submission. Project is already ' . $project->status . '.');
         }
 
         // Delete files
         foreach ($project->files as $file) {
-             Storage::disk('public')->delete($file->path);
+            Storage::disk('public')->delete($file->path);
         }
         $project->files()->delete();
 
@@ -947,8 +947,8 @@ class ProjectController extends Controller
 
         // Find the user's most recent pending project created in the last 5 minutes
         $recentProject = Project::whereHas('authors', function ($q) use ($user) {
-                $q->where('users.id', $user->id);
-            })
+            $q->where('users.id', $user->id);
+        })
             ->where('status', 'pending')
             ->where('created_at', '>=', now()->subMinutes(5))
             ->orderByDesc('created_at')
@@ -1004,7 +1004,12 @@ class ProjectController extends Controller
             abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
         }
 
-        // 2. Manuscript Visibility: Guests can only download published manuscripts
+        // 2. Manuscript Visibility: ONLY logged-in users can download manuscripts
+        $isManuscript = strtolower($file->type) === 'manuscript' || strtolower($file->filename) === 'manuscript.pdf';
+        if ($isManuscript) {
+            abort_unless(auth()->check(), 403, 'Downloading the full manuscript is restricted to registered members. Please sign in to download.');
+        }
+
         if ($project->status !== 'published') {
             $isOwner = $user && $project->authors->contains($user);
             $isPrivileged = $user && $user->isAdmin();
@@ -1029,7 +1034,7 @@ class ProjectController extends Controller
         // Generate a clean filename from project title for manuscripts
         $downloadName = $file->filename;
         $isManuscript = strtolower($file->type) === 'manuscript' || strtolower($file->filename) === 'manuscript.pdf';
-        
+
         if ($isManuscript && $project) {
             $safeTitle = Str::slug($project->title);
             if (empty($safeTitle)) {
@@ -1060,6 +1065,9 @@ class ProjectController extends Controller
         }
 
         // 2. Manuscript Visibility: Guests can only view published manuscripts
+        $isManuscript = strtolower($file->type) === 'manuscript' || strtolower($file->filename) === 'manuscript.pdf';
+        $isGuest = !auth()->check();
+
         if ($project->status !== 'published') {
             $isOwner = $user && $project->authors->contains($user);
             $isPrivileged = $user && $user->isAdmin();
@@ -1077,9 +1085,14 @@ class ProjectController extends Controller
                 'filename' => $file->filename,
                 'type' => $file->type,
                 'project_id' => $file->project_id,
-                'guest' => !auth()->check()
+                'guest' => $isGuest
             ]
         ]);
+
+        // 3. Guest Partial Preview (5 Pages) for Manuscripts
+        if ($isManuscript && $isGuest) {
+            return $this->streamPartialPdf($fullPath, 5);
+        }
 
         // Force PDF to be inline for better browser/mobile support (Streaming Option)
         if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) === 'pdf') {
@@ -1102,5 +1115,50 @@ class ProjectController extends Controller
         }
 
         return response()->file($fullPath);
+    }
+
+    /**
+     * Streams only the first X pages of a PDF for guest previews.
+     * Requires: composer require setasign/fpdf setasign/fpdi
+     */
+    protected function streamPartialPdf($path, $maxPages = 5)
+    {
+        if (!class_exists(\setasign\Fpdi\Fpdi::class)) {
+            // Fallback: If library is not installed, we still serve the file but 
+            // you should run: composer require setasign/fpdf setasign/fpdi
+            return response()->stream(function () use ($path) {
+                readfile($path);
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="preview_unrestricted.pdf"',
+            ]);
+        }
+
+        try {
+            $pdf = new \setasign\Fpdi\Fpdi();
+            $pageCount = $pdf->setSourceFile($path);
+            $pagesToRender = min($pageCount, $maxPages);
+
+            for ($n = 1; $n <= $pagesToRender; $n++) {
+                $tplIdx = $pdf->importPage($n);
+                $specs = $pdf->getTemplateSize($tplIdx);
+                $pdf->AddPage($specs['orientation'], [$specs['width'], $specs['height']]);
+                $pdf->useTemplate($tplIdx);
+            }
+
+            return response($pdf->Output('S'), 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="manuscript_preview.pdf"',
+                'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            ]);
+        } catch (\Exception $e) {
+            // If splitting fails, fallback to full stream to avoid breaking the page
+            return response()->stream(function () use ($path) {
+                readfile($path);
+            }, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="preview_fallback.pdf"',
+            ]);
+        }
     }
 }

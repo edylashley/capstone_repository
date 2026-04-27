@@ -146,8 +146,7 @@
                                                 Administrator's Feedback:</p>
                                             <p
                                                 class="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap bg-red-500/10 rounded-lg p-3 border border-red-500/20">
-                                                {{ $project->rejection_reason }}
-                                            </p>
+                                                {{ $project->rejection_reason }}</p>
                                         </div>
                                     @endif
                                 </div>
@@ -282,46 +281,6 @@
                                                 Confirm Final Record
                                             </button>
                                         </form>
-                                        <p class="text-[10px] text-gray-500 mt-2 text-center italic">Digital signature will be
-                                            recorded upon confirmation.</p>
-                                    @endif
-                                </div>
-                            @endif
-                        @endif
-                    </div>
-                </div>
-
-                <!-- PDF Layout (Side or Bottom) -->
-                <div class="flex-1 min-w-0 space-y-6">
-                    <div class="bg-slate-900 overflow-hidden shadow-sm sm:rounded-xl p-4 md:p-8 border border-white/5">
-                        <div
-                            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-white/5 pb-4">
-                            <h3 class="font-black text-lg text-white uppercase tracking-tight italic">Manuscript Viewer
-                            </h3>
-                            @auth
-                                <div class="flex items-center gap-2 desktop-only">
-                                    <button onclick="window.open('{{ route('projects.viewer', $project) }}', '_blank')"
-                                        class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-700 transition">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                        </svg>
-                                        Open Full View
-                                    </button>
-                                </div>
-                            @endauth
-                        </div>
-
-                        @php
-                            $manuscript = $project->files->firstWhere('type', 'manuscript');
-                            $attachments = $project->files->where('type', 'attachment');
-                        @endphp
-
-                        @if($manuscript)
-                            @guest
-                                <!-- Guest Preview Banner -->
-                                <div
-                                    class="mb-6 p-6 bg-indigo-600 rounded-3xl shadow-xl shadow-indigo-500/20 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/10 relative overflow-hidden group">
                                     <div
                                         class="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700">
                                     </div>
@@ -386,37 +345,23 @@
                                         </div>
 
                                         <!-- Mobile Teaser (Locked Page 6) -->
-                                        <div id="mobile-teaser-container"
-                                            class="hidden relative w-full min-h-[400px] overflow-hidden bg-slate-900 flex items-center justify-center">
-                                            <canvas id="mobile-teaser-canvas"
-                                                class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50"></canvas>
-                                            <div
-                                                class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-6 bg-slate-900/60 backdrop-blur-md">
+                                        <div id="mobile-teaser-container" class="hidden relative w-full min-h-[400px] overflow-hidden bg-slate-900 flex items-center justify-center">
+                                            <canvas id="mobile-teaser-canvas" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-50"></canvas>
+                                            <div class="absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-6 bg-slate-900/60 backdrop-blur-md">
                                                 <div class="relative">
-                                                    <div
-                                                        class="absolute -inset-4 bg-indigo-500/20 blur-2xl rounded-full animate-pulse">
-                                                    </div>
-                                                    <div
-                                                        class="relative w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-indigo-500/40 border border-white/20">
+                                                    <div class="absolute -inset-4 bg-indigo-500/20 blur-2xl rounded-full animate-pulse"></div>
+                                                    <div class="relative w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-indigo-500/40 border border-white/20">
                                                         <span class="text-2xl">🔐</span>
                                                     </div>
                                                 </div>
-                                                <h5 class="text-xl font-black text-white uppercase tracking-[0.2em] mb-2">
-                                                    Keep Reading?</h5>
-                                                <p
-                                                    class="text-indigo-100/70 text-[10px] font-bold uppercase tracking-widest mb-8 max-w-[240px] mx-auto leading-relaxed">
-                                                    This manuscript contains <span class="text-white font-black"
-                                                        id="mobile-teaser-page-count">0</span> pages of research.
+                                                <h5 class="text-xl font-black text-white uppercase tracking-[0.2em] mb-2">Keep Reading?</h5>
+                                                <p class="text-indigo-100/70 text-[10px] font-bold uppercase tracking-widest mb-8 max-w-[240px] mx-auto leading-relaxed">
+                                                    This manuscript contains <span class="text-white font-black" id="mobile-teaser-page-count">0</span> pages of research. 
                                                     Sign in to unlock the full document.
                                                 </p>
-                                                <a href="{{ route('login') }}"
-                                                    class="inline-flex items-center gap-3 px-6 py-4 bg-white text-indigo-600 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all">
+                                                <a href="{{ route('login') }}" class="inline-flex items-center gap-3 px-6 py-4 bg-white text-indigo-600 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all">
                                                     <span>Unlock Full Access</span>
-                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="3" d="M14 5l7 7-7 7M3 12h18" />
-                                                    </svg>
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7-7 7M3 12h18"/></svg>
                                                 </a>
                                             </div>
                                         </div>
@@ -473,264 +418,364 @@
 
                             <script src="{{ asset('assets/vendor/pdfjs/pdf.min.js') }}"></script>
                             <script>
-                                                // Mobile PDF Engine
-                                    const m_pdfjsLib = window['pdfjs-dist/build/pdf'];
-                                    m_pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('assets/vendor/pdfjs/pdf.worker.min.js') }}";
+                                // Mobile PDF Engine
+                                const m_pdfjsLib = window['pdfjs-dist/build/pdf'];
+                                m_pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('assets/vendor/pdfjs/pdf.worker.min.js') }}";
 
-                                    let m_pdfDoc = null, m_pageNum = 1, m_pageRendering = false;
-                                    const m_canvas = document.getElementById('mobile-pdf-canvas');
-                                    const m_ctx = m_canvas.getContext('2d');
-                                    const isGuest = {{ auth()->check() ? 'false' : 'true' }};
+                                let m_pdfDoc = null, m_pageNum = 1, m_pageRendering = false;
+                                const m_canvas = document.getElementById('mobile-pdf-canvas');
+                                const m_ctx = m_canvas.getContext('2d');
+                                const isGuest = {{ auth()->check() ? 'false' : 'true' }};
 
-                                    function renderMobilePage(num) {
-                                        if (!m_pdfDoc) return;
+                                function renderMobilePage(num) {
+                                    if (!m_pdfDoc) return;
 
-                                        const canvasContainer = document.getElementById('mobile-canvas-container');
-                                        const teaserContainer = document.getElementById('mobile-teaser-container');
+                                    const canvasContainer = document.getElementById('mobile-canvas-container');
+                                    const teaserContainer = document.getElementById('mobile-teaser-container');
 
-                                        // Mobile Teaser Logic for Guests
-                                        if (isGuest && num === 6) {
-                                            if (canvasContainer) canvasContainer.classList.add('hidden');
-                                            if (teaserContainer) {
-                                                teaserContainer.classList.remove('hidden');
-
-                                                // Render teaser canvas if not already rendered
-                                                const teaserCanvas = document.getElementById('mobile-teaser-canvas');
-                                                if (teaserCanvas && !teaserCanvas.dataset.rendered) {
-                                                    const teaserPageNum = Math.min(m_pdfDoc.numPages, 6);
-                                                    m_pdfDoc.getPage(teaserPageNum).then(function(page) {
-                                                        const viewport = page.getViewport({ scale: 1.0 });
-                                                        const ctx = teaserCanvas.getContext('2d');
-                                                        teaserCanvas.height = viewport.height;
-                                                        teaserCanvas.width = viewport.width;
-                                                        page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
-                                                            teaserCanvas.dataset.rendered = "true";
-                                                        });
+                                    // Mobile Teaser Logic for Guests
+                                    if (isGuest && num === 6) {
+                                        if (canvasContainer) canvasContainer.classList.add('hidden');
+                                        if (teaserContainer) {
+                                            teaserContainer.classList.remove('hidden');
+                                            
+                                            // Render teaser canvas if not already rendered
+                                            const teaserCanvas = document.getElementById('mobile-teaser-canvas');
+                                            if (teaserCanvas && !teaserCanvas.dataset.rendered) {
+                                                const teaserPageNum = Math.min(m_pdfDoc.numPages, 6);
+                                                m_pdfDoc.getPage(teaserPageNum).then(function(page) {
+                                                    const viewport = page.getViewport({ scale: 1.0 });
+                                                    const ctx = teaserCanvas.getContext('2d');
+                                                    teaserCanvas.height = viewport.height;
+                                                    teaserCanvas.width = viewport.width;
+                                                    page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                                                        teaserCanvas.dataset.rendered = "true";
                                                     });
-                                                }
+                                                });
                                             }
+                                        }
+                                        
+                                        document.getElementById('mobile-page-num').textContent = num;
+                                        m_pageRendering = false;
+                                        
+                                        // Hide loading if it was visible
+                                        const loading = document.getElementById('mobile-pdf-loading');
+                                        if (loading) {
+                                            loading.style.opacity = '0';
+                                            setTimeout(() => loading.classList.add('hidden'), 500);
+                                        }
+                                        return;
+                                    }
 
-                                            document.getElementById('mobile-page-num').textContent = num;
+                                    // Normal page rendering
+                                    if (canvasContainer) canvasContainer.classList.remove('hidden');
+                                    if (teaserContainer) teaserContainer.classList.add('hidden');
+
+                                    // Frontend Page Limit for Guests
+                                    if (isGuest && num > 6) {
+                                        return;
+                                    }
+
+                                    m_pageRendering = true;
+                                    m_pdfDoc.getPage(num).then(function (page) {
+                                        // HD Rendering for Mobile (Retina/DPR Support)
+                                        const dpr = window.devicePixelRatio || 1;
+                                        const containerWidth = document.getElementById('mobile-canvas-container').clientWidth - 20;
+
+                                        const unscaledViewport = page.getViewport({ scale: 1.0 });
+                                        const scale = containerWidth / unscaledViewport.width;
+                                        const viewport = page.getViewport({ scale: scale });
+
+                                        m_canvas.height = viewport.height * dpr;
+                                        m_canvas.width = viewport.width * dpr;
+                                        m_canvas.style.width = viewport.width + 'px';
+                                        m_canvas.style.height = viewport.height + 'px';
+
+                                        m_ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                                        const renderContext = { canvasContext: m_ctx, viewport: viewport };
+                                        page.render(renderContext).promise.then(function () {
                                             m_pageRendering = false;
-
-                                            // Hide loading if it was visible
+                                            document.getElementById('mobile-page-num').textContent = num;
                                             const loading = document.getElementById('mobile-pdf-loading');
                                             if (loading) {
                                                 loading.style.opacity = '0';
                                                 setTimeout(() => loading.classList.add('hidden'), 500);
                                             }
-                                            return;
+                                        });
+                                    });
+                                }
+
+                                function mobilePrevPage() { if (m_pageNum <= 1 || m_pageRendering) return; m_pageNum--; renderMobilePage(m_pageNum); }
+                                function mobileNextPage() { 
+                                    const maxPage = isGuest ? Math.min(m_pdfDoc.numPages, 6) : m_pdfDoc.numPages;
+                                    if (m_pageNum >= maxPage || m_pageRendering) return; 
+                                    m_pageNum++; 
+                                    renderMobilePage(m_pageNum); 
+                                }
+
+                                // Start Mobile/Guest Engine
+                                if (isGuest || window.innerWidth < 768) {
+                                    m_pdfjsLib.getDocument({
+                                        url: "{{ route('files.view', $manuscript) }}",
+                                        withCredentials: true
+                                    }).promise.then(function (pdfDoc_) {
+                                        m_pdfDoc = pdfDoc_;
+
+                                        if (isGuest && window.innerWidth >= 768) {
+                                            // DESKTOP GUEST: Render all 5 pages at once
+                                            const pagesToRender = Math.min(m_pdfDoc.numPages, 5);
+                                            const container = document.getElementById('desktop-canvas-container');
+
+                                            for (let i = 1; i <= pagesToRender; i++) {
+                                                const canvas = document.createElement('canvas');
+                                                canvas.className = "shadow-2xl rounded-sm max-w-full h-auto border border-white/5";
+                                                container.appendChild(canvas);
+
+                                                m_pdfDoc.getPage(i).then(function (page) {
+                                                    const viewport = page.getViewport({ scale: 1.5 });
+                                                    const ctx = canvas.getContext('2d');
+                                                    canvas.height = viewport.height;
+                                                    canvas.width = viewport.width;
+                                                    page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                                                        if (i === pagesToRender) {
+                                                            // Add REAL Blurred Page 6 for Guests as a teaser
+                                                            const teaserWrapper = document.createElement('div');
+                                                            teaserWrapper.className = "relative w-full max-w-[800px] h-[800px] shrink-0 rounded-xl overflow-hidden border border-white/10 mb-12 shadow-2xl group";
+
+                                                            // We'll render the actual page 6 inside this, but blur it
+                                                            const teaserCanvas = document.createElement('canvas');
+                                                            teaserCanvas.className = "absolute inset-0 w-full h-full object-cover blur-xl opacity-50";
+                                                            teaserWrapper.appendChild(teaserCanvas);
+
+                                                            // Overlay with Message
+                                                            const overlay = document.createElement('div');
+                                                            overlay.className = "absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-12 bg-slate-900/60 backdrop-blur-md";
+                                                            overlay.innerHTML = `
+                                                                    <div class="relative">
+                                                                        <div class="absolute -inset-4 bg-indigo-500/20 blur-2xl rounded-full animate-pulse"></div>
+                                                                        <div class="relative w-24 h-24 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-500/40 border border-white/20">
+                                                                            <span class="text-4xl">🔐</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <h5 class="text-2xl font-black text-white uppercase tracking-[0.2em] mb-3">Keep Reading?</h5>
+                                                                    <p class="text-indigo-100/70 text-[11px] font-bold uppercase tracking-widest mb-10 max-w-xs mx-auto leading-relaxed">
+                                                                        This manuscript contains <span class="text-white font-black">${m_pdfDoc.numPages} pages</span> of research. 
+                                                                        Sign in to unlock the full document.
+                                                                    </p>
+                                                                    <a href="{{ route('login') }}" class="inline-flex items-center gap-4 px-10 py-5 bg-white text-indigo-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-2xl hover:scale-105 transition-all active:scale-95 group">
+                                                                        <span>Unlock Full Access</span>
+                                                                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7-7 7M3 12h18"/></svg>
+                                                                    </a>
+                                                                `;
+                                                            teaserWrapper.appendChild(overlay);
+                                                            container.appendChild(teaserWrapper);
+
+                                                            // Render the teaser page (page 6 or last page)
+                                                            const teaserPageNum = Math.min(m_pdfDoc.numPages, pagesToRender + 1);
+                                                            m_pdfDoc.getPage(teaserPageNum).then(function (page) {
+                                                                const viewport = page.getViewport({ scale: 1.0 });
+                                                                const ctx = teaserCanvas.getContext('2d');
+                                                                teaserCanvas.height = viewport.height;
+                                                                teaserCanvas.width = viewport.width;
+                                                                page.render({ canvasContext: ctx, viewport: viewport });
+                                                            });
+
+                                                            const loading = document.getElementById('desktop-pdf-loading');
+                                                            if (loading) {
+                                                                loading.style.opacity = '0';
+                                                                setTimeout(() => loading.classList.add('hidden'), 500);
+                                                            }
+                                                        }
+                                                    });
+                                                });
+                                            }
+                                        } else {
+                                            // MOBILE: Render one page at a time with navigation
+                                            const totalPages = isGuest ? Math.min(m_pdfDoc.numPages, 6) : m_pdfDoc.numPages;
+                                            document.getElementById('mobile-page-count').textContent = totalPages;
+                                            
+                                            if (isGuest) {
+                                                const mobileTeaserPageCount = document.getElementById('mobile-teaser-page-count');
+                                                if (mobileTeaserPageCount) mobileTeaserPageCount.textContent = m_pdfDoc.numPages;
+                                            }
+                                            
+                                            renderMobilePage(m_pageNum);
                                         }
+                                    }).catch(err => {
+                                        console.error("PDF Engine Error:", err);
+                                        const mobileLoading = document.getElementById('mobile-pdf-loading');
+                                        const desktopLoading = document.getElementById('desktop-pdf-loading');
+                                        if (mobileLoading) mobileLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Locked.</p>';
+                                        if (desktopLoading) desktopLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Restricted.</p>';
+                                    });
+                                }
 
-                                        // Normal page rendering
-                                        if (canvasContainer) canvasContainer.classList.remove('hidden');
-                                        if (teaserContainer) teaserContainer.classList.add('hidden');
+                                window.openFullViewModal = function() {
+                                    const modal = document.getElementById('fullview-modal');
+                                    const content = document.getElementById('fullview-content');
+                                    if (!modal || !content) return;
 
-                                        // Frontend Page Limit for Guests
-                                        if (isGuest && num > 6) {
-                                            return;
-                                        }
+                                    modal.classList.remove('hidden');
+                                    document.body.style.overflow = 'hidden';
+                                    content.innerHTML = '<div class="flex flex-col items-center justify-center h-full gap-4"><div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div><p class="text-[10px] font-black text-indigo-400 uppercase tracking-widest animate-pulse">Initializing Immersive View...</p></div>';
 
-                                        m_pageRendering = true;
-                                        m_pdfDoc.getPage(num).then(function (page) {
-                                            // HD Rendering for Mobile (Retina/DPR Support)
-                                            const dpr = window.devicePixelRatio || 1;
-                                            const containerWidth = document.getElementById('mobile-canvas-container').clientWidth - 20;
+                                    if (!m_pdfDoc && (isGuest || window.innerWidth < 768)) {
+                                        const checkLoad = setInterval(() => {
+                                            if (m_pdfDoc) {
+                                                clearInterval(checkLoad);
+                                                renderFullViewContent();
+                                            }
+                                        }, 100);
+                                        return;
+                                    }
+                                    renderFullViewContent();
+                                };
 
-                                            const unscaledViewport = page.getViewport({ scale: 1.0 });
-                                            const scale = containerWidth / unscaledViewport.width;
-                                            const viewport = page.getViewport({ scale: scale });
+                                function renderFullViewContent() {
+                                    const content = document.getElementById('fullview-content');
+                                    content.innerHTML = '';
 
-                                            m_canvas.height = viewport.height * dpr;
-                                            m_canvas.width = viewport.width * dpr;
-                                            m_canvas.style.width = viewport.width + 'px';
-                                            m_canvas.style.height = viewport.height + 'px';
+                                    if (!isGuest && window.innerWidth >= 768) {
+                                        const iframe = document.createElement('iframe');
+                                        iframe.src = "{{ route('files.view', $manuscript) }}";
+                                        iframe.className = "w-full h-full border-0 rounded-2xl bg-slate-900 shadow-2xl";
+                                        iframe.style.minHeight = "calc(100vh - 120px)";
+                                        content.appendChild(iframe);
+                                    } else {
+                                        const container = document.createElement('div');
+                                        container.className = "flex flex-col gap-12 items-center max-w-5xl mx-auto w-full pb-32";
+                                        content.appendChild(container);
 
-                                            m_ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                                        const pagesToRender = isGuest ? Math.min(m_pdfDoc.numPages, 5) : m_pdfDoc.numPages;
+                                        renderPagesSequentially(1, pagesToRender, container);
 
-                                            const renderContext = { canvasContext: m_ctx, viewport: viewport };
-                                            page.render(renderContext).promise.then(function () {
-                                                m_pageRendering = false;
-                                                document.getElementById('mobile-page-num').textContent = num;
-                                                const loading = document.getElementById('mobile-pdf-loading');
-                                                if (loading) {
-                                                    loading.style.opacity = '0';
-                                                    setTimeout(() => loading.classList.add('hidden'), 500);
+                                        if (isGuest && m_pdfDoc.numPages > 5) {
+                                            const teaser = document.createElement('div');
+                                            teaser.className = "relative w-full max-w-[800px] h-[500px] rounded-3xl overflow-hidden border border-white/10 mt-12 shadow-2xl shrink-0 group";
+                                            teaser.innerHTML = `
+                                                <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-xl z-20 flex flex-col items-center justify-center text-center p-8">
+                                                    <div class="w-20 h-20 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center mb-8 shadow-2xl border border-white/20">
+                                                        <span class="text-4xl">🔐</span>
+                                                    </div>
+                                                    <h5 class="text-2xl font-black text-white uppercase tracking-[0.2em] mb-4">Keep Reading?</h5>
+                                                    <p class="text-indigo-100/60 text-xs font-bold uppercase tracking-widest mb-10 max-w-xs leading-relaxed">Sign in to unlock all ${m_pdfDoc.numPages} pages of this manuscript.</p>
+                                                    <a href="{{ route('login') }}" class="px-10 py-5 bg-white text-indigo-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-2xl hover:scale-105 transition-all active:scale-95">Sign In for Full Access</a>
+                                                </div>
+                                                <canvas id="fullview-teaser-canvas" class="absolute inset-0 w-full h-full object-cover blur-xl opacity-30"></canvas>
+                                            `;
+                                            container.appendChild(teaser);
+                                            
+                                            m_pdfDoc.getPage(Math.min(m_pdfDoc.numPages, 6)).then(page => {
+                                                const canvas = document.getElementById('fullview-teaser-canvas');
+                                                if (canvas) {
+                                                    const viewport = page.getViewport({ scale: 1.0 });
+                                                    canvas.height = viewport.height;
+                                                    canvas.width = viewport.width;
+                                                    page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
                                                 }
                                             });
+                                        }
+                                    }
+                                }
+
+                                function renderPagesSequentially(start, end, container) {
+                                    if (start > end) return;
+                                    const canvas = document.createElement('canvas');
+                                    canvas.className = "shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-sm max-w-full h-auto border border-white/5 bg-white mb-4";
+                                    container.appendChild(canvas);
+                                    m_pdfDoc.getPage(start).then(page => {
+                                        const dpr = window.devicePixelRatio || 1;
+                                        const viewport = page.getViewport({ scale: window.innerWidth < 768 ? 1.0 : 1.5 });
+                                        const ctx = canvas.getContext('2d');
+                                        canvas.height = viewport.height * dpr;
+                                        canvas.width = viewport.width * dpr;
+                                        canvas.style.width = viewport.width + 'px';
+                                        canvas.style.height = viewport.height + 'px';
+                                        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                                        page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                                            renderPagesSequentially(start + 1, end, container);
                                         });
+                                    });
+                                }
+
+                                window.closeFullViewModal = function() {
+                                    document.getElementById('fullview-modal').classList.add('hidden');
+                                    document.getElementById('fullview-content').innerHTML = '';
+                                    document.body.style.overflow = '';
+                                };
+                                
+                                document.addEventListener('keydown', (e) => {
+                                    if (e.key === 'Escape' && !document.getElementById('fullview-modal').classList.contains('hidden')) {
+                                        closeFullViewModal();
+                                    }
+                                });
+                            </script>
+
+                            <style>
+                                @media (min-width: 768px) {
+                                    .mobile-only {
+                                        display: none !important;
                                     }
 
-                                    function mobilePrevPage() { if (m_pageNum <= 1 || m_pageRendering) return; m_pageNum--; renderMobilePage(m_pageNum); }
-                                    function mobileNextPage() { 
-                                        const maxPage = isGuest ? Math.min(m_pdfDoc.numPages, 6) : m_pdfDoc.numPages;
-                                        if (m_pageNum >= maxPage || m_pageRendering) return; 
-                                        m_pageNum++; 
-                                        renderMobilePage(m_pageNum); 
+                                    .desktop-only {
+                                        display: block !important;
+                                    }
+                                }
+
+                                @media (max-width: 767px) {
+                                    .desktop-only {
+                                        display: none !important;
                                     }
 
-                                    // Start Mobile/Guest Engine
-                                    if (isGuest || window.innerWidth < 768) {
-                                        m_pdfjsLib.getDocument({
-                                            url: "{{ route('files.view', $manuscript) }}",
-                                            withCredentials: true
-                                        }).promise.then(function (pdfDoc_) {
-                                            m_pdfDoc = pdfDoc_;
-
-                                            if (isGuest && window.innerWidth >= 768) {
-                                                // DESKTOP GUEST: Render all 5 pages at once
-                                                const pagesToRender = Math.min(m_pdfDoc.numPages, 5);
-                                                const container = document.getElementById('desktop-canvas-container');
-
-                                                for (let i = 1; i <= pagesToRender; i++) {
-                                                    const canvas = document.createElement('canvas');
-                                                    canvas.className = "shadow-2xl rounded-sm max-w-full h-auto border border-white/5";
-                                                    container.appendChild(canvas);
-
-                                                    m_pdfDoc.getPage(i).then(function (page) {
-                                                        const viewport = page.getViewport({ scale: 1.5 });
-                                                        const ctx = canvas.getContext('2d');
-                                                        canvas.height = viewport.height;
-                                                        canvas.width = viewport.width;
-                                                        page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
-                                                            if (i === pagesToRender) {
-                                                                // Add REAL Blurred Page 6 for Guests as a teaser
-                                                                const teaserWrapper = document.createElement('div');
-                                                                teaserWrapper.className = "relative w-full max-w-[800px] h-[800px] shrink-0 rounded-xl overflow-hidden border border-white/10 mb-12 shadow-2xl group";
-
-                                                                // We'll render the actual page 6 inside this, but blur it
-                                                                const teaserCanvas = document.createElement('canvas');
-                                                                teaserCanvas.className = "absolute inset-0 w-full h-full object-cover blur-xl opacity-50";
-                                                                teaserWrapper.appendChild(teaserCanvas);
-
-                                                                // Overlay with Message
-                                                                const overlay = document.createElement('div');
-                                                                overlay.className = "absolute inset-0 z-20 flex flex-col items-center justify-center text-center p-12 bg-slate-900/60 backdrop-blur-md";
-                                                                overlay.innerHTML = `
-                                                                        <div class="relative">
-                                                                            <div class="absolute -inset-4 bg-indigo-500/20 blur-2xl rounded-full animate-pulse"></div>
-                                                                            <div class="relative w-24 h-24 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-indigo-500/40 border border-white/20">
-                                                                                <span class="text-4xl">🔐</span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <h5 class="text-2xl font-black text-white uppercase tracking-[0.2em] mb-3">Keep Reading?</h5>
-                                                                        <p class="text-indigo-100/70 text-[11px] font-bold uppercase tracking-widest mb-10 max-w-xs mx-auto leading-relaxed">
-                                                                            This manuscript contains <span class="text-white font-black">${m_pdfDoc.numPages} pages</span> of research. 
-                                                                            Sign in to unlock the full document.
-                                                                        </p>
-                                                                        <a href="{{ route('login') }}" class="inline-flex items-center gap-4 px-10 py-5 bg-white text-indigo-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] shadow-2xl hover:scale-105 transition-all active:scale-95 group">
-                                                                            <span>Unlock Full Access</span>
-                                                                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7-7 7M3 12h18"/></svg>
-                                                                        </a>
-                                                                    `;
-                                                                teaserWrapper.appendChild(overlay);
-                                                                container.appendChild(teaserWrapper);
-
-                                                                // Render the teaser page (page 6 or last page)
-                                                                const teaserPageNum = Math.min(m_pdfDoc.numPages, pagesToRender + 1);
-                                                                m_pdfDoc.getPage(teaserPageNum).then(function (page) {
-                                                                    const viewport = page.getViewport({ scale: 1.0 });
-                                                                    const ctx = teaserCanvas.getContext('2d');
-                                                                    teaserCanvas.height = viewport.height;
-                                                                    teaserCanvas.width = viewport.width;
-                                                                    page.render({ canvasContext: ctx, viewport: viewport });
-                                                                });
-
-                                                                const loading = document.getElementById('desktop-pdf-loading');
-                                                                if (loading) {
-                                                                    loading.style.opacity = '0';
-                                                                    setTimeout(() => loading.classList.add('hidden'), 500);
-                                                                }
-                                                            }
-                                                        });
-                                                    });
-                                                }
-                                            } else {
-                                                // MOBILE: Render one page at a time with navigation
-                                                const totalPages = isGuest ? Math.min(m_pdfDoc.numPages, 6) : m_pdfDoc.numPages;
-                                                document.getElementById('mobile-page-count').textContent = totalPages;
-
-                                                if (isGuest) {
-                                                    const mobileTeaserPageCount = document.getElementById('mobile-teaser-page-count');
-                                                    if (mobileTeaserPageCount) mobileTeaserPageCount.textContent = m_pdfDoc.numPages;
-                                                }
-
-                                                renderMobilePage(m_pageNum);
-                                            }
-                                        }).catch(err => {
-                                            console.error("PDF Engine Error:", err);
-                                            const mobileLoading = document.getElementById('mobile-pdf-loading');
-                                            const desktopLoading = document.getElementById('desktop-pdf-loading');
-                                            if (mobileLoading) mobileLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Locked.</p>';
-                                            if (desktopLoading) desktopLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Restricted.</p>';
-                                        });
+                                    .mobile-only {
+                                        display: block !important;
                                     }
-                                </script>
+                                }
 
-                                <style>
-                                    @media (min-width: 768px) {
-                                        .mobile-only {
-                                            display: none !important;
-                                        }
+                                .animate-bounce-short {
+                                    animation: bounce-short 1s ease-in-out infinite;
+                                }
 
-                                        .desktop-only {
-                                            display: block !important;
-                                        }
+                                @keyframes bounce-short {
+
+                                    0%,
+                                    100% {
+                                        transform: translateY(0);
                                     }
 
-                                    @media (max-width: 767px) {
-                                        .desktop-only {
-                                            display: none !important;
-                                        }
-
-                                        .mobile-only {
-                                            display: block !important;
-                                        }
+                                    50% {
+                                        transform: translateY(-5px);
                                     }
+                                }
+                            </style>
 
-                                    .animate-bounce-short {
-                                        animation: bounce-short 1s ease-in-out infinite;
-                                    }
-
-                                    @keyframes bounce-short {
-
-                                        0%,
-                                        100% {
-                                            transform: translateY(0);
-                                        }
-
-                                        50% {
-                                            transform: translateY(-5px);
-                                        }
-                                    }
-                                </style>
-
-                                <div
-                                    class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-800 p-4 rounded-2xl border border-white/5">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center shadow-inner border border-white/5">
-                                            <span class="text-xl">📄</span>
-                                        </div>
-                                        <div>
-                                            <p class="text-xs font-black text-white uppercase tracking-widest">
-                                                {{ $manuscript->filename }}</p>
-                                            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                                                {{ number_format($manuscript->size / 1048576, 2) }} MB</p>
-                                        </div>
+                            <div
+                                class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-800 p-4 rounded-2xl border border-white/5">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center shadow-inner border border-white/5">
+                                        <span class="text-xl">📄</span>
                                     </div>
-
-                                    @auth
-                                        <a href="{{ route('files.download', $manuscript->id) }}"
-                                            class="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                            </svg>
-                                            Download PDF
-                                        </a>
-                                    @endauth
+                                    <div>
+                                        <p class="text-xs font-black text-white uppercase tracking-widest">
+                                            {{ $manuscript->filename }}</p>
+                                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                                            {{ number_format($manuscript->size / 1048576, 2) }} MB</p>
+                                    </div>
                                 </div>
+
+                                @auth
+                                    <a href="{{ route('files.download', $manuscript->id) }}"
+                                        class="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                        </svg>
+                                        Download PDF
+                                    </a>
+                                @endauth
+                            </div>
                         @else
                             <div
                                 class="p-12 text-center bg-slate-950 rounded-3xl text-slate-500 border border-white/5 font-black uppercase tracking-widest text-xs">
@@ -865,53 +910,6 @@
             <img id="lightbox-img" src="" alt=""
                 class="max-h-[80vh] max-w-full object-contain rounded-xl shadow-2xl hidden">
 
-            <!-- Video mode -->
-            <video id="lightbox-video" controls class="max-h-[80vh] max-w-full rounded-xl shadow-2xl hidden"
-                style="max-width:900px;">
-                <source id="lightbox-video-src" src="" type="">
-            </video>
-
-            <!-- Caption + download -->
-            <div class="flex items-center gap-4">
-                <span id="lightbox-caption" class="text-white/70 text-sm font-semibold"></span>
-                <a id="lightbox-download" href="#" download
-                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-full transition-all">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- PDF Navigation + Lightbox Script -->
-    <script>
-        // ── Lightbox (Image + Video) ──────────────────────────────────────────────
-        function openLightbox(src, filename) {
-            const img = document.getElementById('lightbox-img');
-            const video = document.getElementById('lightbox-video');
-            img.src = src;
-            img.alt = filename;
-            img.classList.remove('hidden');
-            video.classList.add('hidden');
-            video.pause();
-            _openLightboxShared(src, filename);
-        }
-
-        function openVideoLightbox(src, filename, mimeType) {
-            const img = document.getElementById('lightbox-img');
-            const video = document.getElementById('lightbox-video');
-            const vsrc = document.getElementById('lightbox-video-src');
-            img.classList.add('hidden');
-            img.src = '';
-            vsrc.src = src;
-            vsrc.type = 'video/' + mimeType;
-            video.load();  // reload source
-            video.classList.remove('hidden');
-            _openLightboxShared(src, filename);
-        }
 
         function _openLightboxShared(src, filename) {
             document.getElementById('lightbox-caption').textContent = filename;
