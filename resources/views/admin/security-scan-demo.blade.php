@@ -394,7 +394,7 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="font-bold text-red-400 text-sm">PHP Webshell</p>
+                                        <p class="font-bold text-red-500 text-sm">PHP Webshell</p>
                                         <p class="text-[10px] text-red-500/80 font-semibold uppercase">Should be
                                             detected</p>
                                     </div>
@@ -423,8 +423,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="font-bold text-amber-500 text-sm">XSS / JS Injection</p>
-                                        <p class="text-[10px] text-amber-500/80 font-semibold uppercase">Should be
+                                        <p class="font-bold text-amber-600 text-sm">XSS / JS Injection</p>
+                                        <p class="text-[10px] text-amber-600 font-semibold uppercase">Should be
                                             detected</p>
                                     </div>
                                 </div>
@@ -452,8 +452,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="font-bold text-green-400 text-sm">Clean PDF</p>
-                                        <p class="text-[10px] text-green-500/80 font-semibold uppercase">Should pass</p>
+                                        <p class="font-bold text-green-600 text-sm">Clean PDF</p>
+                                        <p class="text-[10px] text-green-500 font-semibold uppercase">Should pass</p>
                                     </div>
                                 </div>
                                 <p class="text-xs text-slate-400 mb-3">A minimal, clean PDF file with no malicious
@@ -480,8 +480,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <p class="font-bold text-green-400 text-sm">Clean Text File</p>
-                                        <p class="text-[10px] text-green-500/80 font-semibold uppercase">Should pass</p>
+                                        <p class="font-bold text-green-600 text-sm">Clean Text File</p>
+                                        <p class="text-[10px] text-green-500 font-semibold uppercase">Should pass</p>
                                     </div>
                                 </div>
                                 <p class="text-xs text-slate-400 mb-3">A plain text file with harmless content — should
@@ -741,23 +741,23 @@
                 grid.innerHTML = `
                 <div class="fade-in-up" style="animation-delay:.1s">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Filename</p>
-                    <p class="text-sm text-gray-900 dark:text-white font-semibold truncate">\${info.name}</p>
+                    <p class="text-sm text-gray-900 dark:text-white font-semibold truncate">${info.name}</p>
                 </div>
                 <div class="fade-in-up" style="animation-delay:.15s">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Size</p>
-                    <p class="text-sm text-gray-900 dark:text-white font-semibold">\${info.size_human}</p>
+                    <p class="text-sm text-gray-900 dark:text-white font-semibold">${info.size_human}</p>
                 </div>
                 <div class="fade-in-up" style="animation-delay:.2s">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">MIME Type</p>
-                    <p class="text-sm text-gray-900 dark:text-white font-semibold">\${info.mime_type}</p>
+                    <p class="text-sm text-gray-900 dark:text-white font-semibold">${info.mime_type}</p>
                 </div>
                 <div class="fade-in-up" style="animation-delay:.25s">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">Extension</p>
-                    <p class="text-sm text-gray-900 dark:text-white font-semibold">.\${info.extension}</p>
+                    <p class="text-sm text-gray-900 dark:text-white font-semibold">.${info.extension}</p>
                 </div>
                 <div class="col-span-full fade-in-up" style="animation-delay:.3s">
                     <p class="text-[10px] text-gray-400 font-bold uppercase">SHA-256 Hash</p>
-                    <p class="text-xs text-gray-600 dark:text-slate-400 font-mono break-all">\${info.sha256}</p>
+                    <p class="text-xs text-gray-600 dark:text-slate-400 font-mono break-all">${info.sha256}</p>
                 </div>
             `;
 
@@ -800,35 +800,35 @@
                         if (d.startsWith('⚠')) cls = 'text-red-600 dark:text-red-400 font-semibold';
                         else if (d.startsWith('✓')) cls = 'text-green-600 dark:text-green-400';
                         else if (d.startsWith('ℹ')) cls = 'text-blue-600 dark:text-indigo-400';
-                        return `<li class="text-xs \${cls}">\${escapeHtml(d)}</li>`;
+                        return `<li class="text-xs ${cls}">${escapeHtml(d)}</li>`;
                     }).join('');
 
                     const stepHtml = `
-                <div class="rounded-xl border-2 \${borderColor} \${bgColor} overflow-hidden fade-in-up transition-colors" style="animation-delay:\${delay}s">
+                <div class="rounded-xl border-2 ${borderColor} ${bgColor} overflow-hidden fade-in-up transition-colors" style="animation-delay:${delay}s">
                     <div class="px-5 py-4 flex items-center gap-4">
-                        <div class="w-9 h-9 rounded-lg bg-white dark:bg-slate-900 border \${borderColor} flex items-center justify-center flex-shrink-0 transition-colors">
-                            <svg class="w-5 h-5 \${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">\${iconSvg}</svg>
+                        <div class="w-9 h-9 rounded-lg bg-white dark:bg-slate-900 border ${borderColor} flex items-center justify-center flex-shrink-0 transition-colors">
+                            <svg class="w-5 h-5 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24">${iconSvg}</svg>
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2">
-                                <span class="font-bold text-sm text-gray-900 dark:text-white">Step \${i + 1}: \${escapeHtml(step.name)}</span>
-                                \${statusBadge}
+                                <span class="font-bold text-sm text-gray-900 dark:text-white">Step ${i + 1}: ${escapeHtml(step.name)}</span>
+                                ${statusBadge}
                             </div>
-                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 truncate">\${escapeHtml(step.description)}</p>
+                            <p class="text-[11px] text-gray-500 dark:text-slate-400 mt-0.5 truncate">${escapeHtml(step.description)}</p>
                         </div>
                         <button onclick="this.closest('.rounded-xl').querySelector('.step-details').classList.toggle('hidden')"
                                 class="text-xs text-gray-400 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 font-bold uppercase tracking-wider flex-shrink-0 transition-colors">
                             Details ▾
                         </button>
                     </div>
-                    <div class="step-details hidden border-t \${borderColor} px-5 py-4 space-y-3 transition-colors">
+                    <div class="step-details hidden border-t ${borderColor} px-5 py-4 space-y-3 transition-colors">
                         <div>
                             <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Algorithm</p>
-                            <p class="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">\${escapeHtml(step.algorithm)}</p>
+                            <p class="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">${escapeHtml(step.algorithm)}</p>
                         </div>
                         <div>
                             <p class="text-[10px] text-gray-400 font-bold uppercase mb-1">Results</p>
-                            <ul class="space-y-1">\${detailsHtml}</ul>
+                            <ul class="space-y-1">${detailsHtml}</ul>
                         </div>
                     </div>
                 </div>`;

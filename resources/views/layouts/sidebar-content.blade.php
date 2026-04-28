@@ -5,7 +5,8 @@
         <img src="{{ asset('images/system-logo.jpg') }}" alt="NORSU Capstone Repository"
             class="w-full h-full object-cover transform scale-120 transition-transform duration-300 group-hover:scale-135" />
     </button>
-    <span class="text-sm font-black text-center leading-tight mt-4 uppercase tracking-wider text-gray-900 dark:text-white">
+    <span
+        class="text-sm font-black text-center leading-tight mt-4 uppercase tracking-wider text-gray-900 dark:text-white">
         {{ \App\Models\Setting::get('repository_name', 'CSIT Capstone Repository') }}
     </span>
 </div>
@@ -24,7 +25,8 @@
 
     <!-- Student Specific -->
     @if(auth()->user()->isStudent())
-        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">My Space</div>
+        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">My
+            Space</div>
         <a href="{{ route('student.home') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('student.home') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +55,8 @@
     @endif
 
     @if(auth()->user()->isAdmin())
-        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">Overview</div>
+        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">
+            Overview</div>
         <a href="{{ route('admin.dashboard') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,7 +71,8 @@
 
     <!-- Admin Specific -->
     @if(auth()->user()->isAdmin())
-        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">Management</div>
+        <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">
+            Management</div>
         <a href="{{ route('admin.users.index') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.users.*') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,7 +99,7 @@
                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
                 </path>
             </svg>
-            <span class="font-bold tracking-tight">Specializations</span>
+            <span class="font-bold tracking-tight">Project Categories</span>
         </a>
         <a href="{{ route('admin.programs.index') }}"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.programs.*') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
@@ -127,15 +131,15 @@
             <span class="font-bold tracking-tight">Security Scan Demo</span>
         </a>
         <a href="{{ route('admin.support.index') }}" x-data="{ 
-                    count: @js(\App\Models\SupportTicket::getNotificationCount()),
-                    async updateCount() {
-                        try {
-                            const response = await fetch('{{ route('admin.support.count') }}');
-                            const data = await response.json();
-                            this.count = data.count;
-                        } catch (e) { }
-                    }
-                }" x-init="setInterval(() => updateCount(), 30000)"
+                        count: @js(\App\Models\SupportTicket::getNotificationCount()),
+                        async updateCount() {
+                            try {
+                                const response = await fetch('{{ route('admin.support.count') }}');
+                                const data = await response.json();
+                                this.count = data.count;
+                            } catch (e) { }
+                        }
+                    }" x-init="setInterval(() => updateCount(), 30000)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.support.*') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -168,7 +172,8 @@
         </a>
     @endif
 
-    <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">Account</div>
+    <div class="mt-4 mb-1 px-4 text-[10px] uppercase font-black tracking-[0.2em] text-gray-900 dark:text-slate-500">
+        Account</div>
     <a href="{{ route('profile.edit') }}"
         class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('profile.edit') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,27 +190,57 @@
     <div class="flex items-center justify-between">
         <div class="flex items-center gap-3 overflow-hidden">
             <div
-                class="w-10 h-10 rounded-full bg-gray-100 dark:bg-slate-700 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-900 dark:text-white font-bold text-sm flex-shrink-0 shadow-sm">
+                class="w-10 h-10 rounded-full bg-slate-300 dark:bg-slate-700 border border-slate-400 dark:border-white/10 flex items-center justify-center text-slate-800 dark:text-white font-bold text-sm flex-shrink-0 shadow-sm">
                 {{ substr(auth()->user()->name, 0, 1) }}
             </div>
             <div class="flex flex-col overflow-hidden">
-                <span class="font-bold text-gray-900 dark:text-white text-sm truncate leading-tight">{{ auth()->user()->name }}</span>
+                <span
+                    class="font-bold text-gray-900 dark:text-white text-sm truncate leading-tight">{{ auth()->user()->name }}</span>
                 <span class="text-[9px] uppercase font-black tracking-widest text-gray-900 dark:text-slate-400 mt-0.5">
                     {{ auth()->user()->role }} {{ auth()->user()->program ? '• ' . auth()->user()->program : '' }}
                 </span>
             </div>
         </div>
 
-        <form method="POST" action="{{ route('logout') }}" class="flex-shrink-0">
-            @csrf
-            <button type="submit" title="Logout"
-                class="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-900 dark:text-white hover:text-gray-900 transition-all duration-300 shadow-sm border border-gray-200 dark:border-white/5">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                    </path>
-                </svg>
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <!-- Theme Toggle -->
+            <button type="button" @click="toggleTheme()" title="Toggle Light/Dark Mode"
+                class="p-2.5 rounded-xl transition-all duration-500 shadow-sm border focus:outline-none focus:ring-2 group overflow-hidden relative flex items-center justify-center"
+                :class="theme === 'dark' ? 'bg-white/90 backdrop-blur-md border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-900/80 backdrop-blur-md border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
+
+                <!-- Subtle Hover Glow -->
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    :class="theme === 'dark' ? 'bg-gradient-to-tr from-amber-500/20 to-yellow-500/20' : 'bg-gradient-to-tr from-indigo-500/20 to-purple-500/20'">
+                </div>
+                <template x-if="theme === 'dark'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:rotate-90 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 19.071l-.707-.707M7.929 4.929l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z">
+                        </path>
+                    </svg>
+                </template>
+                <template x-if="theme === 'light'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:-rotate-12 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </template>
             </button>
-        </form>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" title="Logout"
+                    class="p-2.5 rounded-xl bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-900 dark:text-white transition-all duration-300 shadow-sm border border-gray-200 dark:border-white/5 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                </button>
+            </form>
+        </div>
     </div>
 </div>

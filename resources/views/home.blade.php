@@ -260,7 +260,7 @@
                             </form>
 
                             <div
-                                class="flex flex-wrap items-center justify-center lg:justify-between gap-4 pt-6 mt-6 border-t border-gray-300 dark:border-white/20">
+                                class="flex flex-wrap items-center justify-center lg:justify-between gap-4 pt-6 mt-6 border-t border-slate-600 dark:border-white/20">
                                 <!-- Browse Button on Left -->
                                 <a href="{{ route('projects.index') }}"
                                     class="inline-flex items-center px-5 py-2.5 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white text-sm font-medium rounded-lg backdrop-blur-sm border border-gray-300 dark:border-white/20 transition-colors duration-200 shadow-sm hover:shadow-lg">

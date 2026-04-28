@@ -47,8 +47,8 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Name</th>
                                     <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Abbr</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Description</th>
-                                    <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Usage Count</th>
+
+                                    <th class="px-6 py-3 text-center text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Usage Count</th>
                                     <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Actions</th>
                                 </tr>
                             </thead>
@@ -65,16 +65,14 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-600 dark:text-indigo-400 font-black">
                                             {{ $program->abbreviation }}
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-600 dark:text-slate-400 min-w-[200px] max-w-xs truncate">
-                                            {{ $program->description ?? 'No description' }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-500">
-                                            <div class="flex items-center gap-1.5">
-                                                <a href="{{ route('admin.projects.index', ['program' => $program->abbreviation]) }}" class="px-2 py-0.5 inline-flex text-[7px] leading-4 font-black uppercase tracking-widest rounded-md bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors" title="Projects">
-                                                    {{ $projectCount }} PRJ
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-500 text-center">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <a href="{{ route('admin.projects.index', ['program' => $program->abbreviation]) }}" class="px-3 py-1 inline-flex text-[10px] leading-4 font-black uppercase tracking-widest rounded-lg bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-200 dark:hover:bg-indigo-800/50 transition-colors" title="View Projects">
+                                                    {{ $projectCount }} Projects
                                                 </a>
-                                                <a href="{{ route('admin.users.index', ['program' => $program->abbreviation]) }}" class="px-2 py-0.5 inline-flex text-[7px] leading-4 font-black uppercase tracking-widest rounded-md bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-200 dark:hover:bg-emerald-800/50 transition-colors" title="Users">
-                                                    {{ $userCount }} USR
+                                                <a href="{{ route('admin.users.index', ['program' => $program->abbreviation]) }}" class="px-3 py-1 inline-flex text-[10px] leading-4 font-black uppercase tracking-widest rounded-lg bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-200 dark:hover:bg-emerald-800/50 transition-colors" title="View Users">
+                                                    {{ $userCount }} Users
                                                 </a>
                                             </div>
                                         </td>
@@ -97,7 +95,7 @@
                                 @endforeach
                                 @if($programs->isEmpty())
                                     <tr>
-                                        <td colspan="5" class="px-6 py-20 text-center">
+                                        <td colspan="4" class="px-6 py-20 text-center">
                                             <div class="flex flex-col items-center justify-center py-10">
                                                 <div class="relative mb-6">
                                                     <div class="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full"></div>
