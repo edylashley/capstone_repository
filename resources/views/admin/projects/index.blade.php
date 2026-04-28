@@ -123,7 +123,7 @@
                             <tr class="bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-white/5 transition-colors">
                                 <th class="px-6 py-4 w-12"><input type="checkbox"
                                         onchange="document.querySelectorAll('.project-checkbox').forEach(cb => cb.checked = this.checked)"
-                                        class="rounded-md border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 shadow-sm transition-colors">
+                                        class="rounded-md border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 shadow-sm transition-colors">
                                 </th>
                                 <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-500">
                                     Project Title</th>
@@ -143,7 +143,7 @@
                                     <td class="px-6 py-4">
                                         <input type="checkbox" name="project_ids[]" value="{{ $project->id }}"
                                             form="bulkActionForm"
-                                            class="project-checkbox rounded-md border-gray-300 dark:border-white/10 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 shadow-sm transition-colors">
+                                            class="project-checkbox rounded-md border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 shadow-sm transition-colors">
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="max-w-md">

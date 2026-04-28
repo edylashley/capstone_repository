@@ -78,7 +78,7 @@
                                         <label class="flex items-center gap-3 cursor-pointer group">
                                             <input type="checkbox" name="categories[]" value="{{ $cat->id }}" 
                                                 {{ (is_array(old('categories')) && in_array($cat->id, old('categories'))) || (!old('categories') && $project->categories->contains($cat->id)) ? 'checked' : '' }}
-                                                class="rounded border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
+                                                class="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-950 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
                                             <span class="text-sm text-gray-700 dark:text-slate-300 group-hover:text-blue-600 dark:group-hover:text-indigo-400 transition-colors">{{ $cat->name }}</span>
                                         </label>
                                     @endforeach

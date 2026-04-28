@@ -126,7 +126,7 @@
                                 <div class="col-span-1 md:col-span-2 flex items-center gap-6 p-6 bg-white dark:bg-slate-900 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 transition-colors">
                                     <div class="flex-shrink-0">
                                         <input type="checkbox" name="submissions_open" id="submissions_open" value="1" 
-                                            class="w-8 h-8 rounded border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 focus:ring-blue-500 dark:focus:ring-indigo-500 dark:focus:ring-offset-slate-900 cursor-pointer transition-colors"
+                                            class="w-8 h-8 rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-950 text-blue-600 focus:ring-blue-500 dark:focus:ring-indigo-500 dark:focus:ring-offset-slate-900 cursor-pointer transition-colors"
                                             {{ old('submissions_open', $settings['submissions_open']) == '1' ? 'checked' : '' }} />
                                     </div>
                                     <div>
@@ -215,7 +215,7 @@
                                 <div class="mt-1">
                                     <input type="checkbox" id="maintenance_mode" name="maintenance_mode" value="1" 
                                         {{ old('maintenance_mode', $settings['maintenance_mode']) == '1' ? 'checked' : '' }}
-                                        class="h-6 w-6 mt-4 rounded border-gray-300 dark:border-rose-800/50 bg-white dark:bg-rose-950 text-rose-600 dark:text-rose-500 focus:ring-rose-500 dark:focus:ring-offset-slate-900 transition-colors">
+                                        class="h-6 w-6 mt-4 rounded border-gray-400 dark:border-rose-800 bg-white dark:bg-rose-950 text-rose-600 dark:text-rose-500 focus:ring-rose-500 dark:focus:ring-offset-slate-900 transition-colors">
                                 </div>
                                 <div class="ml-2 text-sm">
                                     <label for="maintenance_mode" class="font-medium text-rose-800 dark:text-rose-400 font-bold text-base">Enable Maintenance Mode</label>

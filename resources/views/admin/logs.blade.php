@@ -16,7 +16,7 @@
                 </div>
             </div>
             
-            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
+            <div class="bg-gray-100 dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
                 <div class="p-6 text-gray-900 dark:text-white">
                     <h3 class="text-lg font-bold mb-4">System Timeline</h3>
                     

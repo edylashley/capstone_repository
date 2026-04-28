@@ -66,7 +66,7 @@
                         <!-- Status -->
                         <div class="mt-4 block">
                             <label for="is_active" class="inline-flex items-center">
-                                <input id="is_active" type="checkbox" name="is_active" value="1" class="rounded border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors" {{ $user->is_active ? 'checked' : '' }}>
+                                <input id="is_active" type="checkbox" name="is_active" value="1" class="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-950 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors" {{ $user->is_active ? 'checked' : '' }}>
                                 <span class="ml-2 text-sm text-gray-600 dark:text-slate-400">{{ __('Account Active') }}</span>
                             </label>
                         </div>

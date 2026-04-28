@@ -5,9 +5,13 @@
             {{-- Integrated Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
                 <div>
-                    <h2 class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">Support Tickets
+                    <h2
+                        class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">
+                        Support Tickets
                     </h2>
-                    <p class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">Manage
+                    <p
+                        class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">
+                        Manage
                         user inquiries and technical assistance</p>
                 </div>
                 <div class="flex items-center gap-3">
@@ -27,8 +31,10 @@
                 <div
                     class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 p-5 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-gray-500 dark:text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div
+                            class="w-11 h-11 rounded-xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-500 dark:text-slate-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z">
                                 </path>
@@ -43,15 +49,18 @@
                 <div
                     class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-amber-200 dark:border-amber-500/20 p-5 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-amber-100 dark:bg-amber-500/10 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div
+                            class="w-11 h-11 rounded-xl bg-amber-100 dark:bg-amber-500/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-amber-600 dark:text-amber-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-2xl font-black text-amber-600 dark:text-amber-500">{{ $stats['pending'] }}</p>
-                            <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Waitlisted</p>
+                            <p class="text-2xl font-black text-amber-600 dark:text-amber-500">{{ $stats['pending'] }}
+                            </p>
+                            <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Pending</p>
                         </div>
                     </div>
                 </div>
@@ -59,14 +68,17 @@
                 <div
                     class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-emerald-200 dark:border-emerald-500/20 p-5 hover:shadow-md transition-shadow">
                     <div class="flex items-center gap-3">
-                        <div class="w-11 h-11 rounded-xl bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div
+                            class="w-11 h-11 rounded-xl bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-emerald-600 dark:text-emerald-500" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-2xl font-black text-emerald-600 dark:text-emerald-500">{{ $stats['resolved'] }}</p>
+                            <p class="text-2xl font-black text-emerald-600 dark:text-emerald-500">
+                                {{ $stats['resolved'] }}</p>
                             <p class="text-[10px] uppercase font-bold tracking-wider text-slate-500">Completed</p>
                         </div>
                     </div>
@@ -74,7 +86,8 @@
             </div>
 
             {{-- Filters --}}
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 p-5 mb-6 transition-colors">
+            <div
+                class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 p-5 mb-6 transition-colors">
                 <form method="GET" action="{{ route('admin.support.index') }}" class="flex flex-wrap gap-3 items-end">
                     <div class="flex-1 min-w-[200px]">
                         <label
@@ -126,7 +139,8 @@
             </div>
 
             {{-- Tickets List --}}
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 overflow-hidden transition-colors" x-data="{ 
+            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 overflow-hidden transition-colors"
+                x-data="{ 
                     selected: [], 
                     allSelected: false,
                     toggleAll() {
@@ -168,21 +182,25 @@
                     <div class="p-12 text-center bg-gray-50 dark:bg-slate-950 transition-colors">
                         <div
                             class="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gray-200 dark:border-white/5 shadow-inner">
-                            <svg class="w-8 h-8 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-gray-400 dark:text-slate-500" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
                                 </path>
                             </svg>
                         </div>
-                        <p class="text-gray-900 dark:text-white font-black uppercase tracking-widest text-sm">Clear Horizons</p>
-                        <p class="text-xs text-gray-500 dark:text-slate-500 mt-2">No support inquiries require immediate intervention.</p>
+                        <p class="text-gray-900 dark:text-white font-black uppercase tracking-widest text-sm">Clear Horizons
+                        </p>
+                        <p class="text-xs text-gray-500 dark:text-slate-500 mt-2">No support inquiries require immediate
+                            intervention.</p>
                     </div>
                 @else
                     {{-- Select All Header --}}
-                    <div class="p-4 bg-gray-50 dark:bg-slate-950/50 border-b border-gray-200 dark:border-white/5 flex items-center gap-4 transition-colors">
+                    <div
+                        class="p-4 bg-gray-50 dark:bg-slate-950/50 border-b border-gray-200 dark:border-white/5 flex items-center gap-4 transition-colors">
                         <div class="flex items-center">
                             <input type="checkbox" x-model="allSelected" @change="toggleAll()"
-                                class="w-4 h-4 rounded border-gray-300 dark:border-white/10 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
+                                class="w-4 h-4 rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
                         </div>
                         <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Selection Matrix /
                             Archive Control</span>
@@ -190,11 +208,12 @@
 
                     <div class="divide-y divide-gray-200 dark:divide-white/5">
                         @foreach($tickets as $ticket)
-                            <div class="relative flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group">
+                            <div
+                                class="relative flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group">
                                 {{-- Checkbox --}}
                                 <div class="flex-shrink-0 z-10">
                                     <input type="checkbox" :value="{{ $ticket->id }}" x-model="selected"
-                                        class="w-4 h-4 rounded border-gray-300 dark:border-white/10 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
+                                        class="w-4 h-4 rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-900 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
                                 </div>
 
                                 {{-- Status Indicator --}}
@@ -211,20 +230,21 @@
 
                                 {{-- Ticket Info --}}
                                 <a href="{{ route('admin.support.show', $ticket) }}" class="flex-1 min-w-0">
-                                        <div class="flex items-center gap-2 mb-1 flex-wrap">
-                                            <h4
-                                                class="font-black text-sm text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-indigo-400 transition-colors">
-                                                {{ $ticket->category_label }}
-                                            </h4>
-                                            <span
-                                                class="flex-shrink-0 text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border {{ $ticket->status_badge }}">
-                                                {{ $ticket->status_label }}
-                                            </span>
-                                        </div>
+                                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                        <h4
+                                            class="font-black text-sm text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-indigo-400 transition-colors">
+                                            {{ $ticket->category_label }}
+                                        </h4>
+                                        <span
+                                            class="flex-shrink-0 text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border {{ $ticket->status_badge }}">
+                                            {{ $ticket->status_label }}
+                                        </span>
+                                    </div>
                                     <p class="text-xs text-slate-500 truncate">{{ $ticket->subject }}</p>
                                     <div class="flex items-center gap-3 mt-1.5">
                                         <span class="text-[10px] font-bold text-slate-500">
-                                            <span class="text-gray-800 dark:text-slate-300">{{ $ticket->user?->name ?? $ticket->email }}</span>
+                                            <span
+                                                class="text-gray-800 dark:text-slate-300">{{ $ticket->user?->name ?? $ticket->email }}</span>
                                         </span>
                                     </div>
                                 </a>
