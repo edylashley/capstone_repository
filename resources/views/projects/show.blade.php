@@ -349,7 +349,7 @@
                                 <div class="desktop-only relative border-4 border-gray-200 dark:border-slate-800 rounded-2xl overflow-hidden shadow-inner bg-gray-100 dark:bg-slate-950 min-h-[800px]"
                                     id="pdf-container">
                                     @auth
-                                        <iframe id="manuscript-viewer" src="{{ route('files.view', $manuscript) }}" width="100%"
+                                        <iframe id="manuscript-viewer" src="{{ route('files.view', ['file' => $manuscript->id]) }}" width="100%"
                                             height="800px" style="min-height: 800px;"
                                             class="w-full h-[600px] md:h-[800px] bg-gray-200 dark:bg-gray-500 border-0"></iframe>
                                     @else
@@ -571,8 +571,18 @@
 
                                     // Start Mobile/Guest Engine
                                     if (isGuest || window.innerWidth < 768) {
+                                        let pdfUrl = "{{ route('files.view', ['file' => $manuscript->id]) }}";
+                                        // Protocol-Aware Fix: Force the PDF URL to match the current page's protocol
+                                        // This prevents "Mixed Content" blocks on live sites using HTTPS
+                                        if (window.location.protocol === 'https:' && pdfUrl.startsWith('http:')) {
+                                            pdfUrl = pdfUrl.replace('http:', 'https:');
+                                        }
+
+                                        // Restore worker for performance, but add compatibility flags
+                                        m_pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('assets/vendor/pdfjs/pdf.worker.min.js') }}";
+
                                         m_pdfjsLib.getDocument({
-                                            url: "{{ route('files.view', $manuscript) }}",
+                                            url: pdfUrl,
                                             withCredentials: true
                                         }).promise.then(function (pdfDoc_) {
                                             m_pdfDoc = pdfDoc_;
@@ -636,17 +646,14 @@
                                                                     `;
                                                                 teaserWrapper.appendChild(overlay);
                                                                 container.appendChild(teaserWrapper);
-
-                                                                // Render the teaser page (page 6 or last page)
-                                                                const teaserPageNum = Math.min(m_pdfDoc.numPages, pagesToRender + 1);
-                                                                m_pdfDoc.getPage(teaserPageNum).then(function (page) {
-                                                                    const dpr = window.devicePixelRatio || 1;
-                                                                    const containerWidth = Math.min(container.clientWidth - 60, 850);
+                                                                
+                                                                const teaserPageNum = Math.min(m_pdfDoc.numPages, 6);
+                                                                m_pdfDoc.getPage(teaserPageNum).then(function(page) {
                                                                     const unscaledViewport = page.getViewport({ scale: 1.0 });
                                                                     const scale = containerWidth / unscaledViewport.width;
                                                                     const viewport = page.getViewport({ scale: scale });
                                                                     const ctx = teaserCanvas.getContext('2d');
-                                                                    
+                                                                    const dpr = window.devicePixelRatio || 1;
                                                                     teaserCanvas.height = viewport.height * dpr;
                                                                     teaserCanvas.width = viewport.width * dpr;
                                                                     teaserCanvas.style.width = viewport.width + 'px';
@@ -663,7 +670,6 @@
                                                                     setTimeout(() => loading.classList.add('hidden'), 500);
                                                                 }
                                                             } else if (i === pagesToRender) {
-                                                                // Just hide loading if there's no teaser needed
                                                                 const loading = document.getElementById('desktop-pdf-loading');
                                                                 if (loading) {
                                                                     loading.style.opacity = '0';
@@ -674,23 +680,26 @@
                                                     });
                                                 }
                                             } else {
-                                                // MOBILE: Render one page at a time with navigation
                                                 const totalPages = isGuest ? Math.min(m_pdfDoc.numPages, 6) : m_pdfDoc.numPages;
                                                 document.getElementById('mobile-page-count').textContent = totalPages;
-
                                                 if (isGuest) {
                                                     const mobileTeaserPageCount = document.getElementById('mobile-teaser-page-count');
                                                     if (mobileTeaserPageCount) mobileTeaserPageCount.textContent = m_pdfDoc.numPages;
                                                 }
-
                                                 renderMobilePage(m_pageNum);
                                             }
                                         }).catch(err => {
                                             console.error("PDF Engine Error:", err);
                                             const mobileLoading = document.getElementById('mobile-pdf-loading');
                                             const desktopLoading = document.getElementById('desktop-pdf-loading');
-                                            if (mobileLoading) mobileLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Locked.</p>';
-                                            if (desktopLoading) desktopLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Restricted.</p>';
+                                            
+                                            let errorMsg = 'Preview Restricted.';
+                                            if (err.name === 'MissingPDFException') errorMsg = 'File Not Found.';
+                                            if (err.name === 'UnexpectedResponseException') errorMsg = 'Server Error (' + err.status + ').';
+                                            if (err.name === 'InvalidPDFException') errorMsg = 'Invalid PDF Format.';
+
+                                            if (mobileLoading) mobileLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Engine Error.</p><p class="text-gray-500 text-[8px] uppercase mt-2">' + errorMsg + '</p>';
+                                            if (desktopLoading) desktopLoading.innerHTML = '<p class="text-red-500 text-[10px] font-black uppercase">Preview Restricted.</p><p class="text-gray-500 text-[8px] uppercase mt-2">' + errorMsg + '</p>';
                                         });
                                     }
                                 </script>

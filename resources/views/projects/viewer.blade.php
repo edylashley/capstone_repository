@@ -135,11 +135,19 @@
     let scale = 1.5;
     let loadingPages = new Set();
 
-    const url = "{{ route('files.view', $project->files->firstWhere('type', 'manuscript')) }}";
+    @php $manuscript = $project->files->firstWhere('type', 'manuscript'); @endphp
+    let url = "{{ route('files.view', ['file' => $manuscript->id]) }}";
+    
+    // Protocol-Aware Fix: Force the PDF URL to match the current page's protocol
+    if (window.location.protocol === 'https:' && url.startsWith('http:')) {
+        url = url.replace('http:', 'https:');
+    }
 
     async function initViewer() {
         try {
             // CRITICAL: withCredentials ensures the session cookie is sent!
+            pdfjsLib.GlobalWorkerOptions.workerSrc = "{{ asset('assets/vendor/pdfjs/pdf.worker.min.js') }}";
+
             const loadingTask = pdfjsLib.getDocument({
                 url: url,
                 withCredentials: true

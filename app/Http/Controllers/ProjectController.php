@@ -1078,7 +1078,9 @@ class ProjectController extends Controller
         }
 
         // 2. Manuscript Visibility: Guests can only view published manuscripts
-        $isManuscript = strtolower($file->type) === 'manuscript' || strtolower($file->filename) === 'manuscript.pdf';
+        $fileType = strtolower($file->type ?? '');
+        $fileName = strtolower($file->filename ?? '');
+        $isManuscript = $fileType === 'manuscript' || $fileName === 'manuscript.pdf';
         $isGuest = !auth()->check();
 
         if ($project->status !== 'published') {
@@ -1137,13 +1139,10 @@ class ProjectController extends Controller
     protected function streamPartialPdf($path, $maxPages = 5)
     {
         if (!class_exists(\setasign\Fpdi\Fpdi::class)) {
-            // Fallback: If library is not installed, we still serve the file but 
-            // you should run: composer require setasign/fpdf setasign/fpdi
-            return response()->stream(function () use ($path) {
-                readfile($path);
-            }, 200, [
+            // Fallback: Use native Laravel file response for maximum compatibility
+            return response()->file($path, [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="preview_unrestricted.pdf"',
+                'Content-Disposition' => 'inline; filename="manuscript_preview.pdf"',
             ]);
         }
 
@@ -1159,9 +1158,11 @@ class ProjectController extends Controller
                 $pdf->useTemplate($tplIdx);
             }
 
-            return response($pdf->Output('S'), 200, [
+            $output = $pdf->Output('S');
+            return response($output, 200, [
                 'Content-Type' => 'application/pdf',
                 'Content-Disposition' => 'inline; filename="manuscript_preview.pdf"',
+                'Content-Length' => strlen($output),
                 'Cache-Control' => 'no-cache, no-store, must-revalidate',
             ]);
         } catch (\Exception $e) {
