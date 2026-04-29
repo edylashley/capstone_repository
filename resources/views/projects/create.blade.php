@@ -430,6 +430,30 @@
             realInput.files = dt.files;
         }
 
+        // ── Client-side Size Validation ──────────────────────────────────────────
+        const maxManuscriptMB = {{ \App\Models\Setting::get('max_upload_size', '10') }};
+        const maxAttachmentMB = {{ \App\Models\Setting::get('max_attachment_size', '50') }};
+
+        function validateFileSizes() {
+            const manuscriptInput = document.querySelector('input[name="manuscript"]');
+            if (manuscriptInput.files.length > 0) {
+                const sizeMB = manuscriptInput.files[0].size / (1024 * 1024);
+                if (sizeMB > maxManuscriptMB) {
+                    alert(`Main Manuscript is too large (${sizeMB.toFixed(1)}MB). Max allowed is ${maxManuscriptMB}MB.`);
+                    return false;
+                }
+            }
+
+            for (const file of attachmentFiles) {
+                const sizeMB = file.size / (1024 * 1024);
+                if (sizeMB > maxAttachmentMB) {
+                    alert(`Attachment "${file.name}" is too large (${sizeMB.toFixed(1)}MB). Max allowed is ${maxAttachmentMB}MB per file.`);
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // Remove button handler (delegated)
         queueEl.addEventListener('click', function (e) {
             const btn = e.target.closest('.remove-attachment');
@@ -442,7 +466,13 @@
         let scanTimeoutId = null;
         let valTimeoutId = null;
 
-        document.getElementById('project-form').addEventListener('submit', function () {
+        document.getElementById('project-form').addEventListener('submit', function (e) {
+            // Check sizes first
+            if (!validateFileSizes()) {
+                e.preventDefault();
+                return;
+            }
+
             // Show overlay
             const overlay = document.getElementById('loading-overlay');
             overlay.classList.remove('hidden');

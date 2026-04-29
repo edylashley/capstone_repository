@@ -758,14 +758,16 @@
                                     </div>
 
                                     @auth
-                                        <a href="{{ route('files.download', $manuscript->id) }}"
-                                            class="w-full sm:w-auto px-8 py-3 bg-blue-600 dark:bg-gray-900 hover:bg-blue-700 dark:hover:bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-md dark:shadow-lg dark:hover:shadow-indigo-500/20 transition-all flex items-center justify-center gap-2">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                            </svg>
-                                            Download PDF
-                                        </a>
+                                        <div class="w-full sm:w-auto flex items-center justify-center">
+                                            <a href="{{ route('files.download', $manuscript->id) }}"
+                                                class="w-full sm:w-auto px-6 py-3.5 bg-blue-600 dark:bg-slate-900 hover:bg-blue-700 dark:hover:bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl dark:shadow-indigo-500/10 transition-all flex items-center justify-center gap-3 group">
+                                                <svg class="w-4 h-4 transform group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                                </svg>
+                                                Download PDF
+                                            </a>
+                                        </div>
                                     @endauth
                                 </div>
                         @else
@@ -830,9 +832,9 @@
                                                     class="w-12 h-12 rounded-xl {{ $isLocked ? 'bg-gray-200 dark:bg-slate-800' : 'bg-white dark:bg-slate-900' }} flex items-center justify-center shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                                                     <span class="text-xl {{ $isLocked ? 'grayscale opacity-50' : '' }}">{{ $icon }}</span>
                                                 </div>
-                                                <div class="flex flex-col overflow-hidden">
-                                                    <div class="flex items-center gap-2">
-                                                        <span class="text-sm font-black text-gray-900 dark:text-white truncate"
+                                                <div class="flex flex-col min-w-0">
+                                                    <div class="flex items-center gap-3 flex-wrap">
+                                                        <span class="text-xs sm:text-sm font-black text-gray-900 dark:text-white truncate max-w-[120px] sm:max-w-none"
                                                             title="{{ $file->filename }}">{{ $file->filename }}</span>
                                                         @if($isLocked)
                                                             <span class="text-xs" title="Login required for full access">🔒</span>
