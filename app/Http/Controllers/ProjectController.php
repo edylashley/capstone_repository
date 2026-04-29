@@ -500,27 +500,27 @@ class ProjectController extends Controller
                         ->withErrors(['attachments' => $errorMsg]);
                 }
 
-            if ($attPath) {
-                try {
-                    $fullAttPath = Storage::disk('public')->path($attPath);
-                    $checksum = @hash_file('sha256', $fullAttPath) ?: null;
-                    $fileHash = $checksum;
+                if ($attPath) {
+                    try {
+                        $fullAttPath = Storage::disk('public')->path($attPath);
+                        $checksum = @hash_file('sha256', $fullAttPath) ?: null;
+                        $fileHash = $checksum;
 
-                    ProjectFile::create([
-                        'project_id' => $project->id,
-                        'type' => 'attachment',
-                        'filename' => $attach->getClientOriginalName(),
-                        'path' => $attPath,
-                        'mime_type' => $attach->getClientMimeType(),
-                        'size' => $attach->getSize(),
-                        'checksum' => $checksum,
-                        'file_hash' => $fileHash,
-                        'uploaded_by' => $request->user()->id,
-                    ]);
-                } catch (\Exception $e) {
-                    \Log::error("Attachment processing failed for project {$project->id}: " . $e->getMessage());
+                        ProjectFile::create([
+                            'project_id' => $project->id,
+                            'type' => 'attachment',
+                            'filename' => $attach->getClientOriginalName(),
+                            'path' => $attPath,
+                            'mime_type' => $attach->getClientMimeType(),
+                            'size' => $attach->getSize(),
+                            'checksum' => $checksum,
+                            'file_hash' => $fileHash,
+                            'uploaded_by' => $request->user()->id,
+                        ]);
+                    } catch (\Exception $e) {
+                        \Log::error("Attachment processing failed for project {$project->id}: " . $e->getMessage());
+                    }
                 }
-            }
             }
         }
 
@@ -1067,13 +1067,13 @@ class ProjectController extends Controller
         if ($file->type === 'attachment') {
             $ext = strtolower(pathinfo($file->filename, PATHINFO_EXTENSION));
             $isSafeMedia = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm', 'avi']);
-            
+
             $isOwner = $user && $project && ($project->authors->contains($user) || $project->adviser_id == $user->id);
             $isPrivileged = $user && $user->isAdmin();
-            
+
             // Allow if owner/admin OR if logged in and it's a safe media file
             $canView = $isOwner || $isPrivileged || (auth()->check() && $isSafeMedia);
-            
+
             abort_unless($canView, 403, 'This attachment is restricted to project authors and administrators.');
         }
 

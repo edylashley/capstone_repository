@@ -212,7 +212,14 @@ class UserController extends Controller
 
         $name = $user->name;
         $userId = $user->id;
-        $user->delete();
+
+        if (request('force_delete') === 'true') {
+            $user->forceDelete();
+            $actionMsg = "User account for '$name' has been permanently deleted.";
+        } else {
+            $user->delete();
+            $actionMsg = "User account for '$name' has been moved to Trash.";
+        }
 
         // Log the deletion
         ActivityLog::create([
@@ -227,6 +234,6 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('admin.users.index')
-            ->with('success', "User account for '$name' has been moved to Trash.");
+            ->with('success', $actionMsg);
     }
 }

@@ -5,14 +5,17 @@
             {{-- Integrated Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
                 <div>
-                    <h2 class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">Capstone Projects
+                    <h2
+                        class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">
+                        Capstone Projects
                     </h2>
-                    <p class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">
+                    <p
+                        class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">
                         Review & Manage All Projects</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('admin.dashboard') }}"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 dark:bg-slate-900/50 text-gray-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-gray-200 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white transition-all shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5">
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 dark:bg-slate-900/50 text-gray-500 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-gray-900 hover:text-white transition-all shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -23,9 +26,10 @@
             </div>
 
             <!-- Top Controls -->
-            <div class="flex flex-wrap items-center gap-4">
+            <div class="flex flex-wrap items-center justify-center gap-4">
                 <!-- Filter Bar -->
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 w-full md:w-auto transition-colors">
+                <div
+                    class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 w-full md:w-auto transition-colors">
                     <form method="GET" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 m-0">
                         <div class="flex items-center justify-between sm:justify-start gap-2">
                             <label class="text-xs font-bold uppercase text-gray-600 dark:text-slate-400">Status:</label>
@@ -38,13 +42,16 @@
                                 <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>
                                     Published
                                     Records</option>
-                                <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived</option>
-                                <option value="returned" {{ request('status') == 'returned' ? 'selected' : '' }}>Returned</option>
+                                <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived
+                                </option>
+                                <option value="returned" {{ request('status') == 'returned' ? 'selected' : '' }}>Returned
+                                </option>
                             </select>
                         </div>
                         <div
                             class="flex items-center justify-between sm:justify-start gap-2 border-l-0 sm:border-l border-gray-200 dark:border-white/10 pl-0 sm:pl-4 transition-colors">
-                            <label class="text-xs font-bold uppercase text-gray-600 dark:text-slate-400">Program:</label>
+                            <label
+                                class="text-xs font-bold uppercase text-gray-600 dark:text-slate-400">Program:</label>
                             <select name="program" onchange="this.form.submit()"
                                 class="text-sm rounded-lg border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 py-1.5 pl-3 pr-10 shadow-sm w-full sm:w-auto text-center sm:text-left transition-colors">
                                 <option value="">All Programs</option>
@@ -58,27 +65,93 @@
                     </form>
                 </div>
                 <!-- Bulk Actions -->
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 w-full md:w-auto transition-colors">
-                    <form id="bulkActionForm" method="POST" action="{{ route('admin.projects.bulk') }}"
-                        class="flex flex-col sm:flex-row items-stretch sm:items-center m-0 gap-2"
-                        onsubmit="return confirm('Are you sure you want to perform this bulk action?');">
+                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 w-full md:w-auto transition-colors" x-data="{ 
+                    open: false, 
+                    selectedAction: '', 
+                    selectedLabel: 'Select Action...',
+                    executeBulkAction() {
+                        if (!this.selectedAction) {
+                            alert('Please select an action from the dropdown first.');
+                            return;
+                        }
+                        
+                        var checkedCount = document.querySelectorAll('.project-checkbox:checked').length;
+                        if (checkedCount === 0) {
+                            alert('Please select at least one project first.');
+                            return;
+                        }
+
+                        if (this.selectedAction === 'delete') {
+                            Alpine.store('deleteModal').show(
+                                'Bulk Delete', 
+                                checkedCount + ' selected projects will be removed. How would you like to proceed?', 
+                                'bulkActionForm'
+                            );
+                        } else {
+                            if (confirm('Apply ' + this.selectedLabel + ' to ' + checkedCount + ' projects?')) {
+                                this.$refs.bulkForm.submit();
+                            }
+                        }
+                    }
+                }">
+                    <form id="bulkActionForm" x-ref="bulkForm" method="POST" action="{{ route('admin.projects.bulk') }}"
+                        class="flex flex-col sm:flex-row items-stretch sm:items-center m-0 gap-3">
                         @csrf
-                        <label class="text-xs font-bold uppercase text-gray-600 dark:text-slate-400 whitespace-nowrap">Bulk
-                            Action:</label>
-                        <select name="action" id="bulkActionSelect" required
-                            class="text-sm rounded-lg border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 py-1.5 pl-3 pr-8 w-full sm:w-auto text-center sm:text-left transition-colors">
-                            <option value="">Select Action...</option>
-                            <option value="pending">Move to Pending</option>
-                            <option value="publish">Publish All</option>
-                            <option value="archive">Archive All</option>
-                            <option value="delete">Delete All</option>
-                        </select>
-                        <button type="submit"
-                            class="px-4 py-2 sm:py-1.5 bg-blue-600 dark:bg-indigo-600 text-white text-[10px] font-black uppercase rounded shadow-sm hover:bg-blue-700 dark:hover:bg-indigo-700 transition w-full sm:w-auto">Apply</button>
+                        <input type="hidden" name="action" x-model="selectedAction">
+                        <label class="text-xs font-bold uppercase text-gray-600 dark:text-slate-400 whitespace-nowrap">Bulk Actions</label>
+                        
+                        {{-- Custom Alpine Dropdown --}}
+                        <div class="relative min-w-[200px]">
+                            <button @click="open = !open" type="button" 
+                                class="w-full flex items-center justify-between gap-3 px-4 py-2.5 bg-gray-50 dark:bg-slate-800/50 border border-gray-200 dark:border-white/5 rounded-xl text-xs font-black uppercase tracking-widest text-gray-900 dark:text-white transition-all hover:border-blue-500 dark:hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-inner">
+                                <span x-text="selectedLabel"></span>
+                                <svg class="w-4 h-4 text-gray-400 transition-transform duration-200" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+
+                            <div x-show="open" x-cloak @click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
+                                class="absolute left-0 top-full mt-2 w-full bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden py-1 transition-colors duration-300"
+                                style="display: none;">
+                                
+                                {{-- Pending --}}
+                                <button type="button" @click="selectedAction = 'pending'; selectedLabel = 'Move to Pending'; open = false" 
+                                    class="w-full text-center px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 group hover:bg-amber-500 hover:text-white dark:text-gray-300">
+                                    <span>Move to Pending</span>
+                                    <div x-show="selectedAction === 'pending'" class="w-1.5 h-1.5 rounded-full bg-amber-500 group-hover:bg-white"></div>
+                                </button>
+
+                                {{-- Publish --}}
+                                <button type="button" @click="selectedAction = 'publish'; selectedLabel = 'Publish All'; open = false" 
+                                    class="w-full text-center px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 group hover:bg-emerald-500 hover:text-white dark:text-gray-300">
+                                    <span>Publish All</span>
+                                    <div x-show="selectedAction === 'publish'" class="w-1.5 h-1.5 rounded-full bg-emerald-500 group-hover:bg-white"></div>
+                                </button>
+
+                                {{-- Archive --}}
+                                <button type="button" @click="selectedAction = 'archive'; selectedLabel = 'Archive All'; open = false" 
+                                    class="w-full text-center px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 group hover:bg-gray-500 hover:text-white dark:text-gray-300">
+                                    <span>Archive All</span>
+                                    <div x-show="selectedAction === 'archive'" class="w-1.5 h-1.5 rounded-full bg-gray-400 group-hover:bg-white"></div>
+                                </button>
+
+                                {{-- Delete --}}
+                                <button type="button" @click="selectedAction = 'delete'; selectedLabel = 'Delete All'; open = false" 
+                                    class="w-full text-center px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-3 group hover:bg-rose-500 hover:text-white dark:text-gray-300">
+                                    <span>Delete All</span>
+                                    <div x-show="selectedAction === 'delete'" class="w-1.5 h-1.5 rounded-full bg-rose-500 group-hover:bg-white"></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="button" @click="executeBulkAction()"
+                            class="px-6 py-2 bg-blue-600 dark:bg-indigo-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg shadow-blue-500/20 dark:shadow-indigo-500/20 hover:bg-blue-700 dark:hover:bg-indigo-700 transition-all active:scale-95">
+                            Apply
+                        </button>
                     </form>
                 </div>
                 <!-- Direct Entry Dropdown -->
-                <div class="relative w-full md:w-auto md:ml-auto" x-data="{ open: false }">
+                <div class="relative w-full md:w-auto" x-data="{ open: false }">
                     <button @click="open = !open" @click.away="open = false" type="button"
                         class="inline-flex items-center justify-center gap-2 px-6 py-4 bg-blue-600 dark:bg-indigo-600 hover:bg-blue-700 dark:hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-lg hover:shadow-blue-500/30 dark:hover:shadow-indigo-500/30 transition transform hover:-translate-y-0.5 w-full md:w-auto whitespace-nowrap">
                         <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,18 +189,22 @@
                 </div>
             @endif
 
-            <div x-data="projectPolling()" class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-xl sm:rounded-3xl border border-gray-200 dark:border-white/5 transition-colors">
+            <div x-data="projectPolling()"
+                class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-xl sm:rounded-3xl border border-gray-200 dark:border-white/5 transition-colors">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-white/5 transition-colors">
+                            <tr
+                                class="bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-white/5 transition-colors">
                                 <th class="px-6 py-4 w-12"><input type="checkbox"
                                         onchange="document.querySelectorAll('.project-checkbox').forEach(cb => cb.checked = this.checked)"
                                         class="rounded-md border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 focus:ring-offset-white dark:focus:ring-offset-slate-900 shadow-sm transition-colors">
                                 </th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-500">
+                                <th
+                                    class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-500">
                                     Project Title</th>
-                                <th class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-500">
+                                <th
+                                    class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-500">
                                     Project Information</th>
                                 <th
                                     class="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-500 text-center">
@@ -139,7 +216,8 @@
                         </thead>
                         <tbody id="projects-table-body" class="divide-y divide-gray-200 dark:divide-white/5">
                             @foreach($projects as $project)
-                                <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors duration-300 group">
+                                <tr
+                                    class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors duration-300 group">
                                     <td class="px-6 py-4">
                                         <input type="checkbox" name="project_ids[]" value="{{ $project->id }}"
                                             form="bulkActionForm"
@@ -147,11 +225,39 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="max-w-md">
-                                            <a href="{{ route('projects.show', $project->id) }}"
-                                                class="block font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-indigo-400 hover:underline transition-colors truncate"
-                                                title="View Project Details">
-                                                {{ $project->title }}
-                                            </a>
+                                            <div class="flex items-center gap-2 max-w-full overflow-hidden">
+                                                <a href="{{ route('projects.show', $project->id) }}"
+                                                    class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-indigo-400 hover:underline transition-colors truncate"
+                                                    title="View Project Details">
+                                                    {{ $project->title }}
+                                                </a>
+
+                                                {{-- Broken File Warning --}}
+                                                @php
+                                                    $isMissingFile = false;
+                                                    foreach ($project->files as $f) {
+                                                        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($f->path)) {
+                                                            $isMissingFile = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                @endphp
+                                                @if($isMissingFile)
+                                                    <div class="flex-shrink-0 group/warn relative">
+                                                        <span
+                                                            class="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-white animate-pulse"
+                                                            title="Missing Physical File">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="3"
+                                                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                @endif
+                                            </div>
                                             <div
                                                 class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mt-1 tracking-tighter">
                                                 Authors:
@@ -229,9 +335,9 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                <form method="POST"
+                                                <form id="delete-project-{{ $project->id }}" method="POST"
                                                     action="{{ route('admin.projects.destroy', $project->id) }}"
-                                                    onsubmit="return confirm('⚠️ WARNING: This will permanently delete this project and all associated files.\n\nProject: {{ $project->title }}\n\nThis action cannot be undone. Are you sure?');">
+                                                    @submit.prevent="deleteModal.show('Delete Project', '{{ addslashes($project->title) }} will be removed. How would you like to proceed?', 'delete-project-{{ $project->id }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
@@ -257,7 +363,8 @@
                 </div>
 
                 @if($projects->hasPages())
-                    <div id="projects-pagination" class="px-6 py-4 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-white/5 transition-colors">
+                    <div id="projects-pagination"
+                        class="px-6 py-4 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-white/5 transition-colors">
                         {{ $projects->links() }}
                     </div>
                 @endif

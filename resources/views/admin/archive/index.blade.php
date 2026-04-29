@@ -111,7 +111,7 @@
                                 </path>
                             </svg>
                             <span
-                                x-text="(tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? 'Empty Trash' : 'Purge Selected'"></span>
+                                x-text="(tab === 'projects' ? selectedProjects.length : selectedUsers.length) === 0 ? 'Empty Trash' : 'Delete Permanently'"></span>
                         </button>
                     </form>
                 </div>

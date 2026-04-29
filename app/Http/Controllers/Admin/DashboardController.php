@@ -81,6 +81,17 @@ class DashboardController extends Controller
             ->pluck('projects_count', 'name')
             ->toArray();
 
+        // Include projects using the "Others" (Custom) category
+        $othersCount = Project::whereNotNull('custom_category')
+            ->where('custom_category', '!=', '')
+            ->count();
+
+        if ($othersCount > 0) {
+            $categoryStats['Others'] = $othersCount;
+            arsort($categoryStats); // Keep the top categories at the top
+            $categoryStats = array_slice($categoryStats, 0, 10, true); // Keep top 10
+        }
+
         // Recent Activity (Filtered strictly for actions requiring Admin attention)
         $recentActivities = \App\Models\ActivityLog::with([
             'user' => function ($query) {

@@ -99,6 +99,34 @@
     @stack('styles')
 </head>
 
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('deleteModal', {
+                open: false,
+                title: '',
+                message: '',
+                formId: '',
+                show(title, message, formId) {
+                    this.title = title;
+                    this.message = message;
+                    this.formId = formId;
+                    this.open = true;
+                },
+                confirm(permanent) {
+                    const form = document.getElementById(this.formId);
+                    if (permanent) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'force_delete';
+                        input.value = 'true';
+                        form.appendChild(input);
+                    }
+                    form.submit();
+                }
+            })
+        })
+    </script>
+
 <body
     class="font-sans antialiased bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300"
     :class="{ 'overflow-hidden': sidebarOpen || (typeof supportOpen !== 'undefined' && supportOpen) }" x-data="{ 
@@ -482,6 +510,73 @@
             </button>
         </div>
     @endif
+    {{-- ── Global Delete Choice Modal ─────────────────────────────── --}}
+    <div x-show="$store.deleteModal.open" x-cloak
+        class="fixed inset-0 z-[10000] flex items-center justify-center px-4" style="display: none;">
+        {{-- Backdrop --}}
+        <div x-show="$store.deleteModal.open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" @click="$store.deleteModal.open = false"></div>
+
+        {{-- Modal Card --}}
+        <div x-show="$store.deleteModal.open" x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+            x-transition:enter-end="opacity-100 scale-100 translate-y-0" x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+            x-transition:leave-end="opacity-0 scale-95 translate-y-4"
+            class="relative bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 dark:border-white/10 transition-colors duration-300">
+            
+            <div class="p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-14 h-14 bg-rose-50 dark:bg-rose-500/10 rounded-2xl flex items-center justify-center border border-rose-200 dark:border-rose-500/20">
+                        <svg class="w-7 h-7 text-rose-600 dark:text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight" x-text="$store.deleteModal.title"></h3>
+                        <p class="text-[10px] font-black text-rose-600 dark:text-rose-500 uppercase tracking-widest mt-0.5">Critical Action Required</p>
+                    </div>
+                </div>
+
+                <p class="text-sm text-gray-600 dark:text-slate-400 leading-relaxed mb-8" x-text="$store.deleteModal.message"></p>
+
+                <div class="flex flex-col gap-3">
+                    {{-- Soft Delete Option --}}
+                    <button @click="$store.deleteModal.confirm(false)"
+                        class="group w-full flex items-center justify-between p-5 bg-gray-50 dark:bg-slate-950 hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-gray-200 dark:border-white/5 rounded-2xl transition-all duration-300 text-left">
+                        <div>
+                            <p class="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wide">Move to Trash</p>
+                            <p class="text-[9px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest mt-1">Safely store in the Archive Center for later recovery</p>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-300 group-hover:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    {{-- Force Delete Option --}}
+                    <button @click="$store.deleteModal.confirm(true)"
+                        class="group w-full flex items-center justify-between p-5 bg-gray-50 dark:bg-slate-950 hover:bg-rose-50 dark:hover:bg-rose-500/10 border border-gray-200 dark:border-white/5 rounded-2xl transition-all duration-300 text-left">
+                        <div>
+                            <p class="text-xs font-black text-rose-600 dark:text-rose-500 uppercase tracking-wide">Delete Permanently</p>
+                            <p class="text-[9px] text-rose-500/50 dark:text-rose-500/30 font-bold uppercase tracking-widest mt-1">Erase forever. This action cannot be undone.</p>
+                        </div>
+                        <svg class="w-5 h-5 text-gray-300 group-hover:text-rose-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+
+                    {{-- Cancel --}}
+                    <button @click="$store.deleteModal.open = false"
+                        class="mt-2 w-full py-3 text-[10px] font-black text-gray-500 dark:text-slate-500 hover:text-gray-900 dark:hover:text-white uppercase tracking-[0.2em] transition-colors">
+                        Keep Record & Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @stack('scripts')
 </body>
 

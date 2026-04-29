@@ -13,7 +13,7 @@ class ProjectController extends Controller
     public function verifyPdf(Request $request, $id)
     {
         $project = \App\Models\Project::with('files')->findOrFail($id);
-        
+
         // Find manuscript
         $manuscript = $project->files->where('type', 'manuscript')->first();
         if (!$manuscript) {
@@ -21,7 +21,7 @@ class ProjectController extends Controller
         }
 
         $fullPath = \Storage::disk('public')->path($manuscript->path);
-        
+
         if (!file_exists($fullPath)) {
             return redirect()->back()->with('error', 'Manuscript file missing from storage');
         }
@@ -106,14 +106,14 @@ class ProjectController extends Controller
                 $query->where('status', $status);
             }
         }
-        
+
         if ($request->filled('program')) {
             $query->where('program', $request->query('program'));
         }
 
         if ($request->filled('category')) {
             $categoryId = $request->query('category');
-            $query->whereHas('categories', function($q) use ($categoryId) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
                 $q->where('categories.id', $categoryId);
             });
         }
@@ -157,7 +157,10 @@ class ProjectController extends Controller
             'abstract' => 'nullable|string',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'manuscript' => [
-                'required', 'file', 'mimes:pdf', 'max:51200',
+                'required',
+                'file',
+                'mimes:pdf',
+                'max:51200',
                 function ($attribute, $value, $fail) {
                     $hash = hash_file('sha256', $value->path());
                     if (\App\Models\ProjectFile::where('file_hash', $hash)->exists()) {
@@ -166,7 +169,9 @@ class ProjectController extends Controller
                 }
             ],
             'attachments.*' => [
-                'nullable', 'file', 'max:204800',
+                'nullable',
+                'file',
+                'max:204800',
                 function ($attribute, $value, $fail) {
                     $hash = hash_file('sha256', $value->path());
                     static $attachHashes = [];
@@ -301,7 +306,7 @@ class ProjectController extends Controller
         $project = \App\Models\Project::withTrashed()->findOrFail($id);
         $categories = \App\Models\Category::all();
         $programs = \App\Models\Program::all();
-        
+
         return view('admin.projects.edit', compact('project', 'categories', 'programs'));
     }
 
@@ -311,7 +316,7 @@ class ProjectController extends Controller
     public function update(Request $request, string $id)
     {
         $project = \App\Models\Project::withTrashed()->findOrFail($id);
-        
+
         $validated = $request->validate([
             'title' => [
                 'required',
@@ -354,15 +359,15 @@ class ProjectController extends Controller
     public function destroy(Request $request, string $id)
     {
         $project = \App\Models\Project::findOrFail($id);
-        
+
         // Store project info for logging before deletion
         $projectTitle = $project->title;
         $projectId = $project->id;
-        
+
         // We no longer delete files here because we want them to be restorable 
         // from the Central Archive. Physical file deletion now happens only 
         // during a "Force Delete/Purge" in the Archive Center.
-        
+
         // Log the deletion before removing the record
         \App\Models\ActivityLog::create([
             'user_id' => $request->user()->id,
@@ -376,11 +381,17 @@ class ProjectController extends Controller
                 'deleted_at' => now()->toDateTimeString()
             ],
         ]);
-        
+
         // Delete the project (cascade will handle related records)
-        $project->delete();
-        
-        return redirect()->route('admin.projects.index')->with('status', 'Project deleted successfully');
+        if ($request->force_delete === 'true') {
+            $project->forceDelete();
+            $msg = 'Project permanently deleted successfully';
+        } else {
+            $project->delete();
+            $msg = 'Project moved to Trash successfully';
+        }
+
+        return redirect()->route('admin.projects.index')->with('status', $msg);
     }
 
     /**
@@ -435,7 +446,7 @@ class ProjectController extends Controller
                 $project->status = 'archived';
                 $project->is_published = false;
                 $project->save();
-                
+
                 \App\Models\ActivityLog::create([
                     'user_id' => $request->user()->id,
                     'action' => 'archive_project',
@@ -454,7 +465,7 @@ class ProjectController extends Controller
                 $project->status = 'pending';
                 $project->is_published = false;
                 $project->save();
-                
+
                 \App\Models\ActivityLog::create([
                     'user_id' => $request->user()->id,
                     'action' => 'project_set_to_pending_bulk',
@@ -469,16 +480,13 @@ class ProjectController extends Controller
         } elseif ($action === 'delete') {
             $projects = \App\Models\Project::whereIn('id', $projectIds)->get();
             foreach ($projects as $project) {
-                foreach ($project->files as $file) {
-                    if (\Storage::disk('public')->exists($file->path)) {
-                        \Storage::disk('public')->delete($file->path);
-                    }
-                }
+                // We no longer physically delete files here so they can be restored from Trash.
+                // Physical deletion is handled in the Archive Center's Force Delete.
                 $project->delete();
             }
-            return redirect()->back()->with('success', 'Selected projects deleted successfully.');
+            return redirect()->back()->with('success', 'Selected projects moved to Trash successfully.');
         }
-        
+
         return redirect()->back()->with('error', 'Invalid action');
     }
 
@@ -516,10 +524,13 @@ class ProjectController extends Controller
             'projects.*.program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'projects.*.abstract' => 'nullable|string',
             'projects.*.manuscript' => [
-                'required', 'file', 'mimes:pdf', 'max:51200',
+                'required',
+                'file',
+                'mimes:pdf',
+                'max:51200',
                 function ($attribute, $value, $fail) {
                     $parts = explode('.', $attribute);
-                    $entryNum = isset($parts[1]) ? (int)$parts[1] + 1 : 1;
+                    $entryNum = isset($parts[1]) ? (int) $parts[1] + 1 : 1;
                     $hash = hash_file('sha256', $value->path());
                     static $bulkMsHashes = [];
                     if (isset($bulkMsHashes[$hash]) || \App\Models\ProjectFile::where('file_hash', $hash)->exists()) {
@@ -529,10 +540,12 @@ class ProjectController extends Controller
                 }
             ],
             'projects.*.attachments.*' => [
-                'nullable', 'file', 'max:204800',
+                'nullable',
+                'file',
+                'max:204800',
                 function ($attribute, $value, $fail) {
                     $parts = explode('.', $attribute);
-                    $entryNum = isset($parts[1]) ? (int)$parts[1] + 1 : 1;
+                    $entryNum = isset($parts[1]) ? (int) $parts[1] + 1 : 1;
                     $hash = hash_file('sha256', $value->path());
                     static $bulkAttHashes = [];
                     if (isset($bulkAttHashes[$hash]) || \App\Models\ProjectFile::where('file_hash', $hash)->exists()) {

@@ -170,9 +170,9 @@
                                                                                 Approve
                                                                             </button>
                                                                         </form>
-                                                                        <form action="{{ route('admin.users.deny', $user) }}" method="POST"
+                                                                        <form id="deny-user-{{ $user->id }}" action="{{ route('admin.users.deny', $user) }}" method="POST"
                                                                              class="inline"
-                                                                             onsubmit="return confirm('Deny this registration? The account will be moved to Trash.');">
+                                                                             @submit.prevent="Alpine.store('deleteModal').show('Deny Registration', 'Are you sure you want to deny this account? It will be removed from the system.', 'deny-user-{{ $user->id }}')">
                                                                              @csrf
                                                                              <button type="submit"
                                                                                  class="px-4 py-1.5 bg-rose-50 dark:bg-rose-600/10 text-rose-600 dark:text-rose-500 border border-rose-200 dark:border-rose-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 dark:hover:text-white transition-all transform hover:-translate-y-0.5">
@@ -187,9 +187,9 @@
                                                                         </a>
 
                                                                         @if($user->id !== auth()->id())
-                                                                            <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                                                            <form id="delete-user-{{ $user->id }}" action="{{ route('admin.users.destroy', $user) }}" method="POST"
                                                                                 class="inline"
-                                                                                onsubmit="return confirm('Move this account to Trash?');">
+                                                                                @submit.prevent="Alpine.store('deleteModal').show('Confirm User Deletion', 'Are you sure you want to remove the account for {{ $user->name }}?', 'delete-user-{{ $user->id }}')">
                                                                                 @csrf
                                                                                 @method('DELETE')
                                                                                 <button type="submit"

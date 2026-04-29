@@ -26,9 +26,32 @@
             {{-- Integrated Header --}}
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-2">
                 <div>
-                    <h2
-                        class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">
-                        Dashboard</h2>
+                    <div class="flex items-center gap-4">
+                        <h2
+                            class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">
+                            Dashboard</h2>
+                        
+                        {{-- Security Engine Status Pill --}}
+                        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 shadow-sm transition-all hover:shadow-md">
+                            <div class="relative flex h-2 w-2">
+                                @php
+                                    $statusColor = match($stats['security_status']) {
+                                        'online', 'ready' => 'bg-emerald-500',
+                                        'offline' => 'bg-rose-500',
+                                        default => 'bg-amber-500'
+                                    };
+                                @endphp
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $statusColor }} opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 {{ $statusColor }}"></span>
+                            </div>
+                            <span class="text-[9px] font-black uppercase tracking-[0.1em] text-gray-500 dark:text-slate-400">
+                                Security Engine: 
+                                <span class="{{ $stats['security_status'] === 'offline' ? 'text-rose-500' : 'text-emerald-500' }}">
+                                    {{ strtoupper($stats['security_status']) }}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
                     <p
                         class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.4em] font-black mt-3 opacity-80">
                         System Management & Monitoring</p>
