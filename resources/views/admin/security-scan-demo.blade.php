@@ -730,7 +730,7 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-black text-red-700">MALICIOUS FILE BLOCKED</h3>
-                        <p class="text-sm text-red-600 mt-1">Threats detected! This file would be <strong>rejected and deleted</strong> by the system.</p>
+                        <p class="text-sm text-red-600 mt-1">Threats detected! This file would be <strong>blocked and deleted</strong> by the system.</p>
                         <p class="text-xs text-red-500 mt-2 font-semibold">Threats: ${data.threats_found.join(', ')}</p>
                     </div>`;
                 }

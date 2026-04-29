@@ -46,32 +46,38 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #f3f4f6; /* gray-100 */
+            background: #f3f4f6;
+            /* gray-100 */
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; /* slate-300 */
+            background: #cbd5e1;
+            /* slate-300 */
             border-radius: 20px;
             border: 3px solid #f3f4f6;
             transition: all 0.3s ease;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1; /* indigo-500 */
+            background: #6366f1;
+            /* indigo-500 */
         }
 
         /* Custom Premium Scrollbar - Dark Mode */
         .dark ::-webkit-scrollbar-track {
-            background: #020617; /* slate-950 */
+            background: #020617;
+            /* slate-950 */
         }
 
         .dark ::-webkit-scrollbar-thumb {
-            background: #475569; /* slate-600 */
+            background: #475569;
+            /* slate-600 */
             border: 3px solid #020617;
         }
 
         .dark ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1; /* indigo-500 */
+            background: #6366f1;
+            /* indigo-500 */
         }
 
         /* Firefox */
@@ -140,8 +146,8 @@
                                 alt="NORSU Capstone Repository">
                             <span class="text-sm font-black uppercase tracking-wider">Capstone Repository</span>
                         </div>
-                            <button @click="sidebarOpen = true"
-                                class="p-2 rounded-lg text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                        <button @click="sidebarOpen = true"
+                            class="p-2 rounded-lg text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 12h16M4 18h16"></path>
@@ -151,37 +157,6 @@
                 @endif
             @endauth
 
-            @if(auth()->guest() || request()->is('/'))
-                <!-- Universal Theme Toggle -->
-                <div class="fixed bottom-6 left-6 lg:top-6 lg:bottom-auto lg:left-auto lg:right-6 z-[100] flex items-center">
-                    <button @click="toggleTheme()" title="Toggle Light/Dark Mode"
-                        class="p-2.5 rounded-xl transition-all duration-500 shadow-xl border focus:outline-none focus:ring-2 group overflow-hidden relative"
-                        :class="theme === 'dark' ? 'bg-white/90 backdrop-blur-md border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-900/80 backdrop-blur-md border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
-
-                        <!-- Subtle Hover Glow -->
-                        <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                            :class="theme === 'dark' ? 'bg-gradient-to-tr from-amber-500/20 to-yellow-500/20' : 'bg-gradient-to-tr from-indigo-500/20 to-purple-500/20'">
-                        </div>
-
-                        <template x-if="theme === 'dark'">
-                            <svg class="w-5 h-5 relative z-10 transform group-hover:rotate-90 transition-transform duration-700"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 19.071l-.707-.707M7.929 4.929l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z">
-                                </path>
-                            </svg>
-                        </template>
-                        <template x-if="theme === 'light'">
-                            <svg class="w-5 h-5 relative z-10 transform group-hover:-rotate-12 transition-transform duration-700"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
-                                </path>
-                            </svg>
-                        </template>
-                    </button>
-                </div>
-            @endif
 
             <!-- Page Heading -->
             @if(isset($header) || View::hasSection('header'))
@@ -191,9 +166,9 @@
                         class="py-4 md:py-6 px-4 md:px-8 text-gray-900 dark:text-white flex items-center justify-between gap-4">
                         <div class="flex items-center gap-4 flex-1">
                             <!-- Toggle Button (Visible only when sidebar is collapsed on desktop) -->
-                                <button @click="sidebarCollapsed = false" x-show="sidebarCollapsed" x-cloak
-                                    class="hidden lg:block p-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors focus:outline-none text-gray-900 dark:text-white"
-                                    title="Show Sidebar">
+                            <button @click="sidebarCollapsed = false" x-show="sidebarCollapsed" x-cloak
+                                class="hidden lg:block p-2 rounded-lg bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors focus:outline-none text-gray-900 dark:text-white"
+                                title="Show Sidebar">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4 6h16M4 12h16M4 18h16"></path>
@@ -384,7 +359,7 @@
                             @endif
                         @endauth
 
-                        <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6">
+                        <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6" enctype="multipart/form-data">
                             @csrf
                             <div>
                                 <label
@@ -407,7 +382,8 @@
                                     Category</label>
                                 <input type="text" name="custom_category" :required="selectedCategory === 'others'"
                                     placeholder="e.g. Feedback, UI Improvement"
-                                    class="w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-2xl text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 text-sm py-3.5 px-4 font-bold placeholder:text-gray-400 dark:placeholder:text-slate-600 transition-colors">
+                                    class="w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-2xl text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 text-sm py-3.5 px-4 font-bold placeholder:text-gray-400 dark:placeholder:text-slate-600 transition-colors"
+                                    autocomplete="off">
                             </div>
 
                             <div>
@@ -419,17 +395,16 @@
                                     class="w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-2xl text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 text-sm py-3.5 px-4 font-bold resize-none placeholder:text-gray-400 dark:placeholder:text-slate-600 leading-relaxed transition-colors"></textarea>
                             </div>
 
+                            <div>
+                                <label
+                                    class="block text-[10px] font-black text-gray-900 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Attachment
+                                    (Optional)</label>
+                                <input type="file" name="screenshot" accept="image/*"
+                                    class="w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-indigo-900/30 dark:file:text-indigo-400 transition-all cursor-pointer bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-2xl px-2 py-2">
+                                <p class="text-[9px] text-gray-500 dark:text-slate-500 mt-2 ml-1 font-semibold">Max size: 5MB. Supported formats: JPG, PNG, GIF</p>
+                            </div>
 
 
-                            @if(!auth()->check())
-                                <div>
-                                    <label
-                                        class="block text-[10px] font-black text-gray-900 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Contact
-                                        Email</label>
-                                    <input type="email" name="email" required placeholder="Your email address"
-                                        class="w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-2xl text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 text-sm py-3.5 px-4 font-bold shadow-inner placeholder:text-gray-400 dark:placeholder:text-slate-600 transition-colors">
-                                </div>
-                            @endif
 
                             <div class="pt-4">
                                 <button type="submit"
@@ -438,7 +413,7 @@
                                 </button>
                                 <p
                                     class="text-[9px] text-center text-gray-900 dark:text-slate-500 mt-5 font-black uppercase tracking-widest opacity-60">
-                                    We'll get back to you as soon as possible
+                                    Your submission will be reviewed by an administrator
                                 </p>
                             </div>
                         </form>
@@ -451,15 +426,15 @@
     {{-- ── Admin: Floating Support Notification Icon ──────────────────── --}}
     @if(auth()->check() && auth()->user()->isAdmin())
         <a href="{{ route('admin.support.index') }}" x-data="{ 
-                                                    count: @js(\App\Models\SupportTicket::getNotificationCount()),
-                                                    async updateCount() {
-                                                        try {
-                                                            const response = await fetch('{{ route('admin.support.count') }}');
-                                                            const data = await response.json();
-                                                            this.count = data.count;
-                                                        } catch (e) { }
-                                                    }
-                                                }" x-init="setInterval(() => updateCount(), 30000)"
+                                                                count: @js(\App\Models\SupportTicket::getNotificationCount()),
+                                                                async updateCount() {
+                                                                    try {
+                                                                        const response = await fetch('{{ route('admin.support.count') }}');
+                                                                        const data = await response.json();
+                                                                        this.count = data.count;
+                                                                    } catch (e) { }
+                                                                }
+                                                            }" x-init="setInterval(() => updateCount(), 30000)"
             class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
             :title="'Support Tickets' + (count > 0 ? ' — ' + count + ' pending' : '')">
             <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
@@ -475,6 +450,39 @@
             </template>
         </a>
     @endif
+
+    @if(auth()->guest() || request()->is('/'))
+        <!-- Universal Theme Toggle -->
+        <div class="fixed bottom-6 left-6 z-[100] flex items-center">
+            <button @click="toggleTheme()" title="Toggle Light/Dark Mode"
+                class="p-2.5 rounded-xl transition-all duration-500 shadow-xl border focus:outline-none focus:ring-2 group overflow-hidden relative"
+                :class="theme === 'dark' ? 'bg-white/90 backdrop-blur-md border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-900/80 backdrop-blur-md border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
+
+                <!-- Subtle Hover Glow -->
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    :class="theme === 'dark' ? 'bg-gradient-to-tr from-amber-500/20 to-yellow-500/20' : 'bg-gradient-to-tr from-indigo-500/20 to-purple-500/20'">
+                </div>
+
+                <template x-if="theme === 'dark'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:rotate-90 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 19.071l-.707-.707M7.929 4.929l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z">
+                        </path>
+                    </svg>
+                </template>
+                <template x-if="theme === 'light'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:-rotate-12 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </template>
+            </button>
+        </div>
+    @endif
+    @stack('scripts')
 </body>
 
 </html>

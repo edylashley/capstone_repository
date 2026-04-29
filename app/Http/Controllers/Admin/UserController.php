@@ -156,7 +156,7 @@ class UserController extends Controller
         $user->save();
 
         // Send approval notification email
-        Mail::to($user->email)->send(new AccountApproved($user));
+        Mail::to($user->email)->queue(new AccountApproved($user));
 
         // Log the approval
         ActivityLog::create([
@@ -176,7 +176,7 @@ class UserController extends Controller
             ->with('success', 'User ' . ($user->student_id ?? $user->name) . ' has been approved and activated.');
     }
 
-    public function reject(User $user): RedirectResponse
+    public function deny(User $user): RedirectResponse
     {
         $name = $user->name;
         $userId = $user->id;
@@ -187,17 +187,19 @@ class UserController extends Controller
         // Log the rejection
         ActivityLog::create([
             'user_id' => auth()->id(),
-            'action' => 'account_rejected',
+            'action' => 'account_denied',
             'target_type' => 'user',
-            'target_id' => $userId,
+            'target_id' => $user->id,
             'ip' => request()->ip(),
             'meta' => [
+                'name' => $name,
+                'email' => $email,
                 'rejected_name' => $name
-            ]
+            ],
         ]);
 
         return redirect()->route('admin.users.index')
-            ->with('success', "Account for '$name' has been rejected and moved to Trash.");
+            ->with('success', "Account for '$name' has been denied and moved to Trash.");
     }
 
     public function destroy(User $user): RedirectResponse

@@ -113,7 +113,7 @@
                                     $colorClass = match(true) {
                                         str_contains($log->action, 'login') || str_contains($log->action, 'validated') || str_contains($log->action, 'approved') => 'emerald',
                                         str_contains($log->action, 'logout') || str_contains($log->action, 'delete') => 'red',
-                                        str_contains($log->action, 'failed') || str_contains($log->action, 'rejected') || str_contains($log->action, 'blocked') => 'amber',
+                                        str_contains($log->action, 'failed') || str_contains($log->action, 'returned') || str_contains($log->action, 'rejected') || str_contains($log->action, 'blocked') => 'amber',
                                         str_contains($log->action, 'upload') || str_contains($log->action, 'edit') || str_contains($log->action, 'create') => 'indigo',
                                         default => 'gray'
                                     };
@@ -153,55 +153,84 @@
                 <!-- Projects / Submissions Card -->
                 <div class="lg:col-span-2">
                     <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg transition-colors">
-                        <div class="p-6">
-                                <h4 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 border-b border-gray-200 dark:border-slate-700 pb-2 transition-colors">Project Submissions</h4>
-                                @php $projects = $user->authoredProjects; @endphp
+                        <div class="p-6 md:p-8">
+                            <div class="flex items-center justify-between mb-8 border-b border-gray-100 dark:border-slate-800 pb-4">
+                                <h4 class="text-[11px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-[0.3em]">
+                                    Project Records
+                                </h4>
+                                <span class="bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded-full text-[10px] font-black text-gray-500 dark:text-slate-400">
+                                    {{ $user->authoredProjects->count() }} Total
+                                </span>
+                            </div>
 
-                            <div class="space-y-6">
-                                @forelse($projects as $project)
-                                    <div class="relative group bg-gray-50 dark:bg-slate-800/50 rounded-2xl border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-indigo-500/50 transition-all duration-300">
-                                        <div class="flex justify-between items-start gap-4">
-                                            <div class="flex-1">
-                                                <div class="flex items-center gap-2 mb-2">
-                                                    @if($project->status === 'published')
-                                                        <span class="bg-emerald-500/10 text-emerald-500 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest border border-emerald-500/20">Official Record</span>
-                                                    @elseif($project->status === 'approved')
-                                                        <span class="bg-indigo-500/10 text-indigo-500 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest border border-indigo-500/20">Approved</span>
-                                                    @else
-                                                        <span class="bg-yellow-500/10 text-yellow-500 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-widest border border-yellow-500/20">{{ strtoupper($project->status) }}</span>
+                            <div class="space-y-4">
+                                @forelse($user->authoredProjects as $project)
+                                    @php
+                                        $isTrashed = $project->trashed();
+                                        $statusColors = match($project->status) {
+                                            'published' => 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20',
+                                            'pending'   => 'bg-amber-500/10 text-amber-500 border-amber-500/20',
+                                            'returned'  => 'bg-rose-500/10 text-rose-500 border-rose-500/20',
+                                            'archived'  => 'bg-gray-500/10 text-gray-500 border-gray-500/20',
+                                            default     => 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                                        };
+                                        $statusLabel = match($project->status) {
+                                            'published' => 'Official Published Record',
+                                            'pending'   => 'Archive Processing',
+                                            'returned'  => 'Returned for Revision',
+                                            'archived'  => 'Archived Repository',
+                                            default     => ucfirst($project->status)
+                                        };
+                                    @endphp
+                                    <div class="group relative bg-gray-50 dark:bg-slate-800/40 border border-gray-200 dark:border-white/5 rounded-[2rem] p-6 hover:bg-white dark:hover:bg-slate-800 transition-all duration-300">
+                                        <div class="flex flex-col md:flex-row gap-6 items-start">
+                                            {{-- Year/Icon --}}
+                                            <div class="flex flex-col items-center justify-center bg-white dark:bg-slate-900 rounded-2xl w-20 h-20 flex-shrink-0 border border-gray-200 dark:border-white/5 shadow-sm">
+                                                <span class="text-2xl">📄</span>
+                                                <span class="text-[9px] font-black text-gray-400 mt-1 uppercase">{{ $project->year }}</span>
+                                            </div>
+
+                                            {{-- Info --}}
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex flex-wrap items-center gap-2 mb-2">
+                                                    <span class="px-2 py-0.5 {{ $statusColors }} rounded text-[9px] font-black uppercase tracking-widest border">
+                                                        {{ $statusLabel }}
+                                                    </span>
+                                                    @if($isTrashed)
+                                                        <span class="px-2 py-0.5 bg-rose-600 text-white rounded text-[9px] font-black uppercase tracking-widest shadow-sm">
+                                                            Deleted
+                                                        </span>
                                                     @endif
-                                                    <span class="text-[10px] text-gray-500 font-bold tracking-widest">{{ $project->year }}</span>
+                                                    <span class="text-[10px] font-bold text-gray-400 dark:text-slate-500 uppercase tracking-tight ml-1">
+                                                        {{ $project->program }}
+                                                    </span>
                                                 </div>
-                                                <h5 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-indigo-400 transition-colors leading-tight mb-2">
-                                                    {{ $project->title }}
+
+                                                <h5 class="text-lg font-black text-gray-900 dark:text-white leading-tight mb-4 group-hover:text-blue-600 dark:group-hover:text-indigo-400 transition-colors truncate">
+                                                    {{ $project->title ?: 'Untitled Project' }}
                                                 </h5>
-                                                <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 italic mb-4">
-                                                    {{ Str::limit($project->abstract, 180) }}
-                                                </p>
-                                                
-                                                <div class="flex flex-wrap gap-4 pt-4 border-t border-gray-200 dark:border-slate-700/50 transition-colors">
-                                                    <div>
-                                                        <span class="text-[9px] uppercase font-black text-gray-500 tracking-widest block mb-1">Adviser</span>
-                                                        <span class="text-xs text-gray-800 dark:text-gray-300 font-bold tracking-tight">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
+
+                                                <div class="flex flex-wrap gap-x-6 gap-y-2">
+                                                    <div class="flex items-center gap-2 text-xs">
+                                                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Adviser:</span>
+                                                        <span class="font-bold text-gray-600 dark:text-slate-400">{{ $project->adviser->name ?? $project->adviser_name ?? 'N/A' }}</span>
                                                     </div>
-                                                    <div>
-                                                        <span class="text-[9px] uppercase font-black text-gray-500 tracking-widest block mb-1">Category</span>
-                                                        <span class="text-xs text-gray-800 dark:text-gray-300 font-bold tracking-tight">
-                                                            @if($project->categories->isNotEmpty())
-                                                                {{ $project->categories->pluck('name')->join(', ') }}
-                                                            @else
-                                                                Uncategorized
-                                                            @endif
+                                                    <div class="flex items-center gap-2 text-xs">
+                                                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Category:</span>
+                                                        <span class="font-bold text-gray-600 dark:text-slate-400">
+                                                            {{ $project->categories->isNotEmpty() ? $project->categories->first()->name : 'Uncategorized' }}
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex flex-col gap-2">
-                                                <a href="{{ route('projects.show', $project) }}" class="flex items-center justify-center p-2 rounded-xl bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-blue-600 hover:border-blue-500 dark:hover:bg-indigo-600 dark:hover:border-indigo-500 transition-all shadow-sm" title="View Full Project">
+
+                                            {{-- Actions --}}
+                                            <div class="flex md:flex-col gap-2">
+                                                <a href="{{ route('projects.show', $project) }}" class="p-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 text-gray-400 hover:text-blue-500 transition-colors" title="View">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                                 </a>
-                                                 @if(auth()->user()->isAdmin())
-                                                <a href="{{ route('admin.projects.edit', $project) }}" class="flex items-center justify-center p-2 rounded-xl bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-emerald-600 hover:border-emerald-500 transition-all shadow-sm" title="Manage Project Metadata">
+                                                @if(auth()->user()->isAdmin())
+                                                <a href="{{ route('admin.projects.edit', $project) }}" class="p-2 rounded-xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 text-gray-400 hover:text-emerald-500 transition-colors" title="Edit">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                                 </a>
                                                 @endif
@@ -209,8 +238,9 @@
                                         </div>
                                     </div>
                                 @empty
-                                    <div class="text-center py-10 bg-gray-50 dark:bg-slate-800/50 rounded-2xl border border-dashed border-gray-300 dark:border-slate-700 transition-colors">
-                                        <p class="text-gray-500 italic text-sm">No project records found for this user.</p>
+                                    <div class="text-center py-16 bg-gray-50 dark:bg-slate-800/20 rounded-[2rem] border border-dashed border-gray-200 dark:border-slate-800 transition-colors">
+                                        <div class="w-16 h-16 bg-white dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-sm">📁</div>
+                                        <p class="text-gray-500 dark:text-slate-400 font-black text-xs uppercase tracking-widest">No projects found</p>
                                     </div>
                                 @endforelse
                             </div>

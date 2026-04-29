@@ -111,6 +111,13 @@ class ProjectController extends Controller
             $query->where('program', $request->query('program'));
         }
 
+        if ($request->filled('category')) {
+            $categoryId = $request->query('category');
+            $query->whereHas('categories', function($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
+            });
+        }
+
         $projects = $query->with(['authors', 'files'])->paginate(20)->withQueryString();
         $programs = \App\Models\Program::all();
 
@@ -138,7 +145,7 @@ class ProjectController extends Controller
                 'string',
                 'max:255',
                 \Illuminate\Validation\Rule::unique('projects')->where(function ($query) {
-                    return $query->where('status', '!=', 'rejected');
+                    return $query->where('status', '!=', 'returned');
                 })
             ],
             'authors_list' => 'required|string|max:1000',
@@ -210,28 +217,34 @@ class ProjectController extends Controller
         $filename = 'manuscript.pdf';
         $path = $file->storeAs($dir, $filename, 'public');
 
-        $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($path);
-        $fileHash = hash_file('sha256', $fullPath);
+        if ($path) {
+            try {
+                $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($path);
+                $fileHash = @hash_file('sha256', $fullPath) ?: null;
 
-        \App\Models\ProjectFile::create([
-            'project_id' => $project->id,
-            'type' => 'manuscript',
-            'filename' => $filename,
-            'path' => $path,
-            'mime_type' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-            'checksum' => $fileHash,
-            'file_hash' => $fileHash,
-            'uploaded_by' => $request->user()->id,
-            'is_primary' => true,
-        ]);
+                \App\Models\ProjectFile::create([
+                    'project_id' => $project->id,
+                    'type' => 'manuscript',
+                    'filename' => $filename,
+                    'path' => $path,
+                    'mime_type' => $file->getClientMimeType(),
+                    'size' => $file->getSize(),
+                    'checksum' => $fileHash,
+                    'file_hash' => $fileHash,
+                    'uploaded_by' => $request->user()->id,
+                    'is_primary' => true,
+                ]);
 
-        $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($path);
-        $validator = app(\App\Services\PDFValidator::class);
-        $validation = $validator->validate($fullPath);
-        if (isset($validation['text']) && !empty($validation['text'])) {
-            $project->full_text = $validation['text'];
-            $project->save();
+                // Try to extract text for searching
+                $validator = app(\App\Services\PDFValidator::class);
+                $validation = $validator->validate($fullPath);
+                if (isset($validation['text']) && !empty($validation['text'])) {
+                    $project->full_text = $validation['text'];
+                    $project->save();
+                }
+            } catch (\Exception $e) {
+                \Log::error("Post-upload processing failed for project {$project->id}: " . $e->getMessage());
+            }
         }
 
         // Process attachments
@@ -305,7 +318,7 @@ class ProjectController extends Controller
                 'string',
                 'max:255',
                 \Illuminate\Validation\Rule::unique('projects')->ignore($project->id)->where(function ($query) {
-                    return $query->where('status', '!=', 'rejected');
+                    return $query->where('status', '!=', 'returned');
                 })
             ],
             'year' => 'required|integer|min:2000',
@@ -492,7 +505,7 @@ class ProjectController extends Controller
                 'max:255',
                 'distinct',
                 \Illuminate\Validation\Rule::unique('projects', 'title')->where(function ($query) {
-                    return $query->where('status', '!=', 'rejected');
+                    return $query->where('status', '!=', 'returned');
                 })
             ],
             'projects.*.authors_list' => 'required|string|max:1000',
@@ -682,28 +695,28 @@ class ProjectController extends Controller
     }
 
     /**
-     * Reject a project (replaces adviser return)
+     * Return a project for revision
      */
-    public function reject(Request $request, $id)
+    public function returnProject(Request $request, $id)
     {
         $project = \App\Models\Project::findOrFail($id);
 
         $validated = $request->validate([
-            'rejection_reason' => 'required|string|max:2000',
+            'return_reason' => 'required|string|max:2000',
         ]);
 
         $project->update([
-            'status' => 'rejected',
-            'rejection_reason' => $validated['rejection_reason'],
+            'status' => 'returned',
+            'rejection_reason' => $validated['return_reason'],
         ]);
 
         \App\Models\ActivityLog::create([
             'user_id' => $request->user()->id,
-            'action' => 'project_rejected_admin',
+            'action' => 'project_returned_admin',
             'target_type' => 'project',
             'target_id' => $project->id,
             'ip' => $request->ip(),
-            'meta' => ['reason' => $validated['rejection_reason']],
+            'meta' => ['reason' => $validated['return_reason']],
         ]);
 
         try {
@@ -711,7 +724,7 @@ class ProjectController extends Controller
                 \Illuminate\Support\Facades\Mail::to($author)->queue(new \App\Mail\ProjectReturned($project));
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to send admin rejection email: ' . $e->getMessage());
+            \Log::error('Failed to send admin return email: ' . $e->getMessage());
         }
 
         return redirect()->back()->with('success', 'Project returned to student for revision.');

@@ -31,9 +31,9 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
 
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class)->withTrashed(['show']);
     Route::post('/users/{user}/approve', [\App\Http\Controllers\Admin\UserController::class, 'approve'])->name('users.approve');
-    Route::post('/users/{user}/reject', [\App\Http\Controllers\Admin\UserController::class, 'reject'])->name('users.reject');
+    Route::post('/users/{user}/deny', [\App\Http\Controllers\Admin\UserController::class, 'deny'])->name('users.deny');
     Route::get('/logs', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('logs');
 
     // System Settings
@@ -51,7 +51,7 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::post('/security-scan-demo/scan', [\App\Http\Controllers\Admin\SecurityScanDemoController::class, 'scan'])->name('security-demo.scan');
     Route::get('/security-scan-demo/test-file/{type}', [\App\Http\Controllers\Admin\SecurityScanDemoController::class, 'downloadTestFile'])->name('security-demo.test-file');
 
-    Route::get('/support/count', [SupportTicketController::class, 'getPendingCount'])->name('support.count');
+    Route::get('/api/support/notification-count', [SupportTicketController::class, 'getPendingCount'])->name('support.count');
     Route::post('/support/bulk-delete', [SupportTicketController::class, 'bulkDelete'])->name('support.bulk-delete');
     Route::get('/support', [SupportTicketController::class, 'index'])->name('support.index');
     Route::get('/support/{ticket}', [SupportTicketController::class, 'show'])->name('support.show');
@@ -106,7 +106,7 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
     Route::post('/admin/projects/{project}/verify-pdf', [AdminProjectController::class, 'verifyPdf'])->name('admin.projects.verify-pdf');
     Route::post('/admin/projects/{project}/publish', [AdminProjectController::class, 'publish'])->name('admin.projects.publish');
     Route::post('/admin/projects/{project}/approve', [AdminProjectController::class, 'approve'])->name('admin.projects.approve');
-    Route::post('/admin/projects/{project}/reject', [AdminProjectController::class, 'reject'])->name('admin.projects.reject');
+    Route::post('/admin/projects/{project}/return', [AdminProjectController::class, 'returnProject'])->name('admin.projects.return');
     Route::delete('/admin/projects/{project}', [AdminProjectController::class, 'destroy'])->name('admin.projects.destroy');
 });
 

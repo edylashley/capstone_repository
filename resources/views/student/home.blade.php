@@ -162,7 +162,7 @@
                                                         $statusClasses = match ($project->status) {
                                                             'published' => 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
                                                             'approved' => 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
-                                                            'rejected' => 'bg-red-500/20 text-red-400 border-red-500/30',
+                                                            'returned' => 'bg-rose-500/20 text-rose-400 border-rose-500/30',
                                                             default => 'bg-amber-500/20 text-amber-400 border-amber-500/30',
                                                         };
                                                     @endphp
@@ -191,7 +191,7 @@
                                                             </svg>
                                                             View Details
                                                         </a>
-                                                        @if($project->status === 'pending' || $project->status === 'rejected')
+                                                        @if($project->status === 'pending' || $project->status === 'returned')
                                                             <a href="{{ route('projects.edit', $project) }}"
                                                                 class="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all">
                                                                 <svg class="w-3.5 h-3.5 text-gray-400 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors"
@@ -200,7 +200,7 @@
                                                                         stroke-width="2.5"
                                                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                                 </svg>
-                                                                {{ $project->status === 'rejected' ? 'Resubmit' : 'Edit' }}
+                                                                {{ $project->status === 'returned' ? 'Resubmit' : 'Edit' }}
                                                             </a>
                                                             <form action="{{ route('projects.cancel', $project) }}" method="POST"
                                                                 onsubmit="return confirm('Are you sure you want to cancel this submission? This will delete the project and all uploaded files.');"
@@ -215,14 +215,14 @@
                                                                             stroke-width="2.5"
                                                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                                     </svg>
-                                                                    {{ $project->status === 'rejected' ? 'Delete' : 'Cancel' }}
+                                                                    {{ $project->status === 'returned' ? 'Delete' : 'Cancel' }}
                                                                 </button>
                                                             </form>
                                                         @endif
                                                     </div>
                                                 </td>
                                             </tr>
-                                            @if($project->status === 'rejected' && $project->rejection_reason)
+                                            @if($project->status === 'returned' && $project->rejection_reason)
                                                 <tr class="bg-red-500/5">
                                                     <td colspan="4" class="px-6 py-4">
                                                         <div class="flex items-start gap-3">

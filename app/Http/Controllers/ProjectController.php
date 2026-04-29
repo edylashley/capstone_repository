@@ -500,20 +500,27 @@ class ProjectController extends Controller
                         ->withErrors(['attachments' => $errorMsg]);
                 }
 
-                $checksum = hash_file('sha256', $fullAttPath);
-                $fileHash = hash_file('sha256', $fullAttPath);
+            if ($attPath) {
+                try {
+                    $fullAttPath = Storage::disk('public')->path($attPath);
+                    $checksum = @hash_file('sha256', $fullAttPath) ?: null;
+                    $fileHash = $checksum;
 
-                ProjectFile::create([
-                    'project_id' => $project->id,
-                    'type' => 'attachment',
-                    'filename' => $attach->getClientOriginalName(),
-                    'path' => $attPath,
-                    'mime_type' => $attach->getClientMimeType(),
-                    'size' => $attach->getSize(),
-                    'checksum' => $checksum,
-                    'file_hash' => $fileHash,
-                    'uploaded_by' => $request->user()->id,
-                ]);
+                    ProjectFile::create([
+                        'project_id' => $project->id,
+                        'type' => 'attachment',
+                        'filename' => $attach->getClientOriginalName(),
+                        'path' => $attPath,
+                        'mime_type' => $attach->getClientMimeType(),
+                        'size' => $attach->getSize(),
+                        'checksum' => $checksum,
+                        'file_hash' => $fileHash,
+                        'uploaded_by' => $request->user()->id,
+                    ]);
+                } catch (\Exception $e) {
+                    \Log::error("Attachment processing failed for project {$project->id}: " . $e->getMessage());
+                }
+            }
             }
         }
 
@@ -583,7 +590,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource (student editing pending/rejected).
+     * Show the form for editing the specified resource (student editing pending/returned).
      */
     public function edit(string $id)
     {
@@ -595,8 +602,8 @@ class ProjectController extends Controller
             abort(403, 'You are not authorized to edit this project.');
         }
 
-        // Only pending or rejected projects can be edited
-        if (!in_array($project->status, ['pending', 'rejected'])) {
+        // Only pending or returned projects can be edited
+        if (!in_array($project->status, ['pending', 'returned'])) {
             return redirect()->route('projects.show', $project)
                 ->with('error', 'This project can no longer be edited because it has been ' . $project->status . '.');
         }
@@ -608,7 +615,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * Update the specified resource in storage (student updating pending/rejected).
+     * Update the specified resource in storage (student updating pending/returned).
      */
     public function update(Request $request, string $id)
     {
@@ -620,8 +627,8 @@ class ProjectController extends Controller
             abort(403, 'You are not authorized to update this project.');
         }
 
-        // Only pending or rejected projects can be updated
-        if (!in_array($project->status, ['pending', 'rejected'])) {
+        // Only pending or returned projects can be updated
+        if (!in_array($project->status, ['pending', 'returned'])) {
             return redirect()->route('projects.show', $project)
                 ->with('error', 'This project can no longer be edited.');
         }
@@ -632,7 +639,7 @@ class ProjectController extends Controller
                 'string',
                 'max:255',
                 Rule::unique('projects')->ignore($project->id)->where(function ($query) {
-                    return $query->where('status', '!=', 'rejected');
+                    return $query->where('status', '!=', 'returned');
                 })
             ],
             'abstract' => 'required|string',
@@ -664,7 +671,7 @@ class ProjectController extends Controller
             $keywords = array_values($keywords);
         }
 
-        $wasRejected = $project->status === 'rejected';
+        $wasReturned = $project->status === 'returned';
 
         $project->update([
             'title' => $validated['title'],
@@ -772,7 +779,7 @@ class ProjectController extends Controller
                     ]);
                 }
 
-                // Cleanup ONLY the new bad file, keep the project record (rejected state)
+                // Cleanup ONLY the new bad file, keep the project record (returned state)
                 Storage::disk('public')->delete($path);
                 $projectFile->delete(); // Delete the file record we just created
 
@@ -827,13 +834,13 @@ class ProjectController extends Controller
         // Log the edit
         ActivityLog::create([
             'user_id' => $user->id,
-            'action' => $wasRejected ? 'project_resubmitted' : 'project_edited',
+            'action' => $wasReturned ? 'project_resubmitted' : 'project_edited',
             'target_type' => 'project',
             'target_id' => $project->id,
             'ip' => $request->ip(),
             'meta' => [
                 'title' => $project->title,
-                'was_rejected' => $wasRejected,
+                'was_returned' => $wasReturned,
             ],
         ]);
 
@@ -886,7 +893,7 @@ class ProjectController extends Controller
         }
 
         // Notify admin about the resubmission
-        if ($wasRejected) {
+        if ($wasReturned) {
             try {
                 $admin = \App\Models\User::where('role', 'admin')->first();
                 if ($admin) {
@@ -897,7 +904,7 @@ class ProjectController extends Controller
             }
         }
 
-        $message = $wasRejected
+        $message = $wasReturned
             ? 'Project updated and resubmitted for administrator review.'
             : 'Project updated successfully.';
 
@@ -916,8 +923,8 @@ class ProjectController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        // Can only cancel if pending or rejected (not yet approved/archived)
-        if (!in_array($project->status, ['pending', 'rejected'])) {
+        // Can only cancel if pending or returned (not yet approved/archived)
+        if (!in_array($project->status, ['pending', 'returned'])) {
             return redirect()->back()->with('error', 'Cannot cancel submission. Project is already ' . $project->status . '.');
         }
 
@@ -1056,11 +1063,18 @@ class ProjectController extends Controller
         $project = $file->project;
         $user = auth()->user();
 
-        // 1. Attachment Protection: Only owners and admins can view attachments
+        // 1. Attachment Protection
         if ($file->type === 'attachment') {
+            $ext = strtolower(pathinfo($file->filename, PATHINFO_EXTENSION));
+            $isSafeMedia = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm', 'avi']);
+            
             $isOwner = $user && $project && ($project->authors->contains($user) || $project->adviser_id == $user->id);
             $isPrivileged = $user && $user->isAdmin();
-            abort_unless($isOwner || $isPrivileged, 403, 'Attachments are restricted to faculty and administrators.');
+            
+            // Allow if owner/admin OR if logged in and it's a safe media file
+            $canView = $isOwner || $isPrivileged || (auth()->check() && $isSafeMedia);
+            
+            abort_unless($canView, 403, 'This attachment is restricted to project authors and administrators.');
         }
 
         // 2. Manuscript Visibility: Guests can only view published manuscripts

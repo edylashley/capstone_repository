@@ -20,7 +20,7 @@
                 </div>
             </div>
             
-            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
+            <div x-data="userPolling()" class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
                 <div class="p-6 text-gray-900 dark:text-white">
 
 
@@ -78,7 +78,7 @@
                             </form>
                         </div>
 
-                        <div class="text-[10px] text-gray-500 dark:text-gray-400 font-black uppercase tracking-widest">
+                        <div id="users-total" class="text-[10px] text-gray-500 dark:text-gray-400 font-black uppercase tracking-widest">
                             Total: {{ $users->total() }} User{{ $users->total() != 1 ? 's' : '' }}
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                                 <tr>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
-                                        Name / ID</th>
+                                        Name / Student ID</th>
                                     <th
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                                         Email</th>
@@ -104,7 +104,7 @@
                                         Actions</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-white/5 transition-colors">
+                            <tbody id="users-table-body" class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-white/5 transition-colors">
                                 @foreach($users as $user)
                                                             <tr x-data="{}" @click="window.location.href = '{{ route('admin.users.show', $user) }}'"
                                                                 class="group cursor-pointer hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-all duration-300 hover:shadow-sm dark:hover:shadow-2xl hover:shadow-black/20">
@@ -170,15 +170,15 @@
                                                                                 Approve
                                                                             </button>
                                                                         </form>
-                                                                        <form action="{{ route('admin.users.reject', $user) }}" method="POST"
-                                                                            class="inline"
-                                                                            onsubmit="return confirm('Reject this registration? The account will be moved to Trash.');">
-                                                                            @csrf
-                                                                            <button type="submit"
-                                                                                class="px-4 py-1.5 bg-rose-50 dark:bg-rose-600/10 text-rose-600 dark:text-rose-500 border border-rose-200 dark:border-rose-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 dark:hover:text-white transition-all transform hover:-translate-y-0.5">
-                                                                                Reject
-                                                                            </button>
-                                                                        </form>
+                                                                        <form action="{{ route('admin.users.deny', $user) }}" method="POST"
+                                                                             class="inline"
+                                                                             onsubmit="return confirm('Deny this registration? The account will be moved to Trash.');">
+                                                                             @csrf
+                                                                             <button type="submit"
+                                                                                 class="px-4 py-1.5 bg-rose-50 dark:bg-rose-600/10 text-rose-600 dark:text-rose-500 border border-rose-200 dark:border-rose-500/20 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 hover:text-white dark:hover:bg-rose-600 dark:hover:text-white transition-all transform hover:-translate-y-0.5">
+                                                                                 Deny
+                                                                             </button>
+                                                                         </form>
                                                                     @else
                                                                         {{-- Standard Management Flow --}}
                                                                         <a href="{{ route('admin.users.edit', $user) }}"
@@ -206,11 +206,68 @@
                         </table>
                     </div>
 
-                    <div class="mt-4">
+                    <div id="users-pagination" class="mt-4">
                         {{ $users->links() }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('userPolling', () => ({
+                pollInterval: null,
+                
+                init() {
+                    // Start polling when the component initializes
+                    this.startPolling();
+                },
+                
+                startPolling() {
+                    // Fetch updates every 5 seconds (5000 milliseconds)
+                    this.pollInterval = setInterval(() => {
+                        this.fetchUpdate();
+                    }, 5000);
+                },
+                
+                async fetchUpdate() {
+                    try {
+                        // Use the current URL (preserves active filters and pagination page)
+                        const url = window.location.href;
+                        
+                        const response = await fetch(url, {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+                        
+                        if (!response.ok) return;
+                        
+                        const html = await response.text();
+                        
+                        // Parse the fetched HTML
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        
+                        // IDs of elements we want to auto-update
+                        const elementsToUpdate = ['users-table-body', 'users-pagination', 'users-total'];
+                        
+                        elementsToUpdate.forEach(id => {
+                            const newEl = doc.getElementById(id);
+                            const currentEl = document.getElementById(id);
+                            
+                            // Only update if the content has actually changed to prevent flickering
+                            if (newEl && currentEl && currentEl.innerHTML !== newEl.innerHTML) {
+                                currentEl.innerHTML = newEl.innerHTML;
+                            }
+                        });
+                        
+                    } catch (error) {
+                        console.error('Auto-update polling failed:', error);
+                    }
+                }
+            }));
+        });
+    </script>
 </x-app-layout>

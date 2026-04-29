@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <h2
                 class="font-black text-3xl text-gray-900 dark:text-white leading-tight uppercase tracking-widest flex items-center gap-3">
-                <span class="text-blue-500 dark:text-indigo-500"></span> Central Archive Center
+                <span class="text-blue-500 dark:text-indigo-500"></span> Recently Deleted
             </h2>
             <div class="px-3 py-1 bg-rose-500/10 border border-rose-500/20 rounded-full">
                 <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest">Security Safety Net
@@ -126,34 +126,30 @@
                         <thead>
                             <tr
                                 class="bg-gray-50 dark:bg-slate-800/50 border-b border-gray-200 dark:border-white/5 transition-colors">
-                                <th class="p-5 w-10">
+                                <th class="p-4 w-10">
                                     <input type="checkbox" @click="toggleAllProjects()"
                                         :checked="selectedProjects.length === {{ $trashedProjects->count() }} && {{ $trashedProjects->count() }} > 0"
                                         class="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500">
                                 </th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Project
-                                    Information</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Deleted
-                                    On</th>
-                                <th
-                                    class="p-6 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right">
-                                    Actions</th>
+                                <th class="p-4 text-[10px] font-black uppercase tracking-widest text-slate-500">Project Details</th>
+                                <th class="p-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center w-32">Deleted On</th>
+                                <th class="p-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right w-24">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-white/5">
                             @forelse($trashedProjects as $project)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group"
                                     :class="selectedProjects.includes('{{ $project->id }}') ? 'bg-blue-500/5 dark:bg-indigo-500/5' : ''">
-                                    <td class="p-5">
+                                    <td class="p-4">
                                         <input type="checkbox" value="{{ $project->id }}" x-model="selectedProjects"
                                             class="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500">
                                     </td>
-                                    <td class="p-5">
+                                    <td class="p-4">
                                         <div class="flex items-center gap-4">
                                             <div>
-                                                <p
-                                                    class="font-black text-sm text-gray-900 dark:text-white leading-tight mb-1">
-                                                    {{ $project->title }}</p>
+                                                <a href="{{ route('projects.show', $project->id) }}"
+                                                    class="font-black text-sm text-gray-900 dark:text-white leading-tight mb-1 hover:text-blue-600 dark:hover:text-indigo-400 transition-colors">
+                                                    {{ $project->title }}</a>
                                                 <p
                                                     class="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest">
                                                     {{ $project->program }} • Adviser:
@@ -162,14 +158,14 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="p-5 text-center">
+                                    <td class="p-4 text-center">
                                         <p class="text-xs font-bold text-gray-600 dark:text-slate-400">
                                             {{ $project->deleted_at->format('M d, Y') }}</p>
                                         <p
                                             class="text-[10px] text-gray-400 dark:text-slate-600 uppercase font-black tracking-tighter">
                                             {{ $project->deleted_at->diffForHumans() }}</p>
                                     </td>
-                                    <td class="p-5 text-right">
+                                    <td class="p-4 text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             <form
                                                 action="{{ route('admin.archive.restore', ['type' => 'project', 'id' => $project->id, 'tab' => 'projects']) }}"
@@ -252,29 +248,25 @@
                                         :checked="selectedUsers.length === {{ $trashedUsers->count() }} && {{ $trashedUsers->count() }} > 0"
                                         class="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-800 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500">
                                 </th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500">Account
-                                    Details</th>
-                                <th class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center">Deleted
-                                    On</th>
-                                <th
-                                    class="p-5 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right">
-                                    Actions</th>
+                                <th class="p-4 text-[10px] font-black uppercase tracking-widest text-slate-500">Account Details</th>
+                                <th class="p-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-center w-32">Deleted On</th>
+                                <th class="p-4 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right w-24">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-white/5">
                             @forelse($trashedUsers as $user)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group"
                                     :class="selectedUsers.includes('{{ $user->id }}') ? 'bg-blue-500/5 dark:bg-indigo-500/5' : ''">
-                                    <td class="p-5">
+                                    <td class="p-4">
                                         <input type="checkbox" value="{{ $user->id }}" x-model="selectedUsers"
                                             class="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-950 text-blue-600 dark:text-indigo-600 focus:ring-blue-500 dark:focus:ring-indigo-500">
                                     </td>
-                                    <td class="p-5">
+                                    <td class="p-4">
                                         <div class="flex items-center gap-4">
                                             <div>
-                                                <p
-                                                    class="font-black text-sm text-gray-900 dark:text-white leading-tight mb-1">
-                                                    {{ $user->name }}</p>
+                                                <a href="{{ route('admin.users.show', $user->id) }}"
+                                                    class="font-black text-sm text-gray-900 dark:text-white leading-tight mb-1 hover:text-blue-600 dark:hover:text-indigo-400 transition-colors">
+                                                    {{ $user->name }}</a>
                                                 <p
                                                     class="text-[10px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest">
                                                     {{ $user->email }} • <span
@@ -283,14 +275,14 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="p-5 text-center">
+                                    <td class="p-4 text-center">
                                         <p class="text-xs font-bold text-gray-600 dark:text-slate-400">
                                             {{ $user->deleted_at->format('M d, Y') }}</p>
                                         <p
                                             class="text-[10px] text-gray-400 dark:text-slate-600 uppercase font-black tracking-tighter">
                                             {{ $user->deleted_at->diffForHumans() }}</p>
                                     </td>
-                                    <td class="p-5 text-right">
+                                    <td class="p-4 text-right">
                                         <div class="flex items-center justify-end gap-2">
                                             <form
                                                 action="{{ route('admin.archive.restore', ['type' => 'user', 'id' => $user->id, 'tab' => 'users']) }}"

@@ -38,8 +38,8 @@
                                 <option value="published" {{ request('status') == 'published' ? 'selected' : '' }}>
                                     Published
                                     Records</option>
-                                <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived
-                                </option>
+                                <option value="archived" {{ request('status') == 'archived' ? 'selected' : '' }}>Archived</option>
+                                <option value="returned" {{ request('status') == 'returned' ? 'selected' : '' }}>Returned</option>
                             </select>
                         </div>
                         <div
@@ -116,7 +116,7 @@
                 </div>
             @endif
 
-            <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-xl sm:rounded-3xl border border-gray-200 dark:border-white/5 transition-colors">
+            <div x-data="projectPolling()" class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-xl sm:rounded-3xl border border-gray-200 dark:border-white/5 transition-colors">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
@@ -137,7 +137,7 @@
                                     Administrative Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-white/5">
+                        <tbody id="projects-table-body" class="divide-y divide-gray-200 dark:divide-white/5">
                             @foreach($projects as $project)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors duration-300 group">
                                     <td class="px-6 py-4">
@@ -179,7 +179,7 @@
                                         @elseif($project->status === 'archived')
                                             <span
                                                 class="px-3 py-1 bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200 dark:border-white/5">Archived</span>
-                                        @elseif($project->status === 'rejected')
+                                        @elseif($project->status === 'returned')
                                             <span
                                                 class="px-3 py-1 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-rose-200 dark:border-rose-500/20 shadow-sm dark:shadow-[0_0_15px_-5px_rgba(244,63,94,0.3)]">Returned</span>
                                         @else
@@ -189,7 +189,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">
-                                            @if(!in_array($project->status, ['published', 'archived', 'rejected']))
+                                            @if(!in_array($project->status, ['published', 'archived', 'returned']))
                                                 <div class="flex flex-col gap-1.5 min-w-[80px]">
                                                     <form method="POST"
                                                         action="{{ route('admin.projects.approve', $project->id) }}"
@@ -203,16 +203,16 @@
                                                         </button>
                                                     </form>
                                                     <button type="button"
-                                                        onclick="const reason = prompt('Please enter the reason for returning this project:'); if(reason) { const f = document.getElementById('reject-form-{{ $project->id }}'); f.querySelector('input[name=rejection_reason]').value = reason; f.submit(); }"
+                                                        onclick="const reason = prompt('Please enter the reason for returning this project:'); if(reason) { const f = document.getElementById('return-form-{{ $project->id }}'); f.querySelector('input[name=return_reason]').value = reason; f.submit(); }"
                                                         class="w-full px-3 py-1.5 bg-rose-500 hover:bg-rose-600 dark:hover:bg-rose-400 text-white text-[10px] font-black uppercase rounded shadow-[0_4px_15px_-5px_rgba(244,63,94,0.5)] transition transform hover:-translate-y-0.5 active:scale-95"
                                                         title="Return for Revision">
                                                         Return
                                                     </button>
-                                                    <form id="reject-form-{{ $project->id }}" method="POST"
-                                                        action="{{ route('admin.projects.reject', $project->id) }}"
+                                                    <form id="return-form-{{ $project->id }}" method="POST"
+                                                        action="{{ route('admin.projects.return', $project->id) }}"
                                                         class="hidden">
                                                         @csrf
-                                                        <input type="hidden" name="rejection_reason" value="">
+                                                        <input type="hidden" name="return_reason" value="">
                                                     </form>
                                                 </div>
                                             @endif
@@ -257,11 +257,40 @@
                 </div>
 
                 @if($projects->hasPages())
-                    <div class="px-6 py-4 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-white/5 transition-colors">
+                    <div id="projects-pagination" class="px-6 py-4 bg-gray-50 dark:bg-slate-900 border-t border-gray-200 dark:border-white/5 transition-colors">
                         {{ $projects->links() }}
                     </div>
                 @endif
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('projectPolling', () => ({
+                pollInterval: null,
+                init() { this.startPolling(); },
+                startPolling() {
+                    this.pollInterval = setInterval(() => { this.fetchUpdate(); }, 5000);
+                },
+                async fetchUpdate() {
+                    try {
+                        const response = await fetch(window.location.href, {
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        });
+                        if (!response.ok) return;
+                        const html = await response.text();
+                        const doc = new DOMParser().parseFromString(html, 'text/html');
+                        ['projects-table-body', 'projects-pagination'].forEach(id => {
+                            const newEl = doc.getElementById(id);
+                            const currentEl = document.getElementById(id);
+                            if (newEl && currentEl && currentEl.innerHTML !== newEl.innerHTML) {
+                                currentEl.innerHTML = newEl.innerHTML;
+                            }
+                        });
+                    } catch (e) { console.error('Project polling failed:', e); }
+                }
+            }));
+        });
+    </script>
 </x-app-layout>

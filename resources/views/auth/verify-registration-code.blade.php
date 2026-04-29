@@ -32,25 +32,25 @@
             </label>
             <div class="flex justify-center gap-2" id="code-inputs">
                 <input type="text" maxlength="1"
-                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     data-index="0" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
                 <input type="text" maxlength="1"
-                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     data-index="1" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
                 <input type="text" maxlength="1"
-                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     data-index="2" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
                 <div class="flex items-center">
                     <span class="text-gray-400 font-bold text-xl">–</span>
                 </div>
                 <input type="text" maxlength="1"
-                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     data-index="3" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
                 <input type="text" maxlength="1"
-                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     data-index="4" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
                 <input type="text" maxlength="1"
-                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 rounded-xl bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                    class="code-digit w-12 h-14 text-center text-xl font-bold border-2 border-gray-300 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                     data-index="5" inputmode="numeric" pattern="[0-9]" autocomplete="off" />
             </div>
             <!-- Hidden field to hold the complete code -->

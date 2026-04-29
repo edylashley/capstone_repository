@@ -17,7 +17,7 @@
                         <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Project Title</label>
                         <input type="text" name="title" value="{{ old('title') }}" 
                                class="mt-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 placeholder-gray-400 dark:placeholder-slate-600 transition-colors" 
-                               placeholder="Enter your research title" required>
+                               placeholder="Enter your research title" required autocomplete="off">
                         @error('title') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
@@ -41,7 +41,7 @@
                             <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Adviser</label>
                             <input type="text" name="adviser_name" value="{{ old('adviser_name') }}" 
                                    class="mt-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 placeholder-gray-400 dark:placeholder-slate-600 transition-colors" 
-                                   placeholder="Full name of your adviser" required>
+                                   placeholder="Full name of your adviser" required autocomplete="off">
                             @error('adviser_name') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
@@ -64,7 +64,7 @@
                             {{-- First author: pre-filled with submitter, but fully editable --}}
                             <div class="flex items-center gap-2 author-row">
                                 <input type="text" name="authors[]" value="{{ old('authors.0', auth()->user()->name) }}" placeholder="Full name of group member" required
-                                       class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors">
+                                       class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors" autocomplete="off">
                             </div>
 
                             {{-- Pre-fill old values if validation failed --}}
@@ -73,7 +73,7 @@
                                     @if($index > 0)
                                     <div class="flex items-center gap-2 author-row">
                                         <input type="text" name="authors[]" value="{{ $authorName }}" placeholder="Full name of group member"
-                                               class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors">
+                                               class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors" autocomplete="off">
                                         <button type="button" onclick="this.closest('.author-row').remove()"
                                                 class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-200 dark:border-red-500/20"
                                                 title="Remove">
@@ -88,7 +88,7 @@
                                 {{-- Default: 2 empty slots for group members --}}
                                 <div class="flex items-center gap-2 author-row">
                                     <input type="text" name="authors[]" value="" placeholder="Full name of group member"
-                                           class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors">
+                                           class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors" autocomplete="off">
                                     <button type="button" onclick="this.closest('.author-row').remove()"
                                             class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-200 dark:border-red-500/20"
                                             title="Remove">
@@ -99,7 +99,7 @@
                                 </div>
                                 <div class="flex items-center gap-2 author-row">
                                     <input type="text" name="authors[]" value="" placeholder="Full name of group member"
-                                           class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors">
+                                           class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors" autocomplete="off">
                                     <button type="button" onclick="this.closest('.author-row').remove()"
                                             class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-200 dark:border-red-500/20"
                                             title="Remove">
@@ -247,7 +247,7 @@
                             row.className = 'flex items-center gap-2 author-row';
                             row.innerHTML = `
                                 <input type="text" name="authors[]" value="" placeholder="Full name of group member"
-                                       class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors">
+                                       class="flex-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors" autocomplete="off">
                                 <button type="button" onclick="this.closest('.author-row').remove()"
                                         class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-200 dark:border-red-500/20"
                                         title="Remove">

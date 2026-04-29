@@ -131,15 +131,15 @@
             <span class="font-bold tracking-tight">Security Scan Demo</span>
         </a>
         <a href="{{ route('admin.support.index') }}" x-data="{ 
-                        count: @js(\App\Models\SupportTicket::getNotificationCount()),
-                        async updateCount() {
-                            try {
-                                const response = await fetch('{{ route('admin.support.count') }}');
-                                const data = await response.json();
-                                this.count = data.count;
-                            } catch (e) { }
-                        }
-                    }" x-init="setInterval(() => updateCount(), 30000)"
+                            count: @js(\App\Models\SupportTicket::getNotificationCount()),
+                            async updateCount() {
+                                try {
+                                    const response = await fetch('{{ route('admin.support.count') }}');
+                                    const data = await response.json();
+                                    this.count = data.count;
+                                } catch (e) { }
+                            }
+                        }" x-init="setInterval(() => updateCount(), 30000)"
             class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-200 dark:hover:bg-white/10 transition-all duration-200 {{ request()->routeIs('admin.support.*') ? 'bg-blue-50 dark:bg-slate-800 shadow-sm dark:shadow-lg text-blue-600 dark:text-white border border-blue-100 dark:border-transparent' : 'text-gray-900 dark:text-slate-400' }}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

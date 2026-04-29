@@ -72,7 +72,7 @@ class StoreProjectRequest extends FormRequest
                 'string',
                 'max:255',
                 Rule::unique('projects')->where(function ($query) {
-                    return $query->where('status', '!=', 'rejected')
+                    return $query->where('status', '!=', 'returned')
                                  ->whereNull('deleted_at');
                 })
             ],

@@ -20,14 +20,17 @@ class SupportTicketController extends Controller
             'subject' => 'nullable|string|max:255',
             'message' => 'required|string|max:5000',
             'custom_category' => 'nullable|string|max:100',
+            'screenshot' => 'nullable|image|max:5120', // Max 5MB
         ];
 
-        // If guest, email is required. If auth, we use their account email.
-        if (!auth()->check()) {
-            $rules['email'] = 'required|email|max:255';
-        }
-
+        // We no longer require an email for guests (anonymous feedback)
         $validated = $request->validate($rules);
+
+        // Handle screenshot upload
+        $attachmentPath = null;
+        if ($request->hasFile('screenshot')) {
+            $attachmentPath = $request->file('screenshot')->store('support-attachments', 'public');
+        }
 
         // Silently prune any expired tickets
         SupportTicket::whereNotNull('expires_at')
@@ -41,10 +44,11 @@ class SupportTicketController extends Controller
 
         $ticket = SupportTicket::create([
             'user_id' => auth()->id(), // nullable
-            'email' => auth()->check() ? auth()->user()->email : $validated['email'],
+            'email' => auth()->check() ? auth()->user()->email : null,
             'category' => $category,
             'subject' => $validated['subject'] ?? Str::limit($validated['message'], 50),
             'message' => $validated['message'],
+            'attachment_path' => $attachmentPath,
             'status' => 'pending',
         ]);
 
@@ -164,8 +168,8 @@ class SupportTicketController extends Controller
 
         $ticket->update($updateData);
 
-        // If resolved, notify the user via email (works for both guests and registered students)
-        if ($validated['status'] === 'resolved') {
+        // If resolved, notify the user via email (only if email is available)
+        if ($validated['status'] === 'resolved' && !empty($ticket->email)) {
             \Illuminate\Support\Facades\Mail::to($ticket->email)->queue(new \App\Mail\SupportTicketResolved($ticket));
         }
 

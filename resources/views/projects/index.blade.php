@@ -66,7 +66,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 pl-3 pr-8 text-sm text-gray-900 dark:text-white bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="">
+                                    <input type="text" id="sidebar-search" name="keyword" value="{{ request('keyword') }}" class="block w-full py-2 pl-3 pr-8 text-sm text-gray-900 dark:text-white bg-transparent border-none outline-none focus:ring-0 relative z-20" placeholder="" autocomplete="off">
                                     <button type="button" id="sidebar-clear-btn" class="absolute text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hidden z-30 focus:outline-none" style="right: 10px; top: 50%; transform: translateY(-50%);" title="Clear search">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                     </button>

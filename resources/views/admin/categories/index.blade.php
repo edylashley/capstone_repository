@@ -64,9 +64,15 @@
                                             {{ $category->description ?? 'No description' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-500">
-                                            <span class="px-2.5 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-lg {{ $usageCount > 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 border border-gray-200 dark:border-gray-600' }}">
-                                                {{ $usageCount }} projects
-                                            </span>
+                                            <a href="{{ route('admin.projects.index', ['category' => $category->id]) }}" 
+                                               class="group/usage inline-flex items-center gap-2">
+                                                <span class="px-2.5 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-lg {{ $usageCount > 0 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 group-hover/usage:bg-emerald-200 dark:group-hover/usage:bg-emerald-800' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 border border-gray-200 dark:border-gray-600 group-hover/usage:bg-gray-200 dark:group-hover/usage:bg-gray-600' }} transition-colors">
+                                                    {{ $usageCount }} projects
+                                                </span>
+                                                <svg class="w-3 h-3 text-gray-400 dark:text-slate-600 opacity-0 group-hover/usage:opacity-100 transition-all transform group-hover/usage:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                                                </svg>
+                                            </a>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center gap-4">

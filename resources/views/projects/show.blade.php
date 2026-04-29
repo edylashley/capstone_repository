@@ -129,23 +129,23 @@
                                             Final Version</span>
                                     </div>
                                 </div>
-                            @elseif($project->status === 'rejected')
-                                <div class="mt-4 p-5 border-2 border-red-500/30 bg-red-500/10 rounded-2xl shadow-sm">
+                            @elseif($project->status === 'returned')
+                                <div class="mt-4 p-5 border-2 border-rose-500/30 bg-rose-500/10 rounded-2xl shadow-sm">
                                     <span
-                                        class="text-white/50 uppercase text-[10px] font-bold tracking-widest block mb-1">RECORD
+                                        class="text-white/50 dark:text-white/30 uppercase text-[10px] font-bold tracking-widest block mb-1">RECORD
                                         STATUS:</span>
                                     <div class="flex items-center gap-3">
                                         <span
-                                            class="relative inline-flex rounded-full h-3 w-3 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.4)]"></span>
+                                            class="relative inline-flex rounded-full h-3 w-3 bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.4)]"></span>
                                         <span
-                                            class="text-red-400 font-black text-sm uppercase tracking-tight italic">Returned</span>
+                                            class="text-rose-600 dark:text-rose-400 font-black text-sm uppercase tracking-tight italic">Returned for Revision</span>
                                     </div>
                                     @if($project->rejection_reason)
-                                        <div class="mt-4 pt-4 border-t border-red-500/20">
-                                            <p class="text-[10px] text-gray-300 uppercase font-bold tracking-widest mb-2">
+                                        <div class="mt-4 pt-4 border-t border-rose-500/20">
+                                            <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold tracking-widest mb-2">
                                                 Administrator's Feedback:</p>
                                             <p
-                                                class="text-sm text-gray-200 leading-relaxed whitespace-pre-wrap bg-red-500/10 rounded-lg p-3 border border-red-500/20">
+                                                class="text-sm text-gray-700 dark:text-rose-200/80 leading-relaxed whitespace-pre-wrap bg-rose-500/5 rounded-lg p-3 border border-rose-500/10">
                                                 {{ $project->rejection_reason }}
                                             </p>
                                         </div>
@@ -588,12 +588,23 @@
                                                     container.appendChild(canvas);
 
                                                     m_pdfDoc.getPage(i).then(function (page) {
-                                                        const viewport = page.getViewport({ scale: 1.5 });
+                                                        const dpr = window.devicePixelRatio || 1;
+                                                        // Limit width to 850px to prevent "zoomed" appearance on large screens
+                                                        const containerWidth = Math.min(container.clientWidth - 60, 850); 
+                                                        const unscaledViewport = page.getViewport({ scale: 1.0 });
+                                                        const scale = containerWidth / unscaledViewport.width;
+                                                        const viewport = page.getViewport({ scale: scale });
                                                         const ctx = canvas.getContext('2d');
-                                                        canvas.height = viewport.height;
-                                                        canvas.width = viewport.width;
+                                                        
+                                                        canvas.height = viewport.height * dpr;
+                                                        canvas.width = viewport.width * dpr;
+                                                        canvas.style.width = viewport.width + 'px';
+                                                        canvas.style.height = viewport.height + 'px';
+                                                        
+                                                        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                                                        
                                                         page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
-                                                            if (i === pagesToRender) {
+                                                            if (i === pagesToRender && m_pdfDoc.numPages > 5) {
                                                                 // Add REAL Blurred Page 6 for Guests as a teaser
                                                                 const teaserWrapper = document.createElement('div');
                                                                 teaserWrapper.className = "relative w-full max-w-[800px] h-[800px] shrink-0 rounded-xl overflow-hidden border border-white/10 mb-12 shadow-2xl group";
@@ -629,13 +640,30 @@
                                                                 // Render the teaser page (page 6 or last page)
                                                                 const teaserPageNum = Math.min(m_pdfDoc.numPages, pagesToRender + 1);
                                                                 m_pdfDoc.getPage(teaserPageNum).then(function (page) {
-                                                                    const viewport = page.getViewport({ scale: 1.0 });
+                                                                    const dpr = window.devicePixelRatio || 1;
+                                                                    const containerWidth = Math.min(container.clientWidth - 60, 850);
+                                                                    const unscaledViewport = page.getViewport({ scale: 1.0 });
+                                                                    const scale = containerWidth / unscaledViewport.width;
+                                                                    const viewport = page.getViewport({ scale: scale });
                                                                     const ctx = teaserCanvas.getContext('2d');
-                                                                    teaserCanvas.height = viewport.height;
-                                                                    teaserCanvas.width = viewport.width;
+                                                                    
+                                                                    teaserCanvas.height = viewport.height * dpr;
+                                                                    teaserCanvas.width = viewport.width * dpr;
+                                                                    teaserCanvas.style.width = viewport.width + 'px';
+                                                                    teaserCanvas.style.height = viewport.height + 'px';
+                                                                    
+                                                                    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                                                                    
                                                                     page.render({ canvasContext: ctx, viewport: viewport });
                                                                 });
 
+                                                                const loading = document.getElementById('desktop-pdf-loading');
+                                                                if (loading) {
+                                                                    loading.style.opacity = '0';
+                                                                    setTimeout(() => loading.classList.add('hidden'), 500);
+                                                                }
+                                                            } else if (i === pagesToRender) {
+                                                                // Just hide loading if there's no teaser needed
                                                                 const loading = document.getElementById('desktop-pdf-loading');
                                                                 if (loading) {
                                                                     loading.style.opacity = '0';
@@ -740,14 +768,15 @@
                     </div>
 
                     {{-- Attachments: restricted to advisers, admins, and the project's own authors --}}
+                    {{-- Attachments: restricted to advisers, admins, and the project's own authors --}}
                     @php
-                        $canSeeAttachments = auth()->check() && (
+                        $isOwnerOrAdmin = auth()->check() && (
                             auth()->user()->isAdmin() ||
                             $project->authors->contains(auth()->user())
                         );
                     @endphp
 
-                    @if($canSeeAttachments && $attachments->isNotEmpty())
+                    @if($attachments->isNotEmpty())
                         <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm dark:shadow-2xl sm:rounded-3xl p-8 border border-gray-200 dark:border-white/5 transition-colors">
                             <div class="flex items-center justify-between mb-8 border-b border-gray-200 dark:border-white/5 pb-6">
                                 <h3 class="font-black text-xl text-gray-900 dark:text-white uppercase tracking-tight">Project Attachments</h3>
@@ -761,6 +790,13 @@
                                         $ext = strtolower(pathinfo($file->filename, PATHINFO_EXTENSION));
                                         $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
                                         $isVideo = in_array($ext, ['mp4', 'mov', 'webm', 'avi']);
+                                        $isSafe = $isImage || $isVideo || $ext === 'pdf';
+                                        
+                                        // Access Logic
+                                        $canView = $isOwnerOrAdmin || (auth()->check() && ($isImage || $isVideo));
+                                        $canDownload = $isOwnerOrAdmin;
+                                        $isLocked = !auth()->check() || (!$isOwnerOrAdmin && !$isSafe);
+
                                         $isPreviewable = $isImage || $isVideo;
                                         $icon = match (true) {
                                             in_array($ext, ['zip', 'rar', '7z']) => '📦',
@@ -778,18 +814,20 @@
                                         $fileUrl = route('files.view', $file);
                                     @endphp
                                     <div
-                                        class="flex flex-col border border-gray-200 dark:border-white/5 rounded-2xl bg-gray-50 dark:bg-slate-950/50 hover:bg-white dark:hover:bg-white/[0.02] transition-all duration-300 overflow-hidden shadow-sm dark:shadow-lg group">
+                                        class="flex flex-col border border-gray-200 dark:border-white/5 rounded-2xl {{ $isLocked ? 'bg-gray-100/50 dark:bg-slate-950/20 opacity-75' : 'bg-gray-50 dark:bg-slate-950/50 hover:bg-white dark:hover:bg-white/[0.02]' }} transition-all duration-300 overflow-hidden shadow-sm dark:shadow-lg group">
                                         <div class="flex items-center justify-between p-5">
                                             <div class="flex items-center gap-4 overflow-hidden">
                                                 <div
-                                                    class="w-12 h-12 rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                                    <span class="text-xl">{{ $icon }}</span>
+                                                    class="w-12 h-12 rounded-xl {{ $isLocked ? 'bg-gray-200 dark:bg-slate-800' : 'bg-white dark:bg-slate-900' }} flex items-center justify-center shadow-sm dark:shadow-inner border border-gray-200 dark:border-white/5 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                                    <span class="text-xl {{ $isLocked ? 'grayscale opacity-50' : '' }}">{{ $icon }}</span>
                                                 </div>
                                                 <div class="flex flex-col overflow-hidden">
                                                     <div class="flex items-center gap-2">
                                                         <span class="text-sm font-black text-gray-900 dark:text-white truncate"
                                                             title="{{ $file->filename }}">{{ $file->filename }}</span>
-                                                        @if($isImage)
+                                                        @if($isLocked)
+                                                            <span class="text-xs" title="Login required for full access">🔒</span>
+                                                        @elseif($isImage)
                                                             <span
                                                                 class="bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-emerald-200 dark:border-emerald-500/20">Media</span>
                                                         @elseif($isVideo)
@@ -797,24 +835,20 @@
                                                                 class="bg-blue-50 dark:bg-indigo-500/20 text-blue-600 dark:text-indigo-400 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-blue-200 dark:border-indigo-500/20">Stream</span>
                                                         @endif
                                                     </div>
-                                                    @if(auth()->check() && (auth()->user()->isAdmin() || $project->authors->contains(auth()->user())))
-                                                        <span
-                                                            class="text-[9px] uppercase font-black text-gray-500 dark:text-slate-500 tracking-widest mt-0.5">
-                                                            {{ strtoupper($ext) }} • {{ number_format($file->size / 1048576, 2) }}
-                                                            MB
-                                                        </span>
-                                                    @else
-                                                        <span
-                                                            class="text-[9px] uppercase font-black text-gray-600 dark:text-slate-600 tracking-widest mt-0.5">
-                                                            {{ strtoupper($ext) }}
-                                                        </span>
-                                                    @endif
+                                                    <span class="text-[9px] uppercase font-black text-gray-500 dark:text-slate-500 tracking-widest mt-0.5">
+                                                        {{ strtoupper($ext) }} • 
+                                                        @if(!$isLocked)
+                                                            {{ number_format($file->size / 1048576, 2) }} MB
+                                                        @else
+                                                            Restricted Access
+                                                        @endif
+                                                    </span>
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 pr-2">
-                                                @if($isPreviewable)
+                                                @if(!$isLocked && $canView && $isPreviewable)
                                                     <button
-                                                        onclick="openLightbox('{{ $fileUrl }}', '{{ $isImage ? 'image' : 'video' }}')"
+                                                        onclick="{{ $isImage ? "openLightbox('$fileUrl', '$file->filename')" : "openVideoLightbox('$fileUrl', '$file->filename', '$ext')" }}"
                                                         class="p-2.5 text-blue-500 dark:text-indigo-400 hover:bg-blue-50 dark:hover:bg-indigo-500/20 rounded-xl transition-all"
                                                         title="Preview File">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -825,14 +859,23 @@
                                                         </svg>
                                                     </button>
                                                 @endif
-                                                <a href="{{ route('files.download', $file) }}"
-                                                    class="p-2.5 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-all"
-                                                    title="Download File">
-                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                    </svg>
-                                                </a>
+                                                @if($canDownload)
+                                                    <a href="{{ route('files.download', $file) }}"
+                                                        class="p-2.5 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl transition-all"
+                                                        title="Download File">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                        </svg>
+                                                    </a>
+                                                @endif
+                                                @if($isLocked)
+                                                    <span class="p-2.5 text-gray-400 dark:text-slate-600" title="Login or appropriate role required">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                        </svg>
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -866,7 +909,7 @@
                 class="max-h-[80vh] max-w-full object-contain rounded-xl shadow-2xl hidden">
 
             <!-- Video mode -->
-            <video id="lightbox-video" controls class="max-h-[80vh] max-w-full rounded-xl shadow-2xl hidden"
+            <video id="lightbox-video" controls controlsList="nodownload" class="max-h-[80vh] max-w-full rounded-xl shadow-2xl hidden"
                 style="max-width:900px;">
                 <source id="lightbox-video-src" src="" type="">
             </video>
@@ -874,14 +917,16 @@
             <!-- Caption + download -->
             <div class="flex items-center gap-4">
                 <span id="lightbox-caption" class="text-white/70 text-sm font-semibold"></span>
-                <a id="lightbox-download" href="#" download
-                    class="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-full transition-all">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download
-                </a>
+                @if($isOwnerOrAdmin)
+                    <a id="lightbox-download" href="#" download
+                        class="inline-flex items-center gap-1.5 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold rounded-full transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Download
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -900,14 +945,20 @@
             _openLightboxShared(src, filename);
         }
 
-        function openVideoLightbox(src, filename, mimeType) {
+        function openVideoLightbox(src, filename, ext) {
             const img = document.getElementById('lightbox-img');
             const video = document.getElementById('lightbox-video');
             const vsrc = document.getElementById('lightbox-video-src');
             img.classList.add('hidden');
             img.src = '';
+            
+            // Map common video extensions to correct mime types
+            let mime = 'mp4';
+            if(ext === 'webm') mime = 'webm';
+            if(ext === 'ogg') mime = 'ogg';
+
             vsrc.src = src;
-            vsrc.type = 'video/' + mimeType;
+            vsrc.type = 'video/' + mime;
             video.load();  // reload source
             video.classList.remove('hidden');
             _openLightboxShared(src, filename);
@@ -915,8 +966,11 @@
 
         function _openLightboxShared(src, filename) {
             document.getElementById('lightbox-caption').textContent = filename;
-            document.getElementById('lightbox-download').href = src;
-            document.getElementById('lightbox-download').download = filename;
+            const dlBtn = document.getElementById('lightbox-download');
+            if (dlBtn) {
+                dlBtn.href = src;
+                dlBtn.download = filename;
+            }
             const modal = document.getElementById('lightbox-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');

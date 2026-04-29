@@ -243,7 +243,7 @@
 
                                     <input type="search" id="dynamic-search" name="keyword"
                                         class="block w-full py-5 pl-14 pr-[140px] text-sm text-gray-900 dark:text-white placeholder-transparent bg-transparent outline-none focus:ring-0 border-0 relative z-20"
-                                        placeholder="" required>
+                                        placeholder="" required autocomplete="off">
                                     <button type="button" id="clear-search-btn"
                                         class="absolute text-slate-400 hover:text-gray-900 dark:hover:text-white hidden z-30 focus:outline-none"
                                         style="right: 120px; top: 50%; transform: translateY(-50%);" title="Clear search">
@@ -253,7 +253,7 @@
                                         </svg>
                                     </button>
                                     <button type="submit"
-                                        class="absolute right-3 px-6 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs uppercase tracking-widest rounded-xl transition-all duration-300 z-30 shadow-lg shadow-teal-500/20 active:scale-95">
+                                        class="absolute right-3 px-4 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 font-black text-xs uppercase tracking-widest rounded-xl transition-all duration-300 z-30 shadow-lg shadow-teal-500/20 active:scale-95">
                                         Search
                                     </button>
                                 </div>

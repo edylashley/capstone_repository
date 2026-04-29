@@ -85,7 +85,7 @@ class PDFValidator
             }
         }
 
-        $requiredKeywords = config('repository.manuscript_required_keywords', ['approval', 'approved', 'approval page', 'signature', 'approved by']);
+        $requiredKeywords = config('repository.manuscript_required_keywords', ['approval sheet']);
         $found = [];
         $hasImageOnlyPage = false;
 
@@ -132,7 +132,7 @@ class PDFValidator
             // HYBRID LOGIC: Allow multi-page scanned documents but with a warning
             if ($hasImageOnlyPage && $pageCount >= $minPages) {
                 $valid = true;
-                $notes[] = "[i] Manual Verification Needed: Signatures/Keywords not found in text, but a possible scanned document was detected. Please check this page manually if it is the signed approval sheet.";
+                $notes[] = "[i] Manual Verification Needed: Approval Sheet not found in text, but a possible scanned document was detected. Please check manually.";
             } else {
                 $valid = false;
                 $keywordsMissing = true;
@@ -140,7 +140,7 @@ class PDFValidator
                 if ($pageCount < $minPages) {
                     $notes[] = "[ERROR] Document too short ({$pageCount} pg). Manuscripts must be complete research works. (Min: {$minPages} pg)";
                 } elseif (!$hasImageOnlyPage) {
-                    $notes[] = "[ERROR] Required sections (Approval Sheet, signatures, etc.) not detected. Check manually for the Approval Sheet page.";
+                    $notes[] = "[ERROR] Required section (Approval Sheet) not detected. Check manually for the Approval Sheet page.";
                 } else {
                     $notes[] = "[ERROR] Content verification failed. No required keywords found even in scanned pages.";
                 }

@@ -13,7 +13,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             {{-- Show rejection feedback if project was returned --}}
-            @if($project->status === 'rejected' && $project->rejection_reason)
+            @if($project->status === 'returned' && $project->rejection_reason)
                 <div class="mb-8 bg-red-900/10 border-2 border-red-500/20 rounded-3xl p-8 shadow-2xl">
                     <div class="flex items-start gap-6">
                         <div class="flex-shrink-0 w-14 h-14 bg-red-500/20 rounded-2xl flex items-center justify-center border border-red-500/30">
@@ -40,7 +40,7 @@
                         <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Project Title</label>
                         <input type="text" name="title" value="{{ old('title', $project->title) }}" 
                                class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600" 
-                               required>
+                               required autocomplete="off">
                         @error('title') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
 
@@ -64,7 +64,7 @@
                             <label class="block font-bold text-xs uppercase tracking-widest text-slate-400 mb-2">Adviser</label>
                             <input type="text" name="adviser_name" value="{{ old('adviser_name', $project->adviser_name ?? $project->adviser->name ?? '') }}" 
                                    class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600" 
-                                   placeholder="Full name of your adviser" required>
+                                   placeholder="Full name of your adviser" required autocomplete="off">
                             @error('adviser_name') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                         </div>
 
@@ -136,7 +136,7 @@
                         <input type="text" name="keywords" 
                                value="{{ old('keywords', is_array($project->keywords) ? implode(', ', $project->keywords) : $project->keywords) }}" 
                                class="mt-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-600"
-                               placeholder="e.g., machine learning, web app, IoT">
+                               placeholder="e.g., machine learning, web app, IoT" autocomplete="off">
                         <p class="text-[10px] text-slate-500 mt-2 italic">Separate keywords with commas.</p>
                         @error('keywords') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
                     </div>
@@ -159,7 +159,7 @@
                                     <input type="text" name="authors[]" value="{{ $authorName }}" 
                                            {{ $authorName === $primaryAuthor ? 'readonly' : '' }}
                                            placeholder="Full name of group member"
-                                           class="flex-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white {{ $authorName === $primaryAuthor ? 'opacity-50 cursor-not-allowed' : 'focus:border-indigo-500 focus:ring-indigo-500' }} shadow-sm text-sm">
+                                           class="flex-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white {{ $authorName === $primaryAuthor ? 'opacity-50 cursor-not-allowed' : 'focus:border-indigo-500 focus:ring-indigo-500' }} shadow-sm text-sm" autocomplete="off">
                                     
                                     @if($authorName !== $primaryAuthor)
                                         <button type="button" onclick="this.closest('.author-row').remove()"
@@ -311,7 +311,7 @@
                     {{-- Submit Area --}}
                     <div class="mt-10 pt-8 border-t border-gray-200">
 
-                        @if($project->status === 'rejected')
+                        @if($project->status === 'returned')
                             {{-- Resubmission info card --}}
                             <div class="mb-8 rounded-[2rem] border border-amber-500/20 p-8 bg-amber-900/10 shadow-2xl">
                                 <div class="flex items-start gap-6">
@@ -340,7 +340,7 @@
                                 Cancel
                             </a>
 
-                            @if($project->status === 'rejected')
+                            @if($project->status === 'returned')
                                 <button id="submit-btn" type="submit"
                                         class="group relative inline-flex items-center justify-center gap-3 px-20 py-4 text-white font-bold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 text-sm uppercase tracking-widest whitespace-nowrap overflow-hidden"
                                         style="background: linear-gradient(to right, #f59e0b, #d97706, #ea580c); box-shadow: 0 10px 15px -3px rgba(245,158,11,0.3);"
@@ -391,7 +391,7 @@
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                             </svg>
-                            {{ $project->status === 'rejected' ? 'Resubmit your project' : 'Update project details' }}
+                            {{ $project->status === 'returned' ? 'Resubmit your project' : 'Update project details' }}
                         </p>
                     </div>
                 </form>
@@ -718,7 +718,7 @@
             row.className = 'flex items-center gap-2 author-row';
             row.innerHTML = `
                 <input type="text" name="authors[]" value="" placeholder="Full name of group member"
-                       class="flex-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                       class="flex-1 block w-full bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm" autocomplete="off">
                 <button type="button" onclick="this.closest('.author-row').remove()"
                         class="w-10 h-10 flex items-center justify-center rounded-xl bg-red-900/20 text-red-500 hover:bg-red-900/40 transition-all flex-shrink-0 border border-red-500/20"
                         title="Remove">
