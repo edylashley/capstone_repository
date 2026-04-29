@@ -99,33 +99,33 @@
     @stack('styles')
 </head>
 
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.store('deleteModal', {
-                open: false,
-                title: '',
-                message: '',
-                formId: '',
-                show(title, message, formId) {
-                    this.title = title;
-                    this.message = message;
-                    this.formId = formId;
-                    this.open = true;
-                },
-                confirm(permanent) {
-                    const form = document.getElementById(this.formId);
-                    if (permanent) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = 'force_delete';
-                        input.value = 'true';
-                        form.appendChild(input);
-                    }
-                    form.submit();
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('deleteModal', {
+            open: false,
+            title: '',
+            message: '',
+            formId: '',
+            show(title, message, formId) {
+                this.title = title;
+                this.message = message;
+                this.formId = formId;
+                this.open = true;
+            },
+            confirm(permanent) {
+                const form = document.getElementById(this.formId);
+                if (permanent) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'force_delete';
+                    input.value = 'true';
+                    form.appendChild(input);
                 }
-            })
+                form.submit();
+            }
         })
-    </script>
+    })
+</script>
 
 <body
     class="font-sans antialiased bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-slate-200 transition-colors duration-300"
@@ -186,6 +186,8 @@
             @endauth
 
 
+
+
             <!-- Page Heading -->
             @if(isset($header) || View::hasSection('header'))
                 <header
@@ -210,8 +212,6 @@
                                 @endif
                             </div>
                         </div>
-
-
                     </div>
                 </header>
             @endif
@@ -387,7 +387,8 @@
                             @endif
                         @endauth
 
-                        <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6" enctype="multipart/form-data">
+                        <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6"
+                            enctype="multipart/form-data">
                             @csrf
                             <div>
                                 <label
@@ -429,7 +430,8 @@
                                     (Optional)</label>
                                 <input type="file" name="screenshot" accept="image/*"
                                     class="w-full text-sm text-gray-500 dark:text-slate-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-indigo-900/30 dark:file:text-indigo-400 transition-all cursor-pointer bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-white/10 rounded-2xl px-2 py-2">
-                                <p class="text-[9px] text-gray-500 dark:text-slate-500 mt-2 ml-1 font-semibold">Max size: 5MB. Supported formats: JPG, PNG, GIF</p>
+                                <p class="text-[9px] text-gray-500 dark:text-slate-500 mt-2 ml-1 font-semibold">Max size:
+                                    5MB. Supported formats: JPG, PNG, GIF</p>
                             </div>
 
 
@@ -454,15 +456,15 @@
     {{-- ── Admin: Floating Support Notification Icon ──────────────────── --}}
     @if(auth()->check() && auth()->user()->isAdmin())
         <a href="{{ route('admin.support.index') }}" x-data="{ 
-                                                                count: @js(\App\Models\SupportTicket::getNotificationCount()),
-                                                                async updateCount() {
-                                                                    try {
-                                                                        const response = await fetch('{{ route('admin.support.count') }}');
-                                                                        const data = await response.json();
-                                                                        this.count = data.count;
-                                                                    } catch (e) { }
-                                                                }
-                                                            }" x-init="setInterval(() => updateCount(), 30000)"
+                                                                        count: @js(\App\Models\SupportTicket::getNotificationCount()),
+                                                                        async updateCount() {
+                                                                            try {
+                                                                                const response = await fetch('{{ route('admin.support.count') }}');
+                                                                                const data = await response.json();
+                                                                                this.count = data.count;
+                                                                            } catch (e) { }
+                                                                        }
+                                                                    }" x-init="setInterval(() => updateCount(), 30000)"
             class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
             :title="'Support Tickets' + (count > 0 ? ' — ' + count + ' pending' : '')">
             <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
@@ -511,13 +513,14 @@
         </div>
     @endif
     {{-- ── Global Delete Choice Modal ─────────────────────────────── --}}
-    <div x-show="$store.deleteModal.open" x-cloak
-        class="fixed inset-0 z-[10000] flex items-center justify-center px-4" style="display: none;">
+    <div x-show="$store.deleteModal.open" x-cloak class="fixed inset-0 z-[10000] flex items-center justify-center px-4"
+        style="display: none;">
         {{-- Backdrop --}}
-        <div x-show="$store.deleteModal.open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-            class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" @click="$store.deleteModal.open = false"></div>
+        <div x-show="$store.deleteModal.open" x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
+            @click="$store.deleteModal.open = false"></div>
 
         {{-- Modal Card --}}
         <div x-show="$store.deleteModal.open" x-transition:enter="ease-out duration-300"
@@ -526,31 +529,42 @@
             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
             x-transition:leave-end="opacity-0 scale-95 translate-y-4"
             class="relative bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden border border-gray-200 dark:border-white/10 transition-colors duration-300">
-            
+
             <div class="p-8">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="w-14 h-14 bg-rose-50 dark:bg-rose-500/10 rounded-2xl flex items-center justify-center border border-rose-200 dark:border-rose-500/20">
-                        <svg class="w-7 h-7 text-rose-600 dark:text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <div
+                        class="w-14 h-14 bg-rose-50 dark:bg-rose-500/10 rounded-2xl flex items-center justify-center border border-rose-200 dark:border-rose-500/20">
+                        <svg class="w-7 h-7 text-rose-600 dark:text-rose-500" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight" x-text="$store.deleteModal.title"></h3>
-                        <p class="text-[10px] font-black text-rose-600 dark:text-rose-500 uppercase tracking-widest mt-0.5">Critical Action Required</p>
+                        <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight"
+                            x-text="$store.deleteModal.title"></h3>
+                        <p
+                            class="text-[10px] font-black text-rose-600 dark:text-rose-500 uppercase tracking-widest mt-0.5">
+                            Critical Action Required</p>
                     </div>
                 </div>
 
-                <p class="text-sm text-gray-600 dark:text-slate-400 leading-relaxed mb-8" x-text="$store.deleteModal.message"></p>
+                <p class="text-sm text-gray-600 dark:text-slate-400 leading-relaxed mb-8"
+                    x-text="$store.deleteModal.message"></p>
 
                 <div class="flex flex-col gap-3">
                     {{-- Soft Delete Option --}}
                     <button @click="$store.deleteModal.confirm(false)"
                         class="group w-full flex items-center justify-between p-5 bg-gray-50 dark:bg-slate-950 hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-gray-200 dark:border-white/5 rounded-2xl transition-all duration-300 text-left">
                         <div>
-                            <p class="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wide">Move to Trash</p>
-                            <p class="text-[9px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest mt-1">Safely store in the Archive Center for later recovery</p>
+                            <p class="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wide">Move to
+                                Trash</p>
+                            <p
+                                class="text-[9px] text-gray-500 dark:text-slate-500 font-bold uppercase tracking-widest mt-1">
+                                Safely store in the Archive Center for later recovery</p>
                         </div>
-                        <svg class="w-5 h-5 text-gray-300 group-hover:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-gray-300 group-hover:text-amber-500 transition-colors" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
@@ -559,10 +573,14 @@
                     <button @click="$store.deleteModal.confirm(true)"
                         class="group w-full flex items-center justify-between p-5 bg-gray-50 dark:bg-slate-950 hover:bg-rose-50 dark:hover:bg-rose-500/10 border border-gray-200 dark:border-white/5 rounded-2xl transition-all duration-300 text-left">
                         <div>
-                            <p class="text-xs font-black text-rose-600 dark:text-rose-500 uppercase tracking-wide">Delete Permanently</p>
-                            <p class="text-[9px] text-rose-500/50 dark:text-rose-500/30 font-bold uppercase tracking-widest mt-1">Erase forever. This action cannot be undone.</p>
+                            <p class="text-xs font-black text-rose-600 dark:text-rose-500 uppercase tracking-wide">
+                                Delete Permanently</p>
+                            <p
+                                class="text-[9px] text-rose-500/50 dark:text-rose-500/30 font-bold uppercase tracking-widest mt-1">
+                                Erase forever. This action cannot be undone.</p>
                         </div>
-                        <svg class="w-5 h-5 text-gray-300 group-hover:text-rose-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-gray-300 group-hover:text-rose-500 transition-colors" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
@@ -578,6 +596,37 @@
     </div>
 
     @stack('scripts')
+
+    @auth
+        <!-- Persistent Desktop Theme Toggle (Fixed Top Right) -->
+        <div class="hidden lg:block fixed top-4 right-4 z-[9999]">
+            <button type="button" @click="toggleTheme()" title="Toggle Light/Dark Mode"
+                class="p-2.5 rounded-xl transition-all duration-500 shadow-xl border focus:outline-none focus:ring-2 group overflow-hidden relative flex items-center justify-center backdrop-blur-md"
+                :class="theme === 'dark' ? 'bg-white border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-950 border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
+
+                <!-- Subtle Hover Glow -->
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    :class="theme === 'dark' ? 'bg-gradient-to-tr from-amber-500/20 to-yellow-500/20' : 'bg-gradient-to-tr from-indigo-500/20 to-purple-500/20'">
+                </div>
+                <template x-if="theme === 'dark'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:rotate-90 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M12 3v1m0 16v1m9-9h1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.071 19.071l-.707-.707M7.929 4.929l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z">
+                        </path>
+                    </svg>
+                </template>
+                <template x-if="theme === 'light'">
+                    <svg class="w-5 h-5 relative z-10 transform group-hover:-rotate-12 transition-transform duration-700"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </template>
+            </button>
+        </div>
+    @endauth
 </body>
 
 </html>

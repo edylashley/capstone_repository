@@ -203,10 +203,10 @@
         </div>
 
         <div class="flex items-center gap-2 flex-shrink-0">
-            <!-- Theme Toggle -->
+            <!-- Theme Toggle (Mobile Only) -->
             <button type="button" @click="toggleTheme()" title="Toggle Light/Dark Mode"
-                class="p-2.5 rounded-xl transition-all duration-500 shadow-sm border focus:outline-none focus:ring-2 group overflow-hidden relative flex items-center justify-center"
-                :class="theme === 'dark' ? 'bg-white/90 backdrop-blur-md border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-900/80 backdrop-blur-md border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
+                class="lg:hidden p-2.5 rounded-xl transition-all duration-500 shadow-sm border focus:outline-none focus:ring-2 group overflow-hidden relative flex items-center justify-center"
+                :class="theme === 'dark' ? 'bg-white border-amber-200 text-amber-600 shadow-amber-500/10 focus:ring-amber-500/50' : 'bg-slate-950 border-indigo-500/30 text-indigo-400 shadow-indigo-500/20 focus:ring-indigo-500/50'">
 
                 <!-- Subtle Hover Glow -->
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
