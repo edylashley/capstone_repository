@@ -337,7 +337,7 @@
                                                 </a>
                                                 <form id="delete-project-{{ $project->id }}" method="POST"
                                                     action="{{ route('admin.projects.destroy', $project->id) }}"
-                                                    @submit.prevent="deleteModal.show('Delete Project', '{{ addslashes($project->title) }} will be removed. How would you like to proceed?', 'delete-project-{{ $project->id }}')">
+                                                    @submit.prevent="$store.deleteModal.show('Delete Project', '{{ addslashes($project->title) }} will be removed. How would you like to proceed?', 'delete-project-{{ $project->id }}')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
