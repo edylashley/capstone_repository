@@ -390,6 +390,21 @@
                         <form action="{{ route('support.store') }}" method="POST" id="support-form" class="space-y-6"
                             enctype="multipart/form-data">
                             @csrf
+
+                            @guest
+                            <div>
+                                <label
+                                    class="block text-[10px] font-black text-gray-900 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Email Address (Optional)</label>
+                                <input type="email" name="email" 
+                                    placeholder="your@email.com (if you want a reply)"
+                                    class="w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-2xl text-gray-900 dark:text-white focus:border-blue-500 focus:ring-blue-500 text-sm py-3.5 px-4 font-bold placeholder:text-gray-400 dark:placeholder:text-slate-600 transition-colors"
+                                    autocomplete="off"
+                                    value="{{ old('email') }}">
+                                @error('email') <p class="text-red-500 text-[10px] font-bold mt-1 ml-1 uppercase tracking-widest">{{ $message }}</p> @enderror
+                                <p class="text-[9px] text-gray-500 dark:text-slate-500 mt-2 ml-1 font-semibold italic">Provide your email so an administrator can contact you directly regarding this issue.</p>
+                            </div>
+                            @endguest
+
                             <div>
                                 <label
                                     class="block text-[10px] font-black text-gray-900 dark:text-slate-400 uppercase tracking-[0.2em] mb-2.5 ml-1">Issue

@@ -21,9 +21,10 @@ class SupportTicketController extends Controller
             'message' => 'required|string|max:5000',
             'custom_category' => 'nullable|string|max:100',
             'screenshot' => 'nullable|image|max:5120', // Max 5MB
+            'email' => 'nullable|email|max:255',
         ];
 
-        // We no longer require an email for guests (anonymous feedback)
+        // We no longer require an email for guests (anonymous feedback), but validate if provided
         $validated = $request->validate($rules);
 
         // Handle screenshot upload
@@ -42,9 +43,11 @@ class SupportTicketController extends Controller
             $category = $validated['custom_category'];
         }
 
+        $email = auth()->check() ? auth()->user()->email : ($validated['email'] ?? null);
+
         $ticket = SupportTicket::create([
             'user_id' => auth()->id(), // nullable
-            'email' => auth()->check() ? auth()->user()->email : null,
+            'email' => $email,
             'category' => $category,
             'subject' => $validated['subject'] ?? Str::limit($validated['message'], 50),
             'message' => $validated['message'],

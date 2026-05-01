@@ -104,15 +104,79 @@
                                     @error('max_attachment_size') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
                                 </div>
 
-                                <div>
-                                    <label for="allowed_file_types" class="block text-sm font-bold text-gray-700 dark:text-slate-300 mb-1">
-                                        Allowed Attachment Types <span class="text-red-500">*</span>
-                                    </label>
+                                <div x-data="{ showBlocklist: false }">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <label for="allowed_file_types" class="block text-sm font-bold text-gray-700 dark:text-slate-300">
+                                            Allowed Attachment Types <span class="text-red-500">*</span>
+                                        </label>
+                                        <button type="button" @click="showBlocklist = true" class="text-blue-500 hover:text-blue-600 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors" title="View Security Blocklist">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </button>
+                                    </div>
                                     <p class="text-xs text-gray-500 mb-2">Extensions (e.g., zip,rar,7z,sql).</p>
                                     <input type="text" id="allowed_file_types" name="allowed_file_types" 
                                         value="{{ old('allowed_file_types', $settings['allowed_file_types']) }}" 
                                         class="w-full rounded-md border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-emerald-500 focus:ring-emerald-500 transition-colors">
                                     @error('allowed_file_types') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
+
+                                    <!-- Security Blocklist Modal -->
+                                    <template x-teleport="body">
+                                        <div x-show="showBlocklist" 
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0"
+                                            x-transition:enter-end="opacity-100"
+                                            x-transition:leave="transition ease-in duration-200"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0"
+                                            class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+                                            x-cloak>
+                                            
+                                            <div @click.away="showBlocklist = false" 
+                                                class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
+                                                
+                                                <div class="p-6 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-gray-50/50 dark:bg-slate-800/50">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="p-2 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl">
+                                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 15c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                                        </div>
+                                                        <h4 class="font-black uppercase tracking-widest text-sm text-gray-900 dark:text-white">Security Blocklist</h4>
+                                                    </div>
+                                                    <button @click="showBlocklist = false" class="text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">
+                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                    </button>
+                                                </div>
+
+                                                <div class="p-8">
+                                                    <p class="text-xs font-bold text-gray-500 dark:text-slate-400 uppercase tracking-widest mb-4">Hardcoded Protection</p>
+                                                    <p class="text-sm text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
+                                                        Regardless of the "Allowed Types" setting, the system's <span class="text-blue-600 dark:text-indigo-400 font-bold">FileScanner</span> will <u>always</u> block and shred the following extensions to prevent server compromise:
+                                                    </p>
+
+                                                    <div class="bg-gray-100 dark:bg-slate-950 p-4 rounded-2xl border border-gray-200 dark:border-white/5 grid grid-cols-4 gap-2 mb-6">
+                                                        @php
+                                                            $blocked = ['exe', 'bat', 'cmd', 'ps1', 'vbs', 'js', 'scr', 'com', 'pif', 'msi', 'hta', 'cpl', 'inf', 'reg', 'ws', 'wsf', 'wsc', 'wsh', 'php', 'phtml', 'phar'];
+                                                        @endphp
+                                                        @foreach($blocked as $ext)
+                                                            <span class="px-2 py-1 bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 font-mono text-[10px] font-bold rounded-lg border border-gray-200 dark:border-white/5 text-center">.{{ $ext }}</span>
+                                                        @endforeach
+                                                    </div>
+
+                                                    <div class="flex items-start gap-3 p-4 bg-blue-50 dark:bg-indigo-900/20 rounded-2xl border border-blue-100 dark:border-indigo-800/50">
+                                                        <svg class="w-5 h-5 text-blue-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                        <p class="text-[11px] text-blue-700 dark:text-indigo-300 leading-normal font-medium">
+                                                            <strong>Note:</strong> Students can still submit system code containing these files if they are compressed into a <span class="font-bold">.zip</span> or <span class="font-bold">.rar</span> archive. The scanner will then rely on antivirus signatures for protection.
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div class="p-6 bg-gray-50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-white/5 flex justify-end">
+                                                    <button @click="showBlocklist = false" class="px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-lg">
+                                                        Understood
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
                             </div>
                         </div>
