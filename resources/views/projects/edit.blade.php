@@ -110,7 +110,8 @@
                         <div id="other_category_container" class="{{ old('other_category') ? '' : 'hidden' }} mt-4">
                             <input type="text" name="other_category" value="{{ old('other_category') }}" 
                                 placeholder="Specify other category name"
-                                class="w-full sm:w-1/2 bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm px-4 py-3 font-bold placeholder:font-normal">
+                                class="w-full sm:w-1/2 bg-slate-950 border-white/10 rounded-xl text-white focus:border-indigo-500 focus:ring-indigo-500 text-sm px-4 py-3 font-bold placeholder:font-normal"
+                                autocomplete="off">
                             <p class="text-[10px] text-indigo-400 mt-2 italic ml-1">This will be added as a new specialization for your project.</p>
                         </div>
                         

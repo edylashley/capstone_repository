@@ -153,7 +153,8 @@
                         <div id="other_category_container" class="{{ old('other_category') ? '' : 'hidden' }} mt-4">
                             <input type="text" name="other_category" value="{{ old('other_category') }}" 
                                 placeholder="Specify other category name"
-                                class="w-full sm:w-1/2 bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm px-4 py-3 font-bold placeholder-gray-400 dark:placeholder-slate-500 placeholder:font-normal">
+                                class="w-full sm:w-1/2 bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 text-sm px-4 py-3 font-bold placeholder-gray-400 dark:placeholder-slate-500 placeholder:font-normal"
+                                autocomplete="off">
                             <p class="text-[10px] text-blue-500 dark:text-indigo-400 mt-2 italic ml-1">This will be saved as a custom category for your project.</p>
                         </div>
                         

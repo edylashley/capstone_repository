@@ -94,7 +94,8 @@
                             class="block text-[10px] uppercase font-black tracking-wider text-slate-500 mb-1">Search</label>
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Subject, message, or user..."
-                            class="w-full rounded-xl border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors">
+                            class="w-full rounded-xl border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm placeholder-gray-400 dark:placeholder-slate-600 transition-colors"
+                            autocomplete="off">
                     </div>
                     <div>
                         <label

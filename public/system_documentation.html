@@ -465,10 +465,101 @@
 
     footer { text-align: center; padding: 28px; color: #484f58; font-size: 11px; border-top: 1px solid var(--border); margin-top: 40px; }
 
-    @media (max-width: 768px) {
-      .section-content { padding: 24px 16px 40px; }
-      .section-nav { flex-wrap: wrap; }
-      .nav-btn { font-size: 12px; padding: 8px 14px; }
+    /* Organizational Chart */
+    .org-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 20px 0;
+    }
+    
+    .org-node {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 220px;
+      position: relative;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    
+    .org-node:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    
+    .org-node h4 {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .org-node small {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+    
+    .org-node .icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .org-dept { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+    .org-admin { border-color: var(--admin); background: var(--admin-light); color: #fcd34d; }
+    .org-student { border-color: var(--student); background: var(--student-light); color: #93c5fd; }
+    .org-guest { border-color: var(--neutral); background: rgba(100, 116, 139, 0.05); color: #94a3b8; }
+
+    .org-row {
+      display: flex;
+      gap: 80px;
+      position: relative;
+    }
+
+    .org-connector-v {
+      width: 2px;
+      height: 30px;
+      background: var(--border);
+      z-index: 1;
+    }
+
+    .org-connector-h {
+        position: relative;
+        width: 2px;
+        height: 20px;
+        background: var(--border);
+    }
+
+    .org-connector-h::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 302px;
+        height: 2px;
+        background: var(--border);
+    }
+
+    .org-row-connectors {
+        display: flex;
+        justify-content: space-between;
+        width: 302px;
+        height: 20px;
+    }
+
+    .org-row-connectors div {
+        width: 2px;
+        height: 100%;
+        background: var(--border);
     }
   </style>
 </head>
@@ -484,14 +575,17 @@
     <button class="nav-btn active" onclick="showSection('arch', this)" id="nav-arch">
       <span class="nav-num">1</span> System Architecture
     </button>
+    <button class="nav-btn" onclick="showSection('org', this)" id="nav-org">
+      <span class="nav-num">2</span> Organizational Chart
+    </button>
     <button class="nav-btn" onclick="showSection('roles', this)" id="nav-roles">
-      <span class="nav-num">2</span> Flowchart per Role
+      <span class="nav-num">3</span> Flowchart per Role
     </button>
     <button class="nav-btn" onclick="showSection('process', this)" id="nav-process">
-      <span class="nav-num">3</span> System Process Flow
+      <span class="nav-num">4</span> System Process Flow
     </button>
     <button class="nav-btn" onclick="showSection('flowchart', this)" id="nav-flowchart">
-      <span class="nav-num">4</span> Detailed Flowchart
+      <span class="nav-num">5</span> Detailed Flowchart
     </button>
   </nav>
 
@@ -613,7 +707,68 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-     SECTION 2: FLOWCHART PER ROLE
+     SECTION 2: ORGANIZATIONAL CHART
+     ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="section-org">
+    <div class="section-content">
+      <div class="section-title">
+        <h2>Organizational Chart</h2>
+        <p>The hierarchy of user roles and institutional oversight within the CSIT Capstone Repository system.</p>
+      </div>
+
+      <div class="diagram-block">
+        <div class="diagram-panel" data-label="Organizational Hierarchy">
+          <div class="org-wrapper">
+            <!-- Top: Dept -->
+            <div class="org-node org-dept">
+              <h4>CSIT Department</h4>
+              <small>Institutional Oversight</small>
+            </div>
+            
+            <div class="org-connector-v"></div>
+            
+            <!-- Middle: Admin -->
+            <div class="org-node org-admin">
+              <span class="icon">👤</span>
+              <h4>System Administrator</h4>
+              <small>Admin Role</small>
+            </div>
+
+            <div class="org-connector-h"></div>
+            <div class="org-row-connectors">
+                <div></div>
+                <div></div>
+            </div>
+
+            <!-- Bottom: Row -->
+            <div class="org-row">
+              <div class="org-node org-student">
+                <span class="icon">🎓</span>
+                <h4>Student Users</h4>
+                <small>Student Role</small>
+              </div>
+              
+              <div class="org-node org-guest">
+                <span class="icon">🌐</span>
+                <h4>Public Guests</h4>
+                <small>Unauthenticated</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="desc-panel">
+          <h3><span class="icon" style="background:var(--accent-light);">👥</span> Hierarchy Description</h3>
+          <p>The Organizational Chart for the CSIT Capstone Repository defines a streamlined hierarchy designed to facilitate efficient digital preservation while maintaining strict departmental oversight. At the highest level, the platform operates under the institutional governance of the CSIT Department, which provides the overall mandate for academic research standards. Directly reporting to this oversight is the System Administrator, a role tasked with the comprehensive management of the repository’s ecosystem. This administrator acts as the primary gatekeeper, responsible for activating student accounts, maintaining robust system security through specialized scanning tools, and performing the final verification and publishing of research manuscripts to ensure they meet the institution's criteria.</p>
+          <p style="margin-top: 16px;">Reporting to the administrative layer are the Student Users and Public Guests, who represent the primary contributors and consumers of the repository’s data. Students are granted authenticated access to manage their personal profiles and preserve their research studies through a secure submission portal, directly interacting with the administrator for the publication of their work. Conversely, Public Guests are integrated into the chart as unauthenticated stakeholders who utilize the search and discovery engine for open-access knowledge sharing. By utilizing this two-role administrative architecture, the system minimizes bureaucratic overhead and ensures a direct, efficient workflow that transitions student research from initial submission to long-term digital archiving.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+     SECTION 3: FLOWCHART PER ROLE
      ═══════════════════════════════════════════════════════ -->
   <div class="section" id="section-roles">
     <div class="section-content">
@@ -801,7 +956,7 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-     SECTION 3: SYSTEM PROCESS FLOW
+     SECTION 4: SYSTEM PROCESS FLOW
      ═══════════════════════════════════════════════════════ -->
   <div class="section" id="section-process">
     <div class="section-content">
@@ -901,7 +1056,7 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-     SECTION 4: DETAILED SYSTEM FLOWCHART
+     SECTION 5: DETAILED SYSTEM FLOWCHART
      ═══════════════════════════════════════════════════════ -->
   <div class="section" id="section-flowchart">
     <div class="section-content">
