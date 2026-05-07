@@ -47,7 +47,7 @@ class ProjectController extends Controller
             'target_type' => 'project',
             'target_id' => $project->id,
             'ip' => $request->ip(),
-            'meta' => ['valid' => $validation['valid'], 'notes' => $combinedNotes],
+            'meta' => ['project_title' => $project->title, 'valid' => $validation['valid'], 'notes' => $combinedNotes],
         ]);
 
         $msg = $validation['valid'] ? 'Project Passed Verification' : 'Project Failed Verification';
@@ -72,7 +72,7 @@ class ProjectController extends Controller
             'target_type' => 'project',
             'target_id' => $project->id,
             'ip' => $request->ip(),
-            'meta' => ['published_at' => $project->published_at->toDateTimeString()],
+            'meta' => ['project_title' => $project->title, 'published_at' => $project->published_at->toDateTimeString()],
         ]);
 
         // Send email notification to students
@@ -424,7 +424,7 @@ class ProjectController extends Controller
                     'target_type' => 'project',
                     'target_id' => $project->id,
                     'ip' => $request->ip(),
-                    'meta' => ['bulk' => true, 'published_at' => $project->published_at->toDateTimeString()],
+                    'meta' => ['project_title' => $project->title, 'bulk' => true, 'published_at' => $project->published_at->toDateTimeString()],
                 ]);
 
                 // Send email notification to students
@@ -453,7 +453,7 @@ class ProjectController extends Controller
                     'target_type' => 'project',
                     'target_id' => $project->id,
                     'ip' => $request->ip(),
-                    'meta' => ['bulk' => true],
+                    'meta' => ['project_title' => $project->title, 'bulk' => true],
                 ]);
                 $archivedCount++;
             }
@@ -472,7 +472,7 @@ class ProjectController extends Controller
                     'target_type' => 'project',
                     'target_id' => $project->id,
                     'ip' => $request->ip(),
-                    'meta' => ['bulk' => true],
+                    'meta' => ['project_title' => $project->title, 'bulk' => true],
                 ]);
                 $pendingCount++;
             }
@@ -729,7 +729,7 @@ class ProjectController extends Controller
             'target_type' => 'project',
             'target_id' => $project->id,
             'ip' => $request->ip(),
-            'meta' => ['reason' => $validated['return_reason']],
+            'meta' => ['project_title' => $project->title, 'reason' => $validated['return_reason']],
         ]);
 
         try {

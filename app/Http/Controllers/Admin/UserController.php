@@ -192,9 +192,9 @@ class UserController extends Controller
             'target_id' => $user->id,
             'ip' => request()->ip(),
             'meta' => [
-                'name' => $name,
-                'email' => $email,
-                'rejected_name' => $name
+                'name' => $user->name,
+                'email' => $user->email,
+                'rejected_name' => $user->name
             ],
         ]);
 

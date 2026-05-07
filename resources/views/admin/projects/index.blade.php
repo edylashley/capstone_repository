@@ -279,19 +279,9 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        @if($project->status === 'published')
-                                            <span
-                                                class="px-3 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-200 dark:border-emerald-500/20 shadow-sm dark:shadow-[0_0_15px_-5px_rgba(16,185,129,0.3)]">Published</span>
-                                        @elseif($project->status === 'archived')
-                                            <span
-                                                class="px-3 py-1 bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-gray-200 dark:border-white/5">Archived</span>
-                                        @elseif($project->status === 'returned')
-                                            <span
-                                                class="px-3 py-1 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-rose-200 dark:border-rose-500/20 shadow-sm dark:shadow-[0_0_15px_-5px_rgba(244,63,94,0.3)]">Returned</span>
-                                        @else
-                                            <span
-                                                class="px-3 py-1 bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-200 dark:border-amber-500/30 shadow-sm dark:shadow-[0_0_15px_-5px_rgba(245,158,11,0.3)]">Pending</span>
-                                        @endif
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm {{ $project->status_badge }}">
+                                            {{ $project->status_label }}
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex items-center justify-end gap-2">

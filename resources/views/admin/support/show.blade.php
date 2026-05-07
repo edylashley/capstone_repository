@@ -36,7 +36,10 @@
                         </div>
 
                         {{-- Status & Actions --}}
-                        <div class="flex items-center gap-2 flex-shrink-0" x-data="{ confirmDelete: false }">
+                        <div class="flex items-center gap-3 flex-shrink-0" x-data="{ confirmDelete: false }">
+                            <span class="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border {{ $ticket->priority_badge }}">
+                                {{ $ticket->priority ?? 'low' }} PRIORITY
+                            </span>
                             @if($ticket->status === 'resolved')
                                 <form method="POST" action="{{ route('admin.support.status', $ticket) }}">
                                     @csrf

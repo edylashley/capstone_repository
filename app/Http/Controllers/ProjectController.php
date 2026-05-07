@@ -313,6 +313,7 @@ class ProjectController extends Controller
                         'user_id' => $request->user()->id,
                         'email' => $request->user()->email,
                         'category' => 'security',
+                        'priority' => 'urgent',
                         'subject' => '⚠️ SECURITY ALERT: Malicious Upload Blocked',
                         'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
                             "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
@@ -459,6 +460,7 @@ class ProjectController extends Controller
                             'user_id' => $request->user()->id,
                             'email' => $request->user()->email,
                             'category' => 'security',
+                            'priority' => 'urgent',
                             'subject' => '⚠️ SECURITY ALERT: Malicious Attachment Blocked',
                             'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
                                 "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
@@ -768,6 +770,7 @@ class ProjectController extends Controller
                         'user_id' => $user->id,
                         'email' => $user->email,
                         'category' => 'security',
+                        'priority' => 'urgent',
                         'subject' => '⚠️ SECURITY ALERT: Malicious Update Blocked',
                         'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
                             "Student: " . $user->name . " (ID: " . $user->id . ")\n" .

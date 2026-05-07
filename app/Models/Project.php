@@ -63,4 +63,32 @@ class Project extends Model
     {
         return $this->hasOne(AdviserVerification::class);
     }
+
+    /**
+     * Get human-readable status label.
+     */
+    public function getStatusLabelAttribute(): string
+    {
+        return match ($this->status) {
+            'published' => 'Published',
+            'pending' => 'Pending Review',
+            'returned' => 'Returned for Revision',
+            'archived' => 'Archived',
+            default => ucfirst($this->status),
+        };
+    }
+
+    /**
+     * Get CSS classes for status badge.
+     */
+    public function getStatusBadgeAttribute(): string
+    {
+        return match ($this->status) {
+            'published' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+            'pending' => 'bg-amber-500/10 text-amber-600 dark:text-amber-500 border-amber-500/20',
+            'returned' => 'bg-rose-500/10 text-rose-600 dark:text-rose-500 border-rose-500/20',
+            'archived' => 'bg-slate-500/10 text-slate-600 dark:text-slate-400 border-slate-500/20',
+            default => 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20',
+        };
+    }
 }

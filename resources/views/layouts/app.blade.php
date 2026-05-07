@@ -328,8 +328,7 @@
                                 <h3 class="font-black text-xl tracking-tight">System Support</h3>
                                 <p
                                     class="text-gray-900 dark:text-slate-400 text-[10px] font-black uppercase tracking-widest mt-0.5">
-                                    Verified
-                                    Communication Channel</p>
+                                    Secure, simple and fast.</p>
                             </div>
                         </div>
                         <button @click="supportOpen = false"

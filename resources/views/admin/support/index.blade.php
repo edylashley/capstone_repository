@@ -126,11 +126,23 @@
                             </option>
                         </select>
                     </div>
+                    <div>
+                        <label
+                            class="block text-[10px] uppercase font-black tracking-wider text-slate-500 mb-1">Priority</label>
+                        <select name="priority"
+                            class="rounded-xl border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-slate-950 text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-sm transition-colors">
+                            <option value="">All</option>
+                            <option value="urgent" {{ request('priority') === 'urgent' ? 'selected' : '' }}>Urgent</option>
+                            <option value="high" {{ request('priority') === 'high' ? 'selected' : '' }}>High</option>
+                            <option value="medium" {{ request('priority') === 'medium' ? 'selected' : '' }}>Medium</option>
+                            <option value="low" {{ request('priority') === 'low' ? 'selected' : '' }}>Low</option>
+                        </select>
+                    </div>
                     <button type="submit"
                         class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-500/20">
                         Filter
                     </button>
-                    @if(request()->hasAny(['search', 'status', 'category']))
+                    @if(request()->hasAny(['search', 'status', 'category', 'priority']))
                         <a href="{{ route('admin.support.index') }}"
                             class="px-5 py-2.5 bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-slate-300 rounded-xl text-sm font-bold hover:bg-gray-300 dark:hover:bg-slate-700 transition-colors shadow-sm">
                             Clear
@@ -211,6 +223,13 @@
                         @foreach($tickets as $ticket)
                             <div
                                 class="relative flex items-center gap-4 p-5 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group">
+                                {{-- Priority Badge (Extreme Upper Right) --}}
+                                <div class="absolute top-0 right-0">
+                                    <span class="flex items-center text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-bl-xl border {{ $ticket->priority_badge }}">
+                                        {{ $ticket->priority ?? 'low' }} PRIORITY
+                                    </span>
+                                </div>
+
                                 {{-- Checkbox --}}
                                 <div class="flex-shrink-0 z-10">
                                     <input type="checkbox" :value="{{ $ticket->id }}" x-model="selected"

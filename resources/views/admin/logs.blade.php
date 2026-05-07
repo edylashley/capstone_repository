@@ -33,24 +33,28 @@
                             @php
                                 $statusClasses = match(true) {
                                     str_contains($log->action, 'login') => 'border-emerald-500 bg-white dark:bg-slate-800/50',
-                                    str_contains($log->action, 'logout') => 'border-rose-500 bg-white dark:bg-slate-800/50',
-                                    str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') => 'border-emerald-500 bg-white dark:bg-slate-800/50',
-                                    str_contains($log->action, 'failed') || str_contains($log->action, 'error') || str_contains($log->action, 'blocked') => 'border-amber-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'logout') => 'border-gray-400 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') || str_contains($log->action, 'publish') => 'border-emerald-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'failed') || str_contains($log->action, 'error') || str_contains($log->action, 'blocked') || str_contains($log->action, 'returned') || str_contains($log->action, 'denied') => 'border-rose-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'delete') || str_contains($log->action, 'shred') => 'border-rose-600 bg-rose-50/50 dark:bg-rose-950/20',
                                     str_contains($log->action, 'create') || str_contains($log->action, 'upload') || str_contains($log->action, 'request') => 'border-blue-500 bg-white dark:bg-slate-800/50',
+                                    str_contains($log->action, 'settings') => 'border-amber-500 bg-white dark:bg-slate-800/50',
                                     default => 'border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/50',
                                 };
 
                                 $badgeClasses = match(true) {
-                                    str_contains($log->action, 'login') || str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') => 'bg-emerald-600 text-white',
-                                    str_contains($log->action, 'logout') || str_contains($log->action, 'failed') || str_contains($log->action, 'blocked') => 'bg-rose-600 text-white',
+                                    str_contains($log->action, 'login') || str_contains($log->action, 'approved') || str_contains($log->action, 'confirm') || str_contains($log->action, 'publish') => 'bg-emerald-600 text-white',
+                                    str_contains($log->action, 'logout') => 'bg-gray-500 text-white',
+                                    str_contains($log->action, 'failed') || str_contains($log->action, 'blocked') || str_contains($log->action, 'returned') || str_contains($log->action, 'denied') || str_contains($log->action, 'delete') => 'bg-rose-600 text-white',
                                     str_contains($log->action, 'create') || str_contains($log->action, 'upload') || str_contains($log->action, 'request') => 'bg-indigo-600 text-white',
+                                    str_contains($log->action, 'settings') => 'bg-amber-600 text-white',
                                     default => 'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-300',
                                 };
                             @endphp
                             <div class="flex items-start gap-4 p-4 border-l-4 border-y border-r border-y-gray-200 border-r-gray-200 dark:border-y-white/5 dark:border-r-white/5 {{ $statusClasses }} rounded-r-lg transition-all hover:shadow-sm">
                                 <div class="flex-shrink-0 mt-1">
                                     <span class="p-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 rounded-full shadow-sm">
-                                        @if(str_contains($log->action, 'user')) 👤 @elseif(str_contains($log->action, 'project')) 📂 @else ⚙️ @endif
+                                        @if(str_contains($log->action, 'user') || str_contains($log->action, 'account')) 👤 @elseif(str_contains($log->action, 'project') || str_contains($log->action, 'manuscript')) 📂 @elseif(str_contains($log->action, 'ticket') || str_contains($log->action, 'support')) 🎫 @elseif(str_contains($log->action, 'login') || str_contains($log->action, 'logout')) 🔑 @elseif(str_contains($log->action, 'settings')) ⚙️ @else 📄 @endif
                                     </span>
                                 </div>
                                 <div class="flex-1">
@@ -111,12 +115,12 @@
                                         </div>
                                         <span class="text-xs text-gray-500 dark:text-gray-400 font-black whitespace-nowrap ml-4">{{ $log->created_at ? $log->created_at->diffForHumans() : 'N/A' }}</span>
                                     </div>
-                                    <div class="flex items-center gap-2 mt-2">
-                                        <div class="text-[10px] text-gray-700 dark:text-gray-300 font-black bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-gray-300 dark:border-slate-600 uppercase tracking-tighter">
-                                            IP: {{ $log->ip }}
+                                    <div class="flex items-center gap-3 mt-2 opacity-40 hover:opacity-100 transition-opacity">
+                                        <div class="text-[8px] text-gray-500 dark:text-slate-500 font-black px-2 py-0.5 rounded border border-gray-200 dark:border-slate-700 uppercase tracking-widest">
+                                            IP: {{ ($log->ip === '::1' || $log->ip === '127.0.0.1') ? 'Localhost' : $log->ip }}
                                         </div>
-                                        <div class="text-[10px] text-gray-700 dark:text-gray-300 font-black bg-gray-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-gray-300 dark:border-slate-600 uppercase tracking-tighter">
-                                            ID: {{ $log->target_id }}
+                                        <div class="text-[8px] text-gray-500 dark:text-slate-500 font-black px-2 py-0.5 rounded border border-gray-200 dark:border-slate-700 uppercase tracking-widest">
+                                            {{ ucfirst($log->target_type) }} ID: {{ $log->target_id }}
                                         </div>
                                     </div>
 
@@ -146,8 +150,21 @@
                                                     @endforeach
                                                 </div>
                                             @else
-                                                <div class="text-gray-800 dark:text-slate-300 text-[11px] font-mono font-bold leading-relaxed bg-white dark:bg-slate-900 p-3 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm whitespace-pre-wrap break-all">
-                                                    {{ json_encode($log->meta, JSON_PRETTY_PRINT) }}
+                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-white dark:bg-slate-900 p-3 rounded-lg border border-gray-200 dark:border-slate-700 shadow-sm">
+                                                    @foreach($log->meta as $key => $value)
+                                                        @if($key !== 'changes' && !is_array($value))
+                                                            <div class="flex flex-col border-b border-gray-50 dark:border-white/5 pb-1 last:border-0">
+                                                                <span class="text-[8px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ str_replace('_', ' ', $key) }}</span>
+                                                                <span class="text-[11px] font-bold text-gray-700 dark:text-slate-300 truncate" title="{{ $value }}">
+                                                                    @if(is_bool($value) || ($key === 'is_guest' && ($value === 1 || $value === 0 || $value === '1' || $value === '0')))
+                                                                        {{ ($value == 1) ? 'Yes' : 'No' }}
+                                                                    @else
+                                                                        {{ $value ?: 'N/A' }}
+                                                                    @endif
+                                                                </span>
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
                                             @endif
                                         </div>

@@ -260,6 +260,12 @@
                                         value="{{ old('log_retention_days', $settings['log_retention_days'] ?? '90') }}" 
                                         min="7" max="3650"
                                         class="w-full rounded-md border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-amber-500 focus:ring-amber-500 transition-colors">
+                                    <div class="mt-2 flex items-start gap-1.5 p-2 bg-rose-500/5 rounded border border-rose-500/10">
+                                        <svg class="w-3.5 h-3.5 text-rose-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 15c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        <p class="text-[9px] font-black uppercase tracking-tighter text-rose-600 dark:text-rose-400 leading-tight">
+                                            Warning: Reducing this value will permanently delete old logs the moment you save.
+                                        </p>
+                                    </div>
                                     @error('log_retention_days') <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p> @enderror
                                 </div>
                                 <div class="flex items-end">

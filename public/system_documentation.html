@@ -145,8 +145,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .section-content {
@@ -305,18 +312,69 @@
       box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
     }
 
-    .layer-presentation { border-color: var(--student); background: rgba(59, 130, 246, .06); }
-    .layer-presentation .arch-layer-label { background: var(--student); color: #fff; }
-    .layer-presentation .arch-item { border-color: rgba(59, 130, 246, .3); background: rgba(59, 130, 246, .08); color: #93c5fd; }
-    .layer-logic { border-color: #a855f7; background: rgba(168, 85, 247, .06); }
-    .layer-logic .arch-layer-label { background: #a855f7; color: #fff; }
-    .layer-logic .arch-item { border-color: rgba(168, 85, 247, .3); background: rgba(168, 85, 247, .08); color: #d8b4fe; }
-    .layer-data { border-color: var(--system); background: rgba(16, 185, 129, .06); }
-    .layer-data .arch-layer-label { background: var(--system); color: #fff; }
-    .layer-data .arch-item { border-color: rgba(16, 185, 129, .3); background: rgba(16, 185, 129, .08); color: #6ee7b7; }
-    .layer-infra { border-color: var(--admin); background: rgba(245, 158, 11, .06); }
-    .layer-infra .arch-layer-label { background: var(--admin); color: #fff; }
-    .layer-infra .arch-item { border-color: rgba(245, 158, 11, .3); background: rgba(245, 158, 11, .08); color: #fcd34d; }
+    .layer-presentation {
+      border-color: var(--student);
+      background: rgba(59, 130, 246, .06);
+    }
+
+    .layer-presentation .arch-layer-label {
+      background: var(--student);
+      color: #fff;
+    }
+
+    .layer-presentation .arch-item {
+      border-color: rgba(59, 130, 246, .3);
+      background: rgba(59, 130, 246, .08);
+      color: #93c5fd;
+    }
+
+    .layer-logic {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, .06);
+    }
+
+    .layer-logic .arch-layer-label {
+      background: #a855f7;
+      color: #fff;
+    }
+
+    .layer-logic .arch-item {
+      border-color: rgba(168, 85, 247, .3);
+      background: rgba(168, 85, 247, .08);
+      color: #d8b4fe;
+    }
+
+    .layer-data {
+      border-color: var(--system);
+      background: rgba(16, 185, 129, .06);
+    }
+
+    .layer-data .arch-layer-label {
+      background: var(--system);
+      color: #fff;
+    }
+
+    .layer-data .arch-item {
+      border-color: rgba(16, 185, 129, .3);
+      background: rgba(16, 185, 129, .08);
+      color: #6ee7b7;
+    }
+
+    .layer-infra {
+      border-color: var(--admin);
+      background: rgba(245, 158, 11, .06);
+    }
+
+    .layer-infra .arch-layer-label {
+      background: var(--admin);
+      color: #fff;
+    }
+
+    .layer-infra .arch-item {
+      border-color: rgba(245, 158, 11, .3);
+      background: rgba(245, 158, 11, .08);
+      color: #fcd34d;
+    }
 
     .arch-connector {
       display: flex;
@@ -325,9 +383,25 @@
       gap: 2px;
     }
 
-    .arch-connector-line { width: 2px; height: 18px; background: #334155; }
-    .arch-connector-arrow { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #334155; }
-    .arch-connector-label { font-size: 10px; color: #64748b; font-weight: 600; }
+    .arch-connector-line {
+      width: 2px;
+      height: 18px;
+      background: #334155;
+    }
+
+    .arch-connector-arrow {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #334155;
+    }
+
+    .arch-connector-label {
+      font-size: 10px;
+      color: #64748b;
+      font-weight: 600;
+    }
 
     /* Role Tabs */
     .role-tabs {
@@ -353,13 +427,37 @@
       gap: 8px;
     }
 
-    .role-tab:hover { background: var(--surface2); color: #e2e8f0; }
-    .role-tab.active-student { background: var(--student-light); border-color: var(--student); color: #93c5fd; }
-    .role-tab.active-admin { background: var(--admin-light); border-color: var(--admin); color: #fcd34d; }
-    .role-tab .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .role-tab:hover {
+      background: var(--surface2);
+      color: #e2e8f0;
+    }
 
-    .role-content { display: none; animation: fadeIn .35s ease; }
-    .role-content.active { display: block; }
+    .role-tab.active-student {
+      background: var(--student-light);
+      border-color: var(--student);
+      color: #93c5fd;
+    }
+
+    .role-tab.active-admin {
+      background: var(--admin-light);
+      border-color: var(--admin);
+      color: #fcd34d;
+    }
+
+    .role-tab .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .role-content {
+      display: none;
+      animation: fadeIn .35s ease;
+    }
+
+    .role-content.active {
+      display: block;
+    }
 
     /* Flow Nodes */
     .flow {
@@ -383,87 +481,488 @@
       line-height: 1.5;
     }
 
-    .node:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0, 0, 0, .4); }
-    .node-start { border-radius: 999px; font-size: 12px; padding: 10px 24px; letter-spacing: .3px; font-weight: 700; }
-    .node-end { border-radius: 999px; font-size: 12px; padding: 10px 24px; font-weight: 700; border-width: 2px; }
-    .node small { font-weight: 400; color: #8b949e; font-size: 11.5px; }
+    .node:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+    }
 
-    .c-student { background: var(--student-light); border-color: var(--student); color: #93c5fd; }
-    .c-admin { background: var(--admin-light); border-color: var(--admin); color: #fcd34d; }
-    .c-system { background: var(--system-light); border-color: var(--system); color: #6ee7b7; }
-    .c-danger { background: rgba(239, 68, 68, .1); border-color: var(--danger); color: #fca5a5; }
-    .c-neutral { background: rgba(100, 116, 139, .08); border-color: var(--neutral); color: #94a3b8; }
-    .c-accent { background: var(--accent-light); border-color: var(--accent); color: #67e8f9; }
+    .node-start {
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 10px 24px;
+      letter-spacing: .3px;
+      font-weight: 700;
+    }
 
-    .arrow { display: flex; flex-direction: column; align-items: center; padding: 2px 0; }
-    .arrow-line { width: 2px; height: 22px; background: #334155; }
-    .arrow-head { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 7px solid #334155; }
-    .arrow-label { font-size: 10px; font-weight: 700; letter-spacing: .3px; padding: 2px 8px; border-radius: 5px; margin: 2px 0; white-space: nowrap; }
-    .al-yes { background: rgba(16, 185, 129, .18); color: #34d399; }
-    .al-no { background: rgba(239, 68, 68, .18); color: #f87171; }
-    .al-auto { background: rgba(59, 130, 246, .18); color: #60a5fa; }
-    .al-mail { background: rgba(168, 85, 247, .18); color: #c084fc; }
+    .node-end {
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 10px 24px;
+      font-weight: 700;
+      border-width: 2px;
+    }
 
-    .diamond-wrap { display: flex; flex-direction: column; align-items: center; }
-    .diamond { width: 130px; height: 65px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; text-align: center; }
-    .diamond-branches { display: flex; width: 100%; max-width: 340px; justify-content: space-around; margin-top: 4px; }
-    .diamond-branch { display: flex; flex-direction: column; align-items: center; width: 45%; }
+    .node small {
+      font-weight: 400;
+      color: #8b949e;
+      font-size: 11.5px;
+    }
 
-    .status-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .4px; margin-top: 4px; text-transform: uppercase; }
-    .s-pending { background: rgba(245, 158, 11, .2); color: #fbbf24; }
-    .s-approved { background: rgba(59, 130, 246, .2); color: #60a5fa; }
-    .s-published { background: rgba(168, 85, 247, .2); color: #c084fc; }
-    .s-rejected { background: rgba(239, 68, 68, .2); color: #f87171; }
+    .c-student {
+      background: var(--student-light);
+      border-color: var(--student);
+      color: #93c5fd;
+    }
+
+    .c-admin {
+      background: var(--admin-light);
+      border-color: var(--admin);
+      color: #fcd34d;
+    }
+
+    .c-system {
+      background: var(--system-light);
+      border-color: var(--system);
+      color: #6ee7b7;
+    }
+
+    .c-danger {
+      background: rgba(239, 68, 68, .1);
+      border-color: var(--danger);
+      color: #fca5a5;
+    }
+
+    .c-neutral {
+      background: rgba(100, 116, 139, .08);
+      border-color: var(--neutral);
+      color: #94a3b8;
+    }
+
+    .c-accent {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: #67e8f9;
+    }
+
+    .arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2px 0;
+    }
+
+    .arrow-line {
+      width: 2px;
+      height: 22px;
+      background: #334155;
+    }
+
+    .arrow-head {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid #334155;
+    }
+
+    .arrow-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      margin: 2px 0;
+      white-space: nowrap;
+    }
+
+    .al-yes {
+      background: rgba(16, 185, 129, .18);
+      color: #34d399;
+    }
+
+    .al-no {
+      background: rgba(239, 68, 68, .18);
+      color: #f87171;
+    }
+
+    .al-auto {
+      background: rgba(59, 130, 246, .18);
+      color: #60a5fa;
+    }
+
+    .al-mail {
+      background: rgba(168, 85, 247, .18);
+      color: #c084fc;
+    }
+
+    .diamond-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .diamond {
+      width: 130px;
+      height: 65px;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .diamond-branches {
+      display: flex;
+      width: 100%;
+      max-width: 340px;
+      justify-content: space-around;
+      margin-top: 4px;
+    }
+
+    .diamond-branch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 45%;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    .s-pending {
+      background: rgba(245, 158, 11, .2);
+      color: #fbbf24;
+    }
+
+    .s-approved {
+      background: rgba(59, 130, 246, .2);
+      color: #60a5fa;
+    }
+
+    .s-published {
+      background: rgba(168, 85, 247, .2);
+      color: #c084fc;
+    }
+
+    .s-rejected {
+      background: rgba(239, 68, 68, .2);
+      color: #f87171;
+    }
 
     /* Process Flow */
-    .process-flow-container { display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 700px; }
-    .process-phase { width: 100%; max-width: 860px; display: flex; align-items: stretch; gap: 0; }
-    .phase-sidebar { width: 48px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px 0 0 12px; padding: 12px 4px; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255, 255, 255, .85); }
-    .phase-body { flex: 1; border-radius: 0 14px 14px 0; border: 1.5px solid; border-left: none; padding: 20px 24px; }
-    .phase-body-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-    .phase-body-steps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .phase-step { padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1px solid; transition: transform .15s; }
-    .phase-step:hover { transform: translateY(-1px); }
-    .phase-body p { font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin-top: 6px; }
-    .phase-arrow { display: flex; flex-direction: column; align-items: center; padding: 4px 0; }
-    .phase-arrow-line { width: 2px; height: 20px; background: #334155; }
-    .phase-arrow-head { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #475569; }
+    .process-flow-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      min-width: 700px;
+    }
 
-    .phase-student .phase-sidebar { background: var(--student); }
-    .phase-student .phase-body { border-color: rgba(59, 130, 246, .35); background: rgba(59, 130, 246, .04); }
-    .phase-student .phase-step { border-color: rgba(59, 130, 246, .3); background: rgba(59, 130, 246, .08); color: #93c5fd; }
-    .phase-student .phase-body-title { color: #93c5fd; }
-    .phase-system .phase-sidebar { background: var(--system); }
-    .phase-system .phase-body { border-color: rgba(16, 185, 129, .35); background: rgba(16, 185, 129, .04); }
-    .phase-system .phase-step { border-color: rgba(16, 185, 129, .3); background: rgba(16, 185, 129, .08); color: #6ee7b7; }
-    .phase-system .phase-body-title { color: #6ee7b7; }
-    .phase-admin .phase-sidebar { background: var(--admin); }
-    .phase-admin .phase-body { border-color: rgba(245, 158, 11, .35); background: rgba(245, 158, 11, .04); }
-    .phase-admin .phase-step { border-color: rgba(245, 158, 11, .3); background: rgba(245, 158, 11, .08); color: #fcd34d; }
-    .phase-admin .phase-body-title { color: #fcd34d; }
-    .phase-public .phase-sidebar { background: var(--accent); }
-    .phase-public .phase-body { border-color: rgba(6, 182, 212, .35); background: rgba(6, 182, 212, .04); }
-    .phase-public .phase-step { border-color: rgba(6, 182, 212, .3); background: rgba(6, 182, 212, .08); color: #67e8f9; }
-    .phase-public .phase-body-title { color: #67e8f9; }
+    .process-phase {
+      width: 100%;
+      max-width: 860px;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .phase-sidebar {
+      width: 48px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px 0 0 12px;
+      padding: 12px 4px;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .85);
+    }
+
+    .phase-body {
+      flex: 1;
+      border-radius: 0 14px 14px 0;
+      border: 1.5px solid;
+      border-left: none;
+      padding: 20px 24px;
+    }
+
+    .phase-body-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .phase-body-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .phase-step {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid;
+      transition: transform .15s;
+    }
+
+    .phase-step:hover {
+      transform: translateY(-1px);
+    }
+
+    .phase-body p {
+      font-size: 12.5px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    .phase-arrow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .phase-arrow-line {
+      width: 2px;
+      height: 20px;
+      background: #334155;
+    }
+
+    .phase-arrow-head {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 8px solid #475569;
+    }
+
+    .phase-student .phase-sidebar {
+      background: var(--student);
+    }
+
+    .phase-student .phase-body {
+      border-color: rgba(59, 130, 246, .35);
+      background: rgba(59, 130, 246, .04);
+    }
+
+    .phase-student .phase-step {
+      border-color: rgba(59, 130, 246, .3);
+      background: rgba(59, 130, 246, .08);
+      color: #93c5fd;
+    }
+
+    .phase-student .phase-body-title {
+      color: #93c5fd;
+    }
+
+    .phase-system .phase-sidebar {
+      background: var(--system);
+    }
+
+    .phase-system .phase-body {
+      border-color: rgba(16, 185, 129, .35);
+      background: rgba(16, 185, 129, .04);
+    }
+
+    .phase-system .phase-step {
+      border-color: rgba(16, 185, 129, .3);
+      background: rgba(16, 185, 129, .08);
+      color: #6ee7b7;
+    }
+
+    .phase-system .phase-body-title {
+      color: #6ee7b7;
+    }
+
+    .phase-admin .phase-sidebar {
+      background: var(--admin);
+    }
+
+    .phase-admin .phase-body {
+      border-color: rgba(245, 158, 11, .35);
+      background: rgba(245, 158, 11, .04);
+    }
+
+    .phase-admin .phase-step {
+      border-color: rgba(245, 158, 11, .3);
+      background: rgba(245, 158, 11, .08);
+      color: #fcd34d;
+    }
+
+    .phase-admin .phase-body-title {
+      color: #fcd34d;
+    }
+
+    .phase-public .phase-sidebar {
+      background: var(--accent);
+    }
+
+    .phase-public .phase-body {
+      border-color: rgba(6, 182, 212, .35);
+      background: rgba(6, 182, 212, .04);
+    }
+
+    .phase-public .phase-step {
+      border-color: rgba(6, 182, 212, .3);
+      background: rgba(6, 182, 212, .08);
+      color: #67e8f9;
+    }
+
+    .phase-public .phase-body-title {
+      color: #67e8f9;
+    }
 
     /* Horizontal Flowchart */
-    .hflow { display: flex; align-items: flex-start; gap: 0; min-width: 1800px; padding: 20px 10px 120px; }
-    .hflow-col { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
-    .hnode { width: 120px; padding: 12px 10px; border-radius: 12px; border: 1.5px solid; font-size: 11.5px; font-weight: 600; text-align: center; line-height: 1.4; transition: transform .15s, box-shadow .15s; }
-    .hnode:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, .4); }
-    .hnode small { font-weight: 400; color: #8b949e; font-size: 10px; }
-    .hnode-start { border-radius: 999px; font-weight: 700; padding: 14px 10px; }
-    .hnode-end { border-radius: 999px; font-weight: 700; border-width: 2.5px; padding: 14px 10px; }
-    .hnode-sm { width: 100px; padding: 8px 8px; border-radius: 10px; border: 1.5px solid; font-size: 10px; font-weight: 600; text-align: center; line-height: 1.35; }
-    .hnode-sm small { font-weight: 400; color: #8b949e; font-size: 9px; }
-    .harrow { display: flex; align-items: center; padding: 0 2px; flex-shrink: 0; margin-top: 20px; }
-    .harrow-line { width: 28px; height: 2px; background: #334155; }
-    .harrow-head { width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid #334155; }
-    .harrow-label { font-size: 9px; font-weight: 700; letter-spacing: .3px; padding: 1px 6px; border-radius: 4px; margin: 0 2px; white-space: nowrap; }
-    .hdiamond { width: 70px; height: 70px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; text-align: center; border: 1.5px solid; flex-shrink: 0; }
-    .hbranch-down { display: flex; flex-direction: column; align-items: center; margin-top: 4px; }
+    .hflow {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      min-width: 1800px;
+      padding: 20px 10px 120px;
+    }
 
-    footer { text-align: center; padding: 28px; color: #484f58; font-size: 11px; border-top: 1px solid var(--border); margin-top: 40px; }
+    .hflow-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .hnode {
+      width: 120px;
+      padding: 12px 10px;
+      border-radius: 12px;
+      border: 1.5px solid;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.4;
+      transition: transform .15s, box-shadow .15s;
+    }
+
+    .hnode:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
+    }
+
+    .hnode small {
+      font-weight: 400;
+      color: #8b949e;
+      font-size: 10px;
+    }
+
+    .hnode-start {
+      border-radius: 999px;
+      font-weight: 700;
+      padding: 14px 10px;
+    }
+
+    .hnode-end {
+      border-radius: 999px;
+      font-weight: 700;
+      border-width: 2.5px;
+      padding: 14px 10px;
+    }
+
+    .hnode-sm {
+      width: 100px;
+      padding: 8px 8px;
+      border-radius: 10px;
+      border: 1.5px solid;
+      font-size: 10px;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    .hnode-sm small {
+      font-weight: 400;
+      color: #8b949e;
+      font-size: 9px;
+    }
+
+    .harrow {
+      display: flex;
+      align-items: center;
+      padding: 0 2px;
+      flex-shrink: 0;
+      margin-top: 20px;
+    }
+
+    .harrow-line {
+      width: 28px;
+      height: 2px;
+      background: #334155;
+    }
+
+    .harrow-head {
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid #334155;
+    }
+
+    .harrow-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin: 0 2px;
+      white-space: nowrap;
+    }
+
+    .hdiamond {
+      width: 70px;
+      height: 70px;
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      text-align: center;
+      border: 1.5px solid;
+      flex-shrink: 0;
+    }
+
+    .hbranch-down {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px;
+      color: #484f58;
+      font-size: 11px;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+    }
 
     /* Organizational Chart */
     .org-wrapper {
@@ -473,7 +972,7 @@
       gap: 0;
       padding: 20px 0;
     }
-    
+
     .org-node {
       background: var(--surface);
       border: 2px solid var(--border);
@@ -485,12 +984,12 @@
       transition: all 0.3s ease;
       z-index: 2;
     }
-    
+
     .org-node:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
     }
-    
+
     .org-node h4 {
       font-size: 14px;
       font-weight: 800;
@@ -498,7 +997,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    
+
     .org-node small {
       font-size: 10px;
       font-weight: 700;
@@ -506,17 +1005,36 @@
       letter-spacing: 1px;
       opacity: 0.7;
     }
-    
+
     .org-node .icon {
       font-size: 24px;
       margin-bottom: 8px;
       display: block;
     }
 
-    .org-dept { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
-    .org-admin { border-color: var(--admin); background: var(--admin-light); color: #fcd34d; }
-    .org-student { border-color: var(--student); background: var(--student-light); color: #93c5fd; }
-    .org-guest { border-color: var(--neutral); background: rgba(100, 116, 139, 0.05); color: #94a3b8; }
+    .org-dept {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+
+    .org-admin {
+      border-color: var(--admin);
+      background: var(--admin-light);
+      color: #fcd34d;
+    }
+
+    .org-student {
+      border-color: var(--student);
+      background: var(--student-light);
+      color: #93c5fd;
+    }
+
+    .org-guest {
+      border-color: var(--neutral);
+      background: rgba(100, 116, 139, 0.05);
+      color: #94a3b8;
+    }
 
     .org-row {
       display: flex;
@@ -532,34 +1050,34 @@
     }
 
     .org-connector-h {
-        position: relative;
-        width: 2px;
-        height: 20px;
-        background: var(--border);
+      position: relative;
+      width: 2px;
+      height: 20px;
+      background: var(--border);
     }
 
     .org-connector-h::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 302px;
-        height: 2px;
-        background: var(--border);
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 302px;
+      height: 2px;
+      background: var(--border);
     }
 
     .org-row-connectors {
-        display: flex;
-        justify-content: space-between;
-        width: 302px;
-        height: 20px;
+      display: flex;
+      justify-content: space-between;
+      width: 302px;
+      height: 20px;
     }
 
     .org-row-connectors div {
-        width: 2px;
-        height: 100%;
-        background: var(--border);
+      width: 2px;
+      height: 100%;
+      background: var(--border);
     }
   </style>
 </head>
@@ -587,6 +1105,9 @@
     <button class="nav-btn" onclick="showSection('flowchart', this)" id="nav-flowchart">
       <span class="nav-num">5</span> Detailed Flowchart
     </button>
+    <button class="nav-btn" onclick="showSection('ipo', this)" id="nav-ipo">
+      <span class="nav-num">6</span> Conceptual Framework
+    </button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════
@@ -596,7 +1117,8 @@
     <div class="section-content">
       <div class="section-title">
         <h2>System Architecture</h2>
-        <p>The key components that define the structure, views, and behavior of the CSIT Capstone Repository Management System.</p>
+        <p>The key components that define the structure, views, and behavior of the CSIT Capstone Repository Management
+          System.</p>
       </div>
 
       <div class="diagram-block">
@@ -643,9 +1165,11 @@
               <div class="arch-layer-label">3 · System Interfaces</div>
               <div class="arch-layer-items">
                 <div class="arch-item">🌐 Public Browse Library<br><small>Search &amp; View Projects</small></div>
-                <div class="arch-item">🔑 Authentication Pages<br><small>Login · Registration<br>Email Verification</small></div>
+                <div class="arch-item">🔑 Authentication Pages<br><small>Login · Registration<br>Email
+                    Verification</small></div>
                 <div class="arch-item">📊 Student Dashboard<br><small>Submit &amp; Track Projects</small></div>
-                <div class="arch-item">⚙️ Admin Dashboard<br><small>Manage Users, Projects<br>Settings &amp; Support</small></div>
+                <div class="arch-item">⚙️ Admin Dashboard<br><small>Manage Users, Projects<br>Settings &amp;
+                    Support</small></div>
                 <div class="arch-item">📄 PDF Viewer<br><small>Preview &amp; Download</small></div>
                 <div class="arch-item">🎫 Support System<br><small>Tickets &amp; Feedback</small></div>
               </div>
@@ -661,8 +1185,10 @@
             <div class="arch-layer layer-data">
               <div class="arch-layer-label">4 · System Structure</div>
               <div class="arch-layer-items">
-                <div class="arch-item">📁 Controllers<br><small>Auth · Project · Admin<br>Support · Archive</small></div>
-                <div class="arch-item">📦 Models<br><small>User · Project · ProjectFile<br>Category · Program<br>SupportTicket · ActivityLog</small></div>
+                <div class="arch-item">📁 Controllers<br><small>Auth · Project · Admin<br>Support · Archive</small>
+                </div>
+                <div class="arch-item">📦 Models<br><small>User · Project · ProjectFile<br>Category ·
+                    Program<br>SupportTicket · ActivityLog</small></div>
                 <div class="arch-item">🔄 Services<br><small>PDFValidator<br>FileScanner (ClamAV)</small></div>
                 <div class="arch-item">🛣️ Routes<br><small>Web · Auth<br>Role Middleware</small></div>
                 <div class="arch-item">📂 Migrations<br><small>Database Schema<br>Version Control</small></div>
@@ -679,11 +1205,21 @@
             <div class="arch-layer" style="border-color:var(--danger);background:rgba(239,68,68,.05);">
               <div class="arch-layer-label" style="background:var(--danger);color:#fff;">5 · Security</div>
               <div class="arch-layer-items">
-                <div class="arch-item" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔐 Authentication<br><small>Login · Session · CSRF<br>Email Verification</small></div>
-                <div class="arch-item" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🛡️ Authorization<br><small>Role-Based Access<br>Student · Admin</small></div>
-                <div class="arch-item" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔒 Password Hashing<br><small>Bcrypt Encryption</small></div>
-                <div class="arch-item" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔍 File Validation<br><small>SHA-256 · ClamAV Scan<br>PDF Content Check</small></div>
-                <div class="arch-item" style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">📋 Activity Logging<br><small>Full Audit Trail</small></div>
+                <div class="arch-item"
+                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔐
+                  Authentication<br><small>Login · Session · CSRF<br>Email Verification</small></div>
+                <div class="arch-item"
+                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🛡️
+                  Authorization<br><small>Role-Based Access<br>Student · Admin</small></div>
+                <div class="arch-item"
+                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔒 Password
+                  Hashing<br><small>Bcrypt Encryption</small></div>
+                <div class="arch-item"
+                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔍 File
+                  Validation<br><small>SHA-256 · ClamAV Scan<br>PDF Content Check</small></div>
+                <div class="arch-item"
+                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">📋 Activity
+                  Logging<br><small>Full Audit Trail</small></div>
               </div>
             </div>
 
@@ -691,14 +1227,38 @@
         </div>
 
         <div class="desc-panel">
-          <h3><span class="icon" style="background:rgba(99,102,241,.15);">🏗️</span> Key Components of System Architecture</h3>
-          <p>The CSIT Capstone Repository Management System is built upon five key architectural components, each serving a distinct role in the overall system design:</p>
+          <h3><span class="icon" style="background:rgba(99,102,241,.15);">🏗️</span> Key Components of System
+            Architecture</h3>
+          <p>The CSIT Capstone Repository Management System is built upon five key architectural components, each
+            serving a distinct role in the overall system design:</p>
           <ul>
-            <li><strong>Hardware Platform</strong> — The application runs on a local development server using XAMPP on Windows, which provides the Apache web server and MySQL database server. Local disk storage is used to securely store uploaded PDF manuscripts and file attachments. The network interface handles HTTP communication through localhost during development.</li>
-            <li><strong>Software Platform</strong> — The system is built with PHP 8.2 as the server-side programming language and utilizes the Laravel 12 framework, which follows the Model-View-Controller (MVC) architectural pattern. MySQL serves as the relational database management system for structured data storage. Apache handles incoming HTTP requests, Blade templates coupled with Tailwind CSS render the responsive user interface, and Gmail SMTP services provide queued email delivery for system notifications.</li>
-            <li><strong>System Interfaces</strong> — The public browse library allows guests and authenticated users to search and view published projects. Authentication pages handle user login, registration with email verification. Two role-specific dashboards — Student Dashboard and Admin Dashboard — provide tailored interfaces for each user type. The system includes an embedded PDF viewer for manuscript previews, and a support ticket system for user feedback and issue reporting.</li>
-            <li><strong>System Structure</strong> — Controllers handle incoming requests and coordinate business logic across authentication, project management, user administration, support tickets, and archive management. Models define the data entities (User, Project, ProjectFile, Category, Program, SupportTicket, and ActivityLog) and their relationships through Eloquent ORM. Dedicated Services encapsulate reusable logic, including the PDF Validator for content checking and the File Scanner for ClamAV security scanning.</li>
-            <li><strong>Security</strong> — Authentication is handled through Laravel's session-based login with CSRF token protection and a two-step email verification during registration. Authorization uses Role-Based Access Control (RBAC), restricting system features based on the user's assigned role (Student or Admin). Passwords are encrypted using Bcrypt hashing. Uploaded files undergo a multi-step validation process, including SHA-256 hash comparison for duplicate detection, ClamAV security scanning, and PDF content verification. A comprehensive activity logging system maintains a complete audit trail of all significant system events.</li>
+            <li><strong>Hardware Platform</strong> — The application runs on a local development server using XAMPP on
+              Windows, which provides the Apache web server and MySQL database server. Local disk storage is used to
+              securely store uploaded PDF manuscripts and file attachments. The network interface handles HTTP
+              communication through localhost during development.</li>
+            <li><strong>Software Platform</strong> — The system is built with PHP 8.2 as the server-side programming
+              language and utilizes the Laravel 12 framework, which follows the Model-View-Controller (MVC)
+              architectural pattern. MySQL serves as the relational database management system for structured data
+              storage. Apache handles incoming HTTP requests, Blade templates coupled with Tailwind CSS render the
+              responsive user interface, and Gmail SMTP services provide queued email delivery for system notifications.
+            </li>
+            <li><strong>System Interfaces</strong> — The public browse library allows guests and authenticated users to
+              search and view published projects. Authentication pages handle user login, registration with email
+              verification. Two role-specific dashboards — Student Dashboard and Admin Dashboard — provide tailored
+              interfaces for each user type. The system includes an embedded PDF viewer for manuscript previews, and a
+              support ticket system for user feedback and issue reporting.</li>
+            <li><strong>System Structure</strong> — Controllers handle incoming requests and coordinate business logic
+              across authentication, project management, user administration, support tickets, and archive management.
+              Models define the data entities (User, Project, ProjectFile, Category, Program, SupportTicket, and
+              ActivityLog) and their relationships through Eloquent ORM. Dedicated Services encapsulate reusable logic,
+              including the PDF Validator for content checking and the File Scanner for ClamAV security scanning.</li>
+            <li><strong>Security</strong> — Authentication is handled through Laravel's session-based login with CSRF
+              token protection and a two-step email verification during registration. Authorization uses Role-Based
+              Access Control (RBAC), restricting system features based on the user's assigned role (Student or Admin).
+              Passwords are encrypted using Bcrypt hashing. Uploaded files undergo a multi-step validation process,
+              including SHA-256 hash comparison for duplicate detection, ClamAV security scanning, and PDF content
+              verification. A comprehensive activity logging system maintains a complete audit trail of all significant
+              system events.</li>
           </ul>
         </div>
       </div>
@@ -724,9 +1284,9 @@
               <h4>CSIT Department</h4>
               <small>Institutional Oversight</small>
             </div>
-            
+
             <div class="org-connector-v"></div>
-            
+
             <!-- Middle: Admin -->
             <div class="org-node org-admin">
               <span class="icon">👤</span>
@@ -736,8 +1296,8 @@
 
             <div class="org-connector-h"></div>
             <div class="org-row-connectors">
-                <div></div>
-                <div></div>
+              <div></div>
+              <div></div>
             </div>
 
             <!-- Bottom: Row -->
@@ -747,7 +1307,7 @@
                 <h4>Student Users</h4>
                 <small>Student Role</small>
               </div>
-              
+
               <div class="org-node org-guest">
                 <span class="icon">🌐</span>
                 <h4>Public Guests</h4>
@@ -759,8 +1319,22 @@
 
         <div class="desc-panel">
           <h3><span class="icon" style="background:var(--accent-light);">👥</span> Hierarchy Description</h3>
-          <p>The Organizational Chart for the CSIT Capstone Repository defines a streamlined hierarchy designed to facilitate efficient digital preservation while maintaining strict departmental oversight. At the highest level, the platform operates under the institutional governance of the CSIT Department, which provides the overall mandate for academic research standards. Directly reporting to this oversight is the System Administrator, a role tasked with the comprehensive management of the repository’s ecosystem. This administrator acts as the primary gatekeeper, responsible for activating student accounts, maintaining robust system security through specialized scanning tools, and performing the final verification and publishing of research manuscripts to ensure they meet the institution's criteria.</p>
-          <p style="margin-top: 16px;">Reporting to the administrative layer are the Student Users and Public Guests, who represent the primary contributors and consumers of the repository’s data. Students are granted authenticated access to manage their personal profiles and preserve their research studies through a secure submission portal, directly interacting with the administrator for the publication of their work. Conversely, Public Guests are integrated into the chart as unauthenticated stakeholders who utilize the search and discovery engine for open-access knowledge sharing. By utilizing this two-role administrative architecture, the system minimizes bureaucratic overhead and ensures a direct, efficient workflow that transitions student research from initial submission to long-term digital archiving.</p>
+          <p>The Organizational Chart for the CSIT Capstone Repository defines a streamlined hierarchy designed to
+            facilitate efficient digital preservation while maintaining strict departmental oversight. At the highest
+            level, the platform operates under the institutional governance of the CSIT Department, which provides the
+            overall mandate for academic research standards. Directly reporting to this oversight is the System
+            Administrator, a role tasked with the comprehensive management of the repository’s ecosystem. This
+            administrator acts as the primary gatekeeper, responsible for activating student accounts, maintaining
+            robust system security through specialized scanning tools, and performing the final verification and
+            publishing of research manuscripts to ensure they meet the institution's criteria.</p>
+          <p style="margin-top: 16px;">Reporting to the administrative layer are the Student Users and Public Guests,
+            who represent the primary contributors and consumers of the repository’s data. Students are granted
+            authenticated access to manage their personal profiles and preserve their research studies through a secure
+            submission portal, directly interacting with the administrator for the publication of their work.
+            Conversely, Public Guests are integrated into the chart as unauthenticated stakeholders who utilize the
+            search and discovery engine for open-access knowledge sharing. By utilizing this two-role administrative
+            architecture, the system minimizes bureaucratic overhead and ensures a direct, efficient workflow that
+            transitions student research from initial submission to long-term digital archiving.</p>
         </div>
       </div>
     </div>
@@ -774,7 +1348,8 @@
     <div class="section-content">
       <div class="section-title">
         <h2>Flowchart per Role</h2>
-        <p>Detailed user journey diagrams for each role, showing every action available from registration to task completion.</p>
+        <p>Detailed user journey diagrams for each role, showing every action available from registration to task
+          completion.</p>
       </div>
 
       <div class="role-tabs">
@@ -792,56 +1367,109 @@
           <div class="diagram-panel" data-label="Student Flowchart">
             <div class="flow">
               <div class="node node-start c-neutral">🌐 Visit Public Home Page</div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-student">Register Account<br><small>Name · Email · Student ID · Program · Password</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-student">Register Account<br><small>Name · Email · Student ID · Program ·
+                  Password</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-system">System Sends 6-Digit Verification Code<br><small>📧 Code sent to student email (expires in 10 min)</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-system">System Sends 6-Digit Verification Code<br><small>📧 Code sent to student email
+                  (expires in 10 min)</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
               <div class="node c-student">Enter Verification Code</div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-system">Account Created<br><span class="status-pill s-pending">inactive — awaiting admin approval</span></div>
-              <div class="arrow"><div class="arrow-line"></div><span class="arrow-label al-auto">⏳ Admin Approves</span><div class="arrow-head"></div></div>
+              <div class="node c-system">Account Created<br><span class="status-pill s-pending">inactive — awaiting
+                  admin approval</span></div>
+              <div class="arrow">
+                <div class="arrow-line"></div><span class="arrow-label al-auto">⏳ Admin Approves</span>
+                <div class="arrow-head"></div>
+              </div>
 
               <div class="node c-student">Login → Student Dashboard</div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-student">Fill &amp; Submit Project Form<br><small>Title · Abstract · Year · Program · Categories<br>Authors · Adviser · Manuscript PDF · Attachments</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-student">Fill &amp; Submit Project Form<br><small>Title · Abstract · Year · Program ·
+                  Categories<br>Authors · Adviser · Manuscript PDF · Attachments</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-system">System Validates Submission<br><small>SHA-256 duplicate check → ClamAV security scan → PDF content validation</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-system">System Validates Submission<br><small>SHA-256 duplicate check → ClamAV security
+                  scan → PDF content validation</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
               <!-- Decision -->
               <div class="diamond-wrap">
-                <div class="diamond" style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">Valid?</div>
+                <div class="diamond"
+                  style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">Valid?</div>
               </div>
               <div class="diamond-branches">
                 <div class="diamond-branch">
                   <span class="arrow-label al-no">✗ Fail</span>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-                  <div class="node c-danger" style="font-size:11px;">Blocked &amp; Rolled Back<br><small>Error details shown<br>Security ticket created</small></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
+                  <div class="node c-danger" style="font-size:11px;">Blocked &amp; Rolled Back<br><small>Error details
+                      shown<br>Security ticket created</small></div>
                 </div>
                 <div class="diamond-branch">
                   <span class="arrow-label al-yes">✓ Pass</span>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-                  <div class="node c-system" style="font-size:11px;">Project Created<br><span class="status-pill s-pending">status: pending</span></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
+                  <div class="node c-system" style="font-size:11px;">Project Created<br><span
+                      class="status-pill s-pending">status: pending</span></div>
                 </div>
               </div>
 
-              <div class="arrow" style="margin-top:10px;"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="arrow" style="margin-top:10px;">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-student">View Project Status on Dashboard<br><small>Track progress · View validation report</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-student">View Project Status on Dashboard<br><small>Track progress · View validation
+                  report</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-student" style="border-style:dashed;">Edit &amp; Resubmit if Returned<br><small>Modify metadata · Re-enters pending status</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-student" style="border-style:dashed;">Edit &amp; Resubmit if Returned<br><small>Modify
+                  metadata · Re-enters pending status</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-student" style="border-style:dashed;">Cancel Submission<br><small>(only if status is pending or returned)</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-student" style="border-style:dashed;">Cancel Submission<br><small>(only if status is
+                  pending or returned)</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
               <div class="node node-end c-neutral">End</div>
             </div>
@@ -849,13 +1477,29 @@
 
           <div class="desc-panel">
             <h3><span class="icon" style="background:var(--student-light);">👨‍🎓</span> Student Workflow</h3>
-            <p>The student journey begins with account registration and ends with tracking the project status through the review pipeline:</p>
+            <p>The student journey begins with account registration and ends with tracking the project status through
+              the review pipeline:</p>
             <ul>
-              <li><strong>Registration &amp; Email Verification:</strong> The student visits the public home page and fills out the registration form with their details, student ID, and program. The system sends a 6-digit verification code to the student's email address. The student must enter this code correctly within 10 minutes to confirm their email. Upon successful verification, the account is created but remains inactive until an administrator approves it.</li>
-              <li><strong>Project Submission:</strong> The student submits a new project by providing required metadata (title, abstract, year, program, categories), adding authors, specifying their adviser name, uploading the manuscript PDF, and optionally attaching supplementary files. Submissions may be restricted by admin-configured deadlines or closure settings.</li>
-              <li><strong>Automated Validation:</strong> Upon clicking submit, the system automatically runs three checks: SHA-256 duplicate hash detection, a ClamAV security scan of the uploaded file (including each attachment), and PDF content validation (checking for page counts and required keywords). If any check fails, the submission is instantly blocked, all files are deleted, and the student receives a detailed error report. Security threats automatically generate a high-priority support ticket for the admin.</li>
-              <li><strong>Status Tracking &amp; Cancellation:</strong> Passing all checks places the project in a "pending" state. The student can monitor the progress from their dashboard or cancel the submission entirely as long as it has not yet been published.</li>
-              <li><strong>Edit &amp; Resubmit:</strong> If the admin returns the project for revision (status: "returned"), the student can edit the project metadata and resubmit it. The status is automatically reset to "pending" and re-enters the review queue.</li>
+              <li><strong>Registration &amp; Email Verification:</strong> The student visits the public home page and
+                fills out the registration form with their details, student ID, and program. The system sends a 6-digit
+                verification code to the student's email address. The student must enter this code correctly within 10
+                minutes to confirm their email. Upon successful verification, the account is created but remains
+                inactive until an administrator approves it.</li>
+              <li><strong>Project Submission:</strong> The student submits a new project by providing required metadata
+                (title, abstract, year, program, categories), adding authors, specifying their adviser name, uploading
+                the manuscript PDF, and optionally attaching supplementary files. Submissions may be restricted by
+                admin-configured deadlines or closure settings.</li>
+              <li><strong>Automated Validation:</strong> Upon clicking submit, the system automatically runs three
+                checks: SHA-256 duplicate hash detection, a ClamAV security scan of the uploaded file (including each
+                attachment), and PDF content validation (checking for page counts and required keywords). If any check
+                fails, the submission is instantly blocked, all files are deleted, and the student receives a detailed
+                error report. Security threats automatically generate a high-priority support ticket for the admin.</li>
+              <li><strong>Status Tracking &amp; Cancellation:</strong> Passing all checks places the project in a
+                "pending" state. The student can monitor the progress from their dashboard or cancel the submission
+                entirely as long as it has not yet been published.</li>
+              <li><strong>Edit &amp; Resubmit:</strong> If the admin returns the project for revision (status:
+                "returned"), the student can edit the project metadata and resubmit it. The status is automatically
+                reset to "pending" and re-enters the review queue.</li>
             </ul>
           </div>
         </div>
@@ -867,26 +1511,42 @@
           <div class="diagram-panel" data-label="Admin Flowchart">
             <div class="flow">
               <div class="node node-start c-admin">Login → Admin Dashboard</div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
               <!-- Three main paths -->
               <div style="display:flex;width:100%;max-width:1050px;gap:16px;">
                 <!-- User Management Path -->
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
-                  <div class="node c-admin" style="width:100%;font-size:12px;">👤 User Management<br><small>Review pending accounts<br>Create new users</small></div>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                  <div class="node c-admin" style="width:100%;font-size:12px;">👤 User Management<br><small>Review
+                      pending accounts<br>Create new users</small></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
                   <div class="diamond-wrap">
-                    <div class="diamond" style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:110px;height:55px;">Approve?</div>
+                    <div class="diamond"
+                      style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:110px;height:55px;">
+                      Approve?</div>
                   </div>
                   <div style="display:flex;width:100%;justify-content:space-around;margin-top:4px;">
                     <div style="display:flex;flex-direction:column;align-items:center;width:45%;">
                       <span class="arrow-label al-yes" style="font-size:9px;">✓ Yes</span>
-                      <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
-                      <div class="node c-system" style="font-size:10px;padding:8px;">Activate Account<br><small>📧 Email → Student</small></div>
+                      <div class="arrow">
+                        <div class="arrow-line" style="height:14px;"></div>
+                        <div class="arrow-head"></div>
+                      </div>
+                      <div class="node c-system" style="font-size:10px;padding:8px;">Activate Account<br><small>📧 Email
+                          → Student</small></div>
                     </div>
                     <div style="display:flex;flex-direction:column;align-items:center;width:45%;">
                       <span class="arrow-label al-no" style="font-size:9px;">✗ No</span>
-                      <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
+                      <div class="arrow">
+                        <div class="arrow-line" style="height:14px;"></div>
+                        <div class="arrow-head"></div>
+                      </div>
                       <div class="node c-danger" style="font-size:10px;padding:8px;">Deny → Trash</div>
                     </div>
                   </div>
@@ -894,41 +1554,78 @@
 
                 <!-- Project Review Path -->
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
-                  <div class="node c-admin" style="width:100%;font-size:12px;">📋 Project Review<br><small>Review pending submissions</small></div>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-                  <div class="node c-admin" style="width:100%;font-size:12px;">Review PDF &amp; Metadata<br><small>View validation report</small></div>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                  <div class="node c-admin" style="width:100%;font-size:12px;">📋 Project Review<br><small>Review
+                      pending submissions</small></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
+                  <div class="node c-admin" style="width:100%;font-size:12px;">Review PDF &amp; Metadata<br><small>View
+                      validation report</small></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
                   <div class="diamond-wrap">
-                    <div class="diamond" style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:110px;height:55px;">Decision?</div>
+                    <div class="diamond"
+                      style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:110px;height:55px;">
+                      Decision?</div>
                   </div>
                   <div style="display:flex;width:100%;justify-content:space-around;margin-top:4px;">
                     <div style="display:flex;flex-direction:column;align-items:center;width:45%;">
                       <span class="arrow-label al-yes" style="font-size:9px;">✓ Publish</span>
-                      <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
-                      <div class="node c-system" style="font-size:10px;padding:8px;"><span class="status-pill s-published" style="font-size:8px;">published</span><br>📧 Notify Authors</div>
+                      <div class="arrow">
+                        <div class="arrow-line" style="height:14px;"></div>
+                        <div class="arrow-head"></div>
+                      </div>
+                      <div class="node c-system" style="font-size:10px;padding:8px;"><span
+                          class="status-pill s-published" style="font-size:8px;">published</span><br>📧 Notify Authors
+                      </div>
                     </div>
                     <div style="display:flex;flex-direction:column;align-items:center;width:45%;">
                       <span class="arrow-label al-no" style="font-size:9px;">↩ Return</span>
-                      <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
-                      <div class="node c-danger" style="font-size:10px;padding:8px;"><span class="status-pill s-rejected" style="font-size:8px;">returned</span><br>📧 Email → Student</div>
+                      <div class="arrow">
+                        <div class="arrow-line" style="height:14px;"></div>
+                        <div class="arrow-head"></div>
+                      </div>
+                      <div class="node c-danger" style="font-size:10px;padding:8px;"><span
+                          class="status-pill s-rejected" style="font-size:8px;">returned</span><br>📧 Email → Student
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- Direct Upload Path -->
                 <div style="flex:1;display:flex;flex-direction:column;align-items:center;">
-                  <div class="node c-admin" style="width:100%;font-size:12px;">📤 Direct Upload<br><small>Archive past projects<br>Single or Bulk upload</small></div>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-                  <div class="node c-admin" style="width:100%;font-size:12px;">Fill Project Form<br><small>Title · Authors · Year<br>Adviser · PDF · Attachments</small></div>
-                  <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
-                  <div class="node c-system" style="font-size:10px;padding:8px;"><span class="status-pill s-published" style="font-size:8px;">published</span><br><small>Bypasses review pipeline</small></div>
+                  <div class="node c-admin" style="width:100%;font-size:12px;">📤 Direct Upload<br><small>Archive past
+                      projects<br>Single or Bulk upload</small></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
+                  <div class="node c-admin" style="width:100%;font-size:12px;">Fill Project Form<br><small>Title ·
+                      Authors · Year<br>Adviser · PDF · Attachments</small></div>
+                  <div class="arrow">
+                    <div class="arrow-line"></div>
+                    <div class="arrow-head"></div>
+                  </div>
+                  <div class="node c-system" style="font-size:10px;padding:8px;"><span class="status-pill s-published"
+                      style="font-size:8px;">published</span><br><small>Bypasses review pipeline</small></div>
                 </div>
               </div>
 
-              <div class="arrow" style="margin-top:14px;"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="arrow" style="margin-top:14px;">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
-              <div class="node c-admin">Additional Admin Capabilities<br><small>Delete/Archive projects · Edit metadata · Re-run PDF validation<br>Manage categories &amp; programs · Configure system settings<br>View activity logs · Manage support tickets · Archive Center</small></div>
-              <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+              <div class="node c-admin">Additional Admin Capabilities<br><small>Delete/Archive projects · Edit metadata
+                  · Re-run PDF validation<br>Manage categories &amp; programs · Configure system settings<br>View
+                  activity logs · Manage support tickets · Archive Center</small></div>
+              <div class="arrow">
+                <div class="arrow-line"></div>
+                <div class="arrow-head"></div>
+              </div>
 
               <div class="node node-end c-neutral">End</div>
             </div>
@@ -936,16 +1633,34 @@
 
           <div class="desc-panel">
             <h3><span class="icon" style="background:var(--admin-light);">🛡️</span> Admin Workflow</h3>
-            <p>The administrator has the broadest set of privileges, overseeing both user accounts and project publication:</p>
+            <p>The administrator has the broadest set of privileges, overseeing both user accounts and project
+              publication:</p>
             <ul>
-              <li><strong>User Management:</strong> The admin reviews pending student registration requests. They can approve accounts (triggering an email notification to the student), deny and soft-delete fraudulent requests, manually create new user accounts, or edit existing user details and privileges.</li>
-              <li><strong>Project Review &amp; Publication:</strong> When a student submits a project, the admin receives an email notification. The admin reviews the project metadata, manuscript PDF, and automated validation report. The admin can either approve and publish the project directly (making it publicly visible and sending email notifications to the authors) or return it for revision with a mandatory written reason (emailed to the student for correction).</li>
-              <li><strong>Direct Upload of Past Projects:</strong> The admin can directly upload and publish past capstone projects without going through the student submission pipeline. This supports both single project upload and bulk upload (multiple projects in one submission). Projects are instantly published to the public library.</li>
-              <li><strong>Category &amp; Program Management:</strong> The admin can create, edit, and delete specialization categories and academic programs that are used to classify capstone projects. Items in use by existing projects are protected from deletion.</li>
-              <li><strong>System Settings:</strong> The admin configures system-wide settings including maximum upload sizes, allowed file types, academic year, repository name, submission deadlines, maintenance mode, and log retention days.</li>
-              <li><strong>Support Tickets:</strong> The admin can view, filter, search, reply to, and resolve user-submitted support tickets. Automated security alert tickets are generated when malicious uploads are detected. Resolved tickets auto-expire after 3 days.</li>
-              <li><strong>Archive Center:</strong> The admin manages soft-deleted records (projects, users, categories) through a centralized trash interface, with options to restore or permanently purge items.</li>
-              <li><strong>Activity Logs:</strong> The admin monitors a comprehensive audit trail of all significant system events, with configurable retention periods and automatic pruning.</li>
+              <li><strong>User Management:</strong> The admin reviews pending student registration requests. They can
+                approve accounts (triggering an email notification to the student), deny and soft-delete fraudulent
+                requests, manually create new user accounts, or edit existing user details and privileges.</li>
+              <li><strong>Project Review &amp; Publication:</strong> When a student submits a project, the admin
+                receives an email notification. The admin reviews the project metadata, manuscript PDF, and automated
+                validation report. The admin can either approve and publish the project directly (making it publicly
+                visible and sending email notifications to the authors) or return it for revision with a mandatory
+                written reason (emailed to the student for correction).</li>
+              <li><strong>Direct Upload of Past Projects:</strong> The admin can directly upload and publish past
+                capstone projects without going through the student submission pipeline. This supports both single
+                project upload and bulk upload (multiple projects in one submission). Projects are instantly published
+                to the public library.</li>
+              <li><strong>Category &amp; Program Management:</strong> The admin can create, edit, and delete
+                specialization categories and academic programs that are used to classify capstone projects. Items in
+                use by existing projects are protected from deletion.</li>
+              <li><strong>System Settings:</strong> The admin configures system-wide settings including maximum upload
+                sizes, allowed file types, academic year, repository name, submission deadlines, maintenance mode, and
+                log retention days.</li>
+              <li><strong>Support Tickets:</strong> The admin can view, filter, search, reply to, and resolve
+                user-submitted support tickets. Automated security alert tickets are generated when malicious uploads
+                are detected. Resolved tickets auto-expire after 3 days.</li>
+              <li><strong>Archive Center:</strong> The admin manages soft-deleted records (projects, users, categories)
+                through a centralized trash interface, with options to restore or permanently purge items.</li>
+              <li><strong>Activity Logs:</strong> The admin monitors a comprehensive audit trail of all significant
+                system events, with configurable retention periods and automatic pruning.</li>
             </ul>
           </div>
         </div>
@@ -962,7 +1677,8 @@
     <div class="section-content">
       <div class="section-title">
         <h2>System Process Flow</h2>
-        <p>The end-to-end lifecycle of a capstone project, from initial submission through automated verification, administrative review, and final publication.</p>
+        <p>The end-to-end lifecycle of a capstone project, from initial submission through automated verification,
+          administrative review, and final publication.</p>
       </div>
 
       <div class="diagram-block">
@@ -974,7 +1690,8 @@
               <div class="phase-sidebar">Submission</div>
               <div class="phase-body">
                 <div class="phase-body-title">Phase 1 — Project Submission</div>
-                <p>The student logs in, fills out the submission form with project metadata, uploads the manuscript PDF and optional attachments, then submits for processing.</p>
+                <p>The student logs in, fills out the submission form with project metadata, uploads the manuscript PDF
+                  and optional attachments, then submits for processing.</p>
                 <div class="phase-body-steps">
                   <div class="phase-step">Login</div>
                   <div class="phase-step">Fill Form</div>
@@ -985,14 +1702,22 @@
               </div>
             </div>
 
-            <div class="phase-arrow"><div class="phase-arrow-line"></div><div class="phase-arrow-head"></div></div>
+            <div class="phase-arrow">
+              <div class="phase-arrow-line"></div>
+              <div class="phase-arrow-head"></div>
+            </div>
 
             <!-- Phase 2: Automated Verification -->
             <div class="process-phase phase-system">
               <div class="phase-sidebar">Verification</div>
               <div class="phase-body">
                 <div class="phase-body-title">Phase 2 — Automated Verification</div>
-                <p>The system runs a three-step automated pipeline on the uploaded manuscript. First, it computes a SHA-256 hash and compares it against all existing manuscripts to detect duplicates. Second, it performs a ClamAV security scan on the file. Third, it validates the PDF content by checking page count, structure, and required keywords. If any step fails, the submission is rejected immediately, the student is shown a detailed error report, and an automated security ticket is generated. If all steps pass, the project is created with a "pending" status.</p>
+                <p>The system runs a three-step automated pipeline on the uploaded manuscript. First, it computes a
+                  SHA-256 hash and compares it against all existing manuscripts to detect duplicates. Second, it
+                  performs a ClamAV security scan on the file. Third, it validates the PDF content by checking page
+                  count, structure, and required keywords. If any step fails, the submission is rejected immediately,
+                  the student is shown a detailed error report, and an automated security ticket is generated. If all
+                  steps pass, the project is created with a "pending" status.</p>
                 <div class="phase-body-steps">
                   <div class="phase-step">SHA-256 Duplicate Check</div>
                   <div class="phase-step">ClamAV Security Scan</div>
@@ -1002,14 +1727,21 @@
               </div>
             </div>
 
-            <div class="phase-arrow"><div class="phase-arrow-line"></div><div class="phase-arrow-head"></div></div>
+            <div class="phase-arrow">
+              <div class="phase-arrow-line"></div>
+              <div class="phase-arrow-head"></div>
+            </div>
 
             <!-- Phase 3: Admin Review -->
             <div class="process-phase phase-admin">
               <div class="phase-sidebar">Review</div>
               <div class="phase-body">
                 <div class="phase-body-title">Phase 3 — Administrative Review</div>
-                <p>The system administrator receives an email notification about the new submission. They log in, open the project management interface, and review the project details, manuscript, and validation report. The admin may approve and publish the submission directly (making it publicly visible) or return it for revision (setting the status to "returned"), which notifies the student via email with the admin's feedback.</p>
+                <p>The system administrator receives an email notification about the new submission. They log in, open
+                  the project management interface, and review the project details, manuscript, and validation report.
+                  The admin may approve and publish the submission directly (making it publicly visible) or return it
+                  for revision (setting the status to "returned"), which notifies the student via email with the admin's
+                  feedback.</p>
                 <div class="phase-body-steps">
                   <div class="phase-step">📧 Email Notification</div>
                   <div class="phase-step">Review Manuscript &amp; Report</div>
@@ -1019,14 +1751,20 @@
               </div>
             </div>
 
-            <div class="phase-arrow"><div class="phase-arrow-line"></div><div class="phase-arrow-head"></div></div>
+            <div class="phase-arrow">
+              <div class="phase-arrow-line"></div>
+              <div class="phase-arrow-head"></div>
+            </div>
 
             <!-- Phase 4: Archival & Retrieval -->
             <div class="process-phase phase-public">
               <div class="phase-sidebar">Archive</div>
               <div class="phase-body">
                 <div class="phase-body-title">Phase 4 — Publication &amp; Archival</div>
-                <p>The published project is stored in the centralized database, indexed and fully searchable. Students, administrators, and guests can browse the public library, search past projects using filters (title, year, program, category, keyword, author, adviser), view project details, preview PDFs, and download attachments.</p>
+                <p>The published project is stored in the centralized database, indexed and fully searchable. Students,
+                  administrators, and guests can browse the public library, search past projects using filters (title,
+                  year, program, category, keyword, author, adviser), view project details, preview PDFs, and download
+                  attachments.</p>
                 <div class="phase-body-steps">
                   <div class="phase-step">🌐 Public Library</div>
                   <div class="phase-step">Search &amp; Filter</div>
@@ -1041,12 +1779,25 @@
 
         <div class="desc-panel">
           <h3><span class="icon" style="background:rgba(6,182,212,.12);">🔄</span> Process Flow Description</h3>
-          <p>The CSIT Capstone Repository Management System follows a <strong style="color:#67e8f9;">four-phase linear pipeline</strong> to process each capstone project from submission to public archive:</p>
+          <p>The CSIT Capstone Repository Management System follows a <strong style="color:#67e8f9;">four-phase linear
+              pipeline</strong> to process each capstone project from submission to public archive:</p>
           <ul>
-            <li><strong>Phase 1 — Submission:</strong> The flow begins when a student logs into their dashboard, completes the submission form, inputs all necessary metadata, and uploads their final manuscript PDF along with optional attachments.</li>
-            <li><strong>Phase 2 — Automated Verification:</strong> The system intercepts the upload and executes three sequential checks. First, it computes a SHA-256 hash to intercept duplicate uploads. Next, it runs a ClamAV file integrity security scan. Lastly, it reads the PDF text to validate structure and required signatures. A failure at any step safely rolls back the submission and generates a security alert ticket for the administrator. Success moves the project to a "pending" queue.</li>
-            <li><strong>Phase 3 — Administrative Review:</strong> The newly pending project alerts the system administrator via email. The admin reviews the manuscript through the system's built-in PDF viewer and the automated validation report, then decides to either return it to the student for corrections or officially approve and publish it directly to the public library.</li>
-            <li><strong>Phase 4 — Publication &amp; Archival:</strong> The successfully published project is permanently archived into the relational database. It is fully indexed, allowing any guest or user to perform deep, full-text searches across the public library utilizing advanced filters to retrieve documents by title, year, program, category, keyword, or author.</li>
+            <li><strong>Phase 1 — Submission:</strong> The flow begins when a student logs into their dashboard,
+              completes the submission form, inputs all necessary metadata, and uploads their final manuscript PDF along
+              with optional attachments.</li>
+            <li><strong>Phase 2 — Automated Verification:</strong> The system intercepts the upload and executes three
+              sequential checks. First, it computes a SHA-256 hash to intercept duplicate uploads. Next, it runs a
+              ClamAV file integrity security scan. Lastly, it reads the PDF text to validate structure and required
+              signatures. A failure at any step safely rolls back the submission and generates a security alert ticket
+              for the administrator. Success moves the project to a "pending" queue.</li>
+            <li><strong>Phase 3 — Administrative Review:</strong> The newly pending project alerts the system
+              administrator via email. The admin reviews the manuscript through the system's built-in PDF viewer and the
+              automated validation report, then decides to either return it to the student for corrections or officially
+              approve and publish it directly to the public library.</li>
+            <li><strong>Phase 4 — Publication &amp; Archival:</strong> The successfully published project is permanently
+              archived into the relational database. It is fully indexed, allowing any guest or user to perform deep,
+              full-text searches across the public library utilizing advanced filters to retrieve documents by title,
+              year, program, category, keyword, or author.</li>
           </ul>
         </div>
       </div>
@@ -1062,136 +1813,285 @@
     <div class="section-content">
       <div class="section-title">
         <h2>Detailed System Flowchart</h2>
-        <p>The complete end-to-end flow of a capstone project through the system, with every decision branch visualized.</p>
+        <p>The complete end-to-end flow of a capstone project through the system, with every decision branch visualized.
+        </p>
       </div>
 
       <div class="diagram-block">
         <div class="diagram-panel" data-label="System Flowchart" style="padding:32px 24px;">
-          <div style="overflow-x:auto;padding-bottom:12px;">
-            <div class="hflow">
+          <div class="flow">
 
-              <!-- START -->
-              <div class="hflow-col">
-                <div class="hnode hnode-start c-student">🌐 Student<br>Logs In</div>
-              </div>
+            <!-- START -->
+            <div class="node node-start c-student">🌐 Student Logs In</div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
 
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
+            <!-- Submit -->
+            <div class="node c-student">Fill &amp; Submit Project Form<br><small>Title · Abstract · Year · Program · Categories<br>Authors · Adviser · Manuscript PDF · Attachments</small></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
 
-              <!-- Submit -->
-              <div class="hflow-col">
-                <div class="hnode c-student">Fill &amp; Submit<br>Project Form<br><small>Title · Abstract · Year<br>Authors · Adviser · PDF</small></div>
-              </div>
+            <!-- STEP 1 -->
+            <div class="node c-system">① SHA-256 Duplicate Check<br><small>Compute file hash &amp; compare against existing manuscripts</small></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
 
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- STEP 1: Duplicate Check -->
-              <div class="hflow-col">
-                <div class="hnode c-system">① SHA-256 Check<br><small>Duplicate hash</small></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- Decision: Duplicate? -->
-              <div class="hflow-col">
-                <div class="hdiamond" style="background:var(--system-light);border-color:var(--system);color:#6ee7b7;">Dup?</div>
-                <div class="hbranch-down">
-                  <span class="arrow-label al-yes" style="font-size:9px;">✓ Yes</span>
-                  <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
-                  <div class="hnode-sm c-danger">🚫 Block<br>&amp; Rollback</div>
-                </div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><span class="harrow-label al-no">✗ No</span><div class="harrow-head"></div></div>
-
-              <!-- STEP 2: Security Scan -->
-              <div class="hflow-col">
-                <div class="hnode c-system">② ClamAV<br>Scan<br><small>Security scan</small></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- Decision: Scan OK? -->
-              <div class="hflow-col">
-                <div class="hdiamond" style="background:var(--system-light);border-color:var(--system);color:#6ee7b7;">OK?</div>
-                <div class="hbranch-down">
-                  <span class="arrow-label al-no" style="font-size:9px;">✗ Fail</span>
-                  <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
-                  <div class="hnode-sm c-danger">🚫 Block<br>&amp; Delete<br><small>🎫 Security Ticket</small></div>
-                </div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><span class="harrow-label al-yes">✓ Pass</span><div class="harrow-head"></div></div>
-
-              <!-- STEP 3: PDF Validation -->
-              <div class="hflow-col">
-                <div class="hnode c-system">③ PDF<br>Validation<br><small>Pages · Keywords</small></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- Project Created -->
-              <div class="hflow-col">
-                <div class="hnode c-system">Project<br>Created<br><span class="status-pill s-pending">pending</span></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><span class="harrow-label al-mail" style="font-size:9px;">📧 Admin</span><div class="harrow-head"></div></div>
-
-              <!-- ADMIN REVIEW -->
-              <div class="hflow-col">
-                <div class="hnode c-admin">Admin<br>Reviews<br><small>PDF &amp; Report</small></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- Decision: Admin -->
-              <div class="hflow-col">
-                <div class="hdiamond" style="background:var(--admin-light);border-color:var(--admin);color:#fcd34d;">OK?</div>
-                <div class="hbranch-down">
-                  <span class="arrow-label al-no" style="font-size:9px;">↩ Return</span>
-                  <div class="arrow"><div class="arrow-line" style="height:14px;"></div><div class="arrow-head"></div></div>
-                  <div class="hnode-sm c-danger"><span class="status-pill s-rejected" style="font-size:8px;">returned</span><br>📧 Student<br><small style="font-size:9px;">Revise → ①</small></div>
-                </div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><span class="harrow-label al-yes">✓ Publish</span><div class="harrow-head"></div></div>
-
-              <!-- Published -->
-              <div class="hflow-col">
-                <div class="hnode c-system"><span class="status-pill s-published">published</span><br><small>📧 Authors<br>Notified</small></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- Public Library -->
-              <div class="hflow-col">
-                <div class="hnode c-accent">🌐 Public<br>Library<br><small>Search &amp; Browse</small></div>
-              </div>
-
-              <div class="harrow"><div class="harrow-line"></div><div class="harrow-head"></div></div>
-
-              <!-- END -->
-              <div class="hflow-col">
-                <div class="hnode hnode-end c-neutral">End<br><small>Archived</small></div>
-              </div>
-
+            <!-- Decision: Duplicate? -->
+            <div class="diamond-wrap">
+              <div class="diamond" style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">Dup?</div>
             </div>
+            <div class="diamond-branches">
+              <div class="diamond-branch">
+                <span class="arrow-label al-yes">✓ Yes</span>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node c-danger" style="font-size:11px;">🚫 Block &amp; Rollback<br><small>Error shown to student</small></div>
+              </div>
+              <div class="diamond-branch">
+                <span class="arrow-label al-no">✗ No</span>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node c-system" style="font-size:11px;">Continue ↓</div>
+              </div>
+            </div>
+
+            <div class="arrow" style="margin-top:10px;"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- STEP 2 -->
+            <div class="node c-system">② ClamAV Security Scan<br><small>Scan manuscript &amp; attachments for malware</small></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- Decision: Scan OK? -->
+            <div class="diamond-wrap">
+              <div class="diamond" style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">OK?</div>
+            </div>
+            <div class="diamond-branches">
+              <div class="diamond-branch">
+                <span class="arrow-label al-no">✗ Fail</span>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node c-danger" style="font-size:11px;">🚫 Block &amp; Delete<br><small>🎫 Auto Security Ticket</small></div>
+              </div>
+              <div class="diamond-branch">
+                <span class="arrow-label al-yes">✓ Pass</span>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node c-system" style="font-size:11px;">Continue ↓</div>
+              </div>
+            </div>
+
+            <div class="arrow" style="margin-top:10px;"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- STEP 3 -->
+            <div class="node c-system">③ PDF Content Validation<br><small>Check page count · Detect Approval Sheet · Extract text</small></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- Project Created -->
+            <div class="node c-system">Project Created<br><span class="status-pill s-pending">status: pending</span></div>
+            <div class="arrow"><div class="arrow-line"></div><span class="arrow-label al-mail">📧 Email Notification → Admin</span><div class="arrow-head"></div></div>
+
+            <!-- Admin Reviews -->
+            <div class="node c-admin">Admin Reviews Project<br><small>View manuscript PDF · Review validation report · Check metadata</small></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- Decision: Admin -->
+            <div class="diamond-wrap">
+              <div class="diamond" style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:140px;height:70px;">Approve?</div>
+            </div>
+            <div class="diamond-branches">
+              <div class="diamond-branch">
+                <span class="arrow-label al-no">↩ Return</span>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node c-danger" style="font-size:11px;"><span class="status-pill s-rejected">returned</span><br>📧 Email → Student<br><small>Student revises &amp; resubmits → back to ①</small></div>
+              </div>
+              <div class="diamond-branch">
+                <span class="arrow-label al-yes">✓ Publish</span>
+                <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+                <div class="node c-system" style="font-size:11px;"><span class="status-pill s-published">published</span><br>📧 Email → All Authors</div>
+              </div>
+            </div>
+
+            <div class="arrow" style="margin-top:10px;"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- Public Library -->
+            <div class="node c-accent">🌐 Public Library<br><small>Search · Browse · Preview PDF · Download</small></div>
+            <div class="arrow"><div class="arrow-line"></div><div class="arrow-head"></div></div>
+
+            <!-- END -->
+            <div class="node node-end c-neutral">End — Archived</div>
+
           </div>
         </div>
 
         <div class="desc-panel">
           <h3><span class="icon" style="background:rgba(99,102,241,.12);">📊</span> System Flowchart Description</h3>
-          <p>The detailed system flowchart above shows the <strong style="color:#c7d2fe;">complete end-to-end flow</strong> of a capstone project through the CSIT Repository, reading left-to-right. Each decision diamond branches downward for the failure/reject path, while the success path continues rightward:</p>
+          <p>The detailed system flowchart above shows the <strong style="color:#c7d2fe;">complete end-to-end
+              flow</strong> of a capstone project through the CSIT Repository, reading top-to-bottom. Each decision
+            diamond branches into two paths for the success and failure outcomes:</p>
           <ul>
-            <li><strong>Submission Entry Point</strong> — The flow begins when a student logs in and submits a project through the submission form, providing all required metadata and uploading the manuscript PDF.</li>
-            <li><strong>Three-Stage Automated Verification</strong> — The system runs three sequential validation checks. Each check is a decision point that can either pass the file forward (→) or terminate the flow downward (↓) with an error:
+            <li><strong>Submission Entry Point</strong> — The flow begins when a student logs in and submits a project
+              through the submission form, providing all required metadata and uploading the manuscript PDF.</li>
+            <li><strong>Three-Stage Automated Verification</strong> — The system runs three sequential validation
+              checks. Each check is a decision point that can either pass the file forward (→) or terminate the flow
+              downward (↓) with an error:
               <ul style="margin-top:6px;">
-                <li><strong>① SHA-256 Check</strong> — Computes a SHA-256 hash of the uploaded PDF and compares it against all existing manuscripts. If a match is found, the submission is blocked and rolled back.</li>
-                <li><strong>② ClamAV Scan</strong> — Runs a security scan. If the scan detects a threat, the file is deleted, the failure is logged, and an automated security support ticket is generated for the administrator.</li>
-                <li><strong>③ PDF Validation</strong> — Validates the PDF content by checking page count, document structure, and the presence of required section keywords. Results are logged in a validation report for admin review.</li>
+                <li><strong>① SHA-256 Check</strong> — Computes a SHA-256 hash of the uploaded PDF and compares it
+                  against all existing manuscripts. If a match is found, the submission is blocked and rolled back.</li>
+                <li><strong>② ClamAV Scan</strong> — Runs a security scan. If the scan detects a threat, the file is
+                  deleted, the failure is logged, and an automated security support ticket is generated for the
+                  administrator.</li>
+                <li><strong>③ PDF Validation</strong> — Validates the PDF content by checking page count, document
+                  structure, and the presence of required section keywords. Results are logged in a validation report
+                  for admin review.</li>
               </ul>
             </li>
-            <li><strong>Admin Review Decision</strong> — After all automated checks pass, the project is created with "pending" status and the administrator receives an email notification. The admin reviews the manuscript and validation report, then either publishes it directly (→ making it publicly visible with email notifications to all authors) or returns it for revision (↓ student revises and resubmits back to Step ①).</li>
-            <li><strong>Archival</strong> — Published projects become permanently available in the public browse library, fully indexed and instantly searchable by any user or guest via full-text search.</li>
+            <li><strong>Admin Review Decision</strong> — After all automated checks pass, the project is created with
+              "pending" status and the administrator receives an email notification. The admin reviews the manuscript
+              and validation report, then either publishes it directly (→ making it publicly visible with email
+              notifications to all authors) or returns it for revision (↓ student revises and resubmits back to Step ①).
+            </li>
+            <li><strong>Archival</strong> — Published projects become permanently available in the public browse
+              library, fully indexed and instantly searchable by any user or guest via full-text search.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+     SECTION 6: CONCEPTUAL FRAMEWORK (IPO MODEL)
+     ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="section-ipo">
+    <div class="section-content">
+      <div class="section-title">
+        <h2>Conceptual Framework</h2>
+        <p>The Input-Process-Output (IPO) model illustrating the logical flow of the system's design and development.</p>
+      </div>
+
+      <div class="diagram-block">
+        <div class="diagram-panel" data-label="IPO Model">
+          <div style="display:flex;align-items:stretch;justify-content:center;gap:0;min-width:820px;padding:20px 10px;">
+
+            <!-- INPUT -->
+            <div style="flex:1;max-width:280px;background:rgba(59,130,246,.06);border:2px solid rgba(59,130,246,.35);border-radius:16px;padding:24px 20px;position:relative;">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="display:inline-block;background:var(--student);color:#fff;padding:8px 28px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Input</div>
+              </div>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
+                  <span>Capstone Project Documents<br><small style="color:#64748b;font-weight:400;">(PDF manuscripts &amp; attachments)</small></span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
+                  <span>Project Metadata<br><small style="color:#64748b;font-weight:400;">Title · Authors · Abstract · Year<br>Program · Adviser · Categories</small></span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
+                  <span>User Credentials<br><small style="color:#64748b;font-weight:400;">Students · Administrators</small></span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
+                  <span>System Requirements</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- ARROW 1 -->
+            <div style="display:flex;align-items:center;padding:0 8px;flex-shrink:0;">
+              <div style="width:40px;height:3px;background:#475569;"></div>
+              <div style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid #475569;"></div>
+            </div>
+
+            <!-- PROCESS -->
+            <div style="flex:1.2;max-width:340px;background:rgba(245,158,11,.06);border:2px solid rgba(245,158,11,.35);border-radius:16px;padding:24px 20px;position:relative;">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="display:inline-block;background:var(--admin);color:#fff;padding:8px 28px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Process</div>
+              </div>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>System Design &amp; Development</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>User Authentication &amp; Email Verification</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>File Uploading, Validation &amp; Security Scanning<br><small style="color:#64748b;font-weight:400;">SHA-256 · ClamAV · PDF Validation</small></span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Metadata Indexing &amp; Full-Text Extraction</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Database Storage</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Role-Based Access Control</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Admin Review &amp; Approval Workflow</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Search, Filtering &amp; Retrieval</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Email Notifications &amp; Activity Logging</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  <span>Testing &amp; Security</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- ARROW 2 -->
+            <div style="display:flex;align-items:center;padding:0 8px;flex-shrink:0;">
+              <div style="width:40px;height:3px;background:#475569;"></div>
+              <div style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid #475569;"></div>
+            </div>
+
+            <!-- OUTPUT -->
+            <div style="flex:1;max-width:280px;background:rgba(16,185,129,.06);border:2px solid rgba(16,185,129,.35);border-radius:16px;padding:24px 20px;position:relative;">
+              <div style="text-align:center;margin-bottom:16px;">
+                <div style="display:inline-block;background:var(--system);color:#fff;padding:8px 28px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">Output</div>
+              </div>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  <span>Centralized Web-Based Repository</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  <span>Organized &amp; Searchable Capstone Projects</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  <span>Improved Accessibility</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  <span>Efficient Information Retrieval</span>
+                </li>
+                <li style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  <span>Enhanced Knowledge Sharing</span>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="desc-panel">
+          <h3><span class="icon" style="background:rgba(168,85,247,.12);">📋</span> IPO Model Description</h3>
+          <p>The conceptual framework follows the <strong style="color:#d8b4fe;">Input-Process-Output (IPO)</strong> model to illustrate how data and system requirements are transformed into a functional web-based repository:</p>
+          <ul>
+            <li><strong>Input:</strong> The input phase encompasses all data and resources required by the system — capstone project documents (PDF manuscripts and supplementary attachments), project metadata (title, authors, abstract, year, academic program, adviser name, and specialization categories), user credentials for the two authenticated roles (students and administrators), and the identified system requirements derived from analyzing existing challenges in capstone project storage and accessibility.</li>
+            <li><strong>Process:</strong> The process phase transforms the collected inputs into a fully operational system through: system design and development using the Laravel MVC framework; user authentication with two-step email verification; automated file uploading and validation incorporating SHA-256 duplicate content detection, ClamAV antivirus security scanning, and PDF structural validation; metadata indexing with full-text content extraction for deep search capabilities; structured database storage; role-based access control for students and administrators; an administrative review and approval workflow for project publication; comprehensive search, filtering, and retrieval mechanisms; automated email notifications for system events; activity logging for audit trail maintenance; and iterative testing and security hardening.</li>
+            <li><strong>Output:</strong> The output phase represents the successfully developed Centralized Web-Based Repository — a centralized, organized, and publicly searchable collection of capstone projects. The system improves accessibility to academic research by providing 24/7 access through any web browser, enables efficient information retrieval through full-text search and multi-criteria filtering, and enhances knowledge sharing by making completed research visible to students, administrators, and unauthenticated guests across the institution.</li>
           </ul>
         </div>
       </div>
@@ -1223,4 +2123,3 @@
       btn.classList.add('active-' + role);
     }
   </script>
-

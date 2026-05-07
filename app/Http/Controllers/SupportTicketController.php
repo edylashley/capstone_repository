@@ -39,6 +39,16 @@ class SupportTicketController extends Controller
             ->delete();
 
         $category = $validated['category'];
+        
+        $priority = match ($category) {
+            'bug' => 'high',
+            'account' => 'high',
+            'correction' => 'medium',
+            'others' => 'medium',
+            'general' => 'low',
+            default => 'low',
+        };
+
         if ($category === 'others' && !empty($validated['custom_category'])) {
             $category = $validated['custom_category'];
         }
@@ -49,6 +59,7 @@ class SupportTicketController extends Controller
             'user_id' => auth()->id(), // nullable
             'email' => $email,
             'category' => $category,
+            'priority' => $priority,
             'subject' => $validated['subject'] ?? Str::limit($validated['message'], 50),
             'message' => $validated['message'],
             'attachment_path' => $attachmentPath,
@@ -97,6 +108,11 @@ class SupportTicketController extends Controller
         // Filter by status
         if ($request->filled('status') && in_array($request->status, ['pending', 'resolved'])) {
             $query->where('status', $request->status);
+        }
+
+        // Filter by priority
+        if ($request->filled('priority') && in_array($request->priority, ['low', 'medium', 'high', 'urgent'])) {
+            $query->where('priority', $request->priority);
         }
 
         // Filter by category

@@ -181,8 +181,8 @@
                                                 <span class="text-[10px] text-indigo-400/80 font-black uppercase tracking-widest border-l border-gray-200 dark:border-gray-700 pl-2">{{ $project->program }}</span>
                                                 
                                                 @if(auth()->check() && auth()->user()->isAdmin())
-                                                    <span class="bg-emerald-500/10 text-emerald-600 text-[9px] font-black px-2 py-0.5 rounded-full border border-emerald-500/20 uppercase tracking-tighter ml-auto sm:ml-0">
-                                                        {{ ucfirst($project->status) }}
+                                                    <span class="text-[9px] font-black px-2 py-0.5 rounded-full border {{ $project->status_badge }} uppercase tracking-tighter ml-auto sm:ml-0">
+                                                        {{ $project->status_label }}
                                                     </span>
                                                 @endif
                                             </div>
