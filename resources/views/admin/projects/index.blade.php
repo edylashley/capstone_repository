@@ -172,11 +172,11 @@
                         class="origin-top-right absolute right-0 mt-2 w-48 rounded-2xl shadow-lg bg-white dark:bg-slate-900 ring-1 ring-gray-200 dark:ring-white/10 border border-gray-200 dark:border-white/5 z-50 overflow-hidden text-[10px] font-black uppercase tracking-widest transition-colors"
                         style="display: none;">
                         <a href="{{ route('admin.projects.create') }}"
-                            class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-indigo-600 transition">
+                            class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-blue-600 dark:hover:bg-indigo-600 hover:text-white transition-all duration-200">
                             Single Entry
                         </a>
                         <a href="{{ route('admin.projects.bulk-create') }}"
-                            class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-indigo-600 transition">
+                            class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-blue-600 dark:hover:bg-indigo-600 hover:text-white transition-all duration-200">
                             Bulk Entry (Multi)
                         </a>
                     </div>

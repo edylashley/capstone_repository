@@ -99,6 +99,14 @@
                                 </select>
                                 <x-input-error :messages="$errors->get('program')" class="mt-2" />
                             </div>
+
+                            <!-- Keywords -->
+                            <div>
+                                <x-input-label for="keywords" :value="__('Keywords')" class="text-gray-700 dark:text-slate-300"/>
+                                <x-text-input id="keywords" class="block mt-1 w-full bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-700 text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 shadow-sm transition-colors" type="text" name="keywords" :value="old('keywords', is_array($project->keywords) ? implode(', ', $project->keywords) : $project->keywords)" placeholder="e.g. machine learning, web app" />
+                                <x-input-error :messages="$errors->get('keywords')" class="mt-2" />
+                                <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-widest font-bold italic">Comma-separated. Drives the Recommendation Engine.</p>
+                            </div>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

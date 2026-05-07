@@ -30,23 +30,27 @@
                         <h2
                             class="font-black text-4xl text-gray-900 dark:text-white uppercase tracking-tighter leading-none">
                             Dashboard</h2>
-                        
+
                         {{-- Security Engine Status Pill --}}
-                        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 shadow-sm transition-all hover:shadow-md">
+                        <div
+                            class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 shadow-sm transition-all hover:shadow-md">
                             <div class="relative flex h-2 w-2">
                                 @php
-                                    $statusColor = match($stats['security_status']) {
+                                    $statusColor = match ($stats['security_status']) {
                                         'online', 'ready' => 'bg-emerald-500',
                                         'offline' => 'bg-rose-500',
                                         default => 'bg-amber-500'
                                     };
                                 @endphp
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $statusColor }} opacity-75"></span>
+                                <span
+                                    class="animate-ping absolute inline-flex h-full w-full rounded-full {{ $statusColor }} opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 {{ $statusColor }}"></span>
                             </div>
-                            <span class="text-[9px] font-black uppercase tracking-[0.1em] text-gray-500 dark:text-slate-400">
-                                Security Engine: 
-                                <span class="{{ $stats['security_status'] === 'offline' ? 'text-rose-500' : 'text-emerald-500' }}">
+                            <span
+                                class="text-[9px] font-black uppercase tracking-[0.1em] text-gray-500 dark:text-slate-400">
+                                Security Engine:
+                                <span
+                                    class="{{ $stats['security_status'] === 'offline' ? 'text-rose-500' : 'text-emerald-500' }}">
                                     {{ strtoupper($stats['security_status']) }}
                                 </span>
                             </span>
@@ -396,7 +400,7 @@
                                         color: textColor,
                                         font: { size: 10, weight: '700' },
                                         padding: 10,
-                                        callback: function(value) {
+                                        callback: function (value) {
                                             const label = this.getLabelForValue(value);
                                             const maxLen = window.innerWidth < 768 ? 15 : 30;
                                             return label.length > maxLen ? label.substring(0, maxLen) + '…' : label;

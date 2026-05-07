@@ -896,6 +896,75 @@
                     @endif
                 </div>
             </div>
+
+            <!-- Related Projects Section -->
+            @if(isset($relatedProjects) && $relatedProjects->isNotEmpty())
+                <div class="mt-20 pt-16 border-t border-gray-200 dark:border-white/5">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                        <div class="flex items-center gap-5">
+                            <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-indigo-500/20 transform -rotate-3 group-hover:rotate-0 transition-transform">
+                                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-black text-gray-900 dark:text-white uppercase tracking-tighter italic leading-none">Similar Research</h2>
+                                <p class="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.3em] mt-2 opacity-80">Discover more from the repository</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block">
+                            <span class="text-[10px] font-black text-gray-400 dark:text-slate-600 uppercase tracking-widest bg-gray-100 dark:bg-slate-800/50 px-4 py-2 rounded-full border border-gray-200 dark:border-white/5">
+                                Top 4 Recommendations
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        @foreach($relatedProjects as $related)
+                            <a href="{{ route('projects.show', $related) }}" 
+                               class="group relative bg-white dark:bg-slate-900/40 border border-gray-200 dark:border-white/5 p-6 rounded-[2rem] hover:border-indigo-500/50 transition-all duration-500 flex flex-col h-full hover:-translate-y-2 hover:shadow-[0_30px_60px_-15px_rgba(79,70,229,0.15)] overflow-hidden">
+                                
+                                {{-- Subtle background glow on hover --}}
+                                <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl group-hover:bg-indigo-500/10 transition-all"></div>
+                                
+                                <div class="flex items-center justify-between mb-6 relative z-10">
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2.5 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black rounded-lg border border-indigo-100 dark:border-indigo-500/20">
+                                            {{ $related->year }}
+                                        </span>
+                                        <span class="px-2.5 py-1 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] font-black rounded-lg border border-slate-200 dark:border-white/5">
+                                            {{ $related->program }}
+                                        </span>
+                                    </div>
+                                    <div class="opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7-7 7M3 12h18"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <h3 class="text-base font-black text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-3 line-clamp-2 leading-tight relative z-10 italic uppercase tracking-tight">
+                                    {{ $related->title }}
+                                </h3>
+
+                                <p class="text-xs text-gray-500 dark:text-slate-400 line-clamp-3 leading-relaxed mb-6 flex-1 relative z-10 font-medium">
+                                    {{ $related->abstract }}
+                                </p>
+
+                                <div class="flex items-center gap-3 pt-5 border-t border-gray-100 dark:border-white/5 relative z-10">
+                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-[10px] font-black text-gray-600 dark:text-slate-400 shadow-sm border border-white/10">
+                                        {{ substr($related->adviser_name ?: '?', 0, 1) }}
+                                    </div>
+                                    <div class="flex flex-col min-w-0">
+                                        <span class="text-[9px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest leading-none mb-1">Adviser</span>
+                                        <span class="text-[10px] font-bold text-gray-600 dark:text-slate-300 truncate">{{ $related->adviser_name ?: 'Unknown' }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 

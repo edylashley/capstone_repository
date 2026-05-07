@@ -175,6 +175,15 @@
                         @error('categories') <p class="text-red-600 text-sm mt-3 font-semibold">{{ $message }}</p> @enderror
                     </div>
 
+                    <div class="mb-10">
+                        <label class="block font-bold text-xs uppercase tracking-widest text-gray-500 dark:text-slate-400 mb-2">Keywords</label>
+                        <input type="text" name="keywords" value="{{ old('keywords') }}" 
+                               class="mt-1 block w-full bg-gray-50 dark:bg-slate-950 border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 placeholder-gray-400 dark:placeholder-slate-600 transition-colors" 
+                               placeholder="e.g. machine learning, web app, IoT, sensors" autocomplete="off">
+                        <p class="mt-2 text-[10px] text-gray-500 dark:text-slate-500 italic">Separate keywords with commas. These help students find your work through search.</p>
+                        @error('keywords') <p class="text-red-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div class="p-6 bg-gray-50 dark:bg-slate-950/50 rounded-2xl border-2 border-dashed border-gray-300 dark:border-white/5 group hover:border-blue-500/50 transition-colors">
                             <label class="block font-bold text-xs uppercase tracking-widest text-blue-500 dark:text-blue-400 mb-3">Main Manuscript (PDF)</label>

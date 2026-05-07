@@ -91,4 +91,73 @@ class Project extends Model
             default => 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20',
         };
     }
+    /**
+     * Recommendation Engine: Get projects related to this one.
+     */
+    public function getRelatedProjects($limit = 5)
+    {
+        $keywordMatches = collect();
+        
+        if (!empty($this->keywords)) {
+            $keywordMatches = self::where('id', '!=', $this->id)
+                ->where('status', 'published')
+                ->where(function ($query) {
+                    foreach ($this->keywords as $keyword) {
+                        $query->orWhereJsonContains('keywords', $keyword);
+                    }
+                })
+                ->get();
+        }
+
+        $categoryMatches = self::where('id', '!=', $this->id)
+            ->where('status', 'published')
+            ->where(function ($query) {
+                $query->whereHas('categories', function ($q) {
+                    $q->whereIn('categories.id', $this->categories->pluck('id'));
+                });
+                
+                if (!empty($this->custom_category)) {
+                    $query->orWhere('custom_category', 'like', '%' . $this->custom_category . '%');
+                }
+            })
+            ->get();
+
+        // Combine and score
+        $related = $keywordMatches->merge($categoryMatches)->map(function ($project) {
+            $score = 0;
+            
+            // Score based on keyword overlap
+            if (!empty($this->keywords) && !empty($project->keywords)) {
+                $commonKeywords = array_intersect($this->keywords, $project->keywords);
+                $score += count($commonKeywords) * 10;
+            }
+
+            // Score based on category overlap
+            $commonCategories = $this->categories->pluck('id')->intersect($project->categories->pluck('id'));
+            $score += $commonCategories->count() * 5;
+
+            // Score based on custom category (Other) match
+            if (!empty($this->custom_category) && !empty($project->custom_category)) {
+                if (strtolower($this->custom_category) === strtolower($project->custom_category)) {
+                    $score += 15; // High weight for exact custom category match
+                } elseif (str_contains(strtolower($project->custom_category), strtolower($this->custom_category)) || 
+                          str_contains(strtolower($this->custom_category), strtolower($project->custom_category))) {
+                    $score += 8; // Partial match
+                }
+            }
+
+            // Score based on program match
+            if ($this->program === $project->program) {
+                $score += 2;
+            }
+
+            $project->similarity_score = $score;
+            return $project;
+        })
+        ->sortByDesc('similarity_score')
+        ->unique('id')
+        ->take($limit);
+
+        return $related;
+    }
 }

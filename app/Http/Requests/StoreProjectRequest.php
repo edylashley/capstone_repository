@@ -99,6 +99,7 @@ class StoreProjectRequest extends FormRequest
             'categories' => ['required_without:other_category', 'array'],
             'categories.*' => ['exists:categories,id'],
             'other_category' => ['nullable', 'string', 'max:50', 'required_if:other_category_trigger,on'],
+            'keywords' => ['nullable', 'string'],
 
             // Main manuscript: PDF only
             'manuscript' => ['required','file','mimes:pdf','max:'.$maxManuscriptKb], 

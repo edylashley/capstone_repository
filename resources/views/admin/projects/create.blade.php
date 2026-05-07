@@ -66,7 +66,7 @@
                         @error('categories') <p class="text-red-600 text-sm mt-1 font-semibold">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Program</label>
                         <select name="program" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors" required>
                             <option value="" disabled {{ old('program') ? '' : 'selected' }}>Choose Program</option>
@@ -77,6 +77,13 @@
                             @endforeach
                         </select>
                         @error('program') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block font-medium text-sm text-gray-700 dark:text-slate-300">Keywords</label>
+                        <input type="text" name="keywords" value="{{ old('keywords') }}" placeholder="e.g. machine learning, web app, IoT, sensors" class="mt-1 block w-full rounded-xl border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white shadow-sm focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
+                        <p class="mt-1 text-[10px] text-gray-500 dark:text-slate-400 italic font-bold">Separate with commas. These drive the Recommendation Engine similarity scores.</p>
+                        @error('keywords') <p class="text-red-600 text-sm">{{ $message }}</p> @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

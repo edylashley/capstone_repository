@@ -156,6 +156,7 @@ class ProjectController extends Controller
             'categories.*' => 'exists:categories,id',
             'abstract' => 'nullable|string',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
+            'keywords' => 'nullable|string',
             'manuscript' => [
                 'required',
                 'file',
@@ -205,6 +206,7 @@ class ProjectController extends Controller
             'program' => $program,
             'specialization' => null, // Deprecated
             'authors_list' => $validated['authors_list'],
+            'keywords' => !empty($validated['keywords']) ? array_filter(array_map('trim', explode(',', $validated['keywords']))) : null,
             'status' => 'published', // INSTANT PUBLISH
             'is_published' => true,
             'published_at' => now(),
@@ -334,6 +336,7 @@ class ProjectController extends Controller
             'categories' => 'required|array|min:1',
             'categories.*' => 'exists:categories,id',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
+            'keywords' => 'nullable|string',
         ]);
 
         $project->update([
@@ -346,6 +349,7 @@ class ProjectController extends Controller
             'status' => $validated['status'],
             'specialization' => null, // Deprecated
             'program' => $validated['program'],
+            'keywords' => !empty($validated['keywords']) ? array_filter(array_map('trim', explode(',', $validated['keywords']))) : null,
         ]);
 
         $project->categories()->sync($validated['categories']);
@@ -522,6 +526,7 @@ class ProjectController extends Controller
             'projects.*.categories' => 'required|array|min:1',
             'projects.*.categories.*' => 'exists:categories,id',
             'projects.*.program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
+            'projects.*.keywords' => 'nullable|string',
             'projects.*.abstract' => 'nullable|string',
             'projects.*.manuscript' => [
                 'required',
@@ -584,6 +589,7 @@ class ProjectController extends Controller
                 'program' => $data['program'],
                 'specialization' => null, // Deprecated
                 'authors_list' => $data['authors_list'],
+                'keywords' => !empty($data['keywords']) ? array_filter(array_map('trim', explode(',', $data['keywords']))) : null,
                 'status' => 'published',
                 'is_published' => true,
                 'published_at' => now(),

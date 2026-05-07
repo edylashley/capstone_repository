@@ -190,6 +190,14 @@ class ProjectController extends Controller
             $slug = $originalSlug . '-' . $i++;
         }
 
+        // Parse keywords from comma-separated string
+        $keywords = null;
+        if (!empty($data['keywords'])) {
+            $keywords = array_map('trim', explode(',', $data['keywords']));
+            $keywords = array_filter($keywords);
+            $keywords = array_values($keywords);
+        }
+
         $project = Project::create([
             'title' => $data['title'],
             'slug' => $slug,
@@ -199,6 +207,7 @@ class ProjectController extends Controller
             'adviser_id' => null, // Explicitly null as we are moving away from adviser roles
             'status' => 'pending',
             'program' => $data['program'] ?? 'CSIT',
+            'keywords' => $keywords,
             'specialization' => $request->other_category ?? null,
             'custom_category' => $request->other_category ?? null,
             'authors_list' => implode(', ', array_map('trim', $data['authors'])),
@@ -374,6 +383,15 @@ class ProjectController extends Controller
             $project->manuscript_validation_notes = implode("\n", $combinedNotes);
             if (isset($validation['text']) && !empty($validation['text'])) {
                 $project->full_text = $validation['text'];
+                
+                // Automated Categorization: If user didn't select categories, try to suggest some
+                if (empty($categoryIds)) {
+                    $categorizer = app(\App\Services\Categorizer::class);
+                    $suggestedCategories = $categorizer->suggest($validation['text']);
+                    if ($suggestedCategories->isNotEmpty()) {
+                        $project->categories()->sync($suggestedCategories->pluck('id'));
+                    }
+                }
             }
             $project->save();
 
@@ -588,7 +606,9 @@ class ProjectController extends Controller
             return response()->json($project);
         }
 
-        return view('projects.show', compact('project'));
+        $relatedProjects = $project->getRelatedProjects(4);
+
+        return view('projects.show', compact('project', 'relatedProjects'));
     }
 
     /**
