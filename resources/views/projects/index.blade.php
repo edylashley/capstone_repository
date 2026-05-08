@@ -87,8 +87,9 @@
                                 <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-slate-400">Program</label>
                                 <select name="program" class="w-full rounded-lg border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white text-sm focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500">
                                     <option value="">All Programs</option>
-                                    <option value="BSInT" {{ request('program') == 'BSInT' ? 'selected' : '' }}>BSInT</option>
-                                    <option value="BSCS" {{ request('program') == 'BSCS' || request('program') == 'Com-Sci' ? 'selected' : '' }}>BSCS</option>
+                                    @foreach(\App\Models\Program::all() as $prog)
+                                        <option value="{{ $prog->abbreviation }}" {{ request('program') == $prog->abbreviation ? 'selected' : '' }}>{{ $prog->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
 

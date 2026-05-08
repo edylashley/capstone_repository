@@ -75,16 +75,9 @@ class ProjectController extends Controller
             $query->where('year', $request->query('year'));
         }
 
-        // Filter by Program (Mapping BSInT and Com-Sci based on DB schema)
+        // Filter by Program
         if ($request->filled('program')) {
-            $program = $request->query('program');
-            if ($program === 'BSIT') {
-                $query->where('program', 'BSInT');
-            } elseif ($program === 'BSCS') {
-                $query->where('program', 'Com-Sci');
-            } else {
-                $query->where('program', $program);
-            }
+            $query->where('program', $request->query('program'));
         }
 
         // Search by category (Dropdown + Text Search)
