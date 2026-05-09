@@ -55,14 +55,14 @@
                                     <div id="sidebar-marquee-placeholder" class="absolute inset-y-0 flex items-center overflow-hidden pointer-events-none transition-opacity duration-200" style="left: 0.50rem; right: 0.50rem; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
                                         <div class="animate-sidebar-marquee text-sm text-gray-400">
                                             <div class="flex shrink-0">
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, idea, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, idea, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, idea, author, adviser, keywords...</span>
                                             </div>
                                             <div class="flex shrink-0">
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
-                                                <span class="pr-12">Title, abstract, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, idea, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, idea, author, adviser, keywords...</span>
+                                                <span class="pr-12">Title, abstract, idea, author, adviser, keywords...</span>
                                             </div>
                                         </div>
                                     </div>
@@ -74,13 +74,11 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-bold mb-1 text-gray-500 dark:text-slate-400">Year</label>
-                                <select name="year" class="w-full rounded-lg border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white text-sm focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500">
-                                    <option value="">All Years</option>
-                                    @foreach($years as $y)
-                                        <option value="{{ $y }}" {{ request('year') == $y ? 'selected' : '' }}>{{ $y }}</option>
-                                    @endforeach
-                                </select>
+                                <div class="flex justify-between items-end mb-1">
+                                    <label class="block text-xs font-bold text-gray-500 dark:text-slate-400">Year</label>
+                                    <span class="text-[9px] text-gray-400 font-medium">e.g. 2024 or 2024-2026</span>
+                                </div>
+                                <input type="text" name="year" value="{{ request('year') }}" class="w-full rounded-lg border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white text-sm focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 placeholder-gray-400" placeholder="All Years" autocomplete="off">
                             </div>
 
                             <div>
@@ -104,24 +102,35 @@
                                     @endforeach
                                     <option value="Others" {{ request('specialization') == 'Others' || request('category_text') ? 'selected' : '' }}>Others</option>
                                 </select>
-                                <div id="category-text-container" class="mt-2 {{ request('specialization') == 'Others' || request('category_text') ? '' : 'hidden' }}">
-                                    <input type="text" name="category_text" value="{{ request('category_text') }}" 
-                                           class="w-full rounded-lg border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white text-[10px] uppercase font-black tracking-widest focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 placeholder:text-gray-400 dark:placeholder:text-slate-600 px-3 py-2" 
+                                <div id="category-text-container" class="mt-2 relative {{ request('specialization') == 'Others' || request('category_text') ? '' : 'hidden' }}">
+                                    <input type="text" id="custom-category-input" name="category_text" value="{{ request('category_text') }}" 
+                                           class="w-full rounded-lg border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white text-[10px] uppercase font-black tracking-widest focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500 placeholder:text-gray-400 dark:placeholder:text-slate-600 px-3 py-2 pr-8" 
                                            placeholder="Type custom category..." autocomplete="off">
+                                    <button type="button" id="clear-custom-category-btn" class="absolute text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 focus:outline-none" style="right: 10px; top: 50%; transform: translateY(-50%);" title="Clear category">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    </button>
                                 </div>
 
                                 <script>
                                     document.addEventListener('DOMContentLoaded', function() {
                                         const select = document.getElementById('category-select');
                                         const container = document.getElementById('category-text-container');
+                                        const customInput = document.getElementById('custom-category-input');
+                                        const clearBtn = document.getElementById('clear-custom-category-btn');
                                         
                                         select.addEventListener('change', function() {
                                             if (this.value === 'Others') {
                                                 container.classList.remove('hidden');
-                                                container.querySelector('input').focus();
+                                                customInput.focus();
                                             } else {
                                                 container.classList.add('hidden');
+                                                customInput.value = '';
                                             }
+                                        });
+
+                                        clearBtn.addEventListener('click', function() {
+                                            customInput.value = '';
+                                            customInput.focus();
                                         });
                                     });
                                 </script>

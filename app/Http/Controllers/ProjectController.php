@@ -70,9 +70,21 @@ class ProjectController extends Controller
             $query->where('title', 'like', '%' . $request->query('title') . '%');
         }
 
-        // Search by year
+        // Search by year (supports single year "2024" or range "2024-2026")
         if ($request->filled('year')) {
-            $query->where('year', $request->query('year'));
+            $yearInput = trim($request->query('year'));
+            if (strpos($yearInput, '-') !== false) {
+                $yearsPart = explode('-', $yearInput);
+                if (count($yearsPart) == 2 && is_numeric(trim($yearsPart[0])) && is_numeric(trim($yearsPart[1]))) {
+                    $start = min((int)trim($yearsPart[0]), (int)trim($yearsPart[1]));
+                    $end = max((int)trim($yearsPart[0]), (int)trim($yearsPart[1]));
+                    $query->whereBetween('year', [$start, $end]);
+                } else {
+                    $query->where('year', $yearInput);
+                }
+            } else {
+                $query->where('year', $yearInput);
+            }
         }
 
         // Filter by Program
@@ -100,18 +112,40 @@ class ProjectController extends Controller
             });
         }
 
-        // Intelligent Multi-Term Search
+        // Intelligent Hybrid Search (Semantic + Exact Keyword)
+        $hybridScores = [];
+        
         if ($request->filled('keyword')) {
             $rawKeyword = trim($request->query('keyword'));
+            
+            // 1. Try Semantic Search First
+            try {
+                $embeddingService = app(\App\Services\EmbeddingService::class);
+                $queryEmbedding = $embeddingService->generate($rawKeyword);
+                
+                if ($queryEmbedding) {
+                    // Get all candidate projects matching other filters
+                    $candidates = (clone $query)->whereNotNull('embedding')->get();
+                    
+                    foreach ($candidates as $candidate) {
+                        $score = \App\Services\EmbeddingService::cosineSimilarity($queryEmbedding, $candidate->embedding);
+                        if ($score >= 0.60) { // Minimum similarity threshold to filter baseline noise
+                            $hybridScores[$candidate->id] = $score;
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Semantic search failed: ' . $e->getMessage());
+            }
 
-            // Extract exact matches grouped by quotes or just spaces (e.g. "Mobile Apps" Android)
+            // 2. Perform Exact Keyword Search (Guarantees titles/authors are always caught)
+            $keywordQuery = clone $query;
             preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $rawKeyword, $matches);
             $terms = array_map(function ($term) {
                 return trim($term, '"\'');
             }, $matches[0] ?? []);
 
-            // Require ALL terms to be present SOMEWHERE in the project
-            $query->where(function ($q) use ($terms) {
+            $keywordQuery->where(function ($q) use ($terms) {
                 foreach ($terms as $term) {
                     $q->where(function ($subQ) use ($term) {
                         $subQ->where('title', 'like', '%' . $term . '%')
@@ -125,14 +159,41 @@ class ProjectController extends Controller
                             ->orWhereHas('adviser', function ($adviserQ) use ($term) {
                                 $adviserQ->where('name', 'like', '%' . $term . '%');
                             })
-                            ->orWhere('keywords', 'like', '%' . $term . '%')
-                            ->orWhere('full_text', 'like', '%' . $term . '%');
+                            ->orWhere('keywords', 'like', '%' . $term . '%');
                     });
                 }
             });
+
+            // Get IDs of projects that strictly match the keyword
+            $keywordMatchIds = $keywordQuery->pluck('id')->toArray();
+            
+            // Assign a perfect score (1.0) to strict keyword matches so they appear at the very top
+            foreach ($keywordMatchIds as $id) {
+                $hybridScores[$id] = 1.0; 
+            }
+
+            // 3. Apply the combined results to the main query
+            if (!empty($hybridScores)) {
+                $query->whereIn('id', array_keys($hybridScores));
+            } else {
+                // If neither semantic nor keyword found anything, force empty result
+                $query->whereRaw('1 = 0');
+            }
         }
 
-        $projects = $query->orderBy('year', 'desc')->paginate(10)->withQueryString();
+        // Pagination and Sorting
+        if (!empty($hybridScores)) {
+            // Sort IDs by hybrid score descending
+            $orderedIds = array_keys($hybridScores);
+            usort($orderedIds, function($a, $b) use ($hybridScores) {
+                return $hybridScores[$b] <=> $hybridScores[$a];
+            });
+            
+            $idString = implode(',', $orderedIds);
+            $projects = $query->orderByRaw("FIELD(id, {$idString})")->paginate(10)->withQueryString();
+        } else {
+            $projects = $query->orderBy('year', 'desc')->orderBy('title', 'asc')->paginate(10)->withQueryString();
+        }
 
         // Get all distinct years from the database for the filter dropdown
         $years = Project::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
@@ -376,15 +437,6 @@ class ProjectController extends Controller
             $project->manuscript_validation_notes = implode("\n", $combinedNotes);
             if (isset($validation['text']) && !empty($validation['text'])) {
                 $project->full_text = $validation['text'];
-                
-                // Automated Categorization: If user didn't select categories, try to suggest some
-                if (empty($categoryIds)) {
-                    $categorizer = app(\App\Services\Categorizer::class);
-                    $suggestedCategories = $categorizer->suggest($validation['text']);
-                    if ($suggestedCategories->isNotEmpty()) {
-                        $project->categories()->sync($suggestedCategories->pluck('id'));
-                    }
-                }
             }
             $project->save();
 
@@ -535,6 +587,18 @@ class ProjectController extends Controller
                     }
                 }
             }
+        }
+
+        // Generate semantic search embedding
+        try {
+            $embeddingService = app(\App\Services\EmbeddingService::class);
+            $text = $embeddingService->buildProjectText($project->title, $project->abstract, $project->keywords);
+            $embedding = $embeddingService->generate($text);
+            if ($embedding) {
+                $project->update(['embedding' => $embedding]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to generate embedding during upload: ' . $e->getMessage());
         }
 
         // Log activity
@@ -906,6 +970,18 @@ class ProjectController extends Controller
                 // Cleanup temp
                 Storage::disk('public')->delete($tempPath);
             }
+        }
+
+        // Regenerate semantic search embedding if text might have changed
+        try {
+            $embeddingService = app(\App\Services\EmbeddingService::class);
+            $text = $embeddingService->buildProjectText($project->title, $project->abstract, $project->keywords);
+            $embedding = $embeddingService->generate($text);
+            if ($embedding) {
+                $project->update(['embedding' => $embedding]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Failed to regenerate embedding during update: ' . $e->getMessage());
         }
 
         // Notify admin about the resubmission

@@ -15,6 +15,7 @@ class Project extends Model
         'is_published' => 'boolean',
         'published_at' => 'datetime',
         'manuscript_validated' => 'boolean',
+        'embedding' => 'array',
     ];
 
     protected $fillable = [
@@ -35,6 +36,7 @@ class Project extends Model
         'authors_list',
         'adviser_name',
         'custom_category',
+        'embedding',
     ];
 
     public function adviser()

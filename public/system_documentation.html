@@ -1108,6 +1108,18 @@
     <button class="nav-btn" onclick="showSection('ipo', this)" id="nav-ipo">
       <span class="nav-num">6</span> Conceptual Framework
     </button>
+    <button class="nav-btn" onclick="showSection('func', this)" id="nav-func">
+      <span class="nav-num">7</span> Functional Decomposition
+    </button>
+    <button class="nav-btn" onclick="showSection('usecase', this)" id="nav-usecase">
+      <span class="nav-num">8</span> Use Case Diagram
+    </button>
+    <button class="nav-btn" onclick="showSection('context', this)" id="nav-context">
+      <span class="nav-num">9</span> Context DFD
+    </button>
+    <button class="nav-btn" onclick="showSection('dfd1', this)" id="nav-dfd1">
+      <span class="nav-num">10</span> DFD Level 1
+    </button>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════
@@ -1151,6 +1163,7 @@
                 <div class="arch-item">🌐 Apache Web Server<br><small>Request Handling</small></div>
                 <div class="arch-item">📧 Gmail SMTP<br><small>Email Delivery</small></div>
                 <div class="arch-item">📜 Blade + Tailwind<br><small>Responsive UI</small></div>
+                <div class="arch-item">🧠 Gemini API<br><small>Semantic Engine</small></div>
               </div>
             </div>
 
@@ -1189,7 +1202,7 @@
                 </div>
                 <div class="arch-item">📦 Models<br><small>User · Project · ProjectFile<br>Category ·
                     Program<br>SupportTicket · ActivityLog</small></div>
-                <div class="arch-item">🔄 Services<br><small>PDFValidator<br>FileScanner (ClamAV)</small></div>
+                <div class="arch-item">🔄 Services<br><small>PDFValidator · FileScanner<br>EmbeddingService</small></div>
                 <div class="arch-item">🛣️ Routes<br><small>Web · Auth<br>Role Middleware</small></div>
                 <div class="arch-item">📂 Migrations<br><small>Database Schema<br>Version Control</small></div>
               </div>
@@ -1241,6 +1254,7 @@
               architectural pattern. MySQL serves as the relational database management system for structured data
               storage. Apache handles incoming HTTP requests, Blade templates coupled with Tailwind CSS render the
               responsive user interface, and Gmail SMTP services provide queued email delivery for system notifications.
+              Additionally, the Google Gemini REST API is integrated to generate high-dimensional vector embeddings for the AI-powered semantic search engine.
             </li>
             <li><strong>System Interfaces</strong> — The public browse library allows guests and authenticated users to
               search and view published projects. Authentication pages handle user login, registration with email
@@ -1251,7 +1265,7 @@
               across authentication, project management, user administration, support tickets, and archive management.
               Models define the data entities (User, Project, ProjectFile, Category, Program, SupportTicket, and
               ActivityLog) and their relationships through Eloquent ORM. Dedicated Services encapsulate reusable logic,
-              including the PDF Validator for content checking and the File Scanner for ClamAV security scanning.</li>
+              including the PDF Validator for content checking, the File Scanner for ClamAV security scanning, and the Embedding Service which manages external API communication for Natural Language Processing.</li>
             <li><strong>Security</strong> — Authentication is handled through Laravel's session-based login with CSRF
               token protection and a two-step email verification during registration. Authorization uses Role-Based
               Access Control (RBAC), restricting system features based on the user's assigned role (Student or Admin).
@@ -2099,6 +2113,506 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════
+     SECTION 7: FUNCTIONAL DECOMPOSITION
+     ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="section-func">
+    <div class="section-content">
+      <div class="section-title">
+        <h2>Functional Decomposition Diagram</h2>
+        <p>A hierarchical breakdown of the system's core subsystems and their respective functional modules.</p>
+      </div>
+
+      <div class="diagram-block">
+        <div class="diagram-panel" data-label="Functional Decomposition" style="text-align: center; background: white; border-radius: 12px; padding: 40px;">
+<style>
+.func-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    margin: 20px 0;
+}
+.func-root {
+    background: #4fd1c5;
+    padding: 16px 32px;
+    border-radius: 6px;
+    border: 2px solid #319795;
+    font-weight: 700;
+    font-size: 14px;
+    color: #1a202c;
+    text-align: center;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.func-root::after {
+    content: '';
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    width: 2px;
+    height: 30px;
+    background: #a0aec0;
+    transform: translateX(-50%);
+}
+.func-branches {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+    padding-top: 20px;
+}
+.func-branches::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: #a0aec0;
+}
+.func-col {
+    width: 23%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.func-col::before {
+    content: '';
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    width: 2px;
+    height: 22px;
+    background: #a0aec0;
+    transform: translateX(-50%);
+}
+.func-col::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #a0aec0;
+    transform: translateX(-50%);
+}
+.func-header {
+    width: 100%;
+    padding: 14px 10px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 13px;
+    color: #1a202c;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+    text-transform: uppercase;
+}
+.func-header.student { background: #63b3ed; border: 2px solid #3182ce; }
+.func-header.admin { background: #68d391; border: 2px solid #38a169; }
+.func-header.repo { background: #d6bcbc; border: 2px solid #a0aec0; }
+.func-header.search { background: #f6ad55; border: 2px solid #dd6b20; }
+
+.func-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+    padding-left: 20px;
+}
+.func-items::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    bottom: 20px;
+    left: 10px;
+    width: 2px;
+    background: #a0aec0;
+}
+.func-item-wrapper {
+    position: relative;
+    width: 100%;
+}
+.func-item-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    width: 10px;
+    height: 2px;
+    background: #a0aec0;
+    transform: translateY(-50%);
+}
+.func-item-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -2px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 5px solid #a0aec0;
+    transform: translateY(-50%);
+}
+.func-item {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+</style>
+
+          <div class="func-container">
+              <div class="func-root">A Centralized Web-Based Repository<br>and Management System</div>
+              
+              <div class="func-branches">
+                  <!-- Student Portal -->
+                  <div class="func-col">
+                      <div class="func-header student">Student Portal</div>
+                      <div class="func-items">
+                          <div class="func-item-wrapper"><div class="func-item">Registration / Login</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">PDF Upload Tool</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Submission Form</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">View Own History</div></div>
+                      </div>
+                  </div>
+                  
+                  <!-- Admin Dashboard -->
+                  <div class="func-col">
+                      <div class="func-header admin">Admin Dashboard</div>
+                      <div class="func-items">
+                          <div class="func-item-wrapper"><div class="func-item">Approval Workflow</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Study Verification</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Support Tickets & Logs</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">System Analytics</div></div>
+                      </div>
+                  </div>
+                  
+                  <!-- Repository Management -->
+                  <div class="func-col">
+                      <div class="func-header repo">Repository Management</div>
+                      <div class="func-items">
+                          <div class="func-item-wrapper"><div class="func-item">Metadata Storage</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Category Management</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Security & Duplicate</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Archive Center</div></div>
+                      </div>
+                  </div>
+                  
+                  <!-- Search & Discovery -->
+                  <div class="func-col">
+                      <div class="func-header search">Search & Discovery</div>
+                      <div class="func-items">
+                          <div class="func-item-wrapper"><div class="func-item">AI Semantic Search</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Advanced Filters</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Document Preview</div></div>
+                          <div class="func-item-wrapper"><div class="func-item">Hybrid Match Scoring</div></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+     SECTION 8: USE CASE DIAGRAM
+     ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="section-usecase">
+    <div class="section-content">
+      <div class="section-title">
+        <h2>Use Case Diagram</h2>
+        <p>A demonstration of user interactions and functional requirements within the Centralized Web-Based Repository system.</p>
+      </div>
+
+      <div class="diagram-block">
+        <div class="diagram-panel" data-label="Use Case Diagram" style="text-align: center; background: white; border-radius: 12px; padding: 40px;">
+<svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 1000px; background: white;">
+  <defs>
+    <marker id="arrowHeadLeft" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
+    </marker>
+    <marker id="arrowHeadRight" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
+    </marker>
+  </defs>
+
+  <!-- System Boundary Box -->
+  <rect x="230" y="30" width="540" height="630" fill="none" stroke="black" stroke-width="1.5"/>
+
+  <!-- Student Lines -->
+  <line x1="145" y1="355" x2="275" y2="80" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="125" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="170" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="220" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="265" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="310" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="355" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="145" y1="355" x2="275" y2="625" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+
+  <!-- Admin Lines -->
+  <line x1="855" y1="355" x2="725" y2="80" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="125" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="220" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="265" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="310" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="400" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="445" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="490" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="535" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="580" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+  <line x1="855" y1="355" x2="725" y2="625" stroke="black" stroke-width="1.5" marker-start="url(#arrowHeadLeft)" marker-end="url(#arrowHeadRight)" />
+
+  <!-- Node 1 -->
+  <ellipse cx="500" cy="80" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">1. Register User Account</text>
+  
+  <!-- Node 2 -->
+  <ellipse cx="500" cy="125" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">2. Login &amp; Authenticate</text>
+  
+  <!-- Node 3 -->
+  <ellipse cx="500" cy="170" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">3. Upload Research PDF &amp; Metadata (Title, Year, Domain)</text>
+  
+  <!-- Node 4 -->
+  <ellipse cx="500" cy="220" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">4. Update Personal Profile</text>
+  
+  <!-- Node 5 -->
+  <ellipse cx="500" cy="265" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">5. Search Repository (AI Semantic &amp; Exact Filter)</text>
+  
+  <!-- Node 6 -->
+  <ellipse cx="500" cy="310" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="315" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">6. View "Finished &amp; Defended" Study Previews</text>
+  
+  <!-- Node 7 -->
+  <ellipse cx="500" cy="355" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="360" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">7. Submit Digital Manuscript &amp; Attachments</text>
+  
+  <!-- Node 8 -->
+  <ellipse cx="500" cy="400" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">8. Verify Submissions &amp; Verify Log</text>
+  
+  <!-- Node 9 -->
+  <ellipse cx="500" cy="445" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="450" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">9. Generate System Analytics &amp; Reports</text>
+  
+  <!-- Node 10 -->
+  <ellipse cx="500" cy="490" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="495" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">10. Manage Support Tickets &amp; Security Scans</text>
+  
+  <!-- Node 11 -->
+  <ellipse cx="500" cy="535" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">11. Archive Research Data &amp; Metadata</text>
+  
+  <!-- Node 12 -->
+  <ellipse cx="500" cy="580" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="585" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">12. Execute Scheduled Data Backup</text>
+  
+  <!-- Node 13 -->
+  <ellipse cx="500" cy="625" rx="225" ry="19" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="630" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="black">13. Logout</text>
+
+  <!-- Student Actor -->
+  <circle cx="100" cy="275" r="20" fill="none" stroke="black" stroke-width="2.5"/>
+  <line x1="100" y1="295" x2="100" y2="400" stroke="black" stroke-width="2.5"/>
+  <line x1="60" y1="355" x2="140" y2="355" stroke="black" stroke-width="2.5"/>
+  <line x1="100" y1="400" x2="60" y2="480" stroke="black" stroke-width="2.5"/>
+  <line x1="100" y1="400" x2="140" y2="480" stroke="black" stroke-width="2.5"/>
+  <text x="100" y="520" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="black">&lt;&lt;Actor&gt;&gt;</text>
+  <text x="100" y="545" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="black">STUDENT</text>
+
+  <!-- Admin Actor -->
+  <circle cx="900" cy="275" r="20" fill="none" stroke="black" stroke-width="2.5"/>
+  <line x1="900" y1="295" x2="900" y2="400" stroke="black" stroke-width="2.5"/>
+  <line x1="860" y1="355" x2="940" y2="355" stroke="black" stroke-width="2.5"/>
+  <line x1="900" y1="400" x2="860" y2="480" stroke="black" stroke-width="2.5"/>
+  <line x1="900" y1="400" x2="940" y2="480" stroke="black" stroke-width="2.5"/>
+  <text x="900" y="520" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="black">&lt;&lt;Actor&gt;&gt;</text>
+  <text x="900" y="545" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="black">ADMIN</text>
+</svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+     SECTION 9: CONTEXT DIAGRAM (DFD LEVEL 0)
+     ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="section-context">
+    <div class="section-content">
+      <div class="section-title">
+        <h2>Context Diagram (DFD Level 0)</h2>
+        <p>A high-level Data Flow Diagram illustrating the operational feasibility and data exchange between external entities and the centralized system.</p>
+      </div>
+
+      <div class="diagram-block">
+        <div class="diagram-panel" data-label="Level 0 DFD" style="text-align: center; background: #f8fafc; border-radius: 12px; padding: 40px; border: 1px solid #e2e8f0;">
+          <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 900px; background: transparent; margin: 0 auto; display: block;">
+            <defs>
+              <marker id="dfdArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e293b" />
+              </marker>
+            </defs>
+
+            <!-- Students Entity -->
+            <g transform="translate(50, 90)">
+              <rect x="0" y="0" width="150" height="35" fill="#e0f2fe" stroke="#334155" stroke-width="2" />
+              <rect x="0" y="35" width="150" height="85" fill="#ffffff" stroke="#334155" stroke-width="2" />
+              <text x="75" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">Entity</text>
+              <text x="75" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="18" fill="#0f172a">STUDENTS</text>
+            </g>
+
+            <!-- System Process -->
+            <g transform="translate(500, 150)">
+              <circle cx="0" cy="0" r="110" fill="#e0f2fe" stroke="#334155" stroke-width="3" />
+              <circle cx="0" cy="0" r="95" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+              <text x="0" y="-15" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="20" fill="#0f172a">Centralized</text>
+              <text x="0" y="12" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="20" fill="#0f172a">Capstone</text>
+              <text x="0" y="39" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="20" fill="#0f172a">System</text>
+            </g>
+
+            <!-- Admin Entity -->
+            <g transform="translate(800, 90)">
+              <rect x="0" y="0" width="150" height="35" fill="#e0f2fe" stroke="#334155" stroke-width="2" />
+              <rect x="0" y="35" width="150" height="85" fill="#ffffff" stroke="#334155" stroke-width="2" />
+              <text x="75" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">Entity</text>
+              <text x="75" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="18" fill="#0f172a">ADMIN</text>
+              <text x="75" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#334155">(e.g., CSIT Dept)</text>
+            </g>
+
+            <!-- Arrow 1: Student -> System -->
+            <line x1="200" y1="130" x2="388" y2="130" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
+            <text x="295" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">1. PDF Manuscript</text>
+            <text x="295" y="122" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">&amp; Metadata</text>
+
+            <!-- Arrow 3: System -> Student -->
+            <line x1="390" y1="170" x2="202" y2="170" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
+            <text x="295" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">3. Submission</text>
+            <text x="295" y="207" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">Status Alerts</text>
+
+            <!-- Arrow 2: System -> Admin -->
+            <line x1="610" y1="130" x2="798" y2="130" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
+            <text x="705" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">2. Pending Studies &amp;</text>
+            <text x="705" y="122" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">Validation Reports</text>
+
+            <!-- Arrow 4: Admin -> System -->
+            <line x1="800" y1="170" x2="612" y2="170" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
+            <text x="705" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">4. Approval Decisions</text>
+            <text x="705" y="207" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#0f172a">&amp; Settings</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+     SECTION 10: DFD LEVEL 1
+     ═══════════════════════════════════════════════════════ -->
+  <div class="section" id="section-dfd1">
+    <div class="section-content">
+      <div class="section-title">
+        <h2>Data Flow Diagram (Level 1)</h2>
+        <p>A detailed visualization of the nine internal functional processes, data stores, and external entities involved in the repository management workflow.</p>
+      </div>
+
+      <div class="diagram-block">
+        <div class="diagram-panel" data-label="DFD Level 1" style="text-align: center; background: white; border-radius: 12px; padding: 40px; overflow-x: auto;">
+          <div class="mermaid">
+flowchart TD
+    %% Entities
+    Student[/"&lt;b&gt;🧑‍🎓 STUDENT&lt;/b&gt;"/]
+    Admin[/"&lt;b&gt;🧑‍💻 ADMIN&lt;/b&gt;"/]
+    ExtBackup[/"☁️ EXTERNAL BACKUP SYSTEM"/]
+
+    %% Processes
+    P1(["Process 1.0&lt;br&gt;&lt;b&gt;SUBMIT RESEARCH&lt;/b&gt;"])
+    P2(["Process 2.0&lt;br&gt;&lt;b&gt;SEARCH REPOSITORY&lt;/b&gt;"])
+    P3(["Process 3.0&lt;br&gt;&lt;b&gt;VALIDATE &amp; PROCESS&lt;br&gt;SUBMISSION&lt;/b&gt;"])
+    P4(["Process 4.0&lt;br&gt;&lt;b&gt;MANAGE METADATA&lt;/b&gt;"])
+    P5(["Process 5.0&lt;br&gt;&lt;b&gt;ARCHIVE DOCUMENTS&lt;/b&gt;"])
+    P6(["Process 6.0&lt;br&gt;&lt;b&gt;VERIFY SUBMISSIONS&lt;/b&gt;"])
+    P7(["Process 7.0&lt;br&gt;&lt;b&gt;GENERATE ADMIN REPORTS&lt;/b&gt;"])
+    P8(["Process 8.0&lt;br&gt;&lt;b&gt;MANAGE USER ACCOUNTS&lt;/b&gt;"])
+    P9(["Process 9.0&lt;br&gt;&lt;b&gt;REPLICATE DATA&lt;/b&gt;"])
+
+    %% Data Stores
+    DS1[("METADATA")]
+    DS2[("PDF ARCHIVE")]
+    DS3[("USER ACCOUNTS")]
+    DS4[("BACKUP SCHEDULE")]
+    DS5[("SUBMISSION LOGS")]
+
+    %% Flows from Entities
+    Student -- "Research PDF &amp; Metadata" --> P1
+    P1 -- "Receipt" --> Student
+    Student -- "Search Query" --> P2
+    P2 -- "Search Results" --> Student
+    
+    %% Internal Flows
+    P1 -- "Validated Submission" --> P3
+    P3 --> P4
+    P3 -- "Validated PDFs" --> P5
+    P3 --> DS3
+    
+    P4 --> DS1
+    P5 -- "PDF Documents" --> DS2
+    
+    DS1 -- "READ-ONLY METADATA" --> P2
+    
+    %% Admin Flows
+    Admin --> P6
+    P6 -- "Submission Notification" --> P4
+    P6 -- "Log Data" --> DS5
+    
+    Admin -- "Submission Logs" --> P7
+    P7 -- "Admin Reports" --> Admin
+    
+    Admin -- "Account Management Data" --> P8
+    P8 --> DS3
+    
+    %% Report generation flows
+    DS1 -- "Metadata" --> P7
+    DS2 -- "PDF Documents" --> P7
+    DS3 -- "Account Info" --> P7
+    DS5 -- "Logs" --> P7
+    
+    %% Backup Flows
+    DS1 --> DS4
+    DS2 --> DS4
+    P4 --> DS4
+    DS4 --> P9
+    P9 --> ExtBackup
+
+    %% Styling
+    classDef entity fill:#f8fafc,stroke:#334155,stroke-width:2px,color:#1e293b,font-weight:bold
+    classDef process fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a,font-weight:bold
+    classDef datastore fill:#ffffff,stroke:#1e293b,stroke-width:2px,color:#0f172a,font-weight:bold
+    classDef external fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#0f172a,font-weight:bold
+    
+    class Student,Admin entity
+    class ExtBackup external
+    class P1,P2,P3,P4,P5,P6,P7,P8,P9 process
+    class DS1,DS2,DS3,DS4,DS5 datastore
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <footer>
     CSIT Capstone Repository Management System — System Documentation &nbsp;·&nbsp; 2026
@@ -2109,8 +2623,14 @@
     function showSection(id, btn) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('section-' + id).classList.add('active');
+      var targetSection = document.getElementById('section-' + id);
+      targetSection.classList.add('active');
       btn.classList.add('active');
+      
+      // Render mermaid diagrams only when they become visible
+      if (id === 'dfd1') {
+          mermaid.init(undefined, targetSection.querySelectorAll('.mermaid'));
+      }
     }
 
     // Role tab navigation
@@ -2123,3 +2643,13 @@
       btn.classList.add('active-' + role);
     }
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>
+      mermaid.initialize({ startOnLoad: false, theme: 'default' });
+      // If the dfd1 section is somehow active on load, render it
+      if (document.getElementById('section-dfd1') && document.getElementById('section-dfd1').classList.contains('active')) {
+          mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+      }
+  </script>
+</body>
+</html>
