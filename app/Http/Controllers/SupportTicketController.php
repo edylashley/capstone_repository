@@ -275,5 +275,31 @@ class SupportTicketController extends Controller
             'count' => $pendingCount + $recentSecurityCount
         ]);
     }
+    /**
+     * User: delete their own ticket.
+     */
+    public function userDestroy(SupportTicket $ticket)
+    {
+        // Ensure the user owns the ticket
+        if ($ticket->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $subject = $ticket->subject;
+        $ticket->delete();
+
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'support_ticket_deleted_by_user',
+            'target_type' => 'support_ticket',
+            'target_id' => 0,
+            'ip' => request()->ip(),
+            'meta' => [
+                'subject' => $subject,
+            ],
+        ]);
+
+        return back()->with('success', 'Ticket deleted successfully.');
+    }
 }
 

@@ -59,11 +59,12 @@ class FileScanner
             'PHP Web Shell (system+input)' => ['contains' => 'system($_'],
             'PHP Web Shell (exec+input)' => ['contains' => 'exec($_'],
             'PHP Web Shell (shell_exec+input)' => ['contains' => 'shell_exec($_'],
+            'PHP Web Shell (passthru+input)' => ['contains' => 'passthru($_'],
             'JavaScript Alert Prank' => ['contains' => '<script>alert('],
             'JavaScript Document Cookie' => ['contains' => 'document.cookie'],
+            'JavaScript Data Exfiltration' => ['regex' => '/(XMLHttpRequest|fetch|ajax)\s*\(/i'],
+            'JavaScript Malicious Redirect' => ['contains' => 'location.href'],
             'PowerShell Download Cradle' => ['regex' => '/powershell[^;]*\-[eE].*downloadstring/i'],
-            'EICAR Antivirus Test File' => ['contains' => 'X50!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'],
-            'EICAR Antivirus (Fuzzy)' => ['contains' => 'EICAR-STANDARD-ANTIVIRUS-TEST-FILE'],
         ];
 
         foreach ($signatures as $name => $sig) {
@@ -92,10 +93,11 @@ class FileScanner
             // Standardize path for Windows ClamAV
             $realPath = realpath($path) ?: $path;
             $isClamd = str_contains(strtolower($executable), 'clamdscan');
-            
+
             // STAGE 1: Scan the raw file
             $args = ['--no-summary'];
-            if ($isClamd) $args[] = '--stream';
+            if ($isClamd)
+                $args[] = '--stream';
             $args[] = $realPath;
 
             $result = \Illuminate\Support\Facades\Process::timeout(120)->run(array_merge([$executable], $args));
@@ -105,14 +107,14 @@ class FileScanner
             if ($result->successful() && $extension === 'pdf') {
                 $rawContents = file_get_contents($path);
                 $uncompressedParts = "";
-                
+
                 // Simple regex to find FlateDecode streams which is where most text/scripts are hidden
                 if (preg_match_all('/stream[\r\n]+(.*?)[\r\n]+endstream/s', $rawContents, $matches)) {
                     foreach ($matches[1] as $stream) {
                         try {
                             // Try standard gzuncompress
                             $decompressed = @gzuncompress($stream);
-                            
+
                             // If that fails, try zlib_decode (handles more formats)
                             if (!$decompressed && function_exists('zlib_decode')) {
                                 $decompressed = @zlib_decode($stream);
@@ -125,7 +127,7 @@ class FileScanner
 
                             if ($decompressed) {
                                 $uncompressedParts .= $decompressed . "\n";
-                                
+
                                 // RECURSIVE HEURISTIC CHECK: 
                                 // Check if the decompressed part itself contains a known threat signature
                                 foreach ($signatures as $name => $sig) {
@@ -134,25 +136,27 @@ class FileScanner
                                     }
                                 }
                             }
-                        } catch (\Throwable $e) {}
+                        } catch (\Throwable $e) {
+                        }
                     }
                 }
 
                 $scanTarget = $extractedText . "\n" . $uncompressedParts;
-                
+
                 if (!empty(trim($scanTarget))) {
                     $tmpFile = tempnam(sys_get_temp_dir(), 'pdf_deep_');
                     file_put_contents($tmpFile, $scanTarget);
-                    
+
                     $args = ['--no-summary'];
-                    if ($isClamd) $args[] = '--stream';
+                    if ($isClamd)
+                        $args[] = '--stream';
                     $args[] = $tmpFile;
 
                     $deepResult = \Illuminate\Support\Facades\Process::timeout(60)->run(array_merge([$executable], $args));
-                    
+
                     if (!$deepResult->successful()) {
-                        $result = $deepResult; 
-                        $realPath = "Deep Scanned Content (Uncompressed)"; 
+                        $result = $deepResult;
+                        $realPath = "Deep Scanned Content (Uncompressed)";
                     }
                     @unlink($tmpFile);
                 }
@@ -161,15 +165,15 @@ class FileScanner
             // Log for debugging
             \Illuminate\Support\Facades\Log::debug("ClamAV Scan Result", [
                 'exit_code' => $result->exitCode(),
-                'output'    => $result->output(),
+                'output' => $result->output(),
             ]);
 
             if (!$result->successful()) {
                 $output = $result->output() ?: $result->errorOutput();
-                
+
                 // ClamAV Exit Codes: 1 = Virus Found, anything else = Error
                 $isThreat = ($result->exitCode() === 1);
-                
+
                 // Sanitize output (remove full paths)
                 $sanitized = str_replace([$realPath, dirname($realPath)], [basename($realPath), '...'], $output);
 
@@ -220,7 +224,8 @@ class FileScanner
 
         $checker = PHP_OS_FAMILY === 'Windows' ? 'where' : 'which';
         $output = shell_exec($checker . ' ' . escapeshellarg($cmd));
-        if (!$output) return null;
+        if (!$output)
+            return null;
 
         // 'where' on Windows can return multiple lines; take the first one
         $path = trim(explode("\n", $output)[0]);

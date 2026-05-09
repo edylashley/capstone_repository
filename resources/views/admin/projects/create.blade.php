@@ -14,7 +14,7 @@
 
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 overflow-hidden shadow-sm sm:rounded-lg p-6 transition-colors">
+            <div class="bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/5 shadow-sm sm:rounded-lg p-6 transition-colors relative">
                 <form id="project-form" method="POST" action="{{ route('admin.projects.store') }}" enctype="multipart/form-data">
                     @csrf
 
@@ -54,12 +54,25 @@
                     <div class="mb-4">
                         <label class="block font-medium text-sm text-gray-700 dark:text-slate-300 mb-2">Project Categories</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                            @foreach($categories as $category)
-                                <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-indigo-500/50 hover:bg-blue-50/50 dark:hover:bg-indigo-500/10 cursor-pointer transition-all group">
+                             @foreach($categories as $category)
+                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-indigo-500/50 hover:bg-blue-50/50 dark:hover:bg-indigo-500/10 cursor-pointer transition-all group relative">
                                     <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
                                         {{ (is_array(old('categories')) && in_array($category->id, old('categories'))) ? 'checked' : '' }}
                                         class="w-4 h-4 rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-slate-950 text-blue-600 dark:text-indigo-500 shadow-sm focus:ring-blue-500 dark:focus:ring-indigo-500 transition-colors">
-                                    <span class="text-sm font-semibold text-gray-700 dark:text-slate-300 group-hover:text-blue-700 dark:group-hover:text-indigo-400">{{ $category->name }}</span>
+                                    <span class="ml-3 text-sm font-semibold text-gray-700 dark:text-slate-300 group-hover:text-blue-700 dark:group-hover:text-indigo-400">{{ $category->name }}</span>
+
+                                    {{-- Tooltip Icon --}}
+                                    @if($category->description)
+                                        <div class="ml-auto relative">
+                                            <svg class="w-4 h-4 text-gray-400 dark:text-slate-600 group-hover:text-blue-500 dark:group-hover:text-indigo-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 p-3 bg-gray-900 dark:bg-slate-800 text-white text-[10px] font-medium rounded-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-[100] shadow-2xl border border-white/10 text-center leading-relaxed">
+                                                {{ $category->description }}
+                                                <div class="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-gray-900 dark:border-t-slate-800"></div>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </label>
                             @endforeach
                         </div>

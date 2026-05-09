@@ -106,10 +106,12 @@
             title: '',
             message: '',
             formId: '',
-            show(title, message, formId) {
+            showTrash: true,
+            show(title, message, formId, showTrash = true) {
                 this.title = title;
                 this.message = message;
                 this.formId = formId;
+                this.showTrash = showTrash;
                 this.open = true;
             },
             confirm(permanent) {
@@ -283,17 +285,19 @@
     {{-- ── Global Support / Report Issue FAB & Modal ─────────────────── --}}
     @if(!auth()->check() || !auth()->user()->isAdmin())
         <div x-data="{ selectedCategory: '' }" class="relative z-[9990]">
-            {{-- Floating Action Button --}}
-            <button @click="supportOpen = true"
-                class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-[0_0_20px_rgba(79,70,229,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 group"
-                title="Help & Support">
-                <svg class="w-6 h-6 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                    </path>
-                </svg>
-            </button>
+            {{-- Floating Action Button (Guests on specific pages only) --}}
+            @if(auth()->guest() && (request()->is('/') || request()->routeIs('projects.index')))
+                <button @click="supportOpen = true"
+                    class="fixed bottom-6 right-6 sm:w-14 sm:h-14 w-9 h-9 bg-indigo-600 hover:bg-indigo-500 text-white rounded-full shadow-[0_0_20px_rgba(79,70,229,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 group"
+                    title="Help & Support">
+                    <svg class="sm:w-6 sm:h-6 w-4 h-4 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
+                    </svg>
+                </button>
+            @endif
 
             {{-- Support Modal Backdrop --}}
             <div x-show="supportOpen" x-cloak x-transition:enter="ease-out duration-300"
@@ -479,9 +483,9 @@
                                                                             } catch (e) { }
                                                                         }
                                                                     }" x-init="setInterval(() => updateCount(), 30000)"
-            class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
+            class="fixed bottom-6 right-6 sm:w-14 sm:h-14 w-10 h-10 bg-rose-600 hover:bg-rose-500 text-white rounded-full shadow-[0_0_20px_rgba(225,29,72,0.4)] flex items-center justify-center transition-all duration-300 transform hover:scale-110 focus:outline-none focus:ring-4 focus:ring-rose-500/50 group z-[9990]"
             :title="'Support Tickets' + (count > 0 ? ' — ' + count + ' pending' : '')">
-            <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
+            <svg class="sm:w-6 sm:h-6 w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -489,7 +493,7 @@
             </svg>
             <template x-if="count > 0">
                 <span x-text="count"
-                    class="absolute -top-1.5 -right-1.5 w-6 h-6 bg-amber-400 text-slate-900 text-[10px] font-black rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-pulse ring-2 ring-slate-900">
+                    class="absolute -top-1.5 -right-1.5 sm:w-6 sm:h-6 w-4 h-4 bg-amber-400 text-slate-900 text-[9px] font-black rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(251,191,36,0.5)] animate-pulse ring-2 ring-slate-900">
                 </span>
             </template>
         </a>
@@ -568,7 +572,7 @@
 
                 <div class="flex flex-col gap-3">
                     {{-- Soft Delete Option --}}
-                    <button @click="$store.deleteModal.confirm(false)"
+                    <button x-show="$store.deleteModal.showTrash" @click="$store.deleteModal.confirm(false)"
                         class="group w-full flex items-center justify-between p-5 bg-gray-50 dark:bg-slate-950 hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-gray-200 dark:border-white/5 rounded-2xl transition-all duration-300 text-left">
                         <div>
                             <p class="text-xs font-black text-gray-900 dark:text-white uppercase tracking-wide">Move to

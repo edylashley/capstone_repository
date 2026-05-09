@@ -55,7 +55,7 @@ class ProjectController extends Controller
      */
     public function indexPage(Request $request)
     {
-        $query = Project::with('adviser');
+        $query = Project::with(['adviser', 'categories']);
 
         // Administrators see the full lifecycle (pending, approved, published) EXCEPT archived
         // Students and Guests only see 'published' records
@@ -129,7 +129,27 @@ class ProjectController extends Controller
                     
                     foreach ($candidates as $candidate) {
                         $score = \App\Services\EmbeddingService::cosineSimilarity($queryEmbedding, $candidate->embedding);
-                        if ($score >= 0.60) { // Minimum similarity threshold to filter baseline noise
+                        if ($score >= 0.50) {
+                            // 1.1 Categorical Synergy Boost (+15%)
+                            // If the project shares a category mentioned in the query or the active filter
+                            $hasSynergy = false;
+                            $activeCat = $request->query('specialization');
+                            
+                            foreach ($candidate->categories as $cat) {
+                                if ($activeCat && $cat->name === $activeCat) {
+                                    $hasSynergy = true;
+                                    break;
+                                }
+                                if (stripos($rawKeyword, $cat->name) !== false) {
+                                    $hasSynergy = true;
+                                    break;
+                                }
+                            }
+                            
+                            if ($hasSynergy) {
+                                $score = min(1.0, $score * 1.15); // Maximum confidence cap
+                            }
+
                             $hybridScores[$candidate->id] = $score;
                         }
                     }
@@ -198,7 +218,7 @@ class ProjectController extends Controller
         // Get all distinct years from the database for the filter dropdown
         $years = Project::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
 
-        return view('projects.index', compact('projects', 'years'));
+        return view('projects.index', compact('projects', 'years', 'hybridScores'));
     }
 
     /**
@@ -388,6 +408,23 @@ class ProjectController extends Controller
                     ]);
                 }
 
+                // 3. Send Automatic Email Alert to Administrator
+                $adminUser = \App\Models\User::where('role', 'admin')->first();
+                $adminEmail = $adminUser ? $adminUser->email : config('mail.from.address');
+                
+                try {
+                    \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\SecurityScannerAlert([
+                        'type' => $isSystemError ? 'system' : 'threat',
+                        'status' => $isSystemError ? 'OFFLINE / FAILURE' : 'THREAT BLOCKED',
+                        'message' => $scanResult['notes'],
+                        'action' => $isSystemError ? 'Scanner System Error' : 'Malicious Manuscript Blocked',
+                        'user_name' => $request->user()->name,
+                        'user_role' => $request->user()->role,
+                    ]));
+                } catch (\Exception $e) {
+                    \Log::error("Security Email Alert Failed: " . $e->getMessage());
+                }
+
                 // Cleanup stored file and DB records to block submission
                 Storage::disk('public')->delete($path);
                 \App\Models\ProjectFile::where('project_id', $project->id)->delete();
@@ -535,6 +572,23 @@ class ProjectController extends Controller
                         ]);
                     }
 
+                    // 3. Send Automatic Email Alert to Administrator
+                    $adminUser = \App\Models\User::where('role', 'admin')->first();
+                    $adminEmail = $adminUser ? $adminUser->email : config('mail.from.address');
+                    
+                    try {
+                        \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\SecurityScannerAlert([
+                            'type' => $isSystemError ? 'system' : 'threat',
+                            'status' => $isSystemError ? 'OFFLINE / FAILURE' : 'THREAT BLOCKED',
+                            'message' => "Attachment: " . $attach->getClientOriginalName() . " - " . $attachScanResult['notes'],
+                            'action' => $isSystemError ? 'Scanner System Error' : 'Malicious Attachment Blocked',
+                            'user_name' => $request->user()->name,
+                            'user_role' => $request->user()->role,
+                        ]));
+                    } catch (\Exception $e) {
+                        \Log::error("Security Email Alert Failed (Attachment): " . $e->getMessage());
+                    }
+
                     // Remove the flagged file
                     Storage::disk('public')->delete($attPath);
 
@@ -592,7 +646,7 @@ class ProjectController extends Controller
         // Generate semantic search embedding
         try {
             $embeddingService = app(\App\Services\EmbeddingService::class);
-            $text = $embeddingService->buildProjectText($project->title, $project->abstract, $project->keywords);
+            $text = $embeddingService->buildProjectText($project);
             $embedding = $embeddingService->generate($text);
             if ($embedding) {
                 $project->update(['embedding' => $embedding]);
@@ -975,7 +1029,7 @@ class ProjectController extends Controller
         // Regenerate semantic search embedding if text might have changed
         try {
             $embeddingService = app(\App\Services\EmbeddingService::class);
-            $text = $embeddingService->buildProjectText($project->title, $project->abstract, $project->keywords);
+            $text = $embeddingService->buildProjectText($project);
             $embedding = $embeddingService->generate($text);
             if ($embedding) {
                 $project->update(['embedding' => $embedding]);

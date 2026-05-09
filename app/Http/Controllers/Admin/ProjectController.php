@@ -65,6 +65,18 @@ class ProjectController extends Controller
         $project->is_published = true;
         $project->published_at = now();
         $project->save();
+        
+        // Generate AI Embedding upon publication
+        try {
+            $embeddingService = app(\App\Services\EmbeddingService::class);
+            $text = $embeddingService->buildProjectText($project);
+            $embedding = $embeddingService->generate($text);
+            if ($embedding) {
+                $project->update(['embedding' => $embedding]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Admin Publication: Embedding generation failed: ' . $e->getMessage());
+        }
 
         \App\Models\ActivityLog::create([
             'user_id' => $request->user()->id,
@@ -289,6 +301,18 @@ class ProjectController extends Controller
             'meta' => ['title' => $project->title, 'year' => $project->year],
         ]);
 
+        // Generate AI Embedding for the new manual upload
+        try {
+            $embeddingService = app(\App\Services\EmbeddingService::class);
+            $text = $embeddingService->buildProjectText($project);
+            $embedding = $embeddingService->generate($text);
+            if ($embedding) {
+                $project->update(['embedding' => $embedding]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Admin Store: Embedding generation failed: ' . $e->getMessage());
+        }
+
         return redirect()->route('admin.projects.index')->with('success', 'Past project successfully uploaded and published.');
     }
 
@@ -353,6 +377,18 @@ class ProjectController extends Controller
         ]);
 
         $project->categories()->sync($validated['categories']);
+
+        // Regenerate AI Embedding upon update
+        try {
+            $embeddingService = app(\App\Services\EmbeddingService::class);
+            $text = $embeddingService->buildProjectText($project);
+            $embedding = $embeddingService->generate($text);
+            if ($embedding) {
+                $project->update(['embedding' => $embedding]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Admin Update: Embedding regeneration failed: ' . $e->getMessage());
+        }
 
         return redirect()->route('admin.projects.index')->with('success', 'Project metadata updated successfully');
     }
@@ -671,6 +707,18 @@ class ProjectController extends Controller
             ]);
 
             $createdCount++;
+            
+            // Generate AI Embedding for each project in the bulk upload
+            try {
+                $embeddingService = app(\App\Services\EmbeddingService::class);
+                $text = $embeddingService->buildProjectText($project);
+                $embedding = $embeddingService->generate($text);
+                if ($embedding) {
+                    $project->update(['embedding' => $embedding]);
+                }
+            } catch (\Exception $e) {
+                \Log::error("Admin BulkStore: Embedding generation failed for project {$project->id}: " . $e->getMessage());
+            }
         }
 
         return redirect()->route('admin.projects.index')->with('success', "{$createdCount} past project(s) successfully uploaded and published.");
@@ -692,6 +740,18 @@ class ProjectController extends Controller
             'is_published' => true,
             'published_at' => now(),
         ]);
+
+        // Generate AI Embedding upon approval
+        try {
+            $embeddingService = app(\App\Services\EmbeddingService::class);
+            $text = $embeddingService->buildProjectText($project);
+            $embedding = $embeddingService->generate($text);
+            if ($embedding) {
+                $project->update(['embedding' => $embedding]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Admin Approval: Embedding generation failed: ' . $e->getMessage());
+        }
 
         \App\Models\ActivityLog::create([
             'user_id' => $request->user()->id,

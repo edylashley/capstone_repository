@@ -70,7 +70,7 @@
                         <div class="pt-4 border-t border-gray-200 dark:border-white/5 mt-4">
                             <strong
                                 class="text-blue-600 dark:text-indigo-500 uppercase text-[10px] tracking-widest block mb-2">Abstract</strong>
-                            <p class="text-sm text-gray-700 dark:text-slate-300 italic leading-relaxed">{{ $project->abstract }}</p>
+                            <p class="text-sm text-gray-700 dark:text-slate-300 leading-relaxed">{{ $project->abstract }}</p>
                         </div>
 
                         <div class="pt-4 border-t border-gray-200 dark:border-white/5 mt-4">
@@ -899,10 +899,10 @@
 
             <!-- Related Projects Section -->
             @if(isset($relatedProjects) && $relatedProjects->isNotEmpty())
-                <div class="mt-20 pt-16 border-t border-gray-200 dark:border-white/5">
+                <div class="mt-12 pt-10 border-t border-gray-200 dark:border-white/5">
                     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                         <div class="flex items-center gap-5">
-                            <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-indigo-500/20 transform -rotate-3 group-hover:rotate-0 transition-transform">
+                            <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl shadow-indigo-500/20 transition-transform">
                                 <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                                 </svg>
@@ -932,7 +932,7 @@
                                         <span class="px-2.5 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black rounded-lg border border-indigo-100 dark:border-indigo-500/20">
                                             {{ $related->year }}
                                         </span>
-                                        <span class="px-2.5 py-1 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[10px] font-black rounded-lg border border-slate-200 dark:border-white/5">
+                                        <span class="px-2.5 py-1 {{ strtoupper($related->program) === 'COM-SCI' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : (strtoupper($related->program) === 'BSINT' ? 'bg-sky-500/10 text-sky-500 border-sky-500/20' : 'bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400') }} text-[10px] font-black rounded-lg border {{ (strtoupper($related->program) === 'COM-SCI' || strtoupper($related->program) === 'BSINT') ? '' : 'border-slate-200 dark:border-white/5' }}">
                                             {{ $related->program }}
                                         </span>
                                     </div>
@@ -951,14 +951,15 @@
                                     {{ $related->abstract }}
                                 </p>
 
-                                <div class="flex items-center gap-3 pt-5 border-t border-gray-100 dark:border-white/5 relative z-10">
-                                    <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-[10px] font-black text-gray-600 dark:text-slate-400 shadow-sm border border-white/10">
-                                        {{ substr($related->adviser_name ?: '?', 0, 1) }}
-                                    </div>
-                                    <div class="flex flex-col min-w-0">
-                                        <span class="text-[9px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest leading-none mb-1">Adviser</span>
-                                        <span class="text-[10px] font-bold text-gray-600 dark:text-slate-300 truncate">{{ $related->adviser_name ?: 'Unknown' }}</span>
-                                    </div>
+                                <div class="flex flex-wrap items-center gap-1.5 pt-5 border-t border-gray-100 dark:border-white/5 relative z-10">
+                                    @foreach($related->categories->take(2) as $cat)
+                                        <span class="px-2 py-0.5 bg-blue-500/5 dark:bg-indigo-500/10 text-blue-600 dark:text-indigo-400 text-[8px] font-black rounded-md border border-blue-500/10 dark:border-indigo-500/20 uppercase tracking-widest">
+                                            {{ $cat->name }}
+                                        </span>
+                                    @endforeach
+                                    @if($related->categories->count() > 2)
+                                        <span class="text-[8px] font-black text-gray-400 uppercase tracking-widest ml-1">+{{ $related->categories->count() - 2 }} More</span>
+                                    @endif
                                 </div>
                             </a>
                         @endforeach

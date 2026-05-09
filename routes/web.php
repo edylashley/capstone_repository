@@ -121,6 +121,7 @@ Route::post('/support/submit', [SupportTicketController::class, 'store'])->name(
 
 Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class])->group(function () {
     Route::get('/my-tickets', [SupportTicketController::class, 'myTickets'])->name('support.my-tickets');
+    Route::delete('/my-tickets/{ticket}', [SupportTicketController::class, 'userDestroy'])->name('support.user-destroy');
 });
 
 require __DIR__ . '/auth.php';

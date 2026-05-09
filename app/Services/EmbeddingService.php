@@ -76,29 +76,44 @@ class EmbeddingService
 
     /**
      * Build the searchable text for a project from its abstract and keywords.
-     *
-     * @param string|null $abstract
-     * @param array|null $keywords
-     * @param string|null $title
-     * @return string
      */
-    public function buildProjectText(?string $title, ?string $abstract, ?array $keywords = []): string
+    public function buildProjectText(\App\Models\Project $project): string
     {
         $parts = [];
 
-        if (!empty($title)) {
-            $parts[] = $title;
+        $parts[] = "Project Title: " . $project->title;
+
+        if (!empty($project->authors_list)) {
+            $parts[] = "Authors: " . $project->authors_list;
         }
 
-        if (!empty($abstract)) {
-            $parts[] = $abstract;
+        if (!empty($project->adviser_name)) {
+            $parts[] = "Research Adviser: " . $project->adviser_name;
         }
 
-        if (!empty($keywords)) {
-            $parts[] = 'Keywords: ' . implode(', ', $keywords);
+        if (!empty($project->program)) {
+            $parts[] = "Academic Program: " . $project->program;
         }
 
-        return implode('. ', $parts);
+        // Add categories to context
+        $categories = $project->categories->pluck('name')->toArray();
+        if (!empty($project->custom_category)) {
+            $categories[] = $project->custom_category;
+        }
+        if (!empty($categories)) {
+            $parts[] = "Research Categories: " . implode(', ', $categories);
+        }
+
+        if (!empty($project->keywords)) {
+            $parts[] = "Core Keywords: " . implode(', ', $project->keywords);
+        }
+
+        if (!empty($project->abstract)) {
+            $parts[] = "Project Abstract/Summary: " . $project->abstract;
+        }
+
+        // Join with newlines to simulate a structured document
+        return implode("\n\n", $parts);
     }
 
     /**

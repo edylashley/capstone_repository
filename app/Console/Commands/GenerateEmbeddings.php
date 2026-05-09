@@ -52,7 +52,7 @@ class GenerateEmbeddings extends Command
         $failCount = 0;
 
         foreach ($projects as $project) {
-            $text = $embeddingService->buildProjectText($project->title, $project->abstract, $project->keywords);
+            $text = $embeddingService->buildProjectText($project);
             $embedding = $embeddingService->generate($text);
 
             if ($embedding) {
