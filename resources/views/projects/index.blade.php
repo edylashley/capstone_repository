@@ -199,6 +199,16 @@
                                 class="w-full bg-blue-600 dark:bg-indigo-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-indigo-700 transition shadow-sm">
                                 Apply Filters
                             </button>
+
+                            @if(request()->anyFilled(['keyword', 'year', 'program', 'specialization', 'category_text']))
+                                <a href="{{ route('projects.index') }}"
+                                    class="flex items-center justify-center gap-2 w-full mt-2 py-1.5 text-[10px] font-black text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-rose-400 uppercase tracking-widest transition-all group/clear">
+                                    <svg class="w-3 h-3 transition-transform group-hover/clear:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Clear Filters
+                                </a>
+                            @endif
                         </form>
                     </div>
 
@@ -252,24 +262,36 @@
                                     <div class="flex flex-col md:flex-row justify-between gap-4 md:gap-5 relative z-10">
                                         <div class="flex-1 min-w-0">
                                             <div class="flex flex-wrap items-center gap-2 mb-3">
-                                                {{-- Semantic Match Badge --}}
+                                                {{-- Semantic/Keyword Match Badge --}}
                                                 @if(isset($hybridScores[$project->id]))
-                                                    @php
-                                                        $score = $hybridScores[$project->id] * 100;
-                                                        $badgeColor = $score >= 85 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-                                                            ($score >= 70 ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
-                                                                'bg-amber-500/10 text-amber-500 border-amber-500/20');
-                                                        $matchIcon = $score >= 85 ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M13 10V3L4 14h7v7l9-11h-7z';
-                                                    @endphp
-                                                    <div
-                                                        class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border {{ $badgeColor }} text-[9px] font-black uppercase tracking-widest animate-pulse-slow">
-                                                        <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-                                                                d="{{ $matchIcon }}"></path>
-                                                        </svg>
-                                                        {{ round($score) }}% Match
-                                                    </div>
+                                                    @if(in_array($project->id, $keywordMatchIds))
+                                                        <div
+                                                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border bg-blue-500/10 text-blue-500 border-blue-500/20 text-[9px] font-black uppercase tracking-widest">
+                                                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                            </svg>
+                                                            Keyword Match
+                                                        </div>
+                                                    @else
+                                                        @php
+                                                            $score = $hybridScores[$project->id] * 100;
+                                                            $badgeColor = $score >= 85 ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
+                                                                ($score >= 70 ? 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20' :
+                                                                    'bg-amber-500/10 text-amber-500 border-amber-500/20');
+                                                            $matchIcon = $score >= 85 ? 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z' : 'M13 10V3L4 14h7v7l9-11h-7z';
+                                                        @endphp
+                                                        <div
+                                                            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border {{ $badgeColor }} text-[9px] font-black uppercase tracking-widest animate-pulse-slow">
+                                                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                                                                    d="{{ $matchIcon }}"></path>
+                                                            </svg>
+                                                            {{ round($score) }}% Match
+                                                        </div>
+                                                    @endif
                                                 @elseif(request()->filled('keyword'))
                                                     <div
                                                         class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border bg-blue-500/10 text-blue-500 border-blue-500/20 text-[9px] font-black uppercase tracking-widest">

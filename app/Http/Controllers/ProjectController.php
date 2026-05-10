@@ -76,8 +76,8 @@ class ProjectController extends Controller
             if (strpos($yearInput, '-') !== false) {
                 $yearsPart = explode('-', $yearInput);
                 if (count($yearsPart) == 2 && is_numeric(trim($yearsPart[0])) && is_numeric(trim($yearsPart[1]))) {
-                    $start = min((int)trim($yearsPart[0]), (int)trim($yearsPart[1]));
-                    $end = max((int)trim($yearsPart[0]), (int)trim($yearsPart[1]));
+                    $start = min((int) trim($yearsPart[0]), (int) trim($yearsPart[1]));
+                    $end = max((int) trim($yearsPart[0]), (int) trim($yearsPart[1]));
                     $query->whereBetween('year', [$start, $end]);
                 } else {
                     $query->where('year', $yearInput);
@@ -114,27 +114,28 @@ class ProjectController extends Controller
 
         // Intelligent Hybrid Search (Semantic + Exact Keyword)
         $hybridScores = [];
-        
+        $keywordMatchIds = [];
+
         if ($request->filled('keyword')) {
             $rawKeyword = trim($request->query('keyword'));
-            
+
             // 1. Try Semantic Search First
             try {
                 $embeddingService = app(\App\Services\EmbeddingService::class);
                 $queryEmbedding = $embeddingService->generate($rawKeyword);
-                
+
                 if ($queryEmbedding) {
                     // Get all candidate projects matching other filters
                     $candidates = (clone $query)->whereNotNull('embedding')->get();
-                    
+
                     foreach ($candidates as $candidate) {
                         $score = \App\Services\EmbeddingService::cosineSimilarity($queryEmbedding, $candidate->embedding);
-                        if ($score >= 0.50) {
+                        if ($score >= 0.60) {
                             // 1.1 Categorical Synergy Boost (+15%)
                             // If the project shares a category mentioned in the query or the active filter
                             $hasSynergy = false;
                             $activeCat = $request->query('specialization');
-                            
+
                             foreach ($candidate->categories as $cat) {
                                 if ($activeCat && $cat->name === $activeCat) {
                                     $hasSynergy = true;
@@ -145,7 +146,7 @@ class ProjectController extends Controller
                                     break;
                                 }
                             }
-                            
+
                             if ($hasSynergy) {
                                 $score = min(1.0, $score * 1.15); // Maximum confidence cap
                             }
@@ -168,28 +169,27 @@ class ProjectController extends Controller
             $keywordQuery->where(function ($q) use ($terms) {
                 foreach ($terms as $term) {
                     $q->where(function ($subQ) use ($term) {
-                        $subQ->where('title', 'like', '%' . $term . '%')
-                            ->orWhere('abstract', 'like', '%' . $term . '%')
-                            ->orWhere('year', 'like', '%' . $term . '%')
-                            ->orWhere('authors_list', 'like', '%' . $term . '%')
-                            ->orWhere('adviser_name', 'like', '%' . $term . '%')
-                            ->orWhereHas('authors', function ($authorQ) use ($term) {
-                                $authorQ->where('name', 'like', '%' . $term . '%');
+                        $lowTerm = '%' . strtolower($term) . '%';
+                        $subQ->whereRaw('LOWER(title) LIKE ?', [$lowTerm])
+                            ->orWhereRaw('LOWER(authors_list) LIKE ?', [$lowTerm])
+                            ->orWhereRaw('LOWER(adviser_name) LIKE ?', [$lowTerm])
+                            ->orWhereHas('authors', function ($authorQ) use ($lowTerm) {
+                                $authorQ->whereRaw('LOWER(name) LIKE ?', [$lowTerm]);
                             })
-                            ->orWhereHas('adviser', function ($adviserQ) use ($term) {
-                                $adviserQ->where('name', 'like', '%' . $term . '%');
+                            ->orWhereHas('adviser', function ($adviserQ) use ($lowTerm) {
+                                $adviserQ->whereRaw('LOWER(name) LIKE ?', [$lowTerm]);
                             })
-                            ->orWhere('keywords', 'like', '%' . $term . '%');
+                            ->orWhereRaw('LOWER(CAST(keywords AS CHAR)) LIKE ?', [$lowTerm]);
                     });
                 }
             });
 
             // Get IDs of projects that strictly match the keyword
             $keywordMatchIds = $keywordQuery->pluck('id')->toArray();
-            
+
             // Assign a perfect score (1.0) to strict keyword matches so they appear at the very top
             foreach ($keywordMatchIds as $id) {
-                $hybridScores[$id] = 1.0; 
+                $hybridScores[$id] = 1.0;
             }
 
             // 3. Apply the combined results to the main query
@@ -205,10 +205,10 @@ class ProjectController extends Controller
         if (!empty($hybridScores)) {
             // Sort IDs by hybrid score descending
             $orderedIds = array_keys($hybridScores);
-            usort($orderedIds, function($a, $b) use ($hybridScores) {
+            usort($orderedIds, function ($a, $b) use ($hybridScores) {
                 return $hybridScores[$b] <=> $hybridScores[$a];
             });
-            
+
             $idString = implode(',', $orderedIds);
             $projects = $query->orderByRaw("FIELD(id, {$idString})")->paginate(10)->withQueryString();
         } else {
@@ -218,7 +218,7 @@ class ProjectController extends Controller
         // Get all distinct years from the database for the filter dropdown
         $years = Project::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
 
-        return view('projects.index', compact('projects', 'years', 'hybridScores'));
+        return view('projects.index', compact('projects', 'years', 'hybridScores', 'keywordMatchIds'));
     }
 
     /**
@@ -411,7 +411,7 @@ class ProjectController extends Controller
                 // 3. Send Automatic Email Alert to Administrator
                 $adminUser = \App\Models\User::where('role', 'admin')->first();
                 $adminEmail = $adminUser ? $adminUser->email : config('mail.from.address');
-                
+
                 try {
                     \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\SecurityScannerAlert([
                         'type' => $isSystemError ? 'system' : 'threat',
@@ -575,7 +575,7 @@ class ProjectController extends Controller
                     // 3. Send Automatic Email Alert to Administrator
                     $adminUser = \App\Models\User::where('role', 'admin')->first();
                     $adminEmail = $adminUser ? $adminUser->email : config('mail.from.address');
-                    
+
                     try {
                         \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\SecurityScannerAlert([
                             'type' => $isSystemError ? 'system' : 'threat',
