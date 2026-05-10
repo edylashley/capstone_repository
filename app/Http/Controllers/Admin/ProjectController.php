@@ -130,7 +130,15 @@ class ProjectController extends Controller
             });
         }
 
-        $projects = $query->with(['authors', 'files'])->paginate(20)->withQueryString();
+        if ($request->filled('custom_category')) {
+            $query->where('custom_category', $request->query('custom_category'));
+        }
+
+        $projects = $query->with(['authors', 'files'])
+            ->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+            ->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->withQueryString();
         $programs = \App\Models\Program::all();
 
         return view('admin.projects.index', compact('projects', 'programs'));
@@ -361,6 +369,7 @@ class ProjectController extends Controller
             'categories.*' => 'exists:categories,id',
             'program' => ['required', 'string', \Illuminate\Validation\Rule::in(\App\Models\Program::pluck('abbreviation')->toArray())],
             'keywords' => 'nullable|string',
+            'custom_category' => 'nullable|string|max:255',
         ]);
 
         $project->update([
@@ -371,9 +380,10 @@ class ProjectController extends Controller
             'adviser_name' => $validated['adviser_name'],
             'abstract' => $validated['abstract'],
             'status' => $validated['status'],
-            'specialization' => null, // Deprecated
             'program' => $validated['program'],
             'keywords' => !empty($validated['keywords']) ? array_filter(array_map('trim', explode(',', $validated['keywords']))) : null,
+            'custom_category' => $validated['custom_category'] ?? null,
+            'specialization' => $validated['custom_category'] ?? null, // Sync for compatibility
         ]);
 
         $project->categories()->sync($validated['categories']);

@@ -215,10 +215,21 @@ class ProjectController extends Controller
             $projects = $query->orderBy('year', 'desc')->orderBy('title', 'asc')->paginate(10)->withQueryString();
         }
 
+        // Get emerging categories from "Others" submissions
+        $emergingCategories = Project::where('status', 'published')
+            ->whereNotNull('custom_category')
+            ->where('custom_category', '!=', '')
+            ->select('custom_category')
+            ->selectRaw('count(*) as project_count')
+            ->groupBy('custom_category')
+            ->orderBy('project_count', 'desc')
+            ->take(10)
+            ->get();
+
         // Get all distinct years from the database for the filter dropdown
         $years = Project::select('year')->distinct()->orderBy('year', 'desc')->pluck('year');
 
-        return view('projects.index', compact('projects', 'years', 'hybridScores', 'keywordMatchIds'));
+        return view('projects.index', compact('projects', 'years', 'hybridScores', 'keywordMatchIds', 'emergingCategories'));
     }
 
     /**
@@ -814,6 +825,7 @@ class ProjectController extends Controller
             'adviser_name' => $validated['adviser_name'],
             'keywords' => $keywords,
             'custom_category' => $validated['other_category'] ?? null,
+            'specialization' => $validated['other_category'] ?? null, // Keep sync with custom_category
             'authors_list' => implode(', ', array_map('trim', $validated['authors'])),
             'status' => 'pending', // Reset to pending for re-review
             'rejection_reason' => null, // Clear previous feedback
@@ -953,16 +965,8 @@ class ProjectController extends Controller
             ]);
         }
 
-        // Sync categories
+        // Sync categories (Only official ones selected via checkboxes)
         $categoryIds = $validated['categories'] ?? [];
-        if ($request->filled('other_category')) {
-            $newCat = \App\Models\Category::firstOrCreate([
-                'name' => ucwords(strtolower(trim($request->other_category)))
-            ]);
-            if (!in_array($newCat->id, $categoryIds)) {
-                $categoryIds[] = $newCat->id;
-            }
-        }
         $project->categories()->sync($categoryIds);
 
         // Log the edit

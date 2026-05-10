@@ -13,7 +13,16 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = \App\Models\Category::all();
-        return view('admin.categories.index', compact('categories'));
+        
+        // Fetch unique custom categories and their usage count
+        $emergingTopics = \App\Models\Project::whereNotNull('custom_category')
+            ->where('custom_category', '!=', '')
+            ->select('custom_category', \DB::raw('count(*) as count'))
+            ->groupBy('custom_category')
+            ->orderBy('count', 'desc')
+            ->get();
+
+        return view('admin.categories.index', compact('categories', 'emergingTopics'));
     }
 
     public function create()
@@ -99,5 +108,43 @@ class CategoryController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Category deleted successfully.');
+    }
+    public function promote(Request $request)
+    {
+        $name = $request->input('name');
+        
+        if (empty($name)) {
+            return redirect()->back()->withErrors(['name' => 'Invalid category name.']);
+        }
+
+        // 1. Create the official category
+        $category = \App\Models\Category::firstOrCreate([
+            'name' => ucwords(strtolower(trim($name)))
+        ]);
+
+        // 2. Find all projects using this custom category
+        $projects = \App\Models\Project::where('custom_category', $name)->get();
+        
+        foreach ($projects as $project) {
+            // Attach the new official category
+            $project->categories()->syncWithoutDetaching([$category->id]);
+            
+            // Clear the custom category field
+            $project->update([
+                'custom_category' => null,
+                'specialization' => null
+            ]);
+        }
+
+        \App\Models\ActivityLog::create([
+            'user_id' => auth()->id(),
+            'action' => 'category_promoted',
+            'target_type' => 'category',
+            'target_id' => $category->id,
+            'ip' => $request->ip(),
+            'meta' => ['name' => $name, 'projects_affected' => $projects->count()]
+        ]);
+
+        return redirect()->back()->with('success', "Topic '{$name}' has been promoted to an official category and {$projects->count()} projects were updated.");
     }
 }

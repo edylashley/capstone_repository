@@ -141,8 +141,17 @@
                             </div>
 
                             <div>
-                                <label
-                                    class="block text-xs font-bold mb-1 text-gray-500 dark:text-slate-400">Category</label>
+                                <div class="flex justify-between items-center mb-1">
+                                    <label
+                                        class="block text-xs font-bold text-gray-500 dark:text-slate-400">Category</label>
+                                    <button type="button" onclick="document.getElementById('category-info-modal').classList.remove('hidden')" 
+                                        class="text-gray-400 hover:text-blue-500 dark:hover:text-indigo-400 transition-colors"
+                                        title="View Category Descriptions">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                                 <select id="category-select" name="specialization"
                                     class="w-full rounded-lg border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white text-sm focus:ring-blue-500 dark:focus:ring-indigo-500 focus:border-blue-500 dark:focus:border-indigo-500">
                                     <option value="">Select Category</option>
@@ -407,5 +416,103 @@
                 toggleSidebarMarquee();
             }
         });
+    </script>
+
+    <!-- Category Info Modal -->
+    <div id="category-info-modal" class="fixed inset-0 bg-gray-900/60 dark:bg-slate-950/80 backdrop-blur-md hidden overflow-y-auto h-full w-full z-[100] transition-all duration-300 flex items-start justify-center p-4 pt-10 pb-10">
+        <div class="relative mx-auto border w-full max-w-lg shadow-2xl rounded-[2.5rem] bg-white dark:bg-slate-900 border-gray-200 dark:border-white/10 transition-all duration-300 flex flex-col max-h-[80vh] overflow-hidden">
+            
+            <!-- Fixed Header -->
+            <div class="flex justify-between items-start p-6 md:p-8 border-b border-gray-100 dark:border-white/5">
+                <div>
+                    <h3 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Research Specializations</h3>
+                    <p class="text-[10px] text-blue-600 dark:text-indigo-400 uppercase tracking-[0.3em] font-black mt-1">Guide to Research Categories</p>
+                </div>
+                <button type="button" onclick="document.getElementById('category-info-modal').classList.add('hidden')" 
+                    class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto p-6 md:p-8 space-y-5 custom-scrollbar bg-gray-50/30 dark:bg-slate-900/30">
+                @foreach(\App\Models\Category::orderBy('name', 'asc')->get() as $cat)
+                    <div class="group p-5 rounded-2xl bg-white dark:bg-slate-800/50 border border-gray-100 dark:border-white/5 hover:border-blue-500/30 dark:hover:border-indigo-500/30 transition-all shadow-sm">
+                        <h4 class="text-[11px] font-black text-blue-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-indigo-500"></div>
+                            {{ $cat->name }}
+                        </h4>
+                        <p class="text-xs text-gray-600 dark:text-slate-400 leading-relaxed font-medium">
+                            {{ $cat->description ?: 'No detailed description available for this category.' }}
+                        </p>
+                    </div>
+                @endforeach
+
+                <!-- Hardcoded Others Explanation -->
+                <div class="group p-5 rounded-2xl bg-blue-50/50 dark:bg-indigo-900/20 border border-blue-100 dark:border-indigo-500/20 hover:border-blue-500/30 dark:hover:border-indigo-500/30 transition-all shadow-sm">
+                    <h4 class="text-[11px] font-black text-blue-600 dark:text-indigo-400 uppercase tracking-[0.2em] mb-2 flex items-center gap-2">
+                        <div class="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-indigo-500"></div>
+                        Others / Custom
+                    </h4>
+                    <p class="text-xs text-gray-600 dark:text-slate-400 leading-relaxed font-medium">
+                        Select this if your research topic does not fall under the existing specializations. When selected, you can type a custom category name to refine your search or submission. This ensures that unique and interdisciplinary research can still be properly categorized.
+                    </p>
+                </div>
+
+                @if($emergingCategories->isNotEmpty())
+                    <div class="pt-4">
+                        <h4 class="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em] mb-4 text-center">Discoverable Emerging Topics</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            @foreach($emergingCategories as $emerging)
+                                <button type="button" 
+                                    onclick="document.getElementById('category-select').value = 'Others'; document.getElementById('category-text-container').classList.remove('hidden'); document.getElementById('custom-category-input').value = '{{ $emerging->custom_category }}'; document.getElementById('category-info-modal').classList.add('hidden');"
+                                    class="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-white/5 hover:border-blue-500 dark:hover:border-indigo-500 hover:shadow-md transition-all group/emerging">
+                                    <span class="text-[10px] font-bold text-gray-700 dark:text-slate-300 uppercase tracking-wider truncate mr-2">{{ $emerging->custom_category }}</span>
+                                    <span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-slate-700 text-[9px] font-black text-gray-500 dark:text-slate-400 group-hover/emerging:bg-blue-100 dark:group-hover/emerging:bg-indigo-900/40 group-hover/emerging:text-blue-600 dark:group-hover/emerging:text-indigo-400 transition-colors">
+                                        {{ $emerging->project_count }}
+                                    </span>
+                                </button>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Fixed Footer -->
+            <div class="p-6 md:p-8 border-t border-gray-100 dark:border-white/5 flex justify-end bg-white dark:bg-slate-900">
+                <button type="button" onclick="document.getElementById('category-info-modal').classList.add('hidden')" 
+                    class="w-full md:w-auto px-10 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-gray-900/10 dark:shadow-white/5">
+                    Close Guide
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.3);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.5);
+        }
+    </style>
+
+    <script>
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('category-info-modal');
+            if (event.target == modal) {
+                modal.classList.add('hidden');
+            }
+        }
     </script>
 </x-app-layout>

@@ -102,6 +102,79 @@
 
                 </div>
             </div>
+
+            {{-- Emerging Topics Section --}}
+            <div class="mt-12 mb-4">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-amber-500/10 rounded-xl border border-amber-500/20">
+                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tight">Emerging Topics</h3>
+                        <p class="text-[10px] text-amber-600 dark:text-amber-400/80 uppercase tracking-widest font-black opacity-80">Student-Defined Research Trends</p>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-slate-900 overflow-hidden shadow-sm sm:rounded-lg border border-gray-200 dark:border-white/5 transition-colors">
+                    <div class="p-0 sm:p-6 text-gray-900 dark:text-white">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-white/5">
+                                <thead class="bg-gray-50 dark:bg-slate-800 transition-colors">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Custom Topic</th>
+                                        <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Usage Count</th>
+                                        <th class="px-6 py-3 text-left text-[10px] font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-slate-900 divide-y divide-gray-200 dark:divide-white/5 transition-colors">
+                                    @foreach($emergingTopics as $topic)
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-amber-600 dark:text-amber-400">
+                                                {{ $topic->custom_category }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-slate-500">
+                                                <a href="{{ route('admin.projects.index', ['custom_category' => $topic->custom_category]) }}" 
+                                                   class="group/usage inline-flex items-center gap-2">
+                                                    <span class="px-2.5 py-1 inline-flex text-[10px] leading-5 font-black uppercase tracking-widest rounded-lg bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800 group-hover/usage:bg-amber-200 dark:group-hover/usage:bg-amber-800 transition-colors">
+                                                        {{ $topic->count }} projects
+                                                    </span>
+                                                    <svg class="w-3 h-3 text-gray-400 dark:text-slate-600 opacity-0 group-hover/usage:opacity-100 transition-all transform group-hover/usage:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                                                    </svg>
+                                                </a>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <div class="flex items-center gap-4">
+                                                    <form action="{{ route('admin.categories.promote') }}" method="POST" onsubmit="return confirm('Promote \'{{ addslashes($topic->custom_category) }}\' to an official category? This will update all affected projects.');">
+                                                        @csrf
+                                                        <input type="hidden" name="name" value="{{ $topic->custom_category }}">
+                                                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm transition-all transform hover:-translate-y-0.5 active:scale-95">
+                                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 11l7-7 7 7M5 19l7-7 7 7"></path></svg>
+                                                            Promote to Official
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    @if($emergingTopics->isEmpty())
+                                        <tr>
+                                            <td colspan="3" class="px-6 py-8 text-center">
+                                                <div class="flex flex-col items-center gap-2">
+                                                    <svg class="w-8 h-8 text-gray-300 dark:text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 00-2 2H6a2 2 0 00-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                                                    <span class="text-xs text-gray-500 dark:text-slate-500 font-medium uppercase tracking-widest">No custom categories submitted yet.</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

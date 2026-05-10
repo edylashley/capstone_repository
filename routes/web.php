@@ -42,6 +42,7 @@ Route::middleware(['auth', \App\Http\Middleware\UpdateLastActivity::class, 'role
 
     // Manage Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['create', 'show', 'edit']);
+    Route::post('/categories/promote', [\App\Http\Controllers\Admin\CategoryController::class, 'promote'])->name('categories.promote');
 
     // Manage Programs
     Route::resource('programs', \App\Http\Controllers\Admin\ProgramController::class)->except(['create', 'show', 'edit']);

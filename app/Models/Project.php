@@ -98,68 +98,49 @@ class Project extends Model
      */
     public function getRelatedProjects($limit = 5)
     {
-        $keywordMatches = collect();
-        
-        if (!empty($this->keywords)) {
-            $keywordMatches = self::where('id', '!=', $this->id)
-                ->where('status', 'published')
-                ->where(function ($query) {
-                    foreach ($this->keywords as $keyword) {
-                        $query->orWhereJsonContains('keywords', $keyword);
-                    }
-                })
-                ->get();
-        }
-
-        $categoryMatches = self::where('id', '!=', $this->id)
+        // 1. Get all other published candidate projects
+        $candidates = self::where('id', '!=', $this->id)
             ->where('status', 'published')
-            ->where(function ($query) {
-                $query->whereHas('categories', function ($q) {
-                    $q->whereIn('categories.id', $this->categories->pluck('id'));
-                });
-                
-                if (!empty($this->custom_category)) {
-                    $query->orWhere('custom_category', 'like', '%' . $this->custom_category . '%');
-                }
-            })
+            ->with('categories')
             ->get();
 
-        // Combine and score
-        $related = $keywordMatches->merge($categoryMatches)->map(function ($project) {
+        // 2. Calculate hybrid similarity score for each candidate
+        $scored = $candidates->map(function ($project) {
             $score = 0;
-            
-            // Score based on keyword overlap
+
+            // A. Semantic Similarity (Gemini AI) - Weight: 60%
+            // This analyzes the "intent" and "content" of the abstract and title
+            if (!empty($this->embedding) && !empty($project->embedding)) {
+                $similarity = \App\Services\EmbeddingService::cosineSimilarity($this->embedding, $project->embedding);
+                $score += $similarity * 60;
+            }
+
+            // B. Keyword Overlap - Weight: 20%
+            // Provides a boost for projects sharing specific technical tags
             if (!empty($this->keywords) && !empty($project->keywords)) {
                 $commonKeywords = array_intersect($this->keywords, $project->keywords);
-                $score += count($commonKeywords) * 10;
+                $score += min(20, count($commonKeywords) * 5);
             }
 
-            // Score based on category overlap
+            // C. Academic Field (Category) Synergy - Weight: 15%
+            // Boosts projects within the same specialization
             $commonCategories = $this->categories->pluck('id')->intersect($project->categories->pluck('id'));
-            $score += $commonCategories->count() * 5;
-
-            // Score based on custom category (Other) match
-            if (!empty($this->custom_category) && !empty($project->custom_category)) {
-                if (strtolower($this->custom_category) === strtolower($project->custom_category)) {
-                    $score += 15; // High weight for exact custom category match
-                } elseif (str_contains(strtolower($project->custom_category), strtolower($this->custom_category)) || 
-                          str_contains(strtolower($this->custom_category), strtolower($project->custom_category))) {
-                    $score += 8; // Partial match
-                }
+            if ($commonCategories->isNotEmpty()) {
+                $score += 15;
             }
 
-            // Score based on program match
+            // D. Institutional Context (Program) - Weight: 5%
             if ($this->program === $project->program) {
-                $score += 2;
+                $score += 5;
             }
 
             $project->similarity_score = $score;
             return $project;
-        })
-        ->sortByDesc('similarity_score')
-        ->unique('id')
-        ->take($limit);
+        });
 
-        return $related;
+        // 3. Sort by total score and return the most relevant matches
+        return $scored->sortByDesc('similarity_score')
+            ->filter(fn($p) => $p->similarity_score > 10) // Filter out clearly unrelated noise
+            ->take($limit);
     }
 }

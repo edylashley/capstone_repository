@@ -99,6 +99,14 @@
                                 <x-input-error :messages="$errors->get('categories')" class="mt-2" />
                             </div>
 
+                            <!-- Custom Category (Others) -->
+                            <div class="col-span-2">
+                                <x-input-label for="custom_category" :value="__('Custom Category (Others)')" class="text-gray-700 dark:text-slate-300"/>
+                                <x-text-input id="custom_category" class="block mt-1 w-full bg-white dark:bg-slate-800 border-gray-300 dark:border-slate-700 text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-indigo-500 focus:ring-blue-500 dark:focus:ring-indigo-500 shadow-sm transition-colors" type="text" name="custom_category" :value="old('custom_category', $project->custom_category)" placeholder="Clear this field to remove it from 'Emerging Topics'" />
+                                <p class="text-[10px] text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-widest font-bold">This controls what appears in the 'Emerging Topics' section of the discovery modal.</p>
+                                <x-input-error :messages="$errors->get('custom_category')" class="mt-2" />
+                            </div>
+
                             <!-- Program -->
                             <div>
                                 <x-input-label for="program" :value="__('Program')" class="text-gray-700 dark:text-slate-300"/>
