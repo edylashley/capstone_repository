@@ -9,7 +9,6 @@ class Project extends Model
 {
     use SoftDeletes;
 
-
     protected $casts = [
         'keywords' => 'array',
         'is_published' => 'boolean',
@@ -93,54 +92,88 @@ class Project extends Model
             default => 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border-gray-500/20',
         };
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Invalidate the related projects cache whenever a project is updated or deleted
+        static::saved(fn($project) => $project->clearRelatedCache());
+        static::deleted(fn($project) => $project->clearRelatedCache());
+    }
+
+    /**
+     * Clear the recommendation cache for this project.
+     */
+    public function clearRelatedCache()
+    {
+        \Illuminate\Support\Facades\Cache::forget("project_{$this->id}_related_ids_4");
+        \Illuminate\Support\Facades\Cache::forget("project_{$this->id}_related_ids_5");
+        \Illuminate\Support\Facades\Cache::forget("project_{$this->id}_related_ids_10");
+    }
+
     /**
      * Recommendation Engine: Get projects related to this one.
      */
     public function getRelatedProjects($limit = 5)
     {
-        // 1. Get all other published candidate projects
-        $candidates = self::where('id', '!=', $this->id)
-            ->where('status', 'published')
-            ->with('categories')
-            ->get();
+        $cacheKey = "project_{$this->id}_related_ids_{$limit}";
 
-        // 2. Calculate hybrid similarity score for each candidate
-        $scored = $candidates->map(function ($project) {
-            $score = 0;
+        // Cache only the IDs (much smaller/faster) for 24 hours
+        $relatedIds = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addDay(), function () use ($limit) {
+            // 1. Get all other published candidate projects
+            $candidates = self::where('id', '!=', $this->id)
+                ->where('status', 'published')
+                ->whereNotNull('embedding')
+                ->get();
 
-            // A. Semantic Similarity (Gemini AI) - Weight: 60%
-            // This analyzes the "intent" and "content" of the abstract and title
-            if (!empty($this->embedding) && !empty($project->embedding)) {
-                $similarity = \App\Services\EmbeddingService::cosineSimilarity($this->embedding, $project->embedding);
-                $score += $similarity * 60;
-            }
+            // 2. Calculate hybrid similarity score for each candidate
+            $scored = $candidates->map(function ($project) {
+                $score = 0;
 
-            // B. Keyword Overlap - Weight: 20%
-            // Provides a boost for projects sharing specific technical tags
-            if (!empty($this->keywords) && !empty($project->keywords)) {
-                $commonKeywords = array_intersect($this->keywords, $project->keywords);
-                $score += min(20, count($commonKeywords) * 5);
-            }
+                // A. Semantic Similarity (Gemini AI) - Weight: 60%
+                if (!empty($this->embedding) && !empty($project->embedding)) {
+                    $similarity = \App\Services\EmbeddingService::cosineSimilarity($this->embedding, $project->embedding);
+                    $score += $similarity * 60;
+                }
 
-            // C. Academic Field (Category) Synergy - Weight: 15%
-            // Boosts projects within the same specialization
-            $commonCategories = $this->categories->pluck('id')->intersect($project->categories->pluck('id'));
-            if ($commonCategories->isNotEmpty()) {
-                $score += 15;
-            }
+                // B. Keyword Overlap - Weight: 20%
+                if (!empty($this->keywords) && !empty($project->keywords)) {
+                    $commonKeywords = array_intersect($this->keywords, $project->keywords);
+                    $score += min(20, count($commonKeywords) * 5);
+                }
 
-            // D. Institutional Context (Program) - Weight: 5%
-            if ($this->program === $project->program) {
-                $score += 5;
-            }
+                // C. Academic Field (Category) Synergy - Weight: 15%
+                $commonCategories = $this->categories->pluck('id')->intersect($project->categories->pluck('id'));
+                if ($commonCategories->isNotEmpty()) {
+                    $score += 15;
+                }
 
-            $project->similarity_score = $score;
-            return $project;
+                // D. Institutional Context (Program) - Weight: 5%
+                if ($this->program === $project->program) {
+                    $score += 5;
+                }
+
+                $project->similarity_score = $score;
+                return $project;
+            });
+
+            // 3. Sort by total score and return only the IDs
+            return $scored->sortByDesc('similarity_score')
+                ->filter(fn($p) => $p->similarity_score > 10)
+                ->take($limit)
+                ->pluck('id')
+                ->toArray();
         });
 
-        // 3. Sort by total score and return the most relevant matches
-        return $scored->sortByDesc('similarity_score')
-            ->filter(fn($p) => $p->similarity_score > 10) // Filter out clearly unrelated noise
-            ->take($limit);
+        if (empty($relatedIds)) {
+            return collect();
+        }
+
+        // Fetch the full records for the cached IDs, maintaining the similarity order
+        $idString = implode(',', $relatedIds);
+        return self::whereIn('id', $relatedIds)
+            ->orderByRaw("FIELD(id, {$idString})")
+            ->get();
     }
 }

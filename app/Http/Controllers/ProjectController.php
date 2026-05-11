@@ -130,7 +130,7 @@ class ProjectController extends Controller
 
                     foreach ($candidates as $candidate) {
                         $score = \App\Services\EmbeddingService::cosineSimilarity($queryEmbedding, $candidate->embedding);
-                        if ($score >= 0.60) {
+                        if ($score >= 0.52) {
                             // 1.1 Categorical Synergy Boost (+15%)
                             // If the project shares a category mentioned in the query or the active filter
                             $hasSynergy = false;
