@@ -6,9 +6,9 @@
                 <!-- Logo with White Wrap Glow -->
                 <td style="padding-right: 20px; vertical-align: middle;">
                     @php
-                        $logoUrl = 'https://i.postimg.cc/2SSPY06F/erasebg-transformed-(2).png';
+                        // Using asset() to load the local premium logo.
                     @endphp
-                    <img src="{{ $logoUrl }}" alt="CSIT Logo"
+                    <img src="{{ asset('images/logos/premium_logo.png') }}" alt="CSIT Logo"
                         style="height: 70px; width: auto; display: block; filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 2px #ffffff);">
                 </td>
                 <!-- Text Content -->

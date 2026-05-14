@@ -130,7 +130,7 @@ class ProjectController extends Controller
 
                     foreach ($candidates as $candidate) {
                         $score = \App\Services\EmbeddingService::cosineSimilarity($queryEmbedding, $candidate->embedding);
-                        if ($score >= 0.52) {
+                        if ($score >= 0.60) {
                             // 1.1 Categorical Synergy Boost (+15%)
                             // If the project shares a category mentioned in the query or the active filter
                             $hasSynergy = false;
@@ -407,7 +407,6 @@ class ProjectController extends Controller
                         'user_id' => $request->user()->id,
                         'email' => $request->user()->email,
                         'category' => 'security',
-                        'priority' => 'urgent',
                         'subject' => '⚠️ SECURITY ALERT: Malicious Upload Blocked',
                         'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
                             "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .
@@ -571,7 +570,6 @@ class ProjectController extends Controller
                             'user_id' => $request->user()->id,
                             'email' => $request->user()->email,
                             'category' => 'security',
-                            'priority' => 'urgent',
                             'subject' => '⚠️ SECURITY ALERT: Malicious Attachment Blocked',
                             'message' => "AUTOMATED SYSTEM ALERT:\n\n" .
                                 "Student: " . $request->user()->name . " (ID: " . $request->user()->id . ")\n" .

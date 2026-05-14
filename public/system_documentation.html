@@ -5,8 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CSIT Capstone Repository – System Documentation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *,
     *::before,
@@ -17,33 +18,43 @@
     }
 
     :root {
-      --bg: #0a0e17;
-      --surface: #111827;
-      --surface2: #1e293b;
-      --surface3: #283548;
-      --border: #334155;
-      --student: #3b82f6;
-      --admin: #f59e0b;
-      --system: #10b981;
-      --danger: #ef4444;
-      --neutral: #64748b;
-      --accent: #06b6d4;
-      --student-light: rgba(59, 130, 246, .12);
-      --admin-light: rgba(245, 158, 11, .12);
-      --system-light: rgba(16, 185, 129, .12);
-      --accent-light: rgba(6, 182, 212, .10);
+      /* Primary Brand Colors - High Contrast */
+      --primary: #1e40af;       /* Deep Sapphire */
+      --secondary: #0f766e;     /* Deep Teal */
+      --accent: #d97706;        /* Deep Amber */
+      
+      /* Role Specifics */
+      --student: #1e40af;       /* Indigo */
+      --student-light: rgba(30, 64, 175, 0.05);
+      --admin: #065f46;         /* Forest Green */
+      --admin-light: rgba(6, 95, 70, 0.05);
+      --system: #0369a1;        /* Ocean Blue */
+      --system-light: rgba(3, 105, 161, 0.05);
+      
+      /* UI Colors */
+      --surface: #ffffff;
+      --bg: #f8fafc;
+      --border: #cbd5e1;
+      --text-main: #0f172a;     /* Deep Slate */
+      --text-muted: #64748b;
+      --danger: #991b1b;        /* Crimson */
+      --neutral: #475569;
+      
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
     }
 
     body {
       font-family: 'Inter', sans-serif;
       background: var(--bg);
-      color: #e2e8f0;
+      color: var(--text-main);
       min-height: 100vh;
       line-height: 1.6;
     }
 
     header {
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
       border-bottom: 1px solid var(--border);
       padding: 36px 40px 32px;
       text-align: center;
@@ -55,7 +66,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 600px 300px at 50% 100%, rgba(99, 102, 241, .15), transparent);
+      background: radial-gradient(ellipse 600px 300px at 50% 100%, rgba(255, 255, 255, .05), transparent);
       pointer-events: none;
     }
 
@@ -63,14 +74,14 @@
       font-size: 28px;
       font-weight: 900;
       letter-spacing: -.5px;
-      background: linear-gradient(90deg, #60a5fa, #a78bfa, #34d399);
+      background: linear-gradient(90deg, #60a5fa, #818cf8, #34d399);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       position: relative;
     }
 
     header p {
-      color: #8b949e;
+      color: #94a3b8;
       font-size: 13px;
       margin-top: 8px;
       position: relative;
@@ -81,7 +92,7 @@
       justify-content: center;
       gap: 6px;
       padding: 16px 20px;
-      background: var(--surface);
+      background: rgba(255, 255, 255, 0.9);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -90,9 +101,9 @@
     }
 
     .nav-btn {
-      background: transparent;
+      background: #fff;
       border: 1.5px solid var(--border);
-      color: #94a3b8;
+      color: var(--text-muted);
       padding: 10px 22px;
       border-radius: 10px;
       font-family: 'Inter', sans-serif;
@@ -106,16 +117,16 @@
     }
 
     .nav-btn:hover {
-      background: var(--surface2);
-      color: #e2e8f0;
-      border-color: #475569;
+      background: var(--surface);
+      color: var(--text-main);
+      border-color: var(--neutral);
     }
 
     .nav-btn.active {
-      background: linear-gradient(135deg, rgba(99, 102, 241, .2), rgba(59, 130, 246, .15));
-      border-color: #6366f1;
-      color: #c7d2fe;
-      box-shadow: 0 0 20px rgba(99, 102, 241, .15);
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+      box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.2);
     }
 
     .nav-btn .nav-num {
@@ -170,12 +181,12 @@
     .section-title h2 {
       font-size: 24px;
       font-weight: 800;
-      color: #f1f5f9;
+      color: var(--text-main);
       margin-bottom: 8px;
     }
 
     .section-title p {
-      color: #64748b;
+      color: var(--text-muted);
       font-size: 14px;
       max-width: 600px;
       margin: 0 auto;
@@ -200,16 +211,16 @@
     .diagram-panel::before {
       content: attr(data-label);
       position: absolute;
-      top: 12px;
-      right: 16px;
+      top: 14px;
+      right: 20px;
       font-size: 10px;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #475569;
-      background: var(--surface2);
-      padding: 4px 10px;
-      border-radius: 6px;
+      letter-spacing: 2px;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 10;
     }
 
     .desc-panel {
@@ -222,7 +233,7 @@
     .desc-panel h3 {
       font-size: 16px;
       font-weight: 700;
-      color: #e2e8f0;
+      color: var(--text-main);
       margin-bottom: 14px;
       display: flex;
       align-items: center;
@@ -241,7 +252,7 @@
 
     .desc-panel p,
     .desc-panel li {
-      color: #94a3b8;
+      color: var(--text-muted);
       font-size: 13.5px;
       line-height: 1.75;
     }
@@ -256,7 +267,7 @@
     }
 
     .desc-panel li strong {
-      color: #cbd5e1;
+      color: var(--text-main);
     }
 
     /* Architecture */
@@ -314,7 +325,7 @@
 
     .layer-presentation {
       border-color: var(--student);
-      background: rgba(59, 130, 246, .06);
+      background: rgba(30, 64, 175, 0.04);
     }
 
     .layer-presentation .arch-layer-label {
@@ -323,46 +334,46 @@
     }
 
     .layer-presentation .arch-item {
-      border-color: rgba(59, 130, 246, .3);
-      background: rgba(59, 130, 246, .08);
-      color: #93c5fd;
+      border-color: rgba(30, 64, 175, 0.2);
+      background: #fff;
+      color: var(--student);
     }
 
     .layer-logic {
-      border-color: #a855f7;
-      background: rgba(168, 85, 247, .06);
+      border-color: #6d28d9;
+      background: rgba(109, 40, 217, 0.04);
     }
 
     .layer-logic .arch-layer-label {
-      background: #a855f7;
+      background: #6d28d9;
       color: #fff;
     }
 
     .layer-logic .arch-item {
-      border-color: rgba(168, 85, 247, .3);
-      background: rgba(168, 85, 247, .08);
-      color: #d8b4fe;
+      border-color: rgba(109, 40, 217, 0.2);
+      background: #fff;
+      color: #6d28d9;
     }
 
     .layer-data {
-      border-color: var(--system);
-      background: rgba(16, 185, 129, .06);
+      border-color: var(--secondary);
+      background: rgba(15, 118, 110, 0.04);
     }
 
     .layer-data .arch-layer-label {
-      background: var(--system);
+      background: var(--secondary);
       color: #fff;
     }
 
     .layer-data .arch-item {
-      border-color: rgba(16, 185, 129, .3);
-      background: rgba(16, 185, 129, .08);
-      color: #6ee7b7;
+      border-color: rgba(15, 118, 110, 0.2);
+      background: #fff;
+      color: var(--secondary);
     }
 
     .layer-infra {
       border-color: var(--admin);
-      background: rgba(245, 158, 11, .06);
+      background: rgba(6, 95, 70, 0.04);
     }
 
     .layer-infra .arch-layer-label {
@@ -371,16 +382,17 @@
     }
 
     .layer-infra .arch-item {
-      border-color: rgba(245, 158, 11, .3);
-      background: rgba(245, 158, 11, .08);
-      color: #fcd34d;
+      border-color: rgba(6, 95, 70, 0.2);
+      background: #fff;
+      color: var(--admin);
     }
 
     .arch-connector {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 2px;
+      gap: 6px;
+      margin: 4px 0;
     }
 
     .arch-connector-line {
@@ -433,15 +445,15 @@
     }
 
     .role-tab.active-student {
-      background: var(--student-light);
+      background: var(--student);
       border-color: var(--student);
-      color: #93c5fd;
+      color: white;
     }
 
     .role-tab.active-admin {
-      background: var(--admin-light);
+      background: var(--admin);
       border-color: var(--admin);
-      color: #fcd34d;
+      color: white;
     }
 
     .role-tab .dot {
@@ -468,38 +480,42 @@
     }
 
     .node {
-      width: 100%;
-      max-width: 340px;
-      padding: 14px 18px;
-      border-radius: 12px;
-      border: 1.5px solid;
-      font-size: 13px;
-      font-weight: 600;
+      width: fit-content;
+      min-width: 260px;
+      padding: 18px 28px;
+      border-radius: 16px;
+      border: 2px solid;
+      font-size: 14px;
+      font-weight: 700;
       text-align: center;
       position: relative;
-      transition: transform .15s, box-shadow .15s;
-      line-height: 1.5;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      line-height: 1.6;
+      display: inline-block;
+      margin: 0 auto;
+      background: white;
+      box-shadow: var(--shadow-sm);
     }
 
     .node:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
     }
 
     .node-start {
-      border-radius: 999px;
-      font-size: 12px;
-      padding: 10px 24px;
-      letter-spacing: .3px;
-      font-weight: 700;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--primary), #3b82f6) !important;
+      color: white !important;
+      border: none !important;
+      padding: 14px 32px !important;
     }
 
     .node-end {
-      border-radius: 999px;
-      font-size: 12px;
-      padding: 10px 24px;
-      font-weight: 700;
-      border-width: 2px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #475569, #1e293b) !important;
+      color: white !important;
+      border: none !important;
+      padding: 14px 32px !important;
     }
 
     .node small {
@@ -511,37 +527,76 @@
     .c-student {
       background: var(--student-light);
       border-color: var(--student);
-      color: #93c5fd;
+      color: var(--student);
     }
 
     .c-admin {
       background: var(--admin-light);
       border-color: var(--admin);
-      color: #fcd34d;
+      color: var(--admin);
     }
 
     .c-system {
       background: var(--system-light);
       border-color: var(--system);
-      color: #6ee7b7;
+      color: var(--system);
     }
 
     .c-danger {
-      background: rgba(239, 68, 68, .1);
+      background: rgba(220, 38, 38, .06);
       border-color: var(--danger);
-      color: #fca5a5;
+      color: var(--danger);
     }
 
     .c-neutral {
-      background: rgba(100, 116, 139, .08);
+      background: rgba(71, 85, 105, .06);
       border-color: var(--neutral);
-      color: #94a3b8;
+      color: var(--neutral);
     }
 
     .c-accent {
       background: var(--accent-light);
       border-color: var(--accent);
-      color: #67e8f9;
+      color: var(--accent);
+    }
+
+    /* Diagram Export Styles */
+    .download-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px 0;
+      margin-bottom: 10px;
+    }
+
+    .btn-download {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-download:hover {
+      background: #cbd5e1;
+      color: #1e293b;
+      transform: translateY(-1px);
+    }
+
+    .btn-download:active {
+      transform: translateY(0);
+    }
+
+    .btn-download span {
+      display: inline-block;
     }
 
     .arrow {
@@ -602,22 +657,27 @@
     }
 
     .diamond {
-      width: 130px;
-      height: 65px;
+      width: 160px;
+      height: 85px;
       clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%);
+      background: var(--neutral-light);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
       text-align: center;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 15px;
+      border: none; /* Borders don't work well with clip-path */
+      box-shadow: 0 0 0 1.5px var(--neutral); /* Shadow used as border */
     }
 
     .diamond-branches {
       display: flex;
       width: 100%;
-      max-width: 340px;
-      justify-content: space-around;
+      max-width: 700px;
+      justify-content: center;
+      gap: 40px;
       margin-top: 4px;
     }
 
@@ -625,7 +685,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 45%;
+      width: auto;
+      min-width: 260px;
     }
 
     .status-pill {
@@ -974,36 +1035,37 @@
     }
 
     .org-node {
-      background: var(--surface);
+      background: white;
       border: 2px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 24px;
+      border-radius: 16px;
+      padding: 20px 32px;
       text-align: center;
-      min-width: 220px;
+      min-width: 240px;
       position: relative;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 2;
+      box-shadow: var(--shadow-md);
     }
 
     .org-node:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
     }
 
     .org-node h4 {
-      font-size: 14px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 900;
       margin-bottom: 2px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
     }
 
     .org-node small {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
-      opacity: 0.7;
+      opacity: 0.85;
     }
 
     .org-node .icon {
@@ -1014,26 +1076,26 @@
 
     .org-dept {
       border-color: var(--accent);
-      background: var(--accent-light);
+      background: rgba(217, 119, 6, 0.05);
       color: var(--accent);
     }
 
     .org-admin {
       border-color: var(--admin);
-      background: var(--admin-light);
-      color: #fcd34d;
+      background: rgba(6, 95, 70, 0.05);
+      color: var(--admin);
     }
 
     .org-student {
       border-color: var(--student);
-      background: var(--student-light);
-      color: #93c5fd;
+      background: rgba(30, 64, 175, 0.05);
+      color: var(--student);
     }
 
     .org-guest {
       border-color: var(--neutral);
-      background: rgba(100, 116, 139, 0.05);
-      color: #94a3b8;
+      background: rgba(71, 85, 105, 0.05);
+      color: var(--neutral);
     }
 
     .org-row {
@@ -1043,7 +1105,7 @@
     }
 
     .org-connector-v {
-      width: 2px;
+      width: 2.5px;
       height: 30px;
       background: var(--border);
       z-index: 1;
@@ -1102,8 +1164,8 @@
     <button class="nav-btn" onclick="showSection('process', this)" id="nav-process">
       <span class="nav-num">4</span> System Process Flow
     </button>
-    <button class="nav-btn" onclick="showSection('flowchart', this)" id="nav-flowchart">
-      <span class="nav-num">5</span> Detailed Flowchart
+    <button class="nav-btn" onclick="showSection('data-modeling', this)" id="nav-data-modeling">
+      <span class="nav-num">5</span> Data &amp; Process Modeling
     </button>
     <button class="nav-btn" onclick="showSection('ipo', this)" id="nav-ipo">
       <span class="nav-num">6</span> Conceptual Framework
@@ -1113,12 +1175,6 @@
     </button>
     <button class="nav-btn" onclick="showSection('usecase', this)" id="nav-usecase">
       <span class="nav-num">8</span> Use Case Diagram
-    </button>
-    <button class="nav-btn" onclick="showSection('context', this)" id="nav-context">
-      <span class="nav-num">9</span> Context DFD
-    </button>
-    <button class="nav-btn" onclick="showSection('dfd1', this)" id="nav-dfd1">
-      <span class="nav-num">10</span> DFD Level 1
     </button>
   </nav>
 
@@ -1134,6 +1190,11 @@
       </div>
 
       <div class="diagram-block">
+        <div class="download-bar">
+          <button class="btn-download" onclick="downloadPNG('section-arch', 'CSIT_System_Architecture')">
+            💾 Download as PNG
+          </button>
+        </div>
         <div class="diagram-panel" data-label="Architecture Diagram">
           <div class="arch-wrapper">
 
@@ -1216,24 +1277,24 @@
             </div>
 
             <!-- 5. Security -->
-            <div class="arch-layer" style="border-color:var(--danger);background:rgba(239,68,68,.05);">
-              <div class="arch-layer-label" style="background:var(--danger);color:#fff;">5 · Security</div>
+            <div class="arch-layer" style="border-color:var(--danger); background:rgba(153, 27, 27, 0.04);">
+              <div class="arch-layer-label" style="background:var(--danger); color:#fff;">5 · Security Architecture</div>
               <div class="arch-layer-items">
                 <div class="arch-item"
-                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔐
-                  Authentication<br><small>Login · Session · CSRF<br>Email Verification</small></div>
+                  style="border-color:rgba(153, 27, 27, 0.2); background:#fff; color:var(--danger);">🔐
+                  Authentication<br><small style="color:var(--text-muted);">Login · Session · CSRF<br>Email Verification</small></div>
                 <div class="arch-item"
-                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🛡️
-                  Authorization<br><small>Role-Based Access<br>Student · Admin</small></div>
+                  style="border-color:rgba(153, 27, 27, 0.2); background:#fff; color:var(--danger);">🛡️
+                  Authorization<br><small style="color:var(--text-muted);">Role-Based Access<br>Student · Admin</small></div>
                 <div class="arch-item"
-                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔒 Password
-                  Hashing<br><small>Bcrypt Encryption</small></div>
+                  style="border-color:rgba(153, 27, 27, 0.2); background:#fff; color:var(--danger);">🔒 Password
+                  Hashing<br><small style="color:var(--text-muted);">Bcrypt Encryption</small></div>
                 <div class="arch-item"
-                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">🔍 File
-                  Validation<br><small>SHA-256 · ClamAV Scan<br>PDF Content Check</small></div>
+                  style="border-color:rgba(153, 27, 27, 0.2); background:#fff; color:var(--danger);">🔍 File
+                  Validation<br><small style="color:var(--text-muted);">SHA-256 · ClamAV Scan<br>PDF Content Check</small></div>
                 <div class="arch-item"
-                  style="border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#fca5a5;">📋 Activity
-                  Logging<br><small>Full Audit Trail</small></div>
+                  style="border-color:rgba(153, 27, 27, 0.2); background:#fff; color:var(--danger);">📋 Activity
+                  Logging<br><small style="color:var(--text-muted);">Full Audit Trail</small></div>
               </div>
             </div>
 
@@ -1294,7 +1355,12 @@
       </div>
 
       <div class="diagram-block">
-        <div class="diagram-panel" data-label="Organizational Hierarchy">
+        <div class="download-bar">
+          <button class="btn-download" onclick="downloadPNG('section-org', 'CSIT_Organizational_Hierarchy')">
+            💾 Download as PNG
+          </button>
+        </div>
+        <div class="diagram-panel" data-label="Organizational Hierarchy" id="diagram-org">
           <div class="org-wrapper">
             <!-- Top: Dept -->
             <div class="org-node org-dept">
@@ -1381,6 +1447,11 @@
       <!-- ── STUDENT ROLE ── -->
       <div class="role-content active" id="role-student">
         <div class="diagram-block">
+          <div class="download-bar">
+            <button class="btn-download" onclick="downloadPNG('role-student', 'CSIT_Student_Workflow')">
+              💾 Download as PNG
+            </button>
+          </div>
           <div class="diagram-panel" data-label="Student Flowchart">
             <div class="flow">
               <div class="node node-start c-neutral">🌐 Visit Public Home Page</div>
@@ -1439,7 +1510,7 @@
               <!-- Decision -->
               <div class="diamond-wrap">
                 <div class="diamond"
-                  style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">Valid?</div>
+                  style="background:var(--system-light);border:1.5px solid var(--system);color:var(--system);">Valid?</div>
               </div>
               <div class="diamond-branches">
                 <div class="diamond-branch">
@@ -1525,6 +1596,11 @@
       <!-- ── ADMIN ROLE ── -->
       <div class="role-content" id="role-admin">
         <div class="diagram-block">
+          <div class="download-bar">
+            <button class="btn-download" onclick="downloadPNG('role-admin', 'CSIT_Admin_Workflow')">
+              💾 Download as PNG
+            </button>
+          </div>
           <div class="diagram-panel" data-label="Admin Flowchart">
             <div class="flow">
               <div class="node node-start c-admin">Login → Admin Dashboard</div>
@@ -1545,7 +1621,7 @@
                   </div>
                   <div class="diamond-wrap">
                     <div class="diamond"
-                      style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:110px;height:55px;">
+                      style="background:var(--admin-light);border:1.5px solid var(--admin);color:var(--admin);width:110px;height:55px;">
                       Approve?</div>
                   </div>
                   <div style="display:flex;width:100%;justify-content:space-around;margin-top:4px;">
@@ -1585,7 +1661,7 @@
                   </div>
                   <div class="diamond-wrap">
                     <div class="diamond"
-                      style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:110px;height:55px;">
+                      style="background:var(--admin-light);border:1.5px solid var(--admin);color:var(--admin);width:110px;height:55px;">
                       Decision?</div>
                   </div>
                   <div style="display:flex;width:100%;justify-content:space-around;margin-top:4px;">
@@ -1699,6 +1775,11 @@
       </div>
 
       <div class="diagram-block">
+        <div class="download-bar">
+          <button class="btn-download" onclick="downloadPNG('section-process', 'CSIT_System_Process_Flow')">
+            💾 Download as PNG
+          </button>
+        </div>
         <div class="diagram-panel" data-label="Process Flow Diagram">
           <div class="process-flow-container">
 
@@ -1796,7 +1877,7 @@
 
         <div class="desc-panel">
           <h3><span class="icon" style="background:rgba(6,182,212,.12);">🔄</span> Process Flow Description</h3>
-          <p>The CSIT Capstone Repository Management System follows a <strong style="color:#67e8f9;">four-phase linear
+          <p>The CSIT Capstone Repository Management System follows a <strong style="color:#0891b2;">four-phase linear
               pipeline</strong> to process each capstone project from submission to public archive:</p>
           <ul>
             <li><strong>Phase 1 — Submission:</strong> The flow begins when a student logs into their dashboard,
@@ -1824,218 +1905,91 @@
 
 
   <!-- ═══════════════════════════════════════════════════════
-     SECTION 5: DETAILED SYSTEM FLOWCHART
+     SECTION 5: DATA AND PROCESS MODELING
      ═══════════════════════════════════════════════════════ -->
-  <div class="section" id="section-flowchart">
+  <div class="section" id="section-data-modeling">
     <div class="section-content">
       <div class="section-title">
-        <h2>Detailed System Flowchart</h2>
-        <p>The complete end-to-end flow of a capstone project through the system, with every decision branch visualized.
-        </p>
+        <h2>Data and Process Modeling</h2>
+        <p>A comprehensive visualization of the system's logical data flows and operational processes, following institutional standards for technical documentation.</p>
       </div>
 
-      <div class="diagram-block">
-        <div class="diagram-panel" data-label="System Flowchart" style="padding:32px 24px;">
-          <div class="flow">
-
-            <!-- START -->
-            <div class="node node-start c-student">🌐 Student Logs In</div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Submit -->
-            <div class="node c-student">Fill &amp; Submit Project Form<br><small>Title · Abstract · Year · Program ·
-                Categories<br>Authors · Adviser · Manuscript PDF · Attachments</small></div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- STEP 1 -->
-            <div class="node c-system">① SHA-256 Duplicate Check<br><small>Compute file hash &amp; compare against
-                existing manuscripts</small></div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Decision: Duplicate? -->
-            <div class="diamond-wrap">
-              <div class="diamond"
-                style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">Dup?</div>
-            </div>
-            <div class="diamond-branches">
-              <div class="diamond-branch">
-                <span class="arrow-label al-yes">✓ Yes</span>
-                <div class="arrow">
-                  <div class="arrow-line"></div>
-                  <div class="arrow-head"></div>
-                </div>
-                <div class="node c-danger" style="font-size:11px;">🚫 Block &amp; Rollback<br><small>Error shown to
-                    student</small></div>
-              </div>
-              <div class="diamond-branch">
-                <span class="arrow-label al-no">✗ No</span>
-                <div class="arrow">
-                  <div class="arrow-line"></div>
-                  <div class="arrow-head"></div>
-                </div>
-                <div class="node c-system" style="font-size:11px;">Continue ↓</div>
-              </div>
-            </div>
-
-            <div class="arrow" style="margin-top:10px;">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- STEP 2 -->
-            <div class="node c-system">② ClamAV Security Scan<br><small>Scan manuscript &amp; attachments for
-                malware</small></div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Decision: Scan OK? -->
-            <div class="diamond-wrap">
-              <div class="diamond"
-                style="background:var(--system-light);border:1.5px solid var(--system);color:#6ee7b7;">OK?</div>
-            </div>
-            <div class="diamond-branches">
-              <div class="diamond-branch">
-                <span class="arrow-label al-no">✗ Fail</span>
-                <div class="arrow">
-                  <div class="arrow-line"></div>
-                  <div class="arrow-head"></div>
-                </div>
-                <div class="node c-danger" style="font-size:11px;">🚫 Block &amp; Delete<br><small>🎫 Auto Security
-                    Ticket</small></div>
-              </div>
-              <div class="diamond-branch">
-                <span class="arrow-label al-yes">✓ Pass</span>
-                <div class="arrow">
-                  <div class="arrow-line"></div>
-                  <div class="arrow-head"></div>
-                </div>
-                <div class="node c-system" style="font-size:11px;">Continue ↓</div>
-              </div>
-            </div>
-
-            <div class="arrow" style="margin-top:10px;">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- STEP 3 -->
-            <div class="node c-system">③ PDF Content Validation<br><small>Check page count · Detect Approval Sheet ·
-                Extract text</small></div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Project Created -->
-            <div class="node c-system">Project Created<br><span class="status-pill s-pending">status: pending</span>
-            </div>
-            <div class="arrow">
-              <div class="arrow-line"></div><span class="arrow-label al-mail">📧 Email Notification → Admin</span>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Admin Reviews -->
-            <div class="node c-admin">Admin Reviews Project<br><small>View manuscript PDF · Review validation report ·
-                Check metadata</small></div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Decision: Admin -->
-            <div class="diamond-wrap">
-              <div class="diamond"
-                style="background:var(--admin-light);border:1.5px solid var(--admin);color:#fcd34d;width:140px;height:70px;">
-                Approve?</div>
-            </div>
-            <div class="diamond-branches">
-              <div class="diamond-branch">
-                <span class="arrow-label al-no">↩ Return</span>
-                <div class="arrow">
-                  <div class="arrow-line"></div>
-                  <div class="arrow-head"></div>
-                </div>
-                <div class="node c-danger" style="font-size:11px;"><span
-                    class="status-pill s-rejected">returned</span><br>📧 Email → Student<br><small>Student revises &amp;
-                    resubmits → back to ①</small></div>
-              </div>
-              <div class="diamond-branch">
-                <span class="arrow-label al-yes">✓ Publish</span>
-                <div class="arrow">
-                  <div class="arrow-line"></div>
-                  <div class="arrow-head"></div>
-                </div>
-                <div class="node c-system" style="font-size:11px;"><span
-                    class="status-pill s-published">published</span><br>📧 Email → All Authors</div>
-              </div>
-            </div>
-
-            <div class="arrow" style="margin-top:10px;">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- Public Library -->
-            <div class="node c-accent">🌐 Public Library<br><small>Search · Browse · Preview PDF · Download</small>
-            </div>
-            <div class="arrow">
-              <div class="arrow-line"></div>
-              <div class="arrow-head"></div>
-            </div>
-
-            <!-- END -->
-            <div class="node node-end c-neutral">End — Archived</div>
-
+      <!-- 5.1 Context Diagram -->
+      <div class="sub-section" id="sub-context" style="margin-bottom: 60px; border-bottom: 1px dashed var(--border); padding-bottom: 60px;">
+        <h3 style="margin-bottom: 20px; color: var(--primary);">5.1 Context Diagram (DFD Level 0)</h3>
+        <div class="diagram-block">
+          <div class="download-bar">
+            <button class="btn-download" onclick="downloadPNG('sub-context', 'CSIT_Context_Diagram')">
+              💾 Download as PNG
+            </button>
+          </div>
+          <div class="diagram-panel" data-label="Context Diagram (DFD Level 0)"
+            style="text-align: center; background: white; border-radius: 12px; padding: 40px; border: 1.5px solid #e2e8f0;">
+            <img src="images/documentation/context_diagram_clean_1778693253065.png" alt="Context Diagram" style="width: 100%; height: auto; max-width: 800px; filter: contrast(1.05);">
+          </div>
+          <div class="desc-panel">
+            <p>The Context Diagram represents the highest level of the system’s functional hierarchy, modeling the repository as a single central process (Process 0) to define the operational scope. It maps the flow of information between the repository and its external entities—Students and Administrators—ensuring all primary interfaces are accounted for.</p>
           </div>
         </div>
+      </div>
 
-        <div class="desc-panel">
-          <h3><span class="icon" style="background:rgba(99,102,241,.12);">📊</span> System Flowchart Description</h3>
-          <p>The detailed system flowchart above shows the <strong style="color:#c7d2fe;">complete end-to-end
-              flow</strong> of a capstone project through the CSIT Repository, reading top-to-bottom. Each decision
-            diamond branches into two paths for the success and failure outcomes:</p>
-          <ul>
-            <li><strong>Submission Entry Point</strong> — The flow begins when a student logs in and submits a project
-              through the submission form, providing all required metadata and uploading the manuscript PDF.</li>
-            <li><strong>Three-Stage Automated Verification</strong> — The system runs three sequential validation
-              checks. Each check is a decision point that can either pass the file forward (→) or terminate the flow
-              downward (↓) with an error:
-              <ul style="margin-top:6px;">
-                <li><strong>① SHA-256 Check</strong> — Computes a SHA-256 hash of the uploaded PDF and compares it
-                  against all existing manuscripts. If a match is found, the submission is blocked and rolled back.</li>
-                <li><strong>② ClamAV Scan</strong> — Runs a security scan. If the scan detects a threat, the file is
-                  deleted, the failure is logged, and an automated security support ticket is generated for the
-                  administrator.</li>
-                <li><strong>③ PDF Validation</strong> — Validates the PDF content by checking page count, document
-                  structure, and the presence of required section keywords. Results are logged in a validation report
-                  for admin review.</li>
-              </ul>
-            </li>
-            <li><strong>Admin Review Decision</strong> — After all automated checks pass, the project is created with
-              "pending" status and the administrator receives an email notification. The admin reviews the manuscript
-              and validation report, then either publishes it directly (→ making it publicly visible with email
-              notifications to all authors) or returns it for revision (↓ student revises and resubmits back to Step ①).
-            </li>
-            <li><strong>Archival</strong> — Published projects become permanently available in the public browse
-              library, fully indexed and instantly searchable by any user or guest via full-text search.</li>
-          </ul>
+      <!-- 5.2 Data Flow Diagram -->
+      <div class="sub-section" id="sub-dfd1" style="margin-bottom: 60px; border-bottom: 1px dashed var(--border); padding-bottom: 60px;">
+        <h3 style="margin-bottom: 20px; color: var(--primary);">5.2 Data Flow Diagram (DFD Level 1)</h3>
+        <div class="diagram-block">
+          <div class="download-bar">
+            <button class="btn-download" onclick="downloadPNG('sub-dfd1', 'CSIT_DFD_Level_1')">
+              💾 Download as PNG
+            </button>
+          </div>
+          <div class="diagram-panel" data-label="DFD Level 1"
+            style="text-align: center; background: white; border-radius: 12px; padding: 40px; overflow-x: auto; border: 1.5px solid #e2e8f0;">
+            <img src="images/documentation/dfd_level_1_clean_1778694569657.png" alt="DFD Level 1" style="width: 100%; height: auto; max-width: 900px; filter: contrast(1.05);">
+          </div>
+          <div class="desc-panel">
+            <p>The DFD Level 1 provides a detailed visualization of the nine internal functional processes, data stores (D1-D5), and external entities. It traces the transformation of data from manuscript intake and security screening to AI semantic indexing and final archival in the institutional logs.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5.3 System Flowchart -->
+      <div class="sub-section" id="sub-system-flow" style="margin-bottom: 60px; border-bottom: 1px dashed var(--border); padding-bottom: 60px;">
+        <h3 style="margin-bottom: 20px; color: var(--primary);">5.3 System Flowchart</h3>
+        <div class="diagram-block">
+          <div class="download-bar">
+            <button class="btn-download" onclick="downloadPNG('sub-system-flow', 'CSIT_System_Flowchart')">
+              💾 Download as PNG
+            </button>
+          </div>
+          <div class="diagram-panel" data-label="System Flowchart" style="text-align: center; background: #ffffff; border-radius: 12px; padding: 40px; border: 1.5px solid #e2e8f0;">
+            <img src="images/documentation/system_flowchart_high_contrast_1778697370153.png" alt="System Flowchart" style="width: 100%; height: auto; max-width: 800px; filter: contrast(1.1);">
+          </div>
+          <div class="desc-panel">
+            <p>The System Flowchart tracks the path of a research manuscript through the physical and software layers. It emphasizes the bifurcated storage architecture, where data is distributed across relational MySQL records, local file storage, and high-dimensional semantic vectors.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5.4 Program Flowchart -->
+      <div class="sub-section" id="sub-program-flow">
+        <h3 style="margin-bottom: 20px; color: var(--primary);">5.4 Program Flowchart (Logic Highlights)</h3>
+        <div class="diagram-block">
+          <div class="download-bar">
+            <button class="btn-download" onclick="downloadPNG('sub-program-flow', 'CSIT_Program_Flowchart')">
+              💾 Download as PNG
+            </button>
+          </div>
+          <div class="diagram-panel" data-label="Program Flowchart" style="text-align: center; background: #ffffff; border-radius: 12px; padding: 40px; border: 1.5px solid #e2e8f0;">
+            <img src="images/documentation/program_flowchart_high_contrast_1778697476362.png" alt="Program Flowchart" style="width: 100%; height: auto; max-width: 800px; filter: contrast(1.1);">
+          </div>
+          <div class="desc-panel">
+            <p>The Program Flowchart highlights the granular logical sequences of the security and validation pipeline. It depicts the decision diamonds for ClamAV malware scanning, SHA-256 integrity checks, and administrative review triggers that govern the project's lifecycle.</p>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
-
 
   <!-- ═══════════════════════════════════════════════════════
      SECTION 6: CONCEPTUAL FRAMEWORK (IPO MODEL)
@@ -2049,12 +2003,17 @@
       </div>
 
       <div class="diagram-block">
+        <div class="download-bar">
+          <button class="btn-download" onclick="downloadPNG('section-ipo', 'CSIT_Conceptual_Framework')">
+            💾 Download as PNG
+          </button>
+        </div>
         <div class="diagram-panel" data-label="IPO Model">
           <div style="display:flex;align-items:stretch;justify-content:center;gap:0;min-width:820px;padding:20px 10px;">
 
             <!-- INPUT -->
             <div
-              style="flex:1;max-width:280px;background:rgba(59,130,246,.06);border:2px solid rgba(59,130,246,.35);border-radius:16px;padding:24px 20px;position:relative;">
+              style="flex:1;max-width:280px;background:rgba(37,99,235,.04);border:2px solid rgba(37,99,235,.2);border-radius:16px;padding:24px 20px;position:relative;">
               <div style="text-align:center;margin-bottom:16px;">
                 <div
                   style="display:inline-block;background:var(--student);color:#fff;padding:8px 28px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">
@@ -2062,26 +2021,26 @@
               </div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
-                  <span>Capstone Project Documents<br><small style="color:#64748b;font-weight:400;">(PDF manuscripts
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--student);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--student);flex-shrink:0;">●</span>
+                  <span>Capstone Project Documents<br><small style="color:var(--text-muted);font-weight:400;">(PDF manuscripts
                       &amp; attachments)</small></span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
-                  <span>Project Metadata<br><small style="color:#64748b;font-weight:400;">Title · Authors · Abstract ·
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--student);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--student);flex-shrink:0;">●</span>
+                  <span>Project Metadata<br><small style="color:var(--text-muted);font-weight:400;">Title · Authors · Abstract ·
                       Year<br>Program · Adviser · Categories</small></span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
-                  <span>User Credentials<br><small style="color:#64748b;font-weight:400;">Students ·
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--student);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--student);flex-shrink:0;">●</span>
+                  <span>User Credentials<br><small style="color:var(--text-muted);font-weight:400;">Students ·
                       Administrators</small></span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#93c5fd;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#60a5fa;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--student);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--student);flex-shrink:0;">●</span>
                   <span>System Requirements</span>
                 </li>
               </ul>
@@ -2089,15 +2048,15 @@
 
             <!-- ARROW 1 -->
             <div style="display:flex;align-items:center;padding:0 8px;flex-shrink:0;">
-              <div style="width:40px;height:3px;background:#475569;"></div>
+              <div style="width:40px;height:3px;background:var(--border);"></div>
               <div
-                style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid #475569;">
+                style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid var(--border);">
               </div>
             </div>
 
             <!-- PROCESS -->
             <div
-              style="flex:1.2;max-width:340px;background:rgba(245,158,11,.06);border:2px solid rgba(245,158,11,.35);border-radius:16px;padding:24px 20px;position:relative;">
+              style="flex:1.2;max-width:340px;background:rgba(217,119,6,.04);border:2px solid rgba(217,119,6,.2);border-radius:16px;padding:24px 20px;position:relative;">
               <div style="text-align:center;margin-bottom:16px;">
                 <div
                   style="display:inline-block;background:var(--admin);color:#fff;padding:8px 28px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">
@@ -2105,54 +2064,54 @@
               </div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>System Design &amp; Development</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>User Authentication &amp; Email Verification</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>File Uploading, Validation &amp; Security Scanning<br><small
-                      style="color:#64748b;font-weight:400;">SHA-256 · ClamAV · PDF Validation</small></span>
+                      style="color:var(--text-muted);font-weight:400;">SHA-256 · ClamAV · PDF Validation</small></span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Metadata Indexing &amp; Full-Text Extraction</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Database Storage</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Role-Based Access Control</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Admin Review &amp; Approval Workflow</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Search, Filtering &amp; Retrieval</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Email Notifications &amp; Activity Logging</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#fcd34d;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#f59e0b;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--admin);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--admin);flex-shrink:0;">●</span>
                   <span>Testing &amp; Security</span>
                 </li>
               </ul>
@@ -2160,15 +2119,15 @@
 
             <!-- ARROW 2 -->
             <div style="display:flex;align-items:center;padding:0 8px;flex-shrink:0;">
-              <div style="width:40px;height:3px;background:#475569;"></div>
+              <div style="width:40px;height:3px;background:var(--border);"></div>
               <div
-                style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid #475569;">
+                style="width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:12px solid var(--border);">
               </div>
             </div>
 
             <!-- OUTPUT -->
             <div
-              style="flex:1;max-width:280px;background:rgba(16,185,129,.06);border:2px solid rgba(16,185,129,.35);border-radius:16px;padding:24px 20px;position:relative;">
+              style="flex:1;max-width:280px;background:rgba(5,150,105,.04);border:2px solid rgba(5,150,105,.2);border-radius:16px;padding:24px 20px;position:relative;">
               <div style="text-align:center;margin-bottom:16px;">
                 <div
                   style="display:inline-block;background:var(--system);color:#fff;padding:8px 28px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:1px;text-transform:uppercase;">
@@ -2176,28 +2135,28 @@
               </div>
               <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px;">
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--system);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--system);flex-shrink:0;">●</span>
                   <span>Centralized Web-Based Repository</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--system);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--system);flex-shrink:0;">●</span>
                   <span>Organized &amp; Searchable Capstone Projects</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--system);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--system);flex-shrink:0;">●</span>
                   <span>Improved Accessibility</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--system);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--system);flex-shrink:0;">●</span>
                   <span>Efficient Information Retrieval</span>
                 </li>
                 <li
-                  style="display:flex;align-items:flex-start;gap:8px;color:#6ee7b7;font-size:12.5px;font-weight:600;line-height:1.5;">
-                  <span style="color:#10b981;flex-shrink:0;">●</span>
+                  style="display:flex;align-items:flex-start;gap:8px;color:var(--system);font-size:12.5px;font-weight:600;line-height:1.5;">
+                  <span style="color:var(--system);flex-shrink:0;">●</span>
                   <span>Enhanced Knowledge Sharing</span>
                 </li>
               </ul>
@@ -2207,8 +2166,8 @@
         </div>
 
         <div class="desc-panel">
-          <h3><span class="icon" style="background:rgba(168,85,247,.12);">📋</span> IPO Model Description</h3>
-          <p>The conceptual framework follows the <strong style="color:#d8b4fe;">Input-Process-Output (IPO)</strong>
+          <h3><span class="icon" style="background:var(--system-light);">📋</span> IPO Model Description</h3>
+          <p>The conceptual framework follows the <strong style="color:var(--text-main);">Input-Process-Output (IPO)</strong>
             model to illustrate how data and system requirements are transformed into a functional web-based repository:
           </p>
           <ul>
@@ -2250,6 +2209,11 @@
       </div>
 
       <div class="diagram-block">
+        <div class="download-bar">
+          <button class="btn-download" onclick="downloadPNG('section-func', 'CSIT_Functional_Decomposition')">
+            💾 Download as PNG
+          </button>
+        </div>
         <div class="diagram-panel" data-label="Functional Decomposition"
           style="text-align: center; background: white; border-radius: 12px; padding: 40px;">
           <style>
@@ -2262,17 +2226,17 @@
             }
 
             .func-root {
-              background: #4fd1c5;
+              background: #0d9488;
               padding: 16px 32px;
               border-radius: 6px;
-              border: 2px solid #319795;
+              border: 2px solid #0f766e;
               font-weight: 700;
               font-size: 14px;
-              color: #1a202c;
+              color: #ffffff;
               text-align: center;
               position: relative;
               margin-bottom: 30px;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             }
 
             .func-root::after {
@@ -2282,7 +2246,7 @@
               left: 50%;
               width: 2px;
               height: 30px;
-              background: #a0aec0;
+              background: #94a3b8;
               transform: translateX(-50%);
             }
 
@@ -2302,7 +2266,7 @@
               left: 12.5%;
               right: 12.5%;
               height: 2px;
-              background: #a0aec0;
+              background: #94a3b8;
             }
 
             .func-col {
@@ -2320,7 +2284,7 @@
               left: 50%;
               width: 2px;
               height: 22px;
-              background: #a0aec0;
+              background: #94a3b8;
               transform: translateX(-50%);
             }
 
@@ -2331,7 +2295,7 @@
               left: 50%;
               border-left: 5px solid transparent;
               border-right: 5px solid transparent;
-              border-top: 6px solid #a0aec0;
+              border-top: 6px solid #94a3b8;
               transform: translateX(-50%);
             }
 
@@ -2341,32 +2305,32 @@
               border-radius: 6px;
               font-weight: 800;
               font-size: 13px;
-              color: #1a202c;
+              color: #ffffff;
               text-align: center;
               margin-bottom: 20px;
-              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
               position: relative;
               text-transform: uppercase;
             }
 
             .func-header.student {
-              background: #63b3ed;
-              border: 2px solid #3182ce;
+              background: #2563eb;
+              border: 2px solid #1d4ed8;
             }
 
             .func-header.admin {
-              background: #68d391;
-              border: 2px solid #38a169;
+              background: #059669;
+              border: 2px solid #047857;
             }
 
             .func-header.repo {
-              background: #d6bcbc;
-              border: 2px solid #a0aec0;
+              background: #4b5563;
+              border: 2px solid #374151;
             }
 
             .func-header.search {
-              background: #f6ad55;
-              border: 2px solid #dd6b20;
+              background: #d97706;
+              border: 2px solid #b45309;
             }
 
             .func-items {
@@ -2527,6 +2491,11 @@
       </div>
 
       <div class="diagram-block">
+        <div class="download-bar">
+          <button class="btn-download" onclick="downloadPNG('section-usecase', 'CSIT_Use_Case_Diagram')">
+            💾 Download as PNG
+          </button>
+        </div>
         <div class="diagram-panel" data-label="Use Case Diagram"
           style="text-align: center; background: white; border-radius: 12px; padding: 40px;">
           <svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg"
@@ -2679,195 +2648,20 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════
-     SECTION 9: CONTEXT DIAGRAM (DFD LEVEL 0)
-     ═══════════════════════════════════════════════════════ -->
-  <div class="section" id="section-context">
-    <div class="section-content">
-      <div class="section-title">
-        <h2>Context Diagram (DFD Level 0)</h2>
-        <p>A high-level Data Flow Diagram illustrating the operational feasibility and data exchange between external
-          entities and the centralized system.</p>
-      </div>
-
-      <div class="diagram-block">
-        <div class="diagram-panel" data-label="Level 0 DFD"
-          style="text-align: center; background: #f8fafc; border-radius: 12px; padding: 40px; border: 1px solid #e2e8f0;">
-          <svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg"
-            style="width: 100%; height: auto; max-width: 900px; background: transparent; margin: 0 auto; display: block;">
-            <defs>
-              <marker id="dfdArrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6"
-                orient="auto">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e293b" />
-              </marker>
-            </defs>
-
-            <!-- Students Entity -->
-            <g transform="translate(50, 90)">
-              <rect x="0" y="0" width="150" height="35" fill="#e0f2fe" stroke="#334155" stroke-width="2" />
-              <rect x="0" y="35" width="150" height="85" fill="#ffffff" stroke="#334155" stroke-width="2" />
-              <text x="75" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-                fill="#0f172a">Entity</text>
-              <text x="75" y="85" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="18"
-                fill="#0f172a">STUDENTS</text>
-            </g>
-
-            <!-- System Process -->
-            <g transform="translate(500, 150)">
-              <circle cx="0" cy="0" r="110" fill="#e0f2fe" stroke="#334155" stroke-width="3" />
-              <circle cx="0" cy="0" r="95" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-              <text x="0" y="-15" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="20"
-                fill="#0f172a">Centralized</text>
-              <text x="0" y="12" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="20"
-                fill="#0f172a">Capstone</text>
-              <text x="0" y="39" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="20"
-                fill="#0f172a">System</text>
-            </g>
-
-            <!-- Admin Entity -->
-            <g transform="translate(800, 90)">
-              <rect x="0" y="0" width="150" height="35" fill="#e0f2fe" stroke="#334155" stroke-width="2" />
-              <rect x="0" y="35" width="150" height="85" fill="#ffffff" stroke="#334155" stroke-width="2" />
-              <text x="75" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-                fill="#0f172a">Entity</text>
-              <text x="75" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="18"
-                fill="#0f172a">ADMIN</text>
-              <text x="75" y="95" text-anchor="middle" font-family="Arial, sans-serif" font-size="13"
-                fill="#334155">(e.g., CSIT Dept)</text>
-            </g>
-
-            <!-- Arrow 1: Student -> System -->
-            <line x1="200" y1="130" x2="388" y2="130" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
-            <text x="295" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">1. PDF Manuscript</text>
-            <text x="295" y="122" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">&amp; Metadata</text>
-
-            <!-- Arrow 3: System -> Student -->
-            <line x1="390" y1="170" x2="202" y2="170" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
-            <text x="295" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">3. Submission</text>
-            <text x="295" y="207" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">Status Alerts</text>
-
-            <!-- Arrow 2: System -> Admin -->
-            <line x1="610" y1="130" x2="798" y2="130" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
-            <text x="705" y="105" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">2. Pending Studies &amp;</text>
-            <text x="705" y="122" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">Validation Reports</text>
-
-            <!-- Arrow 4: Admin -> System -->
-            <line x1="800" y1="170" x2="612" y2="170" stroke="#1e293b" stroke-width="2" marker-end="url(#dfdArrow)" />
-            <text x="705" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">4. Approval Decisions</text>
-            <text x="705" y="207" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14"
-              fill="#0f172a">&amp; Settings</text>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════
-     SECTION 10: DFD LEVEL 1
-     ═══════════════════════════════════════════════════════ -->
-  <div class="section" id="section-dfd1">
-    <div class="section-content">
-      <div class="section-title">
-        <h2>Data Flow Diagram (Level 1)</h2>
-        <p>A detailed visualization of the nine internal functional processes, data stores, and external entities
-          involved in the repository management workflow.</p>
-      </div>
-
-      <div class="diagram-block">
-        <div class="diagram-panel" data-label="DFD Level 1"
-          style="text-align: center; background: white; border-radius: 12px; padding: 40px; overflow-x: auto;">
-          <div class="mermaid">
-            flowchart TD
-            %% Entities
-            Student[/"&lt;b&gt;🧑‍🎓 STUDENT&lt;/b&gt;"/]
-            Admin[/"&lt;b&gt;🧑‍💻 ADMIN&lt;/b&gt;"/]
-            ExtBackup[/"☁️ EXTERNAL BACKUP SYSTEM"/]
-
-            %% Processes
-            P1(["Process 1.0&lt;br&gt;&lt;b&gt;SUBMIT RESEARCH&lt;/b&gt;"])
-            P2(["Process 2.0&lt;br&gt;&lt;b&gt;SEARCH REPOSITORY&lt;/b&gt;"])
-            P3(["Process 3.0&lt;br&gt;&lt;b&gt;VALIDATE &amp; PROCESS&lt;br&gt;SUBMISSION&lt;/b&gt;"])
-            P4(["Process 4.0&lt;br&gt;&lt;b&gt;MANAGE METADATA&lt;/b&gt;"])
-            P5(["Process 5.0&lt;br&gt;&lt;b&gt;ARCHIVE DOCUMENTS&lt;/b&gt;"])
-            P6(["Process 6.0&lt;br&gt;&lt;b&gt;VERIFY SUBMISSIONS&lt;/b&gt;"])
-            P7(["Process 7.0&lt;br&gt;&lt;b&gt;GENERATE ADMIN REPORTS&lt;/b&gt;"])
-            P8(["Process 8.0&lt;br&gt;&lt;b&gt;MANAGE USER ACCOUNTS&lt;/b&gt;"])
-            P9(["Process 9.0&lt;br&gt;&lt;b&gt;REPLICATE DATA&lt;/b&gt;"])
-
-            %% Data Stores
-            DS1[("METADATA")]
-            DS2[("PDF ARCHIVE")]
-            DS3[("USER ACCOUNTS")]
-            DS4[("BACKUP SCHEDULE")]
-            DS5[("SUBMISSION LOGS")]
-
-            %% Flows from Entities
-            Student -- "Research PDF &amp; Metadata" --> P1
-            P1 -- "Receipt" --> Student
-            Student -- "Search Query" --> P2
-            P2 -- "Search Results" --> Student
-
-            %% Internal Flows
-            P1 -- "Validated Submission" --> P3
-            P3 --> P4
-            P3 -- "Validated PDFs" --> P5
-            P3 --> DS3
-
-            P4 --> DS1
-            P5 -- "PDF Documents" --> DS2
-
-            DS1 -- "READ-ONLY METADATA" --> P2
-
-            %% Admin Flows
-            Admin --> P6
-            P6 -- "Submission Notification" --> P4
-            P6 -- "Log Data" --> DS5
-
-            Admin -- "Submission Logs" --> P7
-            P7 -- "Admin Reports" --> Admin
-
-            Admin -- "Account Management Data" --> P8
-            P8 --> DS3
-
-            %% Report generation flows
-            DS1 -- "Metadata" --> P7
-            DS2 -- "PDF Documents" --> P7
-            DS3 -- "Account Info" --> P7
-            DS5 -- "Logs" --> P7
-
-            %% Backup Flows
-            DS1 --> DS4
-            DS2 --> DS4
-            P4 --> DS4
-            DS4 --> P9
-            P9 --> ExtBackup
-
-            %% Styling
-            classDef entity fill:#f8fafc,stroke:#334155,stroke-width:2px,color:#1e293b,font-weight:bold
-            classDef process fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a,font-weight:bold
-            classDef datastore fill:#ffffff,stroke:#1e293b,stroke-width:2px,color:#0f172a,font-weight:bold
-            classDef external fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#0f172a,font-weight:bold
-
-            class Student,Admin entity
-            class ExtBackup external
-            class P1,P2,P3,P4,P5,P6,P7,P8,P9 process
-            class DS1,DS2,DS3,DS4,DS5 datastore
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <footer>
     CSIT Capstone Repository Management System — System Documentation &nbsp;·&nbsp; 2026
   </footer>
+
+  <style>
+    footer {
+      padding: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+  </style>
 
   <script>
     // Section navigation
@@ -2894,12 +2688,38 @@
       btn.classList.add('active-' + role);
     }
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <script>
     mermaid.initialize({ startOnLoad: false, theme: 'default' });
-    // If the dfd1 section is somehow active on load, render it
-    if (document.getElementById('section-dfd1') && document.getElementById('section-dfd1').classList.contains('active')) {
-      mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+
+    async function downloadPNG(id, filename) {
+      const btn = event.currentTarget;
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<span>⏳ Capturing...</span>';
+      btn.disabled = true;
+
+      const element = document.querySelector(`#${id} .diagram-panel`);
+      
+      try {
+        const canvas = await html2canvas(element, {
+          scale: 2, // High resolution
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          logging: false
+        });
+        
+        const link = document.createElement('a');
+        link.download = `${filename}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error('Download failed:', err);
+        alert('Failed to generate PNG. Please try taking a screenshot instead.');
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
     }
   </script>
 </body>
