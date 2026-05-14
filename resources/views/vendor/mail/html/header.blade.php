@@ -6,10 +6,11 @@
                 <!-- Logo with White Wrap Glow -->
                 <td style="padding-right: 20px; vertical-align: middle;">
                     @php
-                        // Using asset() to load the local premium logo.
+                        // Standard Laravel asset loader
+                        $logoUrl = asset('images/system-logo.jpg');
                     @endphp
-                    <img src="{{ asset('images/logos/premium_logo.png') }}" alt="CSIT Logo"
-                        style="height: 70px; width: auto; display: block; filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 2px #ffffff);">
+                    <img src="{{ $logoUrl }}" alt="CSIT Logo"
+                        style="height: 70px; width: auto; display: block; border-radius: 6px;">
                 </td>
                 <!-- Text Content -->
                 <td align="left" style="vertical-align: middle;">
@@ -25,4 +26,9 @@
             </tr>
         </table>
     </td>
+</tr>
+</td>
+</tr>
+</table>
+</td>
 </tr>
